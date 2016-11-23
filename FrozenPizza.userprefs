@@ -1,11 +1,17 @@
 ﻿<Properties StartupConfiguration="{09A308E1-3F29-4CCE-A029-A5FC2BAF179E}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="FrozenPizza/Level.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FrozenPizza/Items/Wearables.cs">
     <Files>
       <File FileName="FrozenPizza/HUD.cs" Line="41" Column="61" />
       <File FileName="FrozenPizza/TiledSharp/TiledCore.cs" Line="55" Column="1" />
-      <File FileName="FrozenPizza/Player.cs" Line="107" Column="3" />
+      <File FileName="FrozenPizza/Player.cs" Line="180" Column="13" />
       <File FileName="FrozenPizza/Engine.cs" Line="116" Column="33" />
-      <File FileName="FrozenPizza/Level.cs" Line="18" Column="12" />
+      <File FileName="FrozenPizza/Level.cs" Line="32" Column="1" />
+      <File FileName="FrozenPizza/Items/Item.cs" Line="68" Column="10" />
+      <File FileName="FrozenPizza/Data/items/Melee.xml" Line="6" Column="21" />
+      <File FileName="FrozenPizza/Items/Weapons.cs" Line="13" Column="13" />
+      <File FileName="FrozenPizza/Data/items/Guns.xml" Line="1" Column="1" />
+      <File FileName="FrozenPizza/Items/Food.cs" Line="21" Column="4" />
+      <File FileName="FrozenPizza/Items/Wearables.cs" Line="29" Column="16" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

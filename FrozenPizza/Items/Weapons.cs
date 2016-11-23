@@ -12,13 +12,23 @@ namespace FrozenPizza
         {
             
         }
+
+		public override bool Load(String name)
+		{
+			return (true);
+		}
     }
 
-    public class Pistol : Weapon
+    public class Gun : Weapon
     {
-        public Pistol(String name, uint damage, uint condition, List<SlotType> slots, uint weight, uint size) : base(name, damage, condition, slots, weight, size)
+        public Gun(String name, uint damage, uint condition, List<SlotType> slots, uint weight, uint size) : base(name, damage, condition, slots, weight, size)
         {
             
         }
+
+		public override bool Load(String name)
+		{
+			return (true);
+		}
     }
 }

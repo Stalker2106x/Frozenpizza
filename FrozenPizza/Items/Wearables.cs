@@ -15,7 +15,7 @@ namespace FrozenPizza
         PANTS,
         FEETS
     }
-    public class Wearable : Item
+    public abstract class Wearable : Item
     {
         int _condition, _def;
         WearableSlot _empl;
@@ -25,6 +25,8 @@ namespace FrozenPizza
             _def = def;
             _condition = condition;
         }
+
+		public abstract override bool Load(string name);
 
         public int getArmor()
         {

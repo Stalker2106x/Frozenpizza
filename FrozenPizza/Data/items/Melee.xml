@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<XnaContent>
+  <Asset Type="Generic.List<>">
+    <Item>
+      <Name>Screwdriver</Name>
+	  <Slots>HANDS, BAG</Slots>
+      <Damage>10</Damage>
+	  <Weight>0.3</Weight>
+	  <Size>1</Size>
+      <ResourceID>0</ResourceID>
+    </Item>
+  </Asset>
+</XnaContent>

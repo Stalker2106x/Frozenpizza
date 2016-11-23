@@ -64,6 +64,11 @@
     <None Include="Data\sounds\rstep2.wav" />
     <None Include="Data\sounds\rstep3.wav" />
     <None Include="Data\sounds\rstep4.wav" />
+    <None Include="Data\items\Food.xml" />
+    <None Include="Data\items\Melee.xml" />
+    <None Include="Data\items\Wearables.xml" />
+    <None Include="Data\items\Guns.xml" />
+    <Compile Include="Items\Food.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">

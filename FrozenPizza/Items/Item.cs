@@ -7,7 +7,7 @@ namespace FrozenPizza
 {
     public enum ItemType
     {
-        FOOD,
+        CONSUMABLE,
         WEAPON,
         WEARABLE,
         MISC
@@ -21,7 +21,7 @@ namespace FrozenPizza
         BAG
     }
 
-    public class Item
+    public abstract class Item
     {
         String _name;
         ItemType _type;
@@ -38,6 +38,8 @@ namespace FrozenPizza
             _weight = weight;
             _size = size;
         }
+
+		public abstract bool Load(String name);
 
         public bool slotCompatible(SlotType dest)
         {
@@ -58,24 +60,28 @@ namespace FrozenPizza
         }
     }
 
-    public class Food : Item
+    public abstract class Consumable : Item
     {
-        uint _value;
-        public Food(String name, uint value, List<SlotType> slots, float weight, float size) : base(name, ItemType.FOOD, new List<SlotType> { SlotType.BAG }, weight, size)
+        public Consumable(String name, List<SlotType> slots, float weight, float size) : base(name, ItemType.CONSUMABLE, new List<SlotType> { SlotType.BAG }, weight, size)
         {
-            _value = value;
+
         }
+
+		public override abstract bool Load(String name);
     }
 
-    public class Weapon : Item
+    public abstract class Weapon : Item
     {
         uint _condition;
         uint _damage;
+
         public Weapon(String name, uint damage, uint condition, List<SlotType> slots, float weight, float size) : base(name, ItemType.WEAPON, slots, weight, size)
         {
             _damage = damage;
             _condition = condition;
         }
+
+		public override abstract bool Load(string name);
 
         public uint getDamage()
         {
