@@ -90,17 +90,21 @@ namespace FrozenPizza
             _skinRect = new Rectangle(64, 0, 32, 16);
             _skin = content.Load<Texture2D>(@"gfx/players");
             _origin = new Vector2(16, 8);
-            _stepSound = new SoundEffect[4];
+            _stepSound = new SoundEffect[8];
             _stepSound[0] = content.Load<SoundEffect>("sounds/step1");
             _stepSound[1] = content.Load<SoundEffect>("sounds/step2");
             _stepSound[2] = content.Load<SoundEffect>("sounds/step3");
             _stepSound[3] = content.Load<SoundEffect>("sounds/step4");
+			_stepSound[4] = content.Load<SoundEffect>("sounds/rstep1");
+			_stepSound[5] = content.Load<SoundEffect>("sounds/rstep2");
+			_stepSound[6] = content.Load<SoundEffect>("sounds/rstep3");
+			_stepSound[7] = content.Load<SoundEffect>("sounds/rstep4");
         }
 
         public void die()
         {
 
-        }
+		}
 
         public int getArmor()
         {
@@ -118,18 +122,26 @@ namespace FrozenPizza
             return (weight);
         }
 
-        public float getSpeed(KeyboardState keybState)
+		public float getSpeed(KeyboardState keybState)
         {
+			float speed = 1.25f;
+
             if (keybState.IsKeyDown(Keys.LeftShift))
-                return (2.0f - (getWeight() / 10));
-            else
-                return (1.25f - (getWeight() / 10));
+				speed = 2.0f;
+			return (speed - (getWeight() / 10));
         }
 
-		void stepSound(GameTime gameTime)
+		void stepSound(GameTime gameTime, bool run)
 		{
 			_stepTimer += gameTime.ElapsedGameTime;
-			if (_stepTimer >= _stepSound[0].Duration)
+			if (run && _stepTimer >= _stepSound[4].Duration)
+			{
+				Random rnd = new Random();
+
+				_stepSound[rnd.Next(4, 8)].Play();
+				_stepTimer = TimeSpan.Zero;
+			}
+			else if (!run && _stepTimer >= _stepSound[0].Duration)
 			{
 				Random rnd = new Random();
 
@@ -150,34 +162,41 @@ namespace FrozenPizza
 
         void updateMove(GameTime gameTime, KeyboardState keybState, Level level)
         {
+			
             Vector2 oldpos = _pos;
 			bool move = false;
+			float speed = getSpeed(keybState);
 
             if (keybState.IsKeyDown(Keys.A))
             {
-                _pos += new Vector2(-getSpeed(keybState), 0f);
+				if (keybState.IsKeyDown(Keys.W) || keybState.IsKeyDown(Keys.S))
+					speed *= 0.75f;
+				_pos += new Vector2((float)Math.Sin(_aim + MathHelper.PiOver2) * speed, (float)Math.Cos(_aim + MathHelper.PiOver2) * -speed);
                 move = checkMove(level, oldpos);
             }
             else if (keybState.IsKeyDown(Keys.D))
             {
-                _pos += new Vector2(getSpeed(keybState), 0f);
-                move = checkMove(level, oldpos);
+				if (keybState.IsKeyDown(Keys.W) || keybState.IsKeyDown(Keys.S))
+					speed *= 0.75f;
+				_pos += new Vector2((float)Math.Sin(_aim + MathHelper.PiOver2) * -speed, (float)Math.Cos(_aim + MathHelper.PiOver2) * speed);
+				move = checkMove(level, oldpos);
             }
+			speed = getSpeed(keybState); //Reset speed
             if (keybState.IsKeyDown(Keys.W))
             {
-                _pos += new Vector2(0f, -getSpeed(keybState));
+                _pos += new Vector2((float)Math.Sin(_aim) * -speed, (float)Math.Cos(_aim) * speed);
                 move = checkMove(level, oldpos);
             }
             else if (keybState.IsKeyDown(Keys.S))
             {
-                _pos += new Vector2(0f, getSpeed(keybState));
-                move = checkMove(level, oldpos);
+				_pos += new Vector2((float)Math.Sin(_aim) * speed, (float)Math.Cos(_aim) * -speed);
+				move = checkMove(level, oldpos);
             }
 			if (move)
-				stepSound(gameTime);
+				stepSound(gameTime, keybState.IsKeyDown(Keys.LeftShift) ? true : false);
         }
 
-        float updateAim(Camera cam, MouseState mState)
+        float getAimAngle(Camera cam, MouseState mState)
         {
             Vector2 aimVector = _pos - Vector2.Transform(new Vector2(mState.X, mState.Y), Matrix.Invert(cam.getTransformation()));
 
@@ -204,6 +223,10 @@ namespace FrozenPizza
                 _states.Add(PlayerStates.Hungry);
             else if (_hunger <= 0 && !checkState(PlayerStates.Starving))
                 _states.Add(PlayerStates.Starving);
+			if (_thirst > 0 && _thirst < 50 && !checkState(PlayerStates.Thirsty))
+				_states.Add(PlayerStates.Thirsty);
+			else if (_thirst <= 0 && !checkState(PlayerStates.Dehydrated))
+				_states.Add(PlayerStates.Dehydrated);
         }
 
         void applyStates()
@@ -215,7 +238,7 @@ namespace FrozenPizza
 
         public void Update(GameTime gameTime, Level level, KeyboardState keybState, MouseState mState, Camera cam)
         {
-            _aim = updateAim(cam, mState);
+            _aim = getAimAngle(cam, mState);
             updateMove(gameTime, keybState, level);
             updateStates(gameTime);
             if (_states.Count > 0 && _stateTimer.TotalSeconds >= 20)

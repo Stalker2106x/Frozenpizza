@@ -3,7 +3,7 @@
   <SourceFile>/Users/martenm/frozenpizza/FrozenPizza/Data/sounds/step4.wav</SourceFile>
   <SourceTime>2016-11-23T00:16:37+01:00</SourceTime>
   <DestFile>/Users/martenm/frozenpizza/FrozenPizza/Data/bin/DesktopGL/sounds/step4.xnb</DestFile>
-  <DestTime>2016-11-23T01:06:06+01:00</DestTime>
+  <DestTime>2016-11-23T01:37:52+01:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2016-03-30T08:36:22+02:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

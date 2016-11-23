@@ -1,9 +1,11 @@
 ﻿<Properties StartupConfiguration="{09A308E1-3F29-4CCE-A029-A5FC2BAF179E}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="FrozenPizza/Player.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FrozenPizza/Level.cs">
     <Files>
-      <File FileName="FrozenPizza/HUD.cs" Line="9" Column="22" />
+      <File FileName="FrozenPizza/HUD.cs" Line="41" Column="61" />
       <File FileName="FrozenPizza/TiledSharp/TiledCore.cs" Line="55" Column="1" />
-      <File FileName="FrozenPizza/Player.cs" Line="141" Column="71" />
+      <File FileName="FrozenPizza/Player.cs" Line="107" Column="3" />
+      <File FileName="FrozenPizza/Engine.cs" Line="116" Column="33" />
+      <File FileName="FrozenPizza/Level.cs" Line="18" Column="12" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

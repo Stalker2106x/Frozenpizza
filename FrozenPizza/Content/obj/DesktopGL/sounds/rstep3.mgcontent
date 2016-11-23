@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>/Users/martenm/frozenpizza/FrozenPizza/Data/sounds/step2.wav</SourceFile>
-  <SourceTime>2016-11-23T00:16:37+01:00</SourceTime>
-  <DestFile>/Users/martenm/frozenpizza/FrozenPizza/Data/bin/DesktopGL/sounds/step2.xnb</DestFile>
-  <DestTime>2016-11-23T01:37:52+01:00</DestTime>
+  <SourceFile>/Users/martenm/frozenpizza/FrozenPizza/Data/sounds/rstep3.wav</SourceFile>
+  <SourceTime>2016-11-23T01:36:27+01:00</SourceTime>
+  <DestFile>/Users/martenm/frozenpizza/FrozenPizza/Content/bin/DesktopGL/sounds/rstep3.xnb</DestFile>
+  <DestTime>2016-11-23T01:41:29+01:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2016-03-30T08:36:22+02:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

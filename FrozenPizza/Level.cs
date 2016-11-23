@@ -15,20 +15,26 @@ namespace FrozenPizza
         SPAWN
     }
 
+	public enum Orientation
+	{
+		North,
+		East,
+		South,
+		West
+	}
+
     public class Level
     {
         int _twidth, _theight;
         int _ttwidth, _ttheight;
         TmxMap _map;
         Texture2D _tileset;
-        bool _drawn;
 
         public Level(string mapName)
         {
             _map = new TmxMap(mapName);
             _twidth = _map.Tilesets[0].TileWidth;
             _theight = _map.Tilesets[0].TileHeight;
-            _drawn = false;
         }
 
         public bool Load(ContentManager content)

@@ -113,7 +113,7 @@ namespace FrozenPizza
                 Exit();
             updateTimeEvents(gameTime);
             mainPlayer.Update(gameTime, level, keybState, mState, cam);
-            hud.Update(mState);
+			hud.Update(mState, mainPlayer);
             base.Update(gameTime);
         }
 

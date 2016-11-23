@@ -60,6 +60,10 @@
     <Compile Include="TiledSharp\TiledCore.cs" />
     <Compile Include="TiledSharp\Tileset.cs" />
     <Compile Include="Items\Weapons.cs" />
+    <None Include="Data\sounds\rstep1.wav" />
+    <None Include="Data\sounds\rstep2.wav" />
+    <None Include="Data\sounds\rstep3.wav" />
+    <None Include="Data\sounds\rstep4.wav" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">

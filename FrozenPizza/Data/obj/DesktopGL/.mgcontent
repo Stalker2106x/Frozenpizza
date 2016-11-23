@@ -13,5 +13,9 @@
     <File>/Users/martenm/frozenpizza/FrozenPizza/Data/gfx/players.png</File>
     <File>/Users/martenm/frozenpizza/FrozenPizza/Data/maps/city.jpg</File>
     <File>/Users/martenm/frozenpizza/FrozenPizza/Data/maps/meta.png</File>
+    <File>/Users/martenm/frozenpizza/FrozenPizza/Data/sounds/rstep1.wav</File>
+    <File>/Users/martenm/frozenpizza/FrozenPizza/Data/sounds/rstep2.wav</File>
+    <File>/Users/martenm/frozenpizza/FrozenPizza/Data/sounds/rstep3.wav</File>
+    <File>/Users/martenm/frozenpizza/FrozenPizza/Data/sounds/rstep4.wav</File>
   </SourceFiles>
 </SourceFileCollection>
