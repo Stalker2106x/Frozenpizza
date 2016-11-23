@@ -17,3 +17,4 @@ C:\Users\stalk\documents\visual studio 2015\Projects\FrozenPizza\FrozenPizza\bin
 C:\Users\stalk\documents\visual studio 2015\Projects\FrozenPizza\FrozenPizza\bin\DesktopGL\x86\Debug\Content\sounds\step4.xnb
 C:\Users\stalk\documents\visual studio 2015\Projects\FrozenPizza\FrozenPizza\bin\DesktopGL\x86\Debug\Content\font\hud.xnb
 C:\Users\stalk\documents\visual studio 2015\Projects\FrozenPizza\FrozenPizza\bin\DesktopGL\x86\Debug\Content\maps\world.tmx
+C:\Users\stalk\documents\visual studio 2015\Projects\FrozenPizza\FrozenPizza\obj\x86\Debug\FrozenPizza.csprojResolveAssemblyReference.cache
