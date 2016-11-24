@@ -127,3 +127,23 @@
 /processorParam:Quality=Best
 /build:sounds/rstep4.wav
 
+#begin items/firearms.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:items/firearms.xml
+
+#begin items/food.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:items/food.xml
+
+#begin items/melee.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:items/melee.xml
+
+#begin items/wearables.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:items/wearables.xml
+

@@ -8,7 +8,7 @@ namespace FrozenPizza
 {
     public class Melee : Weapon
     {
-        public Melee(String name, uint damage, uint condition, List<SlotType> slots, uint weight, uint size) : base(name, damage, condition, slots, weight, size)
+        public Melee()
         {
             
         }
@@ -19,9 +19,9 @@ namespace FrozenPizza
 		}
     }
 
-    public class Gun : Weapon
+    public class Firearm : Weapon
     {
-        public Gun(String name, uint damage, uint condition, List<SlotType> slots, uint weight, uint size) : base(name, damage, condition, slots, weight, size)
+		public Firearm()
         {
             
         }

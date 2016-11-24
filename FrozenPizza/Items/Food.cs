@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace FrozenPizza
 {
-	public class Drink : Consumable
+	public class Beverage : Consumable
 	{
-		public Drink(String name, List<SlotType> slots, int weight, int size) : base(name, slots, weight, size)
+		public Beverage()
 		{
 		}
 
@@ -17,7 +17,7 @@ namespace FrozenPizza
 
 	public class Food : Consumable
 	{
-		public Food(String name, List<SlotType> slots, int weight, int size) : base(name, slots, weight, size)
+		public Food()
 		{
 		}
 

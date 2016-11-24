@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Generic:List[Melee]">
+    <Item>
+      <Name>Screwdriver</Name>
+	  <Slots>HANDS, BAG</Slots>
+      <Damage>10</Damage>
+	  <Weight>0.3</Weight>
+	  <Size>1</Size>
+      <Skin>0</Skin>
+    </Item>
+  </Asset>
+</XnaContent>

@@ -7,18 +7,19 @@ namespace FrozenPizza
 {
     public enum ItemType
     {
-        CONSUMABLE,
-        WEAPON,
-        WEARABLE,
-        MISC
+		Consumable,
+		Melee,
+		Firearm,
+		Wearable,
+		Misc
     }
 
     public enum SlotType
     {
-        HANDS,
-        BACK,
-        OUTFIT,
-        BAG
+        Hands,
+		Bag,
+		Outfit,
+		Back
     }
 
     public abstract class Item
@@ -28,15 +29,10 @@ namespace FrozenPizza
         List<SlotType> _slots;
         float _weight, _size;
         Texture2D _skin;
-        Vector2 _pos;
+		int _resourceID;
 
-        public Item(String name, ItemType type, List<SlotType> slots, float weight, float size)
-        {
-            _name = name;
-            _type = type;
-            _slots = slots;
-            _weight = weight;
-            _size = size;
+		public Item()
+		{
         }
 
 		public abstract bool Load(String name);
@@ -49,10 +45,35 @@ namespace FrozenPizza
             return (false);
         }
 
-        public float getWeight()
+		public List<SlotType> Slots
+		{
+			get { return (_slots); }
+			set { _slots = value; }
+		}
+
+		public String Name
+		{
+			get { return (_name); }
+			set { _name = value; }
+		}
+
+        public float Weight
         {
-            return (_weight);
+			get { return (_weight); }
+			set { _weight = value; }
         }
+
+		public float Size
+		{
+			get { return (_size); }
+			set { _size = value; }
+		}
+
+		public int ResourceID
+		{
+			get { return (_resourceID); }
+			set { _weight = value; }
+		}
 
         public float getSize()
         {
@@ -62,10 +83,10 @@ namespace FrozenPizza
 
     public abstract class Consumable : Item
     {
-        public Consumable(String name, List<SlotType> slots, float weight, float size) : base(name, ItemType.CONSUMABLE, new List<SlotType> { SlotType.BAG }, weight, size)
-        {
+	public Consumable()
+	{
 
-        }
+    }
 
 		public override abstract bool Load(String name);
     }
@@ -75,10 +96,8 @@ namespace FrozenPizza
         uint _condition;
         uint _damage;
 
-        public Weapon(String name, uint damage, uint condition, List<SlotType> slots, float weight, float size) : base(name, ItemType.WEAPON, slots, weight, size)
-        {
-            _damage = damage;
-            _condition = condition;
+		public Weapon()
+		{
         }
 
 		public override abstract bool Load(string name);

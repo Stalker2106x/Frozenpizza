@@ -26,6 +26,7 @@ namespace FrozenPizza
         Level level;
         KeyBinds keybinds;
         Player mainPlayer;
+		Collection collection;
         HUD hud;
 
         //Timers
@@ -57,6 +58,7 @@ namespace FrozenPizza
             cam = new Camera(GraphicsDevice);
             hud = new HUD(GraphicsDevice, cam);
             mainPlayer = new Player("Bernie");
+			collection = new Collection();
             base.Initialize();
             gstate = GameState.Playing;
         }
@@ -72,6 +74,7 @@ namespace FrozenPizza
 
             // TODO: use this.Content to load your game content here
             level.Load(this.Content);
+			collection.Load(this.Content);
             hud.Load(this.Content);
             mainPlayer.Load(this.Content);
         }
