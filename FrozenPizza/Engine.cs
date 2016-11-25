@@ -57,7 +57,7 @@ namespace FrozenPizza
             level = new Level("Data/maps/world.tmx");
             cam = new Camera(GraphicsDevice);
             hud = new HUD(GraphicsDevice, cam);
-            mainPlayer = new Player("Bernie");
+			mainPlayer = new Player("Bernie", level.getSpawnPoint());
 			collection = new Collection();
             base.Initialize();
             gstate = GameState.Playing;
@@ -127,7 +127,7 @@ namespace FrozenPizza
             mainPlayer.Draw(spriteBatch);
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            hud.Draw(spriteBatch, mainPlayer);
+            hud.Draw(spriteBatch, GraphicsDevice, mainPlayer);
             spriteBatch.End();
         }
 

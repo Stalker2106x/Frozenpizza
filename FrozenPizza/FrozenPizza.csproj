@@ -69,7 +69,7 @@
     <None Include="Data\items\wearables.xml" />
     <None Include="Data\items\firearms.xml" />
     <Compile Include="Items\Food.cs" />
-    <Compile Include="Data\Collection.cs" />
+    <Compile Include="Collection.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">

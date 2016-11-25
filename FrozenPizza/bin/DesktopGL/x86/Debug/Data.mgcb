@@ -127,3 +127,15 @@
 /processorParam:Quality=Best
 /build:sounds/rstep4.wav
 
+#begin items/firearms.xml
+/copy:items/firearms.xml
+
+#begin items/food.xml
+/copy:items/food.xml
+
+#begin items/wearables.xml
+/copy:items/wearables.xml
+
+#begin items/melee.xml
+/copy:items/melee.xml
+

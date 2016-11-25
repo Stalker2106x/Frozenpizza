@@ -24,14 +24,13 @@ namespace FrozenPizza
         Vector2 _pos, _origin;
         Rectangle _skinRect;
         Texture2D _skin;
-        Wearable[] _outfit;
         List<Item> _inventory;
         List<PlayerStates> _states;
         SoundEffect[] _stepSound;
 		TimeSpan _stepTimer;
         TimeSpan _stateTimer;
 
-        public Player(String name)
+		public Player(String name, Vector2 spawn)
         {
             _name = name;
             _hp = 100;
@@ -40,10 +39,9 @@ namespace FrozenPizza
             _maxHunger = 100;
             _thirst = 25;
             _maxThirst = 100;
-            _pos = new Vector2(64f, 64f);
+			_pos = spawn;
             _aim = 0;
             _inventory = new List<Item>();
-            _outfit = new Wearable[5];
             _states = new List<PlayerStates>();
             _stateTimer = new TimeSpan();
             _stepTimer = new TimeSpan();
@@ -117,7 +115,7 @@ namespace FrozenPizza
 
             foreach (Item item in _inventory)
             {
-                weight += item.getWeight();
+                weight += item.Weight;
             }
             return (weight);
         }

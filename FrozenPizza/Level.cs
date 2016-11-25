@@ -8,11 +8,11 @@ namespace FrozenPizza
 {
     public enum Layers
     {
-        FLOOR,
-        WALL,
-        ITEM,
-        CEILING,
-        SPAWN
+        Floor,
+        Wall,
+        Ceiling,
+        Meta,
+        Spawn
     }
 
 	public enum Orientation
@@ -52,18 +52,24 @@ namespace FrozenPizza
 
         public void GenerateItems()
         {
-            for (int i = 0; i < _map.Layers[(int)Layers.ITEM].Tiles[i].Gid; i++)
+			for (int i = 0; i < _map.Layers[(int)Layers.Meta].Tiles.Count; i++)
             {
-                
+				if (_map.Layers[(int)Layers.Meta].Tiles[i].Gid == 0)
+					continue;				
             }
         }
 
         public Vector2 getSpawnPoint()
         {
             Random rnd = new Random();
+			int pos;
+			TmxLayerTile spawn;
 
-            rnd.Next(0, _map.ObjectGroups["Spawns"].Objects.Count - 1);
-            return (new Vector2(64, 64));
+			pos = rnd.Next(0, _map.Layers[(int)Layers.Spawn].Tiles.Count);
+			while (_map.Layers[(int)Layers.Spawn].Tiles[pos].Gid == 0)
+				pos = rnd.Next(0, _map.Layers[(int)Layers.Spawn].Tiles.Count);
+			spawn = _map.Layers[(int)Layers.Spawn].Tiles[pos];
+			return (new Vector2(spawn.X * _twidth, spawn.Y * _theight));
         }
 
         public bool Collide(Vector2 pos)
@@ -73,8 +79,8 @@ namespace FrozenPizza
                 return (true);
             Rectangle posCell = mapToGrid(pos);
 
-            if ((_map.Layers[(int)Layers.WALL].Tiles[(int)(posCell.X + (posCell.Y * _map.Width))].Gid != 0)
-                || (_map.Layers[(int)Layers.WALL].Tiles[(int)(posCell.Width + (posCell.Height * _map.Width))].Gid != 0))
+            if ((_map.Layers[(int)Layers.Wall].Tiles[(int)(posCell.X + (posCell.Y * _map.Width))].Gid != 0)
+                || (_map.Layers[(int)Layers.Wall].Tiles[(int)(posCell.Width + (posCell.Height * _map.Width))].Gid != 0))
                 return (true);
             return (false);
         }
@@ -83,8 +89,8 @@ namespace FrozenPizza
         {
             Rectangle posCell = mapToGrid(pos);
 
-            if ((_map.Layers[(int)Layers.CEILING].Tiles[(int)(posCell.X + (posCell.Y * _map.Width))].Gid != 0)
-                || (_map.Layers[(int)Layers.CEILING].Tiles[(int)(posCell.Width + (posCell.Height * _map.Width))].Gid != 0))
+            if ((_map.Layers[(int)Layers.Ceiling].Tiles[(int)(posCell.X + (posCell.Y * _map.Width))].Gid != 0)
+                || (_map.Layers[(int)Layers.Ceiling].Tiles[(int)(posCell.Width + (posCell.Height * _map.Width))].Gid != 0))
                 return (true);
             return (false);
         }
@@ -101,7 +107,7 @@ namespace FrozenPizza
                 {
                     for (int l = _map.Layers.Count - 1; l >= 0; l--)
                     {
-                        if ((Layers)l == Layers.ITEM || (Indoor(mainPlayer.Pos) && (Layers)l == Layers.CEILING))
+						if ((Layers)l == Layers.Meta || (Layers)l == Layers.Spawn || (Indoor(mainPlayer.Pos) && (Layers)l == Layers.Ceiling))
                             continue;
                         if ((yoffset + y) < 0 || (xoffset + x) < 0)
                             continue;

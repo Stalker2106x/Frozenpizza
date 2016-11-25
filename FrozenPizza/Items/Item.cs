@@ -22,95 +22,22 @@ namespace FrozenPizza
 		Back
     }
 
-    public abstract class Item
-    {
-        String _name;
-        ItemType _type;
-        List<SlotType> _slots;
-        float _weight, _size;
-        Texture2D _skin;
-		int _resourceID;
-
-		public Item()
-		{
-        }
-
-		public abstract bool Load(String name);
-
-        public bool slotCompatible(SlotType dest)
-        {
-            for (int i = 0; i < _slots.Count; i++)
-                if (_slots[i] == dest)
-                    return (true);
-            return (false);
-        }
-
-		public List<SlotType> Slots
-		{
-			get { return (_slots); }
-			set { _slots = value; }
-		}
-
-		public String Name
-		{
-			get { return (_name); }
-			set { _name = value; }
-		}
-
-        public float Weight
-        {
-			get { return (_weight); }
-			set { _weight = value; }
-        }
-
-		public float Size
-		{
-			get { return (_size); }
-			set { _size = value; }
-		}
-
-		public int ResourceID
-		{
-			get { return (_resourceID); }
-			set { _weight = value; }
-		}
-
-        public float getSize()
-        {
-            return (_size);
-        }
-    }
-
-    public abstract class Consumable : Item
-    {
-	public Consumable()
+	public class Item
 	{
+		public int Id { get; set; }
+		public String Name { get; set; }
+		public ItemType Type { get; set; }
+		public List<SlotType> Slots { get; set; }
+		public float Weight { get; set; }
+		public float Size { get; set; }
 
-    }
-
-		public override abstract bool Load(String name);
-    }
-
-    public abstract class Weapon : Item
-    {
-        uint _condition;
-        uint _damage;
-
-		public Weapon()
+		public Item(int id, String name, ItemType type, float weight, float size)
 		{
-        }
-
-		public override abstract bool Load(string name);
-
-        public uint getDamage()
-        {
-            return (_damage * (_condition / 100));
-        }
-
-        public bool isBroken()
-        {
-            return (_condition >= 50 ? false : true);
-        }
-    }
-
+			Id = id;
+			Name = name;
+			Type = type;
+			Weight = weight;
+			Size = size;
+		}
+	}
 }
