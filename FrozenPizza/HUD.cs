@@ -15,7 +15,7 @@ namespace FrozenPizza
         Texture2D _cursor, _hudEntities;
         Vector2 _cursorPos, _cursorOrigin;
         Rectangle _cursorRect, _hudEntRect;
-		Rectangle _handsPanel;
+		Rectangle _handsPanel, _inventoryPanel;
         Vector2 _statsPos;
         Vector2 _foodPos;
 		Vector2 _handsPos;
@@ -29,6 +29,7 @@ namespace FrozenPizza
             _headsUpHeight = 64;
             _headsUpWidth = 64;
 			_handsPanel = new Rectangle((cam.getViewport().Width / 2) - 125, cam.getViewport().Height - 90, 250, 80);
+			_inventoryPanel = new Rectangle(cam.getViewport().Width / 2, 20, cam.getViewport().Width / 2, cam.getViewport().Height - 140);
 			_handsPos = new Vector2(_handsPanel.X, _handsPanel.Y);
             _statsPos = new Vector2(0, cam.getViewport().Height - _headsUpHeight);
             _foodPos = new Vector2(cam.getViewport().Width - (2 * _headsUpWidth), cam.getViewport().Height - _headsUpHeight);
@@ -80,6 +81,13 @@ namespace FrozenPizza
         	return (rect);
 		}
 
+		private void DrawInventory(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Player mainPlayer)
+		{
+			//Background Panel
+			DrawHudPanel(spriteBatch, graphicsDevice, _inventoryPanel, Color.Gray, 0.9f);
+
+		}
+
 		private void DrawHudPanel(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Rectangle panel, Color color, float opacity)
 		{
 			var rect = new Texture2D(graphicsDevice, 1, 1);
@@ -90,8 +98,7 @@ namespace FrozenPizza
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Player mainPlayer)
         {
 			_hudEntRect.X = 0;
-            spriteBatch.Draw(_cursor, _cursorPos, _cursorRect, Color.White, 0, _cursorOrigin, 1.0f, SpriteEffects.None, 0);
-			//Health
+            //Health
             spriteBatch.Draw(_hudEntities, _statsPos, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
             spriteBatch.Draw(_hudEntities, _statsPos + getHeadsUpHeight(mainPlayer.maxHP, mainPlayer.HP, false), calcHeadsUpRect(mainPlayer.maxHP, mainPlayer.HP), Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
 			//Armor
@@ -107,6 +114,9 @@ namespace FrozenPizza
 			//Hands Panel
 			DrawHudPanel(spriteBatch, graphicsDevice, _handsPanel, Color.LightGray, 0.5f);
 			spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
-        }
+			if (mainPlayer.InventoryOpen)
+				DrawInventory(spriteBatch, graphicsDevice, mainPlayer);
+			spriteBatch.Draw(_cursor, _cursorPos, _cursorRect, Color.White, 0, _cursorOrigin, 1.0f, SpriteEffects.None, 0);
+		}
     }
 }

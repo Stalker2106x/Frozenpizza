@@ -29,6 +29,9 @@ namespace FrozenPizza
 		Collection collection;
         HUD hud;
 
+		//Input
+		KeyboardState[] keybStates;
+
         //Timers
         TimeSpan tMinute;
 
@@ -57,6 +60,7 @@ namespace FrozenPizza
             level = new Level("Data/maps/world.tmx");
             cam = new Camera(GraphicsDevice);
             hud = new HUD(GraphicsDevice, cam);
+			keybStates = new KeyboardState[2];
 			mainPlayer = new Player("Bernie", level.getSpawnPoint());
 			collection = new Collection();
             base.Initialize();
@@ -100,24 +104,25 @@ namespace FrozenPizza
             }
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
-        {
-            if (gstate == GameState.Paused)
-                return;
-            KeyboardState keybState = Keyboard.GetState();
-            MouseState mState = Mouse.GetState();
+		/// <summary>
+		/// Allows the game to run logic such as updating the world,
+		/// checking for collisions, gathering input, and playing audio.
+		/// </summary>
+		/// <param name="gameTime">Provides a snapshot of timing values.</param>
+		protected override void Update(GameTime gameTime)
+		{
+			if (gstate == GameState.Paused)
+				return;
+			keybStates[1] = Keyboard.GetState();
+			MouseState mState = Mouse.GetState();
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-            updateTimeEvents(gameTime);
-            mainPlayer.Update(gameTime, level, keybState, mState, cam);
+			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+				Exit();
+			updateTimeEvents(gameTime);
+			mainPlayer.Update(gameTime, level, keybStates, mState, cam);
 			hud.Update(mState, mainPlayer);
-            base.Update(gameTime);
+			base.Update(gameTime);
+			keybStates[0] = Keyboard.GetState();
         }
 
         protected void DrawGame(GameTime gameTime)

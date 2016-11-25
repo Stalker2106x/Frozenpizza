@@ -50,6 +50,11 @@ namespace FrozenPizza
             return (new Rectangle((int)pos.X / _twidth, (int)pos.Y / _theight, ((int)pos.X / _twidth), (int)pos.Y / _twidth));
         }
 
+		public Vector2 gridToMap(Vector2 pos)
+		{
+			return (new Vector2(pos.X * _twidth, pos.Y * _theight));
+		}
+
         public void GenerateItems()
         {
 			for (int i = 0; i < _map.Layers[(int)Layers.Meta].Tiles.Count; i++)
@@ -69,7 +74,7 @@ namespace FrozenPizza
 			while (_map.Layers[(int)Layers.Spawn].Tiles[pos].Gid == 0)
 				pos = rnd.Next(0, _map.Layers[(int)Layers.Spawn].Tiles.Count);
 			spawn = _map.Layers[(int)Layers.Spawn].Tiles[pos];
-			return (new Vector2(spawn.X * _twidth, spawn.Y * _theight));
+			return (gridToMap(new Vector2(spawn.X, spawn.Y)));
         }
 
         public bool Collide(Vector2 pos)
