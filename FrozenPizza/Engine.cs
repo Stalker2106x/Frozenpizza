@@ -127,10 +127,12 @@ namespace FrozenPizza
 				Exit();
 			updateTimeEvents(gameTime);
 			mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam);
+            IsMouseVisible = mainPlayer.InventoryOpen;
 			hud.Update(mouseStates, mainPlayer);
 			base.Update(gameTime);
 			keybStates[0] = keybStates[1];
-			resetMousePos();
+            if (!mainPlayer.InventoryOpen)
+			    resetMousePos();
 			mouseStates[0] = Mouse.GetState();
         }
 

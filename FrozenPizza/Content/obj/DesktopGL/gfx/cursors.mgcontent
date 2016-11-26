@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>/Users/martenm/frozenpizza/FrozenPizza/Data/gfx/cursors.png</SourceFile>
-  <SourceTime>2016-11-23T00:16:37+01:00</SourceTime>
-  <DestFile>/Users/martenm/frozenpizza/FrozenPizza/Content/bin/DesktopGL/gfx/cursors.xnb</DestFile>
-  <DestTime>2016-11-24T00:09:03+01:00</DestTime>
+  <SourceFile>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/cursors.png</SourceFile>
+  <SourceTime>2016-11-26T20:25:01.3080544+01:00</SourceTime>
+  <DestFile>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Content/bin/DesktopGL/gfx/cursors.xnb</DestFile>
+  <DestTime>2016-11-26T20:25:32.9671373+01:00</DestTime>
   <Importer>TextureImporter</Importer>
-  <ImporterTime>2016-03-30T08:36:22+02:00</ImporterTime>
+  <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
-  <ProcessorTime>2016-03-30T08:36:22+02:00</ProcessorTime>
+  <ProcessorTime>2016-03-30T08:36:08+02:00</ProcessorTime>
   <Parameters>
     <Key>ColorKeyColor</Key>
     <Value>255,0,255,255</Value>

@@ -30,6 +30,7 @@ namespace FrozenPizza
         SoundEffect[] _stepSound;
 		TimeSpan _stepTimer;
         TimeSpan _stateTimer;
+        float _mouseSensivity;
 
 		public Player(String name, Vector2 spawn)
         {
@@ -47,6 +48,7 @@ namespace FrozenPizza
             _states = new List<PlayerStates>();
             _stateTimer = new TimeSpan();
             _stepTimer = new TimeSpan();
+            _mouseSensivity = 0.01f;
 		}
 
         public Vector2 Pos
@@ -174,30 +176,30 @@ namespace FrozenPizza
 
             if (keybStates[1].IsKeyDown(Keys.A))
             {
-				if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))
-					speed *= 0.75f;
-				_pos += new Vector2(-speed, 0f);
+                if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))
+                    speed *= 0.75f;
+                _pos += new Vector2((float)Math.Cos(_aim) * -speed, (float)Math.Sin(_aim) * speed);
                 move = checkMove(level, oldpos);
             }
             else if (keybStates[1].IsKeyDown(Keys.D))
             {
-				if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))
-					speed *= 0.75f;
-				_pos += new Vector2(speed, 0f);
-				move = checkMove(level, oldpos);
+                if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))
+                    speed *= 0.75f;
+                _pos += new Vector2((float)Math.Cos(_aim) * speed, (float)-Math.Sin(_aim) * speed);
+                move = checkMove(level, oldpos);
             }
-			speed = getSpeed(keybStates[1]); //Reset speed
+            speed = getSpeed(keybStates[1]); //Reset speed
             if (keybStates[1].IsKeyDown(Keys.W))
             {
-                _pos += new Vector2(0f, -speed);
+                _pos += new Vector2((float)Math.Sin(_aim) * -speed, (float)Math.Cos(_aim) * -speed);
                 move = checkMove(level, oldpos);
             }
             else if (keybStates[1].IsKeyDown(Keys.S))
             {
-				_pos += new Vector2(0f, speed);
-				move = checkMove(level, oldpos);
+                _pos += new Vector2((float)Math.Sin(_aim) * speed, (float)Math.Cos(_aim) * speed);
+                move = checkMove(level, oldpos);
             }
-			if (move)
+            if (move)
 				stepSound(gameTime, keybStates[1].IsKeyDown(Keys.LeftShift) ? true : false);
         }
 
@@ -205,10 +207,10 @@ namespace FrozenPizza
         {
 			if (mStates[1].X != cam.getViewport().Width / 2)
 			if (mStates[0].X < mStates[1].X)
-				_aim += 0.01f;
+				_aim += (mStates[0].X - mStates[1].X) * _mouseSensivity;
 			else if (mStates[0].X > mStates[1].X)
-				_aim -= 0.01f;
-			if (_aim < 0)
+				_aim -= (mStates[1].X - mStates[0].X) * _mouseSensivity;
+            if (_aim < 0)
 				_aim = MathHelper.TwoPi;
 			else if (_aim > MathHelper.TwoPi)
 				_aim = 0;
@@ -247,12 +249,18 @@ namespace FrozenPizza
                 _hp -= 1;
         }
 
+        void toggleInventory()
+        {
+            _inventoryOpen = _inventoryOpen ? false : true;
+        }
+
         public void Update(GameTime gameTime, Level level, KeyboardState[] keybStates, MouseState[] mStates, Camera cam)
         {
-            updateAimAngle(cam, mStates);
+            if (!InventoryOpen)
+                updateAimAngle(cam, mStates);
             updateMove(gameTime, keybStates, level);
-			if (keybStates[1].IsKeyDown(Keys.Tab) && !keybStates[0].IsKeyDown(Keys.Tab))
-				_inventoryOpen = _inventoryOpen ? false : true;
+            if (keybStates[1].IsKeyDown(Keys.Tab) && !keybStates[0].IsKeyDown(Keys.Tab))
+                toggleInventory();
             updateStates(gameTime);
             if (_states.Count > 0 && _stateTimer.TotalSeconds >= 20)
                 applyStates();
@@ -261,7 +269,7 @@ namespace FrozenPizza
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_skin, _pos, _skinRect, Color.White, 0f, _origin, 1.0f, SpriteEffects.None, 0);
+            spriteBatch.Draw(_skin, _pos, _skinRect, Color.White, -_aim, _origin, 1.0f, SpriteEffects.None, 0);
         }
     }
 

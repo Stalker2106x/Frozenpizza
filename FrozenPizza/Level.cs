@@ -25,6 +25,7 @@ namespace FrozenPizza
 
     public class Level
     {
+        int _drawMargin;
         int _twidth, _theight;
         int _ttwidth, _ttheight;
         TmxMap _map;
@@ -35,6 +36,7 @@ namespace FrozenPizza
             _map = new TmxMap(mapName);
             _twidth = _map.Tilesets[0].TileWidth;
             _theight = _map.Tilesets[0].TileHeight;
+            _drawMargin = 10;
         }
 
         public bool Load(ContentManager content)
@@ -103,12 +105,18 @@ namespace FrozenPizza
         public void Draw(SpriteBatch spriteBatch, Camera cam, Player mainPlayer)
         {
             Rectangle viewport = cam.getViewport();
-            int xoffset = viewport.X / _twidth;
-            int yoffset = viewport.Y / _theight;
+            int xoffset = (viewport.X / _twidth);
+            int xend = ((viewport.X + viewport.Width) / _twidth);
+            int yoffset = (viewport.Y / _theight);
+            int yend = ((viewport.Y + viewport.Height) / _theight);
 
-            for (int y = 0; y <= viewport.Height / _theight; y++)
+            if (xoffset > _drawMargin)
+                xoffset -= _drawMargin;
+            if (yoffset > _drawMargin)
+                yoffset -= _drawMargin;
+            for (int y = 0; y <= yend; y++)
             {
-                for (int x = 0; x <= viewport.Width / _twidth; x++)
+                for (int x = 0; x <= xend; x++)
                 {
                     for (int l = _map.Layers.Count - 1; l >= 0; l--)
                     {
