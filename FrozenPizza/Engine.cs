@@ -31,6 +31,7 @@ namespace FrozenPizza
 
 		//Input
 		KeyboardState[] keybStates;
+		MouseState[] mouseStates;
 
         //Timers
         TimeSpan tMinute;
@@ -48,19 +49,20 @@ namespace FrozenPizza
             gstate = GameState.Paused;
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
-        protected override void Initialize()
-        {
-            // TODO: Add your initialization logic here
-            level = new Level("Data/maps/world.tmx");
-            cam = new Camera(GraphicsDevice);
-            hud = new HUD(GraphicsDevice, cam);
+		/// <summary>
+		/// Allows the game to perform any initialization it needs to before starting to run.
+		/// This is where it can query for any required services and load any non-graphic
+		/// related content.  Calling base.Initialize will enumerate through any components
+		/// and initialize them as well.
+		/// </summary>
+		protected override void Initialize()
+		{
+			// TODO: Add your initialization logic here
+			level = new Level("Data/maps/world.tmx");
+			cam = new Camera(GraphicsDevice);
+			hud = new HUD(GraphicsDevice, cam);
 			keybStates = new KeyboardState[2];
+			mouseStates = new MouseState[2];
 			mainPlayer = new Player("Bernie", level.getSpawnPoint());
 			collection = new Collection();
             base.Initialize();
@@ -104,6 +106,11 @@ namespace FrozenPizza
             }
         }
 
+
+		void resetMousePos()
+		{
+			Mouse.SetPosition(cam.getViewport().Width / 2, cam.getViewport().Height / 2);
+		}
 		/// <summary>
 		/// Allows the game to run logic such as updating the world,
 		/// checking for collisions, gathering input, and playing audio.
@@ -114,15 +121,17 @@ namespace FrozenPizza
 			if (gstate == GameState.Paused)
 				return;
 			keybStates[1] = Keyboard.GetState();
-			MouseState mState = Mouse.GetState();
+			mouseStates[1] = Mouse.GetState();
 
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 			updateTimeEvents(gameTime);
-			mainPlayer.Update(gameTime, level, keybStates, mState, cam);
-			hud.Update(mState, mainPlayer);
+			mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam);
+			hud.Update(mouseStates, mainPlayer);
 			base.Update(gameTime);
-			keybStates[0] = Keyboard.GetState();
+			keybStates[0] = keybStates[1];
+			resetMousePos();
+			mouseStates[0] = Mouse.GetState();
         }
 
         protected void DrawGame(GameTime gameTime)

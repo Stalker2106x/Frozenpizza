@@ -28,6 +28,7 @@ namespace FrozenPizza
             _hudOffset = new Vector2(64, 0);
             _headsUpHeight = 64;
             _headsUpWidth = 64;
+			_cursorPos = new Vector2(cam.getViewport().Width / 2, cam.getViewport().Height / 4);
 			_handsPanel = new Rectangle((cam.getViewport().Width / 2) - 125, cam.getViewport().Height - 90, 250, 80);
 			_inventoryPanel = new Rectangle(cam.getViewport().Width / 2, 20, cam.getViewport().Width / 2, cam.getViewport().Height - 140);
 			_handsPos = new Vector2(_handsPanel.X, _handsPanel.Y);
@@ -37,7 +38,7 @@ namespace FrozenPizza
 
 		public bool Load(ContentManager content)
         {
-            _cursorRect = new Rectangle(192, 0, 64, 64);
+			_cursorRect = new Rectangle(192, 0, 64, 64);
             _cursorOrigin = new Vector2(32, 32);
             _hudEntRect = new Rectangle(0, 0, 64, 64);
             _cursor = content.Load<Texture2D>(@"gfx/cursors");
@@ -47,14 +48,8 @@ namespace FrozenPizza
             return (true);
         }
 
-        public void updateCursor(MouseState mState)
+		public void Update(MouseState[] mStates, Player mainPlayer)
         {
-            _cursorPos = new Vector2(mState.X, mState.Y);
-        }
-
-		public void Update(MouseState mState, Player mainPlayer)
-        {
-            updateCursor(mState);
 			if (mainPlayer.checkState(PlayerStates.Hungry) && _foodBackground[0] != Color.Orange)
 				_foodBackground[0] = Color.Orange;
 			else if (mainPlayer.checkState(PlayerStates.Starving) && _foodBackground[0] != Color.Red)

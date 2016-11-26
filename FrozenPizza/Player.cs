@@ -176,37 +176,43 @@ namespace FrozenPizza
             {
 				if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))
 					speed *= 0.75f;
-				_pos += new Vector2((float)Math.Sin(_aim + MathHelper.PiOver2) * speed, (float)Math.Cos(_aim + MathHelper.PiOver2) * -speed);
+				_pos += new Vector2(-speed, 0f);
                 move = checkMove(level, oldpos);
             }
             else if (keybStates[1].IsKeyDown(Keys.D))
             {
 				if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))
 					speed *= 0.75f;
-				_pos += new Vector2((float)Math.Sin(_aim + MathHelper.PiOver2) * -speed, (float)Math.Cos(_aim + MathHelper.PiOver2) * speed);
+				_pos += new Vector2(speed, 0f);
 				move = checkMove(level, oldpos);
             }
 			speed = getSpeed(keybStates[1]); //Reset speed
             if (keybStates[1].IsKeyDown(Keys.W))
             {
-                _pos += new Vector2((float)Math.Sin(_aim) * -speed, (float)Math.Cos(_aim) * speed);
+                _pos += new Vector2(0f, -speed);
                 move = checkMove(level, oldpos);
             }
             else if (keybStates[1].IsKeyDown(Keys.S))
             {
-				_pos += new Vector2((float)Math.Sin(_aim) * speed, (float)Math.Cos(_aim) * -speed);
+				_pos += new Vector2(0f, speed);
 				move = checkMove(level, oldpos);
             }
 			if (move)
 				stepSound(gameTime, keybStates[1].IsKeyDown(Keys.LeftShift) ? true : false);
         }
 
-        float getAimAngle(Camera cam, MouseState mState)
+        void updateAimAngle(Camera cam, MouseState[] mStates)
         {
-            Vector2 aimVector = _pos - Vector2.Transform(new Vector2(mState.X, mState.Y), Matrix.Invert(cam.getTransformation()));
-
-            aimVector.Normalize();
-            return ((float)Math.Atan2((double)aimVector.Y, (double)aimVector.X) + MathHelper.PiOver2);
+			if (mStates[1].X != cam.getViewport().Width / 2)
+			if (mStates[0].X < mStates[1].X)
+				_aim += 0.01f;
+			else if (mStates[0].X > mStates[1].X)
+				_aim -= 0.01f;
+			if (_aim < 0)
+				_aim = MathHelper.TwoPi;
+			else if (_aim > MathHelper.TwoPi)
+				_aim = 0;
+			cam.Rotation = _aim;
         }
 
         public bool checkState(PlayerStates state)
@@ -241,9 +247,9 @@ namespace FrozenPizza
                 _hp -= 1;
         }
 
-        public void Update(GameTime gameTime, Level level, KeyboardState[] keybStates, MouseState mState, Camera cam)
+        public void Update(GameTime gameTime, Level level, KeyboardState[] keybStates, MouseState[] mStates, Camera cam)
         {
-            _aim = getAimAngle(cam, mState);
+            updateAimAngle(cam, mStates);
             updateMove(gameTime, keybStates, level);
 			if (keybStates[1].IsKeyDown(Keys.Tab) && !keybStates[0].IsKeyDown(Keys.Tab))
 				_inventoryOpen = _inventoryOpen ? false : true;
@@ -255,7 +261,7 @@ namespace FrozenPizza
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_skin, _pos, _skinRect, Color.White, _aim, _origin, 1.0f, SpriteEffects.None, 0);
+            spriteBatch.Draw(_skin, _pos, _skinRect, Color.White, 0f, _origin, 1.0f, SpriteEffects.None, 0);
         }
     }
 
