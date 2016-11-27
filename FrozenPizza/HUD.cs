@@ -12,7 +12,7 @@ namespace FrozenPizza
     {
 
         SpriteFont _font;
-        Texture2D _cursor, _hudEntities;
+        Texture2D _cursor, _hudEntities, _colorRect;
         Vector2 _cursorPos, _cursorOrigin;
         Rectangle _cursorRect, _hudEntRect;
 		Rectangle _handsPanel, _inventoryPanel;
@@ -38,6 +38,7 @@ namespace FrozenPizza
 			_handsPos = new Vector2(_handsPanel.X, _handsPanel.Y);
             _statsPos = new Vector2(0, cam.getViewport().Height - _headsUpHeight);
             _foodPos = new Vector2(cam.getViewport().Width - (2 * _headsUpWidth), cam.getViewport().Height - _headsUpHeight);
+            _colorRect = new Texture2D(graphics, 1, 1);
         }
 
 		public bool Load(ContentManager content)
@@ -54,7 +55,9 @@ namespace FrozenPizza
 
 		public void Update(MouseState[] mStates, Player mainPlayer)
         {
-			if (mainPlayer.checkState(PlayerStates.Hungry) && _foodBackground[0] != Color.Orange)
+            if (mainPlayer.Cooldown)
+                _cooldownBar.Width = mainPlayer.getCooldownPercent(_handsPanel.Width);
+            if (mainPlayer.checkState(PlayerStates.Hungry) && _foodBackground[0] != Color.Orange)
 				_foodBackground[0] = Color.Orange;
 			else if (mainPlayer.checkState(PlayerStates.Starving) && _foodBackground[0] != Color.Red)
 				_foodBackground[0] = Color.Red;
@@ -89,12 +92,11 @@ namespace FrozenPizza
 
 		private void DrawHudPanel(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Rectangle panel, Color color, float opacity)
 		{
-			var rect = new Texture2D(graphicsDevice, 1, 1);
-			rect.SetData(new[] { color });
-			spriteBatch.Draw(rect, panel, color * opacity);
+			_colorRect.SetData(new[] { color });
+			spriteBatch.Draw(_colorRect, panel, null, color * opacity, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
 		}
 
-        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Player mainPlayer)
+        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Player mainPlayer, Collection collection)
         {
 			_hudEntRect.X = 0;
             //Health
@@ -112,12 +114,15 @@ namespace FrozenPizza
             spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.maxThirst, mainPlayer.Thirst, true), calcHeadsUpRect(mainPlayer.maxThirst, mainPlayer.Thirst), _foodBackground[1], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
 			//Hands Panel
 			DrawHudPanel(spriteBatch, graphicsDevice, _handsPanel, Color.LightGray, 0.5f);
-            _cooldownBar.Width = mainPlayer.Cooldown;
-            DrawHudPanel(spriteBatch, graphicsDevice, _cooldownBar, Color.White, 0.75f);
+            if (mainPlayer.Cooldown)
+                DrawHudPanel(spriteBatch, graphicsDevice, _cooldownBar, Color.White, 0.75f);
             if (mainPlayer.Hands == null)
-			    spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
+                spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
             else
+            {
                 spriteBatch.DrawString(_font, mainPlayer.Hands.Name, _handsPanel.Location.ToVector2(), Color.White);
+                spriteBatch.Draw(collection.MeleeTileset, new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), mainPlayer.Hands.SkinRect, Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
+            }
             if (mainPlayer.InventoryOpen)
 				DrawInventory(spriteBatch, graphicsDevice, mainPlayer);
 			spriteBatch.Draw(_cursor, _cursorPos, _cursorRect, Color.White, 0, _cursorOrigin, 1.0f, SpriteEffects.None, 0);

@@ -24,11 +24,12 @@ namespace FrozenPizza
         Vector2 _pos, _origin;
         Rectangle _skinRect;
         Texture2D _skin;
-		bool _inventoryOpen, _cooldown;
+		bool _inventoryOpen, _cooldown, _aimlock;
         Item _hands;
         List<Item> _inventory;
         List<PlayerStates> _states;
         SoundEffect[] _stepSound;
+        SoundEffect _attackSound;
 
         //Timers
 		TimeSpan _stepTimer;
@@ -54,6 +55,7 @@ namespace FrozenPizza
             _stepTimer = new TimeSpan();
             _mouseSensivity = 0.01f;
             _cooldown = false;
+            _aimlock = false;
 		}
 
         public Vector2 Pos
@@ -103,9 +105,25 @@ namespace FrozenPizza
             set { _hands = value; }
         }
 
-        public int Cooldown
+        public bool Cooldown
         {
-            get { return ((int)(_cooldownTimer.TotalMilliseconds / 1000) * 250); }
+            get { return (_cooldown); }
+        }
+
+        public int getCooldownPercent(int width)
+        {
+
+            return ((int)((_cooldownTimer.TotalMilliseconds / 1000) * width));
+        }
+
+        public float getCooldown()
+        {
+            Melee hands = (Melee)_hands;
+
+            if (hands != null)
+                return ((float)TimeSpan.FromSeconds(hands.Cooldown).TotalMilliseconds);
+            else
+                return ((float)TimeSpan.FromSeconds(1).TotalMilliseconds);
         }
 
         public void Load(ContentManager content)
@@ -114,14 +132,15 @@ namespace FrozenPizza
             _skin = content.Load<Texture2D>(@"gfx/players");
             _origin = new Vector2(16, 8);
             _stepSound = new SoundEffect[8];
-            _stepSound[0] = content.Load<SoundEffect>("sounds/step1");
-            _stepSound[1] = content.Load<SoundEffect>("sounds/step2");
-            _stepSound[2] = content.Load<SoundEffect>("sounds/step3");
-            _stepSound[3] = content.Load<SoundEffect>("sounds/step4");
-			_stepSound[4] = content.Load<SoundEffect>("sounds/rstep1");
-			_stepSound[5] = content.Load<SoundEffect>("sounds/rstep2");
-			_stepSound[6] = content.Load<SoundEffect>("sounds/rstep3");
-			_stepSound[7] = content.Load<SoundEffect>("sounds/rstep4");
+            _stepSound[0] = content.Load<SoundEffect>("sounds/player/step1");
+            _stepSound[1] = content.Load<SoundEffect>("sounds/player/step2");
+            _stepSound[2] = content.Load<SoundEffect>("sounds/player/step3");
+            _stepSound[3] = content.Load<SoundEffect>("sounds/player/step4");
+			_stepSound[4] = content.Load<SoundEffect>("sounds/player/rstep1");
+			_stepSound[5] = content.Load<SoundEffect>("sounds/player/rstep2");
+			_stepSound[6] = content.Load<SoundEffect>("sounds/player/rstep3");
+			_stepSound[7] = content.Load<SoundEffect>("sounds/player/rstep4");
+            _attackSound = content.Load<SoundEffect>("sounds/weapon/attack");
         }
 
         public void die()
@@ -161,15 +180,15 @@ namespace FrozenPizza
 			{
 				Random rnd = new Random();
 
-				_stepSound[rnd.Next(4, 8)].Play();
+				_stepSound[rnd.Next(4, 8)].Play(0.5f, 0f, 0f);
 				_stepTimer = TimeSpan.Zero;
 			}
 			else if (!run && _stepTimer >= _stepSound[0].Duration)
 			{
 				Random rnd = new Random();
 
-				_stepSound[rnd.Next(0, 4)].Play();
-				_stepTimer = TimeSpan.Zero;
+				_stepSound[rnd.Next(0, 4)].Play(0.5f, 0f, 0f);
+                _stepTimer = TimeSpan.Zero;
 			}
         }
 
@@ -221,23 +240,38 @@ namespace FrozenPizza
 
         public void updateCooldown(GameTime gameTime)
         {
+            float cooldown = getCooldown();
+
             _cooldownTimer += gameTime.ElapsedGameTime;
-            if (_cooldownTimer > TimeSpan.FromSeconds(1))
+            if (_cooldownTimer.TotalMilliseconds > cooldown)
                     _cooldown = false;
         }
+        public void useHands()
+        {
+            _attackSound.Play();
+            if (_hands == null)
+                return;
+            if (_hands.GetType() == typeof(Melee) || _hands.GetType() == typeof(Firearm))
+            {
+                Weapon weapon = (Weapon)_hands;
+            }
+        }
+
         public void updateAttack(GameTime gameTime, MouseState[] mStates)
         {
             if (_cooldown)
                 updateCooldown(gameTime);
             if (mStates[1].LeftButton == ButtonState.Pressed && !_cooldown)
             {
-                if (_hands != null)
-                    _hands.use();
+
+                useHands();
                 _cooldown = true;
                 _cooldownTimer = TimeSpan.Zero;
             }
             if (mStates[1].RightButton == ButtonState.Pressed)
-                _cooldown = true;
+                _aimlock = true;
+            else if (mStates[1].RightButton == ButtonState.Released)
+                _aimlock = false;
         }
 
         void updateAimAngle(Camera cam, MouseState[] mStates)

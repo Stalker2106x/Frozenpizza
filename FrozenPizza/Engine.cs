@@ -128,8 +128,8 @@ namespace FrozenPizza
 				Exit();
 			updateTimeEvents(gameTime);
 			mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam);
+            hud.Update(mouseStates, mainPlayer);
             IsMouseVisible = mainPlayer.InventoryOpen;
-			hud.Update(mouseStates, mainPlayer);
 			base.Update(gameTime);
 			keybStates[0] = keybStates[1];
             if (!mainPlayer.InventoryOpen)
@@ -144,7 +144,7 @@ namespace FrozenPizza
             mainPlayer.Draw(spriteBatch);
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            hud.Draw(spriteBatch, GraphicsDevice, mainPlayer);
+            hud.Draw(spriteBatch, GraphicsDevice, mainPlayer, collection);
             spriteBatch.End();
         }
 

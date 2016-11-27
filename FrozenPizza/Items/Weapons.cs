@@ -5,16 +5,18 @@ using Microsoft.Xna.Framework;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Audio;
 
 namespace FrozenPizza
 {
-	public class Weapon : Item
-	{
-		public int Damage { get; set; }
-		public int Durability { get; set; }
-		public float Cooldown { get; set; }
+    public class Weapon : Item
+    {
+        public int Damage { get; set; }
+        public int Durability { get; set; }
+        public float Cooldown { get; set; }
 
-		public Weapon(int id, String name, ItemType type, float weight, float size) : base(id, name, type, weight, size)
+
+        public Weapon(int id, String name, ItemType type, float weight, float size) : base(id, name, type, weight, size)
 		{
 
 		}

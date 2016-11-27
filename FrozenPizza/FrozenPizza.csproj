@@ -61,10 +61,10 @@
     <Compile Include="TiledSharp\TiledCore.cs" />
     <Compile Include="TiledSharp\Tileset.cs" />
     <Compile Include="Items\Weapons.cs" />
-    <None Include="Data\sounds\rstep1.wav" />
-    <None Include="Data\sounds\rstep2.wav" />
-    <None Include="Data\sounds\rstep3.wav" />
-    <None Include="Data\sounds\rstep4.wav" />
+    <None Include="Data\sounds\player\rstep1.wav" />
+    <None Include="Data\sounds\player\rstep2.wav" />
+    <None Include="Data\sounds\player\rstep3.wav" />
+    <None Include="Data\sounds\player\rstep4.wav" />
     <None Include="Data\items\food.xml" />
     <None Include="Data\items\melee.xml" />
     <None Include="Data\items\wearables.xml" />
@@ -94,10 +94,11 @@
     <Content Include="Data\maps\city.jpg" />
     <Content Include="Data\maps\meta.png" />
     <Content Include="Data\pizza.ico" />
-    <Content Include="Data\sounds\step1.wav" />
-    <Content Include="Data\sounds\step2.wav" />
-    <Content Include="Data\sounds\step3.wav" />
-    <Content Include="Data\sounds\step4.wav" />
+    <Content Include="Data\sounds\player\step1.wav" />
+    <Content Include="Data\sounds\player\step2.wav" />
+    <Content Include="Data\sounds\player\step3.wav" />
+    <Content Include="Data\sounds\player\step4.wav" />
+    <Content Include="Data\sounds\weapon\attack.wav" />
     <Content Include="OpenTK.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

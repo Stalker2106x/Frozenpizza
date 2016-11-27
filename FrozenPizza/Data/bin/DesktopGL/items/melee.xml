@@ -2,29 +2,29 @@
 <Melee>
 	<Item>
 	  	<Id>0</Id>
-      	<Name>Screwdriver</Name>
+      <Name>Screwdriver</Name>
 	  	<Slots>Hands Bag</Slots>
 	  	<Weight>0.2</Weight>
 	  	<Size>1</Size>
-      	<Damage>10</Damage>
+      <Damage>10</Damage>
 	    <Cooldown>0.3</Cooldown>
     </Item>
 	<Item>
 	  	<Id>1</Id>
-      	<Name>Pizza Cutter</Name>
+      <Name>Pizza Cutter</Name>
 	  	<Slots>Hands Bag</Slots>
 	  	<Weight>0.1</Weight>
 	  	<Size>0.5</Size>
-      	<Damage>5</Damage>
+      <Damage>5</Damage>
 	    <Cooldown>0.3</Cooldown>
     </Item>
 	<Item>
 	  	<Id>2</Id>
-      	<Name>Machete</Name>
+      <Name>Machete</Name>
 	  	<Slots>Hands Bag</Slots>
 	  	<Weight>1</Weight>
 	  	<Size>2</Size>
-      	<Damage>20</Damage>
+      <Damage>20</Damage>
 	    <Cooldown>0.3</Cooldown>
     </Item>
 </Melee>

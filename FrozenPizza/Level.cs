@@ -85,7 +85,7 @@ namespace FrozenPizza
                 else
                 {
                     _entities[i] = new List<Item>();
-                    _entities[i].Add(collection.MeleeList[rnd.Next(0, collection.MeleeList.Count)]);
+                    _entities[i].Add((Melee)collection.MeleeList[rnd.Next(0, collection.MeleeList.Count)]);
                 }
             }
         }
