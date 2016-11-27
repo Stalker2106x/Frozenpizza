@@ -51,6 +51,7 @@
     <Compile Include="Items\Wearables.cs" />
     <MonoGameContentReference Include="Data\Data.mgcb" />
     <None Include="Data\font\hud.xnb" />
+    <None Include="Data\maps\dev.tmx" />
     <None Include="Data\maps\world.tmx" />
     <None Include="TiledSharp\AssemblyInfo.cs" />
     <Compile Include="TiledSharp\ImageLayer.cs" />
@@ -88,6 +89,7 @@
   <ItemGroup>
     <Content Include="Data\gfx\cursors.png" />
     <Content Include="Data\gfx\hud.png" />
+    <Content Include="Data\gfx\melee.png" />
     <Content Include="Data\gfx\players.png" />
     <Content Include="Data\maps\city.jpg" />
     <Content Include="Data\maps\meta.png" />

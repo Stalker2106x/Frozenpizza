@@ -79,10 +79,11 @@ namespace FrozenPizza
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            collection.Load(this.Content);
             level.Load(this.Content);
-			collection.Load(this.Content);
             hud.Load(this.Content);
             mainPlayer.Load(this.Content);
+            level.GenerateItems(collection);
         }
 
         /// <summary>
@@ -139,7 +140,7 @@ namespace FrozenPizza
         protected void DrawGame(GameTime gameTime)
         {
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.getTransformation());
-            level.Draw(spriteBatch, cam, mainPlayer);
+            level.Draw(spriteBatch, cam, mainPlayer, collection);
             mainPlayer.Draw(spriteBatch);
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);

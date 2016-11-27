@@ -108,8 +108,11 @@ namespace FrozenPizza
             spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.maxThirst, mainPlayer.Thirst, true), calcHeadsUpRect(mainPlayer.maxThirst, mainPlayer.Thirst), _foodBackground[1], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
 			//Hands Panel
 			DrawHudPanel(spriteBatch, graphicsDevice, _handsPanel, Color.LightGray, 0.5f);
-			spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
-			if (mainPlayer.InventoryOpen)
+            if (mainPlayer.Hands == null)
+			    spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
+            else
+                spriteBatch.DrawString(_font, mainPlayer.Hands.Name, _handsPanel.Location.ToVector2(), Color.White);
+            if (mainPlayer.InventoryOpen)
 				DrawInventory(spriteBatch, graphicsDevice, mainPlayer);
 			spriteBatch.Draw(_cursor, _cursorPos, _cursorRect, Color.White, 0, _cursorOrigin, 1.0f, SpriteEffects.None, 0);
 		}

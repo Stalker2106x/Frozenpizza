@@ -25,6 +25,7 @@ namespace FrozenPizza
         Rectangle _skinRect;
         Texture2D _skin;
 		bool _inventoryOpen;
+        Item _hands;
         List<Item> _inventory;
         List<PlayerStates> _states;
         SoundEffect[] _stepSound;
@@ -91,6 +92,12 @@ namespace FrozenPizza
 			get { return (_inventoryOpen); }
 			set { _inventoryOpen = value; }
 		}
+
+        public Item Hands
+        {
+            get { return (_hands); }
+            set { _hands = value; }
+        }
 
         public void Load(ContentManager content)
         {
@@ -254,6 +261,20 @@ namespace FrozenPizza
             _inventoryOpen = _inventoryOpen ? false : true;
         }
 
+        public void pickupItem(Level level, int index)
+        {
+            if (_hands == null)
+            {
+                List<Item> entities = level.getEntities(_pos);
+                if (entities == null)
+                    return;
+                _hands = entities[index];
+                entities.RemoveAt(index);
+                if (entities.Count == 0)
+                    entities = null;
+            }
+        }
+
         public void Update(GameTime gameTime, Level level, KeyboardState[] keybStates, MouseState[] mStates, Camera cam)
         {
             if (!InventoryOpen)
@@ -261,6 +282,8 @@ namespace FrozenPizza
             updateMove(gameTime, keybStates, level);
             if (keybStates[1].IsKeyDown(Keys.Tab) && !keybStates[0].IsKeyDown(Keys.Tab))
                 toggleInventory();
+            else if (keybStates[1].IsKeyDown(Keys.E) && !keybStates[0].IsKeyDown(Keys.E))
+                pickupItem(level, 0);
             updateStates(gameTime);
             if (_states.Count > 0 && _stateTimer.TotalSeconds >= 20)
                 applyStates();

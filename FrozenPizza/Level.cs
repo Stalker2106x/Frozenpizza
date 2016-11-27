@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using TiledSharp;
 
 namespace FrozenPizza
@@ -23,12 +24,20 @@ namespace FrozenPizza
 		West
 	}
 
+    public enum Meta
+    {
+        Melee = 1,
+        Pistol,
+        Rifle
+    }
+
     public class Level
     {
         int _drawMargin;
         int _twidth, _theight;
         int _ttwidth, _ttheight;
         TmxMap _map;
+        List<Item>[] _entities;
         Texture2D _tileset;
 
         public Level(string mapName)
@@ -44,6 +53,7 @@ namespace FrozenPizza
             _tileset = content.Load<Texture2D>("maps/" + _map.Tilesets[0].Name.ToString());
             _ttwidth = _tileset.Width / _twidth;
             _ttheight = _tileset.Height / _theight;
+            _entities = new List<Item>[_map.Width * _map.Height];
             return (true);
         }
 
@@ -52,17 +62,31 @@ namespace FrozenPizza
             return (new Rectangle((int)pos.X / _twidth, (int)pos.Y / _theight, ((int)pos.X / _twidth), (int)pos.Y / _twidth));
         }
 
+        public Vector2 vmapToGrid(Vector2 pos)
+        {
+            return (new Vector2(pos.X / _twidth, pos.Y / _theight));
+        }
+
 		public Vector2 gridToMap(Vector2 pos)
 		{
 			return (new Vector2(pos.X * _twidth, pos.Y * _theight));
 		}
 
-        public void GenerateItems()
+        public void GenerateItems(Collection collection)
         {
-			for (int i = 0; i < _map.Layers[(int)Layers.Meta].Tiles.Count; i++)
+            Random rnd = new Random();
+
+            for (int i = 0; i < _map.Layers[(int)Layers.Meta].Tiles.Count; i++)
             {
-				if (_map.Layers[(int)Layers.Meta].Tiles[i].Gid == 0)
-					continue;				
+                int gid = _map.Layers[(int)Layers.Meta].Tiles[i].Gid;
+
+                if (gid == 0)
+                    continue;
+                else
+                {
+                    _entities[i] = new List<Item>();
+                    _entities[i].Add(collection.MeleeList[rnd.Next(0, collection.MeleeList.Count)]);
+                }
             }
         }
 
@@ -102,18 +126,29 @@ namespace FrozenPizza
             return (false);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Camera cam, Player mainPlayer)
+        public List<Item> getEntities(Vector2 pos)
+        {
+            Vector2 realpos = vmapToGrid(pos);
+
+            return (_entities[(int)((realpos.Y * (float)_map.Width) + realpos.X)]);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Camera cam, Player mainPlayer, Collection collection)
         {
             Rectangle viewport = cam.getViewport();
             int xoffset = (viewport.X / _twidth);
             int xend = ((viewport.X + viewport.Width) / _twidth);
             int yoffset = (viewport.Y / _theight);
             int yend = ((viewport.Y + viewport.Height) / _theight);
-
+            
             if (xoffset > _drawMargin)
                 xoffset -= _drawMargin;
             if (yoffset > _drawMargin)
                 yoffset -= _drawMargin;
+            if (xend + _drawMargin < _map.Width)
+                xend += _drawMargin;
+            if (yend + _drawMargin < _map.Height)
+                yend += _drawMargin;
             for (int y = 0; y <= yend; y++)
             {
                 for (int x = 0; x <= xend; x++)
@@ -122,24 +157,32 @@ namespace FrozenPizza
                     {
 						if ((Layers)l == Layers.Meta || (Layers)l == Layers.Spawn || (Indoor(mainPlayer.Pos) && (Layers)l == Layers.Ceiling))
                             continue;
-                        if ((yoffset + y) < 0 || (xoffset + x) < 0)
+                        if (((yoffset + y) < 0 || (xoffset + x) < 0) //TopLeft
+                            || ((yoffset + y) > (_map.Height - 1) || (xoffset + x) > (_map.Width - 1))) //TopRight
                             continue;
                         int gid = _map.Layers[l].Tiles[((yoffset + y) * _map.Width) + xoffset + x].Gid;
 
                         // Empty tile, do nothing
                         if (gid == 0)
                             continue;
-                        else
-                        {
+
                             int tileFrame = gid - 1;
                             int column = tileFrame % _ttwidth;
                             int row = (int)Math.Floor((double)tileFrame / (double)_ttwidth);
 
                             Rectangle tilesetRec = new Rectangle(_twidth * column, _theight * row, _twidth, _theight);
 
-                            spriteBatch.Draw(_tileset, new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), tilesetRec, Color.White, 0, Vector2.Zero, SpriteEffects.None, l / 10);
+                            spriteBatch.Draw(_tileset, new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), tilesetRec, Color.White, 0, Vector2.Zero, SpriteEffects.None, (Layers)l == Layers.Ceiling ? 0.2f : 0.5f);
+                            if (_entities[((yoffset + y) * _map.Width) + xoffset + x] != null)
+                            {
+                                for (int i = 0; i < _entities[((yoffset + y) * _map.Width) + xoffset + x].Count; i++)
+                                {
+                                    Item item = _entities[((yoffset + y) * _map.Width) + xoffset + x][i];
+
+                                    spriteBatch.Draw(collection.MeleeTileset, new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), item.SkinRect, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.3f);
+                                }
+                            }
                             break;
-                        }
                     }
                 }
 

@@ -139,3 +139,18 @@
 #begin items/melee.xml
 /copy:items/melee.xml
 
+#begin gfx/melee.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gfx/melee.png
+
+#begin maps/dev.tmx
+/copy:maps/dev.tmx
+

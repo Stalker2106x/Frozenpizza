@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
+
+
 namespace FrozenPizza
 {
     public enum ItemType
@@ -30,6 +32,7 @@ namespace FrozenPizza
 		public List<SlotType> Slots { get; set; }
 		public float Weight { get; set; }
 		public float Size { get; set; }
+        public Rectangle SkinRect { get; set; }
 
 		public Item(int id, String name, ItemType type, float weight, float size)
 		{
@@ -38,6 +41,12 @@ namespace FrozenPizza
 			Type = type;
 			Weight = weight;
 			Size = size;
+            setSkin();
 		}
+
+        public void setSkin()
+        {
+            SkinRect = new Rectangle(Id % 10, Id / 10, 32, 32);
+        }
 	}
 }
