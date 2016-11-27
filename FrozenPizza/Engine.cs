@@ -58,7 +58,7 @@ namespace FrozenPizza
 		protected override void Initialize()
 		{
 			// TODO: Add your initialization logic here
-			level = new Level("Data/maps/dev.tmx");
+			level = new Level("Data/maps/world.tmx");
 			cam = new Camera(GraphicsDevice);
 			hud = new HUD(GraphicsDevice, cam);
 			keybStates = new KeyboardState[2];

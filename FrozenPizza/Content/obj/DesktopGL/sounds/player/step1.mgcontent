@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/step1.wav</SourceFile>
   <SourceTime>2016-11-26T20:25:01.5755718+01:00</SourceTime>
   <DestFile>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Content/bin/DesktopGL/sounds/player/step1.xnb</DestFile>
-  <DestTime>2016-11-27T17:17:31.1323209+01:00</DestTime>
+  <DestTime>2016-11-27T17:55:36.7401716+01:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>
