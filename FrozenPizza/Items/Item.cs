@@ -24,7 +24,7 @@ namespace FrozenPizza
 		Back
     }
 
-	public class Item
+	public abstract class Item
 	{
 		public int Id { get; set; }
 		public String Name { get; set; }
@@ -43,6 +43,11 @@ namespace FrozenPizza
 			Size = size;
             setSkin();
 		}
+
+        public void use()
+        {
+
+        }
 
         public void setSkin()
         {

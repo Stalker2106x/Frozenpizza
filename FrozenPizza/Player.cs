@@ -24,13 +24,16 @@ namespace FrozenPizza
         Vector2 _pos, _origin;
         Rectangle _skinRect;
         Texture2D _skin;
-		bool _inventoryOpen;
+		bool _inventoryOpen, _cooldown;
         Item _hands;
         List<Item> _inventory;
         List<PlayerStates> _states;
         SoundEffect[] _stepSound;
+
+        //Timers
 		TimeSpan _stepTimer;
         TimeSpan _stateTimer;
+        TimeSpan _cooldownTimer;
         float _mouseSensivity;
 
 		public Player(String name, Vector2 spawn)
@@ -50,6 +53,7 @@ namespace FrozenPizza
             _stateTimer = new TimeSpan();
             _stepTimer = new TimeSpan();
             _mouseSensivity = 0.01f;
+            _cooldown = false;
 		}
 
         public Vector2 Pos
@@ -97,6 +101,11 @@ namespace FrozenPizza
         {
             get { return (_hands); }
             set { _hands = value; }
+        }
+
+        public int Cooldown
+        {
+            get { return ((int)(_cooldownTimer.TotalMilliseconds / 1000) * 250); }
         }
 
         public void Load(ContentManager content)
@@ -210,6 +219,27 @@ namespace FrozenPizza
 				stepSound(gameTime, keybStates[1].IsKeyDown(Keys.LeftShift) ? true : false);
         }
 
+        public void updateCooldown(GameTime gameTime)
+        {
+            _cooldownTimer += gameTime.ElapsedGameTime;
+            if (_cooldownTimer > TimeSpan.FromSeconds(1))
+                    _cooldown = false;
+        }
+        public void updateAttack(GameTime gameTime, MouseState[] mStates)
+        {
+            if (_cooldown)
+                updateCooldown(gameTime);
+            if (mStates[1].LeftButton == ButtonState.Pressed && !_cooldown)
+            {
+                if (_hands != null)
+                    _hands.use();
+                _cooldown = true;
+                _cooldownTimer = TimeSpan.Zero;
+            }
+            if (mStates[1].RightButton == ButtonState.Pressed)
+                _cooldown = true;
+        }
+
         void updateAimAngle(Camera cam, MouseState[] mStates)
         {
 			if (mStates[1].X != cam.getViewport().Width / 2)
@@ -275,15 +305,32 @@ namespace FrozenPizza
             }
         }
 
+        public void dropItem(Level level, SlotType slot, int index)
+        {
+            List<Item> entities = level.getEntities(_pos);
+            if (entities == null)
+                entities = new List<Item>();
+            if (slot == SlotType.Hands)
+            {
+                entities.Add(_hands);
+                level.setEntities(_pos, entities);
+                _hands = null;
+            }
+
+        }
+
         public void Update(GameTime gameTime, Level level, KeyboardState[] keybStates, MouseState[] mStates, Camera cam)
         {
             if (!InventoryOpen)
                 updateAimAngle(cam, mStates);
             updateMove(gameTime, keybStates, level);
+            updateAttack(gameTime, mStates);
             if (keybStates[1].IsKeyDown(Keys.Tab) && !keybStates[0].IsKeyDown(Keys.Tab))
                 toggleInventory();
-            else if (keybStates[1].IsKeyDown(Keys.E) && !keybStates[0].IsKeyDown(Keys.E))
+            if (keybStates[1].IsKeyDown(Keys.E) && !keybStates[0].IsKeyDown(Keys.E))
                 pickupItem(level, 0);
+            if (keybStates[1].IsKeyDown(Keys.G) && !keybStates[0].IsKeyDown(Keys.G))
+                dropItem(level, SlotType.Hands, 0);
             updateStates(gameTime);
             if (_states.Count > 0 && _stateTimer.TotalSeconds >= 20)
                 applyStates();

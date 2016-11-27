@@ -64,12 +64,12 @@ namespace FrozenPizza
 
         public Vector2 vmapToGrid(Vector2 pos)
         {
-            return (new Vector2(pos.X / _twidth, pos.Y / _theight));
+            return (new Vector2((int)pos.X / _twidth, (int)pos.Y / _theight));
         }
 
-		public Vector2 gridToMap(Vector2 pos)
+		public Vector2 vgridToMap(Vector2 pos)
 		{
-			return (new Vector2(pos.X * _twidth, pos.Y * _theight));
+			return (new Vector2((int)pos.X * _twidth, (int)pos.Y * _theight));
 		}
 
         public void GenerateItems(Collection collection)
@@ -100,7 +100,7 @@ namespace FrozenPizza
 			while (_map.Layers[(int)Layers.Spawn].Tiles[pos].Gid == 0)
 				pos = rnd.Next(0, _map.Layers[(int)Layers.Spawn].Tiles.Count);
 			spawn = _map.Layers[(int)Layers.Spawn].Tiles[pos];
-			return (gridToMap(new Vector2(spawn.X, spawn.Y)));
+			return (vgridToMap(new Vector2(spawn.X, spawn.Y)));
         }
 
         public bool Collide(Vector2 pos)
@@ -129,8 +129,15 @@ namespace FrozenPizza
         public List<Item> getEntities(Vector2 pos)
         {
             Vector2 realpos = vmapToGrid(pos);
+            List<Item> list = _entities[(int)((realpos.Y * _map.Width) + realpos.X)];
+            
+            return (list);
+        }
 
-            return (_entities[(int)((realpos.Y * (float)_map.Width) + realpos.X)]);
+        public void setEntities(Vector2 pos, List<Item> list)
+        {
+            Vector2 realpos = vmapToGrid(pos);
+            _entities[(int)((realpos.Y * _map.Width) + realpos.X)] = list;
         }
 
         public void Draw(SpriteBatch spriteBatch, Camera cam, Player mainPlayer, Collection collection)

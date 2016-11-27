@@ -23,6 +23,9 @@ namespace FrozenPizza
 		Color[] _foodBackground;
         int _headsUpHeight, _headsUpWidth;
 
+        //Bars
+        Rectangle _cooldownBar;
+
         public HUD(GraphicsDevice graphics, Camera cam)
         {
             _hudOffset = new Vector2(64, 0);
@@ -30,7 +33,8 @@ namespace FrozenPizza
             _headsUpWidth = 64;
 			_cursorPos = new Vector2(cam.getViewport().Width / 2, cam.getViewport().Height / 4);
 			_handsPanel = new Rectangle((cam.getViewport().Width / 2) - 125, cam.getViewport().Height - 90, 250, 80);
-			_inventoryPanel = new Rectangle(cam.getViewport().Width / 2, 20, cam.getViewport().Width / 2, cam.getViewport().Height - 140);
+            _cooldownBar = new Rectangle((cam.getViewport().Width / 2) - 125, cam.getViewport().Height - 13, 0, 3);
+            _inventoryPanel = new Rectangle(cam.getViewport().Width / 2, 20, cam.getViewport().Width / 2, cam.getViewport().Height - 140);
 			_handsPos = new Vector2(_handsPanel.X, _handsPanel.Y);
             _statsPos = new Vector2(0, cam.getViewport().Height - _headsUpHeight);
             _foodPos = new Vector2(cam.getViewport().Width - (2 * _headsUpWidth), cam.getViewport().Height - _headsUpHeight);
@@ -108,6 +112,8 @@ namespace FrozenPizza
             spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.maxThirst, mainPlayer.Thirst, true), calcHeadsUpRect(mainPlayer.maxThirst, mainPlayer.Thirst), _foodBackground[1], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
 			//Hands Panel
 			DrawHudPanel(spriteBatch, graphicsDevice, _handsPanel, Color.LightGray, 0.5f);
+            _cooldownBar.Width = mainPlayer.Cooldown;
+            DrawHudPanel(spriteBatch, graphicsDevice, _cooldownBar, Color.White, 0.75f);
             if (mainPlayer.Hands == null)
 			    spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
             else
