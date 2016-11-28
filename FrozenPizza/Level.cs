@@ -26,7 +26,7 @@ namespace FrozenPizza
 
     public enum Meta
     {
-        Melee = 1,
+        Melee = 257,
         Pistol,
         Rifle
     }
@@ -45,6 +45,7 @@ namespace FrozenPizza
             _map = new TmxMap(mapName);
             _twidth = _map.Tilesets[0].TileWidth;
             _theight = _map.Tilesets[0].TileHeight;
+            _entities = new List<Item>[_map.Width * _map.Height];
             _drawMargin = 10;
         }
 
@@ -53,7 +54,6 @@ namespace FrozenPizza
             _tileset = content.Load<Texture2D>("maps/" + _map.Tilesets[0].Name.ToString());
             _ttwidth = _tileset.Width / _twidth;
             _ttheight = _tileset.Height / _theight;
-            _entities = new List<Item>[_map.Width * _map.Height];
             return (true);
         }
 
@@ -82,10 +82,17 @@ namespace FrozenPizza
 
                 if (gid == 0)
                     continue;
-                else
+                if (_entities[i] == null)
+                    _entities[i] = new List<Item>();
+                if (gid == (int)Meta.Melee)
+                {
+                    
+                    _entities[i].Add((Melee)collection.MeleeList[rnd.Next(0, collection.MeleeList.Count)]);
+                }
+                else if (gid == (int)Meta.Pistol)
                 {
                     _entities[i] = new List<Item>();
-                    _entities[i].Add((Melee)collection.MeleeList[rnd.Next(0, collection.MeleeList.Count)]);
+                    _entities[i].Add((Firearm)collection.FirearmList[rnd.Next(0, collection.FirearmList.Count)]);
                 }
             }
         }
@@ -185,8 +192,13 @@ namespace FrozenPizza
                                 for (int i = 0; i < _entities[((yoffset + y) * _map.Width) + xoffset + x].Count; i++)
                                 {
                                     Item item = _entities[((yoffset + y) * _map.Width) + xoffset + x][i];
+                                    Texture2D _itemSheet = null;
 
-                                    spriteBatch.Draw(collection.MeleeTileset, new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), item.SkinRect, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.3f);
+                                    if (item.Type == ItemType.Melee)
+                                        _itemSheet = collection.MeleeTileset;
+                                    else if (item.Type == ItemType.Firearm)
+                                        _itemSheet = collection.FirearmTileset;
+                                    spriteBatch.Draw(_itemSheet, new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), item.SkinRect, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.3f);
                                 }
                             }
                             break;

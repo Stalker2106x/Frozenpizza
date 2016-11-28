@@ -25,6 +25,6 @@
 	  	<Weight>1</Weight>
 	  	<Size>2</Size>
       <Damage>20</Damage>
-	    <Cooldown>0.3</Cooldown>
+	    <Cooldown>0.7</Cooldown>
     </Item>
 </Melee>
