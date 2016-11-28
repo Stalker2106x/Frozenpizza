@@ -16,11 +16,13 @@ namespace FrozenPizza
 
         enum GameState
         {
+            Menu,
             Playing,
             Paused
         }
 
         //GAME MECHANICS
+        bool hasFocus;
         GameState gstate;
         Camera cam;
         KeyBinds keybinds;
@@ -62,7 +64,7 @@ namespace FrozenPizza
 		protected override void Initialize()
 		{
 			// TODO: Add your initialization logic here
-			level = new Level("Data/maps/dev.tmx");
+			level = new Level("Data/maps/world.tmx");
 			cam = new Camera(GraphicsDevice);
 			hud = new HUD(GraphicsDevice, cam);
 			keybStates = new KeyboardState[2];
@@ -72,6 +74,18 @@ namespace FrozenPizza
 			collection = new Collection();
             base.Initialize();
             gstate = GameState.Playing;
+        }
+        protected override void OnDeactivated(Object sender, EventArgs args)
+        {
+            hasFocus = false;
+            //call the base method and fire the event
+            base.OnDeactivated(sender, args);
+        }
+
+        protected override void OnActivated(object sender, EventArgs args)
+        {          
+            base.OnActivated(sender, args);
+            hasFocus = true;
         }
 
         /// <summary>
@@ -117,6 +131,19 @@ namespace FrozenPizza
 		{
 			Mouse.SetPosition(cam.getViewport().Width / 2, cam.getViewport().Height / 2);
 		}
+
+        void updateGame(GameTime gameTime)
+        {
+            updateTimeEvents(gameTime);
+            mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, projectiles);
+            hud.Update(mouseStates, mainPlayer);
+            for (int p = 0; p < projectiles.Count; p++)
+                if (!projectiles[p].Update(level))
+                    projectiles.RemoveAt(p);
+            IsMouseVisible = mainPlayer.InventoryOpen;
+            base.Update(gameTime);
+        }
+
 		/// <summary>
 		/// Allows the game to run logic such as updating the world,
 		/// checking for collisions, gathering input, and playing audio.
@@ -124,21 +151,14 @@ namespace FrozenPizza
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			if (gstate == GameState.Paused)
+			if (!hasFocus)
 				return;
 			keybStates[1] = Keyboard.GetState();
 			mouseStates[1] = Mouse.GetState();
 
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
-			updateTimeEvents(gameTime);
-			mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, projectiles);
-            hud.Update(mouseStates, mainPlayer);
-            for (int p = 0; p < projectiles.Count; p++)
-                if (!projectiles[p].Update(level))
-                    projectiles.RemoveAt(p);
-            IsMouseVisible = mainPlayer.InventoryOpen;
-			base.Update(gameTime);
+            updateGame(gameTime);
 			keybStates[0] = keybStates[1];
             if (!mainPlayer.InventoryOpen)
 			    resetMousePos();
@@ -167,10 +187,10 @@ namespace FrozenPizza
             GraphicsDevice.Clear(Color.Black);
             switch (gstate)
             {
+                case GameState.Menu:
+                    break;
                 case GameState.Playing:
                     DrawGame(gameTime);
-                    break;
-                case GameState.Paused:
                     break;
             }
             base.Draw(gameTime);

@@ -92,7 +92,7 @@ namespace FrozenPizza
                 if (gid == (int)Meta.Melee)
                 {
                     
-                    _entities[i].Add((Melee)collection.MeleeList[rnd.Next(0, collection.MeleeList.Count)]);
+                    _entities[i].Add((Melee)collection.MeleeList[rnd.Next(1, collection.MeleeList.Count)]);
                 }
                 else if (gid == (int)Meta.Pistol)
                 {
