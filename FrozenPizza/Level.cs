@@ -80,7 +80,7 @@ namespace FrozenPizza
             {
                 int gid = _map.Layers[(int)Layers.Meta].Tiles[i].Gid;
 
-                if (gid == 0)
+                if (gid == 0 || rnd.Next(0, 2) == 0) //Skip empty & 50% chance of spawn
                     continue;
                 if (_entities[i] == null)
                     _entities[i] = new List<Item>();
