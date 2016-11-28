@@ -43,6 +43,7 @@
     <Compile Include="Character.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="HUD.cs" />
+    <Compile Include="Items\Ammo.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="KeyBinds.cs" />
     <Compile Include="Level.cs" />

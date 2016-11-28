@@ -9,22 +9,29 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace FrozenPizza
 {
+    public enum FirearmActions
+    {
+        Fire,
+        Reload
+    }
     public class Weapon : Item
     {
         public int Damage { get; set; }
         public int Durability { get; set; }
         public float Cooldown { get; set; }
-
+        public String ResourceId { get; set; }
+        public SoundEffect[] Sounds { get; set; }
 
         public Weapon(int id, String name, ItemType type, float weight, float size) : base(id, name, type, weight, size)
 		{
 
 		}
 
-		public void SetWeaponAttributes(int damage, float cooldown)
+		public void SetWeaponAttributes(String resourceId, int damage, float cooldown)
 		{
 			Random rnd = new Random();
 
+            ResourceId = resourceId;
 			Damage = damage;
 			Cooldown = cooldown;
 			Durability = rnd.Next(20, 101);
@@ -35,8 +42,16 @@ namespace FrozenPizza
 	{
 		public Melee(int id, String name, float weight, float size) : base(id, name, ItemType.Melee, weight, size)
 		{
-
+            Sounds = new SoundEffect[1];
 		}
+        public void LoadSounds(ContentManager content)
+        {
+            Sounds[0] = content.Load<SoundEffect>("sounds/weapon/" + ResourceId + "/attack");
+        }
+        public void attack()
+        {
+            Sounds[0].Play();
+        }
 	}
 
     public class Firearm : Weapon
@@ -46,12 +61,36 @@ namespace FrozenPizza
 
 		public Firearm(int id, String name, float weight, float size) : base(id, name, ItemType.Firearm, weight, size)
         {
-            
+            Sounds = new SoundEffect[Enum.GetNames(typeof(FirearmActions)).Length];
+        }
+
+        public float getFireAngle(float[] angle)
+        {
+            Random rnd = new Random();
+            int max = (int)(angle[0] * 100);
+            int min = (int)(angle[1] * 100);
+
+            return ((float)(rnd.Next(min, max + 1) / 100f));
+        }
+
+        public void fire(List<Projectile> projectiles, Vector2 pos, float[] aimAccuracyAngle)
+        {
+            float angle = getFireAngle(aimAccuracyAngle);
+
+            Sounds[(int)FirearmActions.Fire].Play();
+            projectiles.Add(new Projectile(ProjectileType.Bullet, pos, angle, 5f));
         }
 
 		public void SetFirearmAttributes(int accuracy)
 		{
 			Accuracy = accuracy;
 		}
+
+        public void LoadSounds(ContentManager content)
+        {
+            Sounds[(int)FirearmActions.Fire] = content.Load<SoundEffect>("sounds/weapon/" + ResourceId + "/fire");
+            Sounds[(int)FirearmActions.Reload] = content.Load<SoundEffect>("sounds/weapon/" + ResourceId + "/reload");
+
+        }
     }
 }

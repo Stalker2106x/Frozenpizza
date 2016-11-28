@@ -13,6 +13,7 @@ namespace FrozenPizza
 		Melee,
 		Firearm,
 		Wearable,
+        Ammo,
 		Misc
     }
 

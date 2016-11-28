@@ -34,7 +34,6 @@ namespace FrozenPizza
 
         //Sound
         SoundEffect[] _stepSound;
-        SoundEffect _attackSound;
 
         //Timers
 		TimeSpan _stepTimer;
@@ -127,7 +126,6 @@ namespace FrozenPizza
             _stepSound[5] = content.Load<SoundEffect>("sounds/player/rstep2");
             _stepSound[6] = content.Load<SoundEffect>("sounds/player/rstep3");
             _stepSound[7] = content.Load<SoundEffect>("sounds/player/rstep4");
-            _attackSound = content.Load<SoundEffect>("sounds/weapon/attack");
         }
 
         //Getters for private attributes or with operations
@@ -144,7 +142,8 @@ namespace FrozenPizza
 
             if (hands != null)
                 return ((float)TimeSpan.FromSeconds(hands.Cooldown).TotalMilliseconds);
-            return ((float)TimeSpan.FromSeconds(1).TotalMilliseconds);
+            else
+                return ((float)TimeSpan.FromSeconds(Engine.collection.MeleeList[0].Cooldown).TotalMilliseconds);
         }
 
         public int getArmor()
@@ -165,7 +164,7 @@ namespace FrozenPizza
 
 
 
-		public float[] getAimAccuracyAngle()
+		public float[] getAimAccuracyAngle(bool real)
 		{
 			float[] aimAccuracyAngle = new float[2];
 
@@ -183,6 +182,11 @@ namespace FrozenPizza
 				aimAccuracyAngle[0] += 0.2f;
 				aimAccuracyAngle[1] -= 0.2f;
 			}
+            if (real)
+            {
+                aimAccuracyAngle[0] += _aim - MathHelper.PiOver2;
+                aimAccuracyAngle[1] += _aim - MathHelper.PiOver2;
+            }
 			return (aimAccuracyAngle);
 		}
 
@@ -279,24 +283,33 @@ namespace FrozenPizza
             if (_cooldownTimer.TotalMilliseconds > cooldown)
                     _cooldown = false;
         }
-        public void useHands()
+        public void useHands(List<Projectile> projectiles)
         {
-            _attackSound.Play();
-            if (_hands == null)
-                return;
-            if (_hands.GetType() == typeof(Melee) || _hands.GetType() == typeof(Firearm))
+            if (_hands == null || _hands.GetType() == typeof(Melee))
             {
-                Weapon weapon = (Weapon)_hands;
+                Melee weapon;
+
+                if (_hands == null)
+                    weapon = Engine.collection.MeleeList[0];
+                else
+                    weapon = (Melee)_hands;
+                weapon.attack();
+            }
+            else if (_hands.GetType() == typeof(Firearm))
+            {
+                Firearm weapon = (Firearm)_hands;
+
+                weapon.fire(projectiles, _pos, getAimAccuracyAngle(true));
             }
         }
 
-        public void updateAttack(GameTime gameTime, MouseState[] mStates)
+        public void updateAttack(GameTime gameTime, MouseState[] mStates, List<Projectile> projectiles)
         {
             if (_cooldown)
                 updateCooldown(gameTime);
             if (mStates[1].LeftButton == ButtonState.Pressed && mStates[0].LeftButton == ButtonState.Released && !_cooldown)
             {
-                useHands();
+                useHands(projectiles);
                 _cooldown = true;
                 _cooldownTimer = TimeSpan.Zero;
             }
@@ -390,12 +403,12 @@ namespace FrozenPizza
         }
 
         //Base update call
-        public void Update(GameTime gameTime, Level level, KeyboardState[] keybStates, MouseState[] mStates, Camera cam)
+        public void Update(GameTime gameTime, Level level, KeyboardState[] keybStates, MouseState[] mStates, Camera cam, List<Projectile> projectiles)
         {
             if (!InventoryOpen)
                 updateAimAngle(cam, mStates);
             updateMove(gameTime, keybStates, level);
-            updateAttack(gameTime, mStates);
+            updateAttack(gameTime, mStates, projectiles);
             if (keybStates[1].IsKeyDown(Keys.Tab) && !keybStates[0].IsKeyDown(Keys.Tab))
                 toggleInventory();
             if (keybStates[1].IsKeyDown(Keys.E) && !keybStates[0].IsKeyDown(Keys.E))

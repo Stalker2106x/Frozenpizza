@@ -139,7 +139,7 @@ namespace FrozenPizza
 
 		public void drawAimLines(SpriteBatch spriteBatch, Player mainPlayer, Camera cam)
 		{
-			float[] aimAccuracyAngle = mainPlayer.getAimAccuracyAngle();
+			float[] aimAccuracyAngle = mainPlayer.getAimAccuracyAngle(false);
 			Vector2[] leftLine = new Vector2[2];
 			Vector2[] rightLine = new Vector2[2];
 

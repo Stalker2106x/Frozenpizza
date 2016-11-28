@@ -106,18 +106,6 @@
 #begin maps/dev.tmx
 /copy:maps/dev.tmx
 
-#begin sounds/weapon/attack.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:sounds/weapon/attack.wav
-
-#begin sounds/player/attack.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:sounds/player/attack.wav
-
 #begin sounds/player/rstep1.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -177,4 +165,58 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gfx/firearms.png
+
+#begin gfx/projectiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gfx/projectiles.png
+
+#begin sounds/weapon/tool/attack.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/weapon/tool/attack.wav
+
+#begin sounds/weapon/glock18/fire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/weapon/glock18/fire.wav
+
+#begin sounds/weapon/glock18/reload.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/weapon/glock18/reload.wav
+
+#begin sounds/weapon/hands/attack.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/weapon/hands/attack.wav
+
+#begin sounds/weapon/blade/attack.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/weapon/blade/attack.wav
+
+#begin sounds/weapon/berettam9/fire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/weapon/berettam9/fire.wav
+
+#begin sounds/weapon/berettam9/reload.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/weapon/berettam9/reload.wav
 

@@ -20,17 +20,21 @@ namespace FrozenPizza
             Paused
         }
 
-        //GAME
+        //GAME MECHANICS
         GameState gstate;
         Camera cam;
-        Level level;
         KeyBinds keybinds;
-        Player mainPlayer;
-		Collection collection;
         HUD hud;
 
-		//Input
-		KeyboardState[] keybStates;
+        //Database
+        public static Collection collection;
+        //Game
+        Level level;     
+        Player mainPlayer;
+        List<Projectile> projectiles;
+
+        //Input
+        KeyboardState[] keybStates;
 		MouseState[] mouseStates;
 
         //Timers
@@ -58,11 +62,12 @@ namespace FrozenPizza
 		protected override void Initialize()
 		{
 			// TODO: Add your initialization logic here
-			level = new Level("Data/maps/world.tmx");
+			level = new Level("Data/maps/dev.tmx");
 			cam = new Camera(GraphicsDevice);
 			hud = new HUD(GraphicsDevice, cam);
 			keybStates = new KeyboardState[2];
 			mouseStates = new MouseState[2];
+            projectiles = new List<Projectile>();
 			mainPlayer = new Player("Bernie", level.getSpawnPoint());
 			collection = new Collection();
             base.Initialize();
@@ -127,8 +132,11 @@ namespace FrozenPizza
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 			updateTimeEvents(gameTime);
-			mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam);
+			mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, projectiles);
             hud.Update(mouseStates, mainPlayer);
+            for (int p = 0; p < projectiles.Count; p++)
+                if (!projectiles[p].Update(level))
+                    projectiles.RemoveAt(p);
             IsMouseVisible = mainPlayer.InventoryOpen;
 			base.Update(gameTime);
 			keybStates[0] = keybStates[1];
@@ -142,6 +150,8 @@ namespace FrozenPizza
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.getTransformation());
             level.Draw(spriteBatch, cam, mainPlayer, collection);
             mainPlayer.Draw(spriteBatch);
+            for (int p = 0; p < projectiles.Count; p++)
+                projectiles[p].Draw(spriteBatch, collection);
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 			hud.Draw(spriteBatch, GraphicsDevice, mainPlayer, collection, cam);

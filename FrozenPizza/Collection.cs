@@ -13,6 +13,7 @@ namespace FrozenPizza
 		public List<Melee> MeleeList { get; }
 		public List<Firearm> FirearmList { get; }
 		public Texture2D[] Tilesets { get; set; }
+        public Texture2D Projectiles { get; set; }
 
         public Collection()
 		{
@@ -25,6 +26,7 @@ namespace FrozenPizza
 		{
 			LoadMelee(content);
             LoadFirearm(content);
+            LoadProjectiles(content);
 			return (true);
 		}
 
@@ -36,10 +38,10 @@ namespace FrozenPizza
 			foreach (var item in bundle.Elements("Item"))
 			{
 				MeleeList.Add(new Melee((int)item.Element("Id"), item.Element("Name").Value, (float)item.Element("Weight"), (float)item.Element("Size")));
-				MeleeList.Last().SetWeaponAttributes((int)item.Element("Damage"), (float)item.Element("Cooldown"));
-				//MeleeList.Last().SetMeleeAttributes();
-			}
-			return (true);
+				MeleeList.Last().SetWeaponAttributes(item.Element("ResourceId").Value.ToString(), (int)item.Element("Damage"), (float)item.Element("Cooldown"));
+                MeleeList.Last().LoadSounds(content);
+            }
+            return (true);
 		}
 
         public bool LoadFirearm(ContentManager content)
@@ -50,9 +52,16 @@ namespace FrozenPizza
             foreach (var item in bundle.Elements("Item"))
             {
                 FirearmList.Add(new Firearm((int)item.Element("Id"), item.Element("Name").Value, (float)item.Element("Weight"), (float)item.Element("Size")));
-				FirearmList.Last().SetWeaponAttributes((int)item.Element("Damage"), (float)item.Element("Cooldown"));
+				FirearmList.Last().SetWeaponAttributes(item.Element("ResourceId").Value.ToString(), (int)item.Element("Damage"), (float)item.Element("Cooldown"));
 				FirearmList.Last().SetFirearmAttributes((int)item.Element("Accuracy"));
+                FirearmList.Last().LoadSounds(content);
             }
+            return (true);
+        }
+
+        public bool LoadProjectiles(ContentManager content)
+        {
+            Projectiles = content.Load<Texture2D>("gfx/projectiles");
             return (true);
         }
     }
