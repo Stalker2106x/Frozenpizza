@@ -180,8 +180,8 @@ namespace FrozenPizza
 			}
 			if (_sprinting)
 			{
-				aimAccuracyAngle[0] += 0.3f;
-				aimAccuracyAngle[1] -= 0.3f;
+				aimAccuracyAngle[0] += 0.2f;
+				aimAccuracyAngle[1] -= 0.2f;
 			}
 			return (aimAccuracyAngle);
 		}
