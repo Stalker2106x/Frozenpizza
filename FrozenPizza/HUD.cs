@@ -10,35 +10,61 @@ namespace FrozenPizza
 {
     public class HUD
     {
-
+		//Text
         SpriteFont _font;
-        Texture2D _cursor, _hudEntities, _colorRect;
-        Vector2 _cursorPos, _cursorOrigin;
-        Rectangle _cursorRect, _hudEntRect;
-		Rectangle _handsPanel, _inventoryPanel;
+
+		//Cursor
+		Texture2D _cursor;
+		Rectangle _cursorRect;
+		Vector2 _cursorPos, _cursorOrigin;
+
+		//Stats
+		Texture2D _hudEntities;
+		Rectangle _hudEntRect;
+
+		//StatsPanel
         Vector2 _statsPos;
-        Vector2 _foodPos;
+
+		//HandsPanel
 		Vector2 _handsPos;
-        Vector2 _hudOffset;
+		Rectangle _handsPanel;
+
+		//FoodPanel
+		Vector2 _foodPos;
 		Color[] _foodBackground;
-        int _headsUpHeight, _headsUpWidth;
+
+		//Common
+		int _headsUpHeight, _headsUpWidth;
+		Vector2 _hudOffset;
+		Texture2D _colorRect;
+
+		//Inventory
+		Rectangle _inventoryPanel;
 
         //Bars
         Rectangle _cooldownBar;
 
         public HUD(GraphicsDevice graphics, Camera cam)
         {
+			//Common
             _hudOffset = new Vector2(64, 0);
             _headsUpHeight = 64;
             _headsUpWidth = 64;
+			_colorRect = new Texture2D(graphics, 1, 1);
+			_colorRect.SetData(new[] { Color.White });
+			//Cursor
 			_cursorPos = new Vector2(cam.getViewport().Width / 2, cam.getViewport().Height / 4);
+			//HandsPanel
 			_handsPanel = new Rectangle((cam.getViewport().Width / 2) - 125, cam.getViewport().Height - 90, 250, 80);
-            _cooldownBar = new Rectangle((cam.getViewport().Width / 2) - 125, cam.getViewport().Height - 13, 0, 3);
-            _inventoryPanel = new Rectangle(cam.getViewport().Width / 2, 20, cam.getViewport().Width / 2, cam.getViewport().Height - 140);
 			_handsPos = new Vector2(_handsPanel.X, _handsPanel.Y);
+			//Bars
+            _cooldownBar = new Rectangle((cam.getViewport().Width / 2) - 125, cam.getViewport().Height - 13, 0, 3);
+			//Inventory
+            _inventoryPanel = new Rectangle(cam.getViewport().Width / 2, 20, cam.getViewport().Width / 2, cam.getViewport().Height - 140);
+			//StatsPanel
             _statsPos = new Vector2(0, cam.getViewport().Height - _headsUpHeight);
+			//FoodPanel
             _foodPos = new Vector2(cam.getViewport().Width - (2 * _headsUpWidth), cam.getViewport().Height - _headsUpHeight);
-            _colorRect = new Texture2D(graphics, 1, 1);
         }
 
 		public bool Load(ContentManager content)
@@ -92,11 +118,38 @@ namespace FrozenPizza
 
 		private void DrawHudPanel(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Rectangle panel, Color color, float opacity)
 		{
-			_colorRect.SetData(new[] { color });
 			spriteBatch.Draw(_colorRect, panel, null, color * opacity, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
 		}
 
-        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Player mainPlayer, Collection collection)
+		public void drawHandsPanel(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Player mainPlayer, Collection collection)
+		{
+			DrawHudPanel(spriteBatch, graphicsDevice, _handsPanel, Color.LightGray, 0.5f);
+			if (mainPlayer.Cooldown)
+				DrawHudPanel(spriteBatch, graphicsDevice, _cooldownBar, Color.White, 0.75f);
+			if (mainPlayer.Hands == null)
+				spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
+			else
+			{
+				spriteBatch.DrawString(_font, mainPlayer.Hands.Name, _handsPanel.Location.ToVector2(), Color.White);
+				spriteBatch.Draw(collection.Tilesets[(int)mainPlayer.HandsType], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), mainPlayer.Hands.SkinRect, Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
+			}
+		}
+
+		public void drawAimLines(SpriteBatch spriteBatch, Player mainPlayer, Camera cam)
+		{
+			float[] aimAccuracyAngle = mainPlayer.getAimAccuracyAngle();
+			Vector2[] leftLine = new Vector2[2];
+			Vector2[] rightLine = new Vector2[2];
+
+			leftLine[0] = cam.getViewportCenter() + new Vector2((float)Math.Cos(aimAccuracyAngle[0]) * 100, (float)-Math.Sin(aimAccuracyAngle[0]) * 100);
+			leftLine[1] = cam.getViewportCenter() + new Vector2((float)Math.Cos(aimAccuracyAngle[0]) * 120, (float)-Math.Sin(aimAccuracyAngle[0]) * 120);
+			rightLine[0] = cam.getViewportCenter() + new Vector2((float)Math.Cos(aimAccuracyAngle[1]) * 100, (float)-Math.Sin(aimAccuracyAngle[1]) * 100);
+			rightLine[1] = cam.getViewportCenter() + new Vector2((float)Math.Cos(aimAccuracyAngle[1]) * 120, (float)-Math.Sin(aimAccuracyAngle[1]) * 120);
+			Engine.DrawLine(spriteBatch, _colorRect, leftLine[0], leftLine[1], Color.Yellow, 1);
+			Engine.DrawLine(spriteBatch, _colorRect, rightLine[0], rightLine[1], Color.Yellow, 1);
+		}
+
+		public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Player mainPlayer, Collection collection, Camera cam)
         {
 			_hudEntRect.X = 0;
             //Health
@@ -113,18 +166,12 @@ namespace FrozenPizza
 			spriteBatch.Draw(_hudEntities, _foodPos + _hudOffset, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
             spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.maxThirst, mainPlayer.Thirst, true), calcHeadsUpRect(mainPlayer.maxThirst, mainPlayer.Thirst), _foodBackground[1], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
 			//Hands Panel
-			DrawHudPanel(spriteBatch, graphicsDevice, _handsPanel, Color.LightGray, 0.5f);
-            if (mainPlayer.Cooldown)
-                DrawHudPanel(spriteBatch, graphicsDevice, _cooldownBar, Color.White, 0.75f);
-            if (mainPlayer.Hands == null)
-                spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
-            else
-            {
-                spriteBatch.DrawString(_font, mainPlayer.Hands.Name, _handsPanel.Location.ToVector2(), Color.White);
-                spriteBatch.Draw(collection.MeleeTileset, new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), mainPlayer.Hands.SkinRect, Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
-            }
+			drawHandsPanel(spriteBatch, graphicsDevice, mainPlayer, collection);
+			//Inventory
             if (mainPlayer.InventoryOpen)
 				DrawInventory(spriteBatch, graphicsDevice, mainPlayer);
+			//Cursor & AimLines
+			drawAimLines(spriteBatch, mainPlayer, cam);
 			spriteBatch.Draw(_cursor, _cursorPos, _cursorRect, Color.White, 0, _cursorOrigin, 1.0f, SpriteEffects.None, 0);
 		}
     }

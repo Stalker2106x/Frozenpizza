@@ -13,7 +13,7 @@ namespace FrozenPizza
         Hungry,
         Thirsty,
         Starving,
-        Dehydrated,
+        Dehydrated
     }
     public class Player : Character
     {
@@ -22,7 +22,7 @@ namespace FrozenPizza
         int _maxHunger, _maxThirst;
 
         //Triggers
-        bool _inventoryOpen, _cooldown, _aimlock;
+        bool _inventoryOpen, _cooldown, _sprinting, _aimlock;
 
         //Aim View
         float _aim;
@@ -55,6 +55,7 @@ namespace FrozenPizza
             _inventoryOpen = false;
             _cooldown = false;
             _aimlock = false;
+			_sprinting = false;
 
             //Set aim view
             _aim = 0;
@@ -100,6 +101,11 @@ namespace FrozenPizza
             get { return (_hands); }
             set { _hands = value; }
         }
+
+		public ItemType HandsType
+		{
+			get { return (_hands.Type); }
+		}
 
         public bool Cooldown
         {
@@ -157,11 +163,34 @@ namespace FrozenPizza
             return (weight);
         }
 
+
+
+		public float[] getAimAccuracyAngle()
+		{
+			float[] aimAccuracyAngle = new float[2];
+
+			aimAccuracyAngle[0] = MathHelper.PiOver2 * 1.5f;
+			aimAccuracyAngle[1] = MathHelper.PiOver2 * 0.5f;
+			if (_hands != null && _hands.Type == ItemType.Firearm)
+			{
+				Firearm weapon = (Firearm)_hands;
+
+				aimAccuracyAngle[0] -= weapon.Accuracy * 0.1f;
+				aimAccuracyAngle[1] += weapon.Accuracy * 0.1f;
+			}
+			if (_sprinting)
+			{
+				aimAccuracyAngle[0] += 0.3f;
+				aimAccuracyAngle[1] -= 0.3f;
+			}
+			return (aimAccuracyAngle);
+		}
+
 		public float getSpeed(KeyboardState keybState)
         {
 			float speed = 1.25f;
 
-            if (keybState.IsKeyDown(Keys.LeftShift))
+			if (_sprinting)
 				speed = 2.0f;
 			return (speed - (getWeight() / 10));
         }
@@ -208,6 +237,10 @@ namespace FrozenPizza
 			bool move = false;
 			float speed = getSpeed(keybStates[1]);
 
+			if (keybStates[1].IsKeyDown(Keys.LeftShift))
+				_sprinting = true;
+			else if (keybStates[0].IsKeyDown(Keys.LeftShift) && keybStates[1].IsKeyUp(Keys.LeftShift))
+				_sprinting = false;
             if (keybStates[1].IsKeyDown(Keys.A))
             {
                 if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))

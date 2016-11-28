@@ -11,14 +11,14 @@ namespace FrozenPizza
 	public class Collection
 	{
 		public List<Melee> MeleeList { get; }
-        public List<Firearm> FirearmList { get; }
-        public Texture2D MeleeTileset { get; set; }
-        public Texture2D FirearmTileset { get; set; }
+		public List<Firearm> FirearmList { get; }
+		public Texture2D[] Tilesets { get; set; }
 
         public Collection()
 		{
 			MeleeList = new List<Melee>();
             FirearmList = new List<Firearm>();
+			Tilesets = new Texture2D[Enum.GetNames(typeof(ItemType)).Length];
 		}
 
 		public bool Load(ContentManager content)
@@ -32,7 +32,7 @@ namespace FrozenPizza
 		{
 			XElement bundle = XElement.Load("Data/items/melee.xml");
 
-            MeleeTileset = content.Load<Texture2D>("gfx/melee");
+			Tilesets[(int)ItemType.Melee] = content.Load<Texture2D>("gfx/melee");
 			foreach (var item in bundle.Elements("Item"))
 			{
 				MeleeList.Add(new Melee((int)item.Element("Id"), item.Element("Name").Value, (float)item.Element("Weight"), (float)item.Element("Size")));
@@ -46,12 +46,12 @@ namespace FrozenPizza
         {
             XElement bundle = XElement.Load("Data/items/firearms.xml");
 
-            FirearmTileset = content.Load<Texture2D>("gfx/firearms");
+			Tilesets[(int)ItemType.Firearm] = content.Load<Texture2D>("gfx/firearms");
             foreach (var item in bundle.Elements("Item"))
             {
                 FirearmList.Add(new Firearm((int)item.Element("Id"), item.Element("Name").Value, (float)item.Element("Weight"), (float)item.Element("Size")));
-                FirearmList.Last().SetWeaponAttributes((int)item.Element("Damage"), (float)item.Element("Cooldown"));
-                //MeleeList.Last().SetMeleeAttributes();
+				FirearmList.Last().SetWeaponAttributes((int)item.Element("Damage"), (float)item.Element("Cooldown"));
+				FirearmList.Last().SetFirearmAttributes((int)item.Element("Accuracy"));
             }
             return (true);
         }

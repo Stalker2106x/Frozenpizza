@@ -33,12 +33,15 @@ namespace FrozenPizza
 
     public class Level
     {
+		//Tiles
         int _drawMargin;
+		Texture2D _tileset;
         int _twidth, _theight;
         int _ttwidth, _ttheight;
+
+		//Map
         TmxMap _map;
         List<Item>[] _entities;
-        Texture2D _tileset;
 
         public Level(string mapName)
         {
@@ -57,6 +60,7 @@ namespace FrozenPizza
             return (true);
         }
 
+		//Convesion of Coordinates
         public Rectangle mapToGrid(Vector2 pos)
         {
             return (new Rectangle((int)pos.X / _twidth, (int)pos.Y / _theight, ((int)pos.X / _twidth), (int)pos.Y / _twidth));
@@ -72,6 +76,7 @@ namespace FrozenPizza
 			return (new Vector2((int)pos.X * _twidth, (int)pos.Y * _theight));
 		}
 
+		//Generation
         public void GenerateItems(Collection collection)
         {
             Random rnd = new Random();
@@ -110,6 +115,7 @@ namespace FrozenPizza
 			return (vgridToMap(new Vector2(spawn.X, spawn.Y)));
         }
 
+		//Bool checks
         public bool Collide(Vector2 pos)
         {
             if ((pos.X < 0 || pos.X > (_map.Width * _twidth))
@@ -133,6 +139,7 @@ namespace FrozenPizza
             return (false);
         }
 
+		//Items management
         public List<Item> getEntities(Vector2 pos)
         {
             Vector2 realpos = vmapToGrid(pos);
@@ -147,6 +154,7 @@ namespace FrozenPizza
             _entities[(int)((realpos.Y * _map.Width) + realpos.X)] = list;
         }
 
+		//base draw call, includes tilemap algorithm
         public void Draw(SpriteBatch spriteBatch, Camera cam, Player mainPlayer, Collection collection)
         {
             Rectangle viewport = cam.getViewport();
@@ -192,13 +200,8 @@ namespace FrozenPizza
                                 for (int i = 0; i < _entities[((yoffset + y) * _map.Width) + xoffset + x].Count; i++)
                                 {
                                     Item item = _entities[((yoffset + y) * _map.Width) + xoffset + x][i];
-                                    Texture2D _itemSheet = null;
 
-                                    if (item.Type == ItemType.Melee)
-                                        _itemSheet = collection.MeleeTileset;
-                                    else if (item.Type == ItemType.Firearm)
-                                        _itemSheet = collection.FirearmTileset;
-                                    spriteBatch.Draw(_itemSheet, new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), item.SkinRect, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.3f);
+									spriteBatch.Draw(collection.Tilesets[(int)item.Type], new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), item.SkinRect, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.3f);
                                 }
                             }
                             break;

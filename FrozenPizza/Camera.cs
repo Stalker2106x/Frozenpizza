@@ -49,6 +49,11 @@ namespace FrozenPizza
                                     _graphics.Viewport.Width, _graphics.Viewport.Height));
         }
 
+		public Vector2 getViewportCenter()
+		{
+			return (new Vector2(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2));
+		}
+
         public Matrix getTransformation()
         {
             _transform = Matrix.CreateTranslation(new Vector3(-_origin.X, -_origin.Y, 0)) *

@@ -1,20 +1,21 @@
 ﻿<Properties StartupConfiguration="{09A308E1-3F29-4CCE-A029-A5FC2BAF179E}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="FrozenPizza/Engine.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FrozenPizza/Camera.cs">
     <Files>
-      <File FileName="FrozenPizza/HUD.cs" Line="118" Column="1" />
-      <File FileName="FrozenPizza/Player.cs" Line="1" Column="1" />
-      <File FileName="FrozenPizza/Level.cs" Line="77" Column="53" />
-      <File FileName="FrozenPizza/Items/Item.cs" Line="42" Column="3" />
-      <File FileName="FrozenPizza/Data/items/melee.xml" Line="25" Column="17" />
-      <File FileName="FrozenPizza/Items/Weapons.cs" Line="28" Column="35" />
-      <File FileName="FrozenPizza/Collection.cs" Line="18" Column="3" />
-      <File FileName="FrozenPizza/Engine.cs" Line="133" Column="20" />
+      <File FileName="../../../Library/Frameworks/MonoGame.framework/v3.5.1.1679/MonoGame.Content.Builder.targets" Line="1" Column="1" />
+      <File FileName="FrozenPizza/HUD.cs" Line="56" Column="56" />
+      <File FileName="FrozenPizza/Level.cs" Line="203" Column="9" />
+      <File FileName="FrozenPizza/Player.cs" Line="180" Column="4" />
+      <File FileName="FrozenPizza/Collection.cs" Line="55" Column="1" />
+      <File FileName="FrozenPizza/Items/Weapons.cs" Line="51" Column="3" />
+      <File FileName="FrozenPizza/Engine.cs" Line="175" Column="85" />
+      <File FileName="FrozenPizza/Data/items/melee.xml" Line="1" Column="1" />
+      <File FileName="FrozenPizza/Data/items/firearms.xml" Line="10" Column="25" />
+      <File FileName="FrozenPizza/Camera.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.FrozenPizza PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>

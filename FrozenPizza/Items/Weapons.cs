@@ -41,9 +41,17 @@ namespace FrozenPizza
 
     public class Firearm : Weapon
     {
+
+		public int Accuracy { get; set; }
+
 		public Firearm(int id, String name, float weight, float size) : base(id, name, ItemType.Firearm, weight, size)
         {
             
         }
+
+		public void SetFirearmAttributes(int accuracy)
+		{
+			Accuracy = accuracy;
+		}
     }
 }
