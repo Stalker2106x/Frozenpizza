@@ -278,9 +278,9 @@ namespace FrozenPizza
         {
 			if (mStates[1].X != cam.getViewport().Width / 2)
 			if (mStates[0].X < mStates[1].X)
-				_aim += (mStates[0].X - mStates[1].X) * _mouseSensivity;
+				_aim += (mStates[0].X - mStates[1].X) * _aimSensivity;
 			else if (mStates[0].X > mStates[1].X)
-				_aim -= (mStates[1].X - mStates[0].X) * _mouseSensivity;
+				_aim -= (mStates[1].X - mStates[0].X) * _aimSensivity;
             if (_aim < 0)
 				_aim = MathHelper.TwoPi;
 			else if (_aim > MathHelper.TwoPi)
