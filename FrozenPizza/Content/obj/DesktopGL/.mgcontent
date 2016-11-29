@@ -4,29 +4,30 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/cursors.png</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/hud.png</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/players.png</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/maps/city.jpg</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/maps/meta.png</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/melee.png</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/rstep1.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/rstep2.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/rstep3.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/rstep4.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/step1.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/step2.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/step3.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/step4.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/firearms.png</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/projectiles.png</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/tool/attack.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/glock18/fire.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/glock18/reload.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/hands/attack.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/blade/attack.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/berettam9/fire.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/berettam9/reload.wav</File>
-    <File>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/bg/main.jpg</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/cursors.png</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/hud.png</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/players.png</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/maps/city.jpg</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/maps/meta.png</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/melee.png</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/rstep1.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/rstep2.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/rstep3.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/rstep4.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/step1.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/step2.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/step3.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/step4.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/firearms.png</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/projectiles.png</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/tool/attack.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/glock18/fire.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/glock18/reload.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/hands/attack.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/blade/attack.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/berettam9/fire.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/berettam9/reload.wav</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/bg/main.jpg</File>
+    <File>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/dryfire.wav</File>
   </SourceFiles>
 </SourceFileCollection>

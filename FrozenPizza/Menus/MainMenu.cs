@@ -48,9 +48,12 @@ namespace FrozenPizza
             switch (index)
             {
                 case 0:
+                    _engine.toggleMouseVisible();
                     _engine.gstate = Engine.GameState.Playing;
                     break;
                 case 1:
+                    _engine.UnloadGame();
+                    _engine.setMenu(new MainMenu(_engine));
                     break;
                 case 2:
                     break;

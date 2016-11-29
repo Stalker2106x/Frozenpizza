@@ -120,6 +120,14 @@ namespace FrozenPizza
             _gameLoaded = true;
         }
 
+        public void UnloadGame()
+        {
+            level = null;
+            hud = null;
+            mainPlayer = null;
+            _gameLoaded = false;
+        }
+
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// game-specific content.
@@ -165,12 +173,11 @@ namespace FrozenPizza
                 gstate = GameState.Menu;
             }
             updateTimeEvents(gameTime);
-            mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, projectiles);
+            mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, _cursor, projectiles);
             hud.Update(mouseStates, mainPlayer);
             for (int p = 0; p < projectiles.Count; p++)
                 if (!projectiles[p].Update(level))
                     projectiles.RemoveAt(p);
-            _cursor.Show = mainPlayer.InventoryOpen;
             if (!mainPlayer.InventoryOpen)
                 resetMousePos();
         }

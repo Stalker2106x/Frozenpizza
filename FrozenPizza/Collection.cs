@@ -53,7 +53,7 @@ namespace FrozenPizza
             {
                 FirearmList.Add(new Firearm((int)item.Element("Id"), item.Element("Name").Value, (float)item.Element("Weight"), (float)item.Element("Size")));
 				FirearmList.Last().SetWeaponAttributes(item.Element("ResourceId").Value.ToString(), (int)item.Element("Damage"), (float)item.Element("Cooldown"));
-				FirearmList.Last().SetFirearmAttributes((int)item.Element("Accuracy"));
+				FirearmList.Last().SetFirearmAttributes((int)item.Element("Accuracy"), (int)item.Element("ClipSize"));
                 FirearmList.Last().LoadSounds(content);
             }
             return (true);

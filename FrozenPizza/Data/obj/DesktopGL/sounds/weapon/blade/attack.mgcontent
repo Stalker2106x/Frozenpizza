@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/blade/attack.wav</SourceFile>
   <SourceTime>2016-11-27T17:15:03.6402466+01:00</SourceTime>
   <DestFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/bin/DesktopGL/sounds/weapon/blade/attack.xnb</DestFile>
-  <DestTime>2016-11-29T02:39:42.9997554+01:00</DestTime>
+  <DestTime>2016-11-29T18:52:53.0717592+01:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

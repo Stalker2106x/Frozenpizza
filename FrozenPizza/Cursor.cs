@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FrozenPizza
 {
-    class Cursor
+    public class Cursor
     {
         Texture2D _skin;
         Rectangle _skinRect;
@@ -25,7 +25,7 @@ namespace FrozenPizza
         public void Load(ContentManager content)
         {
             _skin = content.Load<Texture2D>("gfx/cursors");
-            _skinRect = new Rectangle(0, 0, 64, 64);
+            _skinRect = new Rectangle(192, 0, 64, 64);
         }
 
         public Vector2 Pos { get; set; }

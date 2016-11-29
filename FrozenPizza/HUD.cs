@@ -13,11 +13,6 @@ namespace FrozenPizza
 		//Text
         SpriteFont _font;
 
-		//Cursor
-		Texture2D _cursor;
-		Rectangle _cursorRect;
-		Vector2 _cursorPos, _cursorOrigin;
-
 		//Stats
 		Texture2D _hudEntities;
 		Rectangle _hudEntRect;
@@ -52,8 +47,6 @@ namespace FrozenPizza
             _headsUpWidth = 64;
 			_colorRect = new Texture2D(graphics, 1, 1);
 			_colorRect.SetData(new[] { Color.White });
-			//Cursor
-			_cursorPos = new Vector2(cam.getViewport().Width / 2, cam.getViewport().Height / 4);
 			//HandsPanel
 			_handsPanel = new Rectangle((cam.getViewport().Width / 2) - 125, cam.getViewport().Height - 90, 250, 80);
 			_handsPos = new Vector2(_handsPanel.X, _handsPanel.Y);
@@ -69,10 +62,7 @@ namespace FrozenPizza
 
 		public bool Load(ContentManager content)
         {
-			_cursorRect = new Rectangle(192, 0, 64, 64);
-            _cursorOrigin = new Vector2(32, 32);
             _hudEntRect = new Rectangle(0, 0, 64, 64);
-            _cursor = content.Load<Texture2D>(@"gfx/cursors");
             _hudEntities = content.Load<Texture2D>(@"gfx/hud");
             _font = content.Load<SpriteFont>(@"font/hud");
 			_foodBackground = new Color[2] { Color.White, Color.White };
@@ -174,7 +164,6 @@ namespace FrozenPizza
 				DrawInventory(spriteBatch, graphicsDevice, mainPlayer);
 			//Cursor & AimLines
 			drawAimLines(spriteBatch, mainPlayer, cam);
-			spriteBatch.Draw(_cursor, _cursorPos, _cursorRect, Color.White, 0, _cursorOrigin, 1.0f, SpriteEffects.None, 0);
 		}
     }
 }

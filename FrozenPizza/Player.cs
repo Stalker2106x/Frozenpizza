@@ -38,7 +38,7 @@ namespace FrozenPizza
         //Timers
 		TimeSpan _stepTimer;
         TimeSpan _stateTimer;
-        TimeSpan _cooldownTimer;
+        TimeSpan[] _cooldownTimer;
         float _aimSensivity;
 
 		public Player(String name, Vector2 spawn) : base(name, spawn)
@@ -66,6 +66,7 @@ namespace FrozenPizza
             //Init timers
             _stateTimer = new TimeSpan();
             _stepTimer = new TimeSpan();
+            _cooldownTimer = new TimeSpan[2];
 		}
 
         // ACCESSORS / SETTERS
@@ -132,8 +133,9 @@ namespace FrozenPizza
 
         public int getCooldownPercent(int width)
         {
+            float elapsed = (float)(_cooldownTimer[1].TotalMilliseconds - _cooldownTimer[0].TotalMilliseconds);
 
-            return ((int)((_cooldownTimer.TotalMilliseconds / getCooldown()) * width));
+            return ((int)((float)(elapsed / _cooldownTimer[1].TotalMilliseconds) * width));
         }
 
         public float getCooldown()
@@ -277,10 +279,9 @@ namespace FrozenPizza
         //Attack & Cooldown
         public void updateCooldown(GameTime gameTime)
         {
-            float cooldown = getCooldown();
 
-            _cooldownTimer += gameTime.ElapsedGameTime;
-            if (_cooldownTimer.TotalMilliseconds > cooldown)
+            _cooldownTimer[0] -= gameTime.ElapsedGameTime;
+            if (_cooldownTimer[0].TotalMilliseconds <= 0)
                     _cooldown = false;
         }
         public void useHands(List<Projectile> projectiles)
@@ -303,15 +304,29 @@ namespace FrozenPizza
             }
         }
 
-        public void updateAttack(GameTime gameTime, MouseState[] mStates, List<Projectile> projectiles)
+        public void updateHands(GameTime gameTime, KeyboardState[] keybStates, MouseState[] mStates, List<Projectile> projectiles)
         {
             if (_cooldown)
                 updateCooldown(gameTime);
+            if (_inventoryOpen)
+                return;
+            if ((_hands != null && _hands.Type == ItemType.Firearm)
+                && (keybStates[0].IsKeyUp(Keys.R) && keybStates[1].IsKeyDown(Keys.R)))
+            {
+                Firearm weapon = (Firearm)_hands;
+                if (weapon.reload())
+                {
+                    _cooldown = true;
+                    _cooldownTimer[1] = TimeSpan.FromMilliseconds(getCooldown() * 10);
+                    _cooldownTimer[0] = _cooldownTimer[1];
+                }
+            }
             if (mStates[1].LeftButton == ButtonState.Pressed && mStates[0].LeftButton == ButtonState.Released && !_cooldown)
             {
                 useHands(projectiles);
                 _cooldown = true;
-                _cooldownTimer = TimeSpan.Zero;
+                _cooldownTimer[1] = TimeSpan.FromMilliseconds(getCooldown());
+                _cooldownTimer[0] = _cooldownTimer[1];
             }
             if (mStates[1].RightButton == ButtonState.Pressed)
                 _aimlock = true;
@@ -369,9 +384,10 @@ namespace FrozenPizza
         }
 
         //Inventory & Item Management
-        void toggleInventory()
+        void toggleInventory(Cursor cursor)
         {
             _inventoryOpen = _inventoryOpen ? false : true;
+            cursor.Show = _inventoryOpen;
         }
 
         public void pickupItem(Level level, int index)
@@ -403,14 +419,14 @@ namespace FrozenPizza
         }
 
         //Base update call
-        public void Update(GameTime gameTime, Level level, KeyboardState[] keybStates, MouseState[] mStates, Camera cam, List<Projectile> projectiles)
+        public void Update(GameTime gameTime, Level level, KeyboardState[] keybStates, MouseState[] mStates, Camera cam, Cursor cursor, List<Projectile> projectiles)
         {
             if (!InventoryOpen)
                 updateAimAngle(cam, mStates);
             updateMove(gameTime, keybStates, level);
-            updateAttack(gameTime, mStates, projectiles);
+            updateHands(gameTime, keybStates, mStates, projectiles);
             if (keybStates[1].IsKeyDown(Keys.Tab) && !keybStates[0].IsKeyDown(Keys.Tab))
-                toggleInventory();
+                toggleInventory(cursor);
             if (keybStates[1].IsKeyDown(Keys.E) && !keybStates[0].IsKeyDown(Keys.E))
                 pickupItem(level, 0);
             if (keybStates[1].IsKeyDown(Keys.G) && !keybStates[0].IsKeyDown(Keys.G))

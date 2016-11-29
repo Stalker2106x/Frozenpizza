@@ -11,6 +11,7 @@
   <GameMenu>
 		<Font>hud</Font>
 		<Background>main</Background>
+    <Item>Resume</Item>
     <Item>Disconnect</Item>
     <Item>Options</Item>
     <Item>Exit</Item>

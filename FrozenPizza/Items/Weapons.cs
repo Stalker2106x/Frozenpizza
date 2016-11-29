@@ -12,6 +12,7 @@ namespace FrozenPizza
     public enum FirearmActions
     {
         Fire,
+        DryFire,
         Reload
     }
     public class Weapon : Item
@@ -58,10 +59,11 @@ namespace FrozenPizza
     {
 
 		public int Accuracy { get; set; }
+        public int LoadedAmmo { get; set; }
+        public int ClipSize { get; set; }
 
 		public Firearm(int id, String name, float weight, float size) : base(id, name, ItemType.Firearm, weight, size)
         {
-            Sounds = new SoundEffect[Enum.GetNames(typeof(FirearmActions)).Length];
         }
 
         public float getFireAngle(float[] angle)
@@ -77,18 +79,39 @@ namespace FrozenPizza
         {
             float angle = getFireAngle(aimAccuracyAngle);
 
-            Sounds[(int)FirearmActions.Fire].Play();
-            projectiles.Add(new Projectile(ProjectileType.Bullet, pos, angle, 5f));
+            if (LoadedAmmo > 0)
+            {
+                Sounds[(int)FirearmActions.Fire].Play();
+                projectiles.Add(new Projectile(ProjectileType.Bullet, pos, angle, 5f));
+                LoadedAmmo -= 1;
+            }
+            else
+            {
+                Sounds[(int)FirearmActions.DryFire].Play();
+            }
         }
 
-		public void SetFirearmAttributes(int accuracy)
+        public bool reload()
+        {
+            if (LoadedAmmo == ClipSize)
+                return (false);
+            Sounds[(int)FirearmActions.Reload].Play();
+            LoadedAmmo = ClipSize;
+            return (true);
+        }
+
+		public void SetFirearmAttributes(int accuracy, int clipsize)
 		{
 			Accuracy = accuracy;
+            ClipSize = accuracy;
+            LoadedAmmo = ClipSize;
 		}
 
         public void LoadSounds(ContentManager content)
         {
+            Sounds = new SoundEffect[Enum.GetNames(typeof(FirearmActions)).Length];
             Sounds[(int)FirearmActions.Fire] = content.Load<SoundEffect>("sounds/weapon/" + ResourceId + "/fire");
+            Sounds[(int)FirearmActions.DryFire] = content.Load<SoundEffect>("sounds/weapon/dryfire");
             Sounds[(int)FirearmActions.Reload] = content.Load<SoundEffect>("sounds/weapon/" + ResourceId + "/reload");
 
         }

@@ -235,3 +235,9 @@
 /processorParam:TextureFormat=Color
 /build:gfx/bg/main.jpg
 
+#begin sounds/weapon/dryfire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/weapon/dryfire.wav
+

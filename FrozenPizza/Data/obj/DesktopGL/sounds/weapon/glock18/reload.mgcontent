@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/glock18/reload.wav</SourceFile>
-  <SourceTime>2016-11-27T17:15:03.6402466+01:00</SourceTime>
+  <SourceTime>2016-11-29T18:48:34.2951479+01:00</SourceTime>
   <DestFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/bin/DesktopGL/sounds/weapon/glock18/reload.xnb</DestFile>
-  <DestTime>2016-11-29T02:39:42.8634271+01:00</DestTime>
+  <DestTime>2016-11-29T18:52:52.9275296+01:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

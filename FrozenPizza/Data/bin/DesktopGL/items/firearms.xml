@@ -8,6 +8,7 @@
     <Weight>1</Weight>
     <Size>1</Size>
     <Damage>20</Damage>
+    <ClipSize>20</ClipSize>
 	  <Accuracy>7</Accuracy>
     <Cooldown>0.15</Cooldown>
   </Item>
@@ -19,6 +20,7 @@
     <Weight>1</Weight>
     <Size>1</Size>
     <Damage>10</Damage>
+    <ClipSize>15</ClipSize>
 	  <Accuracy>6</Accuracy>
     <Cooldown>0.1</Cooldown>
   </Item>
