@@ -14,22 +14,27 @@ namespace FrozenPizza
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        enum GameState
+        public enum GameState
         {
             Menu,
             Playing,
-            Paused
         }
 
         //GAME MECHANICS
         bool hasFocus;
-        GameState gstate;
+        public GameState gstate { get; set; }
         Camera cam;
         KeyBinds keybinds;
         HUD hud;
 
         //Database
         public static Collection collection;
+
+        //Menu
+        Cursor _cursor;
+        Menu _menu;
+        bool _gameLoaded;
+
         //Game
         Level level;     
         Player mainPlayer;
@@ -44,7 +49,6 @@ namespace FrozenPizza
 
         public Engine()
         {
-            IsMouseVisible = false;
             graphics = new GraphicsDeviceManager(this);
             graphics.IsFullScreen = false;
             graphics.PreferredBackBufferWidth = 1024;
@@ -52,7 +56,8 @@ namespace FrozenPizza
             TargetElapsedTime = TimeSpan.FromSeconds(1.0f / 90.0f);
             Content.RootDirectory = "Data";
             tMinute = new TimeSpan(0);
-            gstate = GameState.Paused;
+            gstate = GameState.Menu;
+            _gameLoaded = false;
         }
 
 		/// <summary>
@@ -63,18 +68,24 @@ namespace FrozenPizza
 		/// </summary>
 		protected override void Initialize()
 		{
-			// TODO: Add your initialization logic here
-			level = new Level("Data/maps/world.tmx");
-			cam = new Camera(GraphicsDevice);
-			hud = new HUD(GraphicsDevice, cam);
-			keybStates = new KeyboardState[2];
+            IsMouseVisible = false;
+            _cursor = new Cursor();
+            keybStates = new KeyboardState[2];
 			mouseStates = new MouseState[2];
-            projectiles = new List<Projectile>();
-			mainPlayer = new Player("Bernie", level.getSpawnPoint());
 			collection = new Collection();
+            setMenu(new MainMenu(this));
             base.Initialize();
-            gstate = GameState.Playing;
         }
+
+        public void InitializeGame()
+        {
+            level = new Level("Data/maps/world.tmx");
+            cam = new Camera(GraphicsDevice);
+            hud = new HUD(GraphicsDevice, cam);
+            projectiles = new List<Projectile>();
+            mainPlayer = new Player("Bernie", level.getSpawnPoint());
+        }
+
         protected override void OnDeactivated(Object sender, EventArgs args)
         {
             hasFocus = false;
@@ -94,15 +105,19 @@ namespace FrozenPizza
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
+            _cursor.Load(this.Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
             collection.Load(this.Content);
+            _menu.Load(this.Content);
+        }
+
+        public void LoadGame()
+        {
             level.Load(this.Content);
             hud.Load(this.Content);
             mainPlayer.Load(this.Content);
             level.GenerateItems(collection);
+            _gameLoaded = true;
         }
 
         /// <summary>
@@ -112,6 +127,12 @@ namespace FrozenPizza
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+        }
+
+        public void setMenu(Menu menu)
+        {
+            _menu = menu;
+            _menu.Load(this.Content);
         }
 
         protected void updateTimeEvents(GameTime gameTime)
@@ -126,7 +147,10 @@ namespace FrozenPizza
             }
         }
 
-
+        public void toggleMouseVisible()
+        {
+            _cursor.Show = _cursor.Show == true ? false : true;
+        }
 		void resetMousePos()
 		{
 			Mouse.SetPosition(cam.getViewport().Width / 2, cam.getViewport().Height / 2);
@@ -134,14 +158,21 @@ namespace FrozenPizza
 
         void updateGame(GameTime gameTime)
         {
+            if (keybStates[0].IsKeyUp(Keys.Escape) && keybStates[1].IsKeyDown(Keys.Escape))
+            {
+                mainPlayer.InventoryOpen = false;
+                toggleMouseVisible();
+                gstate = GameState.Menu;
+            }
             updateTimeEvents(gameTime);
             mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, projectiles);
             hud.Update(mouseStates, mainPlayer);
             for (int p = 0; p < projectiles.Count; p++)
                 if (!projectiles[p].Update(level))
                     projectiles.RemoveAt(p);
-            IsMouseVisible = mainPlayer.InventoryOpen;
-            base.Update(gameTime);
+            _cursor.Show = mainPlayer.InventoryOpen;
+            if (!mainPlayer.InventoryOpen)
+                resetMousePos();
         }
 
 		/// <summary>
@@ -155,13 +186,19 @@ namespace FrozenPizza
 				return;
 			keybStates[1] = Keyboard.GetState();
 			mouseStates[1] = Mouse.GetState();
-
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-				Exit();
-            updateGame(gameTime);
-			keybStates[0] = keybStates[1];
-            if (!mainPlayer.InventoryOpen)
-			    resetMousePos();
+            if (_cursor.Show)
+                _cursor.Update(mouseStates);
+            switch (gstate)
+            {
+                case GameState.Menu:
+                    _menu.Update(keybStates, mouseStates);
+                    break;
+                case GameState.Playing:
+                    updateGame(gameTime);
+                    break;
+            }
+            base.Update(gameTime);
+            keybStates[0] = keybStates[1];
 			mouseStates[0] = Mouse.GetState();
         }
 
@@ -188,12 +225,21 @@ namespace FrozenPizza
             switch (gstate)
             {
                 case GameState.Menu:
+                    spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                    _menu.Draw(spriteBatch, GraphicsDevice);
+                    spriteBatch.End();
                     break;
                 case GameState.Playing:
                     DrawGame(gameTime);
                     break;
             }
             base.Draw(gameTime);
+            if (_cursor.Show)
+            {
+                spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                _cursor.Draw(spriteBatch);
+                spriteBatch.End();
+            }
         }
 
 		public static void DrawLine(SpriteBatch spriteBatch, Texture2D text, Vector2 begin, Vector2 end, Color color, int width)
@@ -204,5 +250,10 @@ namespace FrozenPizza
 			if (begin.Y > end.Y) angle = MathHelper.TwoPi - angle;
 			spriteBatch.Draw(text, r, null, color, angle, Vector2.Zero, SpriteEffects.None, 0);
 		}
+
+        public void exit()
+        {
+            Exit();
+        }
     }
 }

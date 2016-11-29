@@ -7,8 +7,8 @@
     <Slots>Hands Bag</Slots>
     <Weight>1</Weight>
     <Size>1</Size>
-    <Damage>15</Damage>
-	  <Accuracy>6</Accuracy>
+    <Damage>20</Damage>
+	  <Accuracy>7</Accuracy>
     <Cooldown>0.15</Cooldown>
   </Item>
   <Item>

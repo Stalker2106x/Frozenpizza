@@ -41,12 +41,15 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="Character.cs" />
+    <Compile Include="Cursor.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="HUD.cs" />
     <Compile Include="Items\Ammo.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="KeyBinds.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="Menus\MainMenu.cs" />
+    <Compile Include="Menus\Menu.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
