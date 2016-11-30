@@ -226,12 +226,21 @@ namespace FrozenPizza
         }
 
         //Moving mechanism functions
-        bool checkMove(Level level, Vector2 oldpos)
+        bool checkMove(Level level, KeyboardState[] keybStates, Vector2 oldpos)
         {
-			if (level.Collide(_pos))
+            if (keybStates[1].IsKeyDown(Keys.LeftShift))
+                _sprinting = true;
+            if (level.Collide(_pos))
 			{
-				_pos = oldpos;
-				return (false);
+                Vector2 posx, posy;
+
+                posx = new Vector2(oldpos.X, _pos.Y);
+                posy = new Vector2(_pos.X, oldpos.Y);
+                if (!level.Collide(posx))
+				    _pos = posx;
+                else if (!level.Collide(posy))
+                    _pos = posy;
+                return (false);
 			}
 			return (true);
         }
@@ -243,34 +252,32 @@ namespace FrozenPizza
 			bool move = false;
 			float speed = getSpeed(keybStates[1]);
 
-			if (keybStates[1].IsKeyDown(Keys.LeftShift))
-				_sprinting = true;
-			else if (keybStates[0].IsKeyDown(Keys.LeftShift) && keybStates[1].IsKeyUp(Keys.LeftShift))
-				_sprinting = false;
+            if (keybStates[1].IsKeyUp(Keys.LeftShift))
+                _sprinting = false;
             if (keybStates[1].IsKeyDown(Keys.A))
             {
                 if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))
                     speed *= 0.75f;
                 _pos += new Vector2((float)Math.Cos(_aim) * -speed, (float)Math.Sin(_aim) * speed);
-                move = checkMove(level, oldpos);
+                move = checkMove(level, keybStates, oldpos);
             }
             else if (keybStates[1].IsKeyDown(Keys.D))
             {
                 if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))
                     speed *= 0.75f;
                 _pos += new Vector2((float)Math.Cos(_aim) * speed, (float)-Math.Sin(_aim) * speed);
-                move = checkMove(level, oldpos);
+                move = checkMove(level, keybStates, oldpos);
             }
             speed = getSpeed(keybStates[1]); //Reset speed
             if (keybStates[1].IsKeyDown(Keys.W))
             {
                 _pos += new Vector2((float)Math.Sin(_aim) * -speed, (float)Math.Cos(_aim) * -speed);
-                move = checkMove(level, oldpos);
+                move = checkMove(level, keybStates, oldpos);
             }
             else if (keybStates[1].IsKeyDown(Keys.S))
             {
                 _pos += new Vector2((float)Math.Sin(_aim) * speed, (float)Math.Cos(_aim) * speed);
-                move = checkMove(level, oldpos);
+                move = checkMove(level, keybStates, oldpos);
             }
             if (move)
 				stepSound(gameTime, keybStates[1].IsKeyDown(Keys.LeftShift) ? true : false);

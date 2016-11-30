@@ -79,7 +79,7 @@ namespace FrozenPizza
 
         public void InitializeGame()
         {
-            level = new Level("Data/maps/world.tmx");
+            level = new Level("Data/maps/dev.tmx");
             cam = new Camera(GraphicsDevice);
             hud = new HUD(GraphicsDevice, cam);
             projectiles = new List<Projectile>();

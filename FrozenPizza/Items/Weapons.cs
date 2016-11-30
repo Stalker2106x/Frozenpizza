@@ -103,7 +103,7 @@ namespace FrozenPizza
 		public void SetFirearmAttributes(int accuracy, int clipsize)
 		{
 			Accuracy = accuracy;
-            ClipSize = accuracy;
+            ClipSize = clipsize;
             LoadedAmmo = ClipSize;
 		}
 

@@ -10,7 +10,7 @@
     <Damage>20</Damage>
     <ClipSize>20</ClipSize>
 	  <Accuracy>7</Accuracy>
-    <Cooldown>0.15</Cooldown>
+    <Cooldown>0.1</Cooldown>
   </Item>
   <Item>
     <Id>1</Id>
