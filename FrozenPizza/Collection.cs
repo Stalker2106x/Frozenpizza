@@ -10,6 +10,7 @@ namespace FrozenPizza
 {
 	public class Collection
 	{
+        public Texture2D GameLogo { get; set; }
 		public List<Melee> MeleeList { get; }
 		public List<Firearm> FirearmList { get; }
 		public Texture2D[] Tilesets { get; set; }
@@ -24,7 +25,8 @@ namespace FrozenPizza
 
 		public bool Load(ContentManager content)
 		{
-			LoadMelee(content);
+            GameLogo = content.Load<Texture2D>("gfx/logo");
+            LoadMelee(content);
             LoadFirearm(content);
             LoadProjectiles(content);
 			return (true);

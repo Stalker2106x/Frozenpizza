@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +10,13 @@ namespace FrozenPizza
 {
     class MainMenu : Menu
     {
+        Rectangle _logoRect;
+
         public MainMenu(Engine engine) : base(engine, "MainMenu")
         {
-
+            _logoRect = new Rectangle((_engine.GraphicsDevice.Viewport.Width - Engine.collection.GameLogo.Width) / 2,
+                            (int)(_engine.GraphicsDevice.Viewport.Height * 0.25f),
+                            Engine.collection.GameLogo.Width, Engine.collection.GameLogo.Height);
         }
 
         public override void itemClicked(int index)
@@ -25,6 +31,7 @@ namespace FrozenPizza
                     _engine.setMenu(new GameMenu(_engine));
                     break;
                 case 1:
+                    _engine.setMenu(new BrowserMenu(_engine));
                     break;
                 case 2:
                     break;
@@ -32,6 +39,12 @@ namespace FrozenPizza
                     _engine.exit();
                     break;
             }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
+        {
+            spriteBatch.Draw(Engine.collection.GameLogo, _logoRect, Color.White);
+            base.Draw(spriteBatch, graphics);
         }
 
     }

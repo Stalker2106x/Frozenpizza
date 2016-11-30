@@ -73,7 +73,6 @@ namespace FrozenPizza
             keybStates = new KeyboardState[2];
 			mouseStates = new MouseState[2];
 			collection = new Collection();
-            setMenu(new MainMenu(this));
             base.Initialize();
         }
 
@@ -108,6 +107,7 @@ namespace FrozenPizza
             _cursor.Load(this.Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             collection.Load(this.Content);
+            setMenu(new MainMenu(this));
             _menu.Load(this.Content);
         }
 

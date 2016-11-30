@@ -16,6 +16,7 @@ namespace FrozenPizza
         protected String[] _items;
         protected Rectangle[] _itemRect;
         protected int _selected, _itemCount;
+        protected float _fontsize;
         String _fontfile, _bgfile;
         SpriteFont _font;
         Texture2D _background;
@@ -33,11 +34,11 @@ namespace FrozenPizza
             _items = new String[_itemCount];
             _itemRect = new Rectangle[_itemCount];
             _fontfile = menu.Elements("Font").First().Value.ToString();
+            _fontsize = 2f;
             _bgfile = menu.Elements("Background").First().Value.ToString();
             foreach (var item in menu.Elements("Item"))
             {
                 _items[id] = item.Value.ToString();
-                _itemRect[id] = new Rectangle(10, (int)(_engine.GraphicsDevice.Viewport.Height * 0.8f) - ((_itemCount - id) * 20), 200, 20);
                 id++;
             }
         }
@@ -46,10 +47,16 @@ namespace FrozenPizza
         {
             _background = content.Load<Texture2D>("gfx/bg/"+_bgfile);
             _font = content.Load<SpriteFont>("font/"+_fontfile);
+            for (int id = 0; id < _itemCount; id++)
+            {
+                Vector2 size = _font.MeasureString(_items[id]);
+
+                _itemRect[id] = new Rectangle(50, (int)(_engine.GraphicsDevice.Viewport.Height - 50) - (int)((_itemCount - id) * (size.Y * _fontsize)), (int)(size.X * _fontsize), (int)(size.Y * _fontsize));
+            }
         }
 
         abstract public void itemClicked(int index);
-        public void Update(KeyboardState[] keybStates, MouseState[] mStates)
+        public virtual void Update(KeyboardState[] keybStates, MouseState[] mStates)
         {
             _selected = -1;
             for (int i = 0; i < _itemCount; i++)
@@ -63,7 +70,7 @@ namespace FrozenPizza
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public virtual void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
             spriteBatch.Draw(_background, new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
             for (int i = 0; i < _itemCount; i++)
@@ -72,7 +79,7 @@ namespace FrozenPizza
 
                 if (i == _selected)
                     color = Color.Red;
-                spriteBatch.DrawString(_font, _items[i], _itemRect[i].Location.ToVector2(), color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(_font, _items[i], _itemRect[i].Location.ToVector2(), color, 0f, Vector2.Zero, _fontsize, SpriteEffects.None, 0f);
             }
         }
     }

@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/dryfire.wav</SourceFile>
   <SourceTime>2016-11-29T17:44:00.370018+01:00</SourceTime>
   <DestFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/bin/DesktopGL/sounds/weapon/dryfire.xnb</DestFile>
-  <DestTime>2016-11-29T18:52:53.6671733+01:00</DestTime>
+  <DestTime>2016-11-30T20:44:19.5606692+01:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

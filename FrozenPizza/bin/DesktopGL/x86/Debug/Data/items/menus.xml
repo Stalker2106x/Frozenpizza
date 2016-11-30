@@ -16,6 +16,20 @@
     <Item>Options</Item>
     <Item>Exit</Item>
   </GameMenu>
+	<BrowseMenu>
+		<Font>hud</Font>
+		<Background>main</Background>
+		<Item>Connect</Item>
+		<Item>Add to favorites</Item>
+		<Item>Direct connect</Item>
+    <Item>Back</Item>
+	</BrowseMenu>
+	<DirectConnectMenu>
+		<Font>hud</Font>
+		<Background>main</Background>
+		<Item>Connect</Item>
+    <Item>Back</Item>
+	</DirectConnectMenu>
   <OptionsMenu>
 		<Font>hud</Font>
 		<Font>main</Font>
