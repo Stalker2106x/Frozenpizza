@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,6 +12,7 @@ namespace FrozenPizza
 	public class Collection
 	{
         public Texture2D GameLogo { get; set; }
+        public SoundEffect[] MenuSounds { get; set; }
 		public List<Melee> MeleeList { get; }
 		public List<Firearm> FirearmList { get; }
 		public Texture2D[] Tilesets { get; set; }
@@ -18,6 +20,8 @@ namespace FrozenPizza
 
         public Collection()
 		{
+            MenuSounds = new SoundEffect[2];
+            //Game
 			MeleeList = new List<Melee>();
             FirearmList = new List<Firearm>();
 			Tilesets = new Texture2D[Enum.GetNames(typeof(ItemType)).Length];
@@ -26,6 +30,9 @@ namespace FrozenPizza
 		public bool Load(ContentManager content)
 		{
             GameLogo = content.Load<Texture2D>("gfx/logo");
+            MenuSounds[0] = content.Load<SoundEffect>("sounds/menu/hover");
+            MenuSounds[1] = content.Load<SoundEffect>("sounds/menu/click");
+            //Game
             LoadMelee(content);
             LoadFirearm(content);
             LoadProjectiles(content);

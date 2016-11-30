@@ -259,3 +259,15 @@
 /processorParam:TextureFormat=Compressed
 /build:font/army.spritefont
 
+#begin sounds/menu/click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/menu/click.wav
+
+#begin sounds/menu/hover.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/menu/hover.wav
+

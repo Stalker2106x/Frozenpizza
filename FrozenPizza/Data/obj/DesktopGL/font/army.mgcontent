@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/font/army.spritefont</SourceFile>
-  <SourceTime>2016-11-30T20:44:13.577332+01:00</SourceTime>
+  <SourceTime>2016-11-30T20:44:24.6436012+01:00</SourceTime>
   <DestFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/bin/DesktopGL/font/army.xnb</DestFile>
-  <DestTime>2016-11-30T20:44:19.9296256+01:00</DestTime>
+  <DestTime>2016-11-30T21:06:35.9789219+01:00</DestTime>
   <Importer>FontDescriptionImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>FontDescriptionProcessor</Processor>

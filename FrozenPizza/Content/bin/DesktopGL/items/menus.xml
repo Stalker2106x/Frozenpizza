@@ -21,6 +21,7 @@
 		<Background>main</Background>
 		<Item>Connect</Item>
 		<Item>Add to favorites</Item>
+		<Item>Refresh</Item>
 		<Item>Direct connect</Item>
     <Item>Back</Item>
 	</BrowseMenu>

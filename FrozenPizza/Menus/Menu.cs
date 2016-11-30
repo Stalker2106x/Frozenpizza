@@ -18,7 +18,7 @@ namespace FrozenPizza
         protected int _selected, _itemCount;
         protected float _fontsize;
         String _fontfile, _bgfile;
-        SpriteFont _font;
+        protected SpriteFont _font;
         Texture2D _background;
         protected Engine _engine;
 
@@ -56,16 +56,31 @@ namespace FrozenPizza
         }
 
         abstract public void itemClicked(int index);
-        public virtual void Update(KeyboardState[] keybStates, MouseState[] mStates)
+
+        bool itemHovered(MouseState[] mStates)
         {
-            _selected = -1;
             for (int i = 0; i < _itemCount; i++)
             {
-                if (_itemRect[i].Contains(mStates[1].Position))
-                    _selected = i;                 
+                if (_itemRect[i].Contains(mStates[0].Position) && _itemRect[i].Contains(mStates[1].Position) && _selected == i)
+                    return (true);
+                else if ((!_itemRect[i].Contains(mStates[0].Position) && _itemRect[i].Contains(mStates[1].Position))
+                    || (_itemRect[i].Contains(mStates[0].Position) && _itemRect[i].Contains(mStates[1].Position) && _selected != i))
+                {
+                    Engine.collection.MenuSounds[0].Play();
+                    _selected = i;
+                    return (true);
+                }
             }
+            return (false);
+        }
+
+        public virtual void Update(KeyboardState[] keybStates, MouseState[] mStates)
+        {
+            if (!itemHovered(mStates))
+                _selected = -1;
             if (_selected >= 0 && mStates[0].LeftButton == ButtonState.Released && mStates[1].LeftButton == ButtonState.Pressed)
             {
+                Engine.collection.MenuSounds[1].Play();
                 itemClicked(_selected);
             }
         }
