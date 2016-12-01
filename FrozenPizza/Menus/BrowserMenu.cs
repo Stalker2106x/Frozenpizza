@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using FrozenPizza;
 
 namespace FrozenPizza
 {
@@ -55,11 +56,13 @@ namespace FrozenPizza
         BrowserMenu _bmenu;
         String _ip, _port;
         Rectangle _inputBox;
+        bool _connecting;
 
         public DirectConnectMenu(Engine engine, BrowserMenu menu) : base(engine, "DirectConnectMenu")
         {
             _bmenu = menu;
             _ip = "";
+            _port = "27420";
             _inputBox = new Rectangle((int)(_engine.GraphicsDevice.Viewport.Width * 0.25f), _engine.GraphicsDevice.Viewport.Height / 2, _engine.GraphicsDevice.Viewport.Width / 2, 40);
             _colorRect = new Texture2D(engine.GraphicsDevice, 1, 1);
             _colorRect.SetData(new[] { Color.White });
@@ -70,15 +73,23 @@ namespace FrozenPizza
             switch(index)
             {
                 case 0:
-                    //Connect
+                    int port;
+
+                    if (Int32.TryParse(_port, out port))
+                    {
+                        _connecting = true;
+                        Engine.netHandle.connect(_ip, port);
+                    }
                     break;
                 case 1:
+                    if (_connecting || NetHandler.Connected)
+                        Engine.netHandle.disconnect();
                     _engine.setMenu(_bmenu);
                     break;
             }
         }
 
-        public override void Update(KeyboardState[] keybStates, MouseState[] mStates)
+        public void updateInput(KeyboardState[] keybStates)
         {
             Keys[] prevInput = keybStates[0].GetPressedKeys();
             Keys[] input = keybStates[1].GetPressedKeys();
@@ -95,13 +106,26 @@ namespace FrozenPizza
             }
             if (_ip.Length > 0 && keybStates[0].IsKeyUp(Keys.Back) && keybStates[1].IsKeyDown(Keys.Back))
                 _ip = _ip.Remove(_ip.Length - 1);
+        }
+
+        public override void Update(KeyboardState[] keybStates, MouseState[] mStates)
+        {
+            if (!_connecting)
+                updateInput(keybStates);
             base.Update(keybStates, mStates);
         }
 
         public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            spriteBatch.Draw(_colorRect, _inputBox, null, Color.White * 0.8f, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
-            spriteBatch.DrawString(_font, _ip, _inputBox.Location.ToVector2(), Color.Black);
+            if (_connecting)
+            {
+                spriteBatch.DrawString(_font, NetHandler.ConnectionStatus, _inputBox.Location.ToVector2(), Color.White);
+            }
+            else
+            {
+                spriteBatch.Draw(_colorRect, _inputBox, null, Color.White * 0.8f, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
+                spriteBatch.DrawString(_font, _ip, _inputBox.Location.ToVector2(), Color.Black);
+            }
             base.Draw(spriteBatch, graphicsDevice);
         }
     }

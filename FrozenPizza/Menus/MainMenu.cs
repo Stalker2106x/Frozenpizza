@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FrozenPizza;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -66,6 +67,8 @@ namespace FrozenPizza
                     break;
                 case 1:
                     _engine.UnloadGame();
+                    if (NetHandler.Connected)
+                        Engine.netHandle.disconnect();
                     _engine.setMenu(new MainMenu(_engine));
                     break;
                 case 2:

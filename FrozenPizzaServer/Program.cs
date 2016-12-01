@@ -25,13 +25,17 @@ namespace FrozenPizzaServer
         //Game
         bool _running;
         String _mapName;
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            Server server = new Server(args[0]);
+            Server server;
 
+            if (args.Length < 1)
+                return (-1);
+            server = new Server(args[0]);
             server.Start();
             while (server.isRunning())
                 server.Update();
+            return (0);
         }
         public bool isRunning()
         {
@@ -41,7 +45,7 @@ namespace FrozenPizzaServer
         public Server(String mapName)
         {
             //Server
-            _port = 13000;
+            _port = 27420;
             _localAddr = IPAddress.Parse("127.0.0.1");
             _server = new TcpListener(_localAddr, _port);
             _client = default(TcpClient);

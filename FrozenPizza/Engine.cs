@@ -27,7 +27,8 @@ namespace FrozenPizza
         KeyBinds keybinds;
         HUD hud;
 
-        //Database
+        //Database & Netcode
+        public static NetHandler netHandle;
         public static Collection collection;
 
         //Menu
@@ -73,6 +74,7 @@ namespace FrozenPizza
             keybStates = new KeyboardState[2];
 			mouseStates = new MouseState[2];
 			collection = new Collection();
+            netHandle = new NetHandler();
             base.Initialize();
         }
 

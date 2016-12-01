@@ -33,7 +33,7 @@
 	</DirectConnectMenu>
   <OptionsMenu>
 		<Font>hud</Font>
-		<Font>main</Font>
+		<Background>main</Background>
     <Setting>Fullscreen</Setting>
     <Setting>Resolution</Setting>
     <Setting>Sound Volume</Setting>
