@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -17,7 +18,7 @@ namespace FrozenPizza
         protected Rectangle[] _itemRect;
         protected int _selected, _itemCount;
         protected float _fontsize;
-        String _fontfile, _bgfile;
+        String _fontfile, _bgfile, _gameVersion;
         protected SpriteFont _font;
         Texture2D _background;
         protected Engine _engine;
@@ -30,6 +31,7 @@ namespace FrozenPizza
 
             _engine = engine;
             _selected = 0;
+            _gameVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
             _itemCount = menu.Elements("Item").Count() + menu.Elements("Setting").Count();
             _items = new String[_itemCount];
             _itemRect = new Rectangle[_itemCount];
@@ -87,6 +89,7 @@ namespace FrozenPizza
 
         public virtual void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
+            spriteBatch.DrawString(_font, _gameVersion,Vector2.Zero, Color.White, 0f, Vector2.Zero, 1.25f, SpriteEffects.None, 0f);
             spriteBatch.Draw(_background, new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
             for (int i = 0; i < _itemCount; i++)
             {

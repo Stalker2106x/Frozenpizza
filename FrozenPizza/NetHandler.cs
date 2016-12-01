@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,12 +24,11 @@ namespace FrozenPizza
             ConnectionStatus = "Disconnected.";
         }
 
-        private static void ConnectCallback(IAsyncResult asyncResult)
+        void ConnectCallback()
         {
             try
             {
-                TcpClient client = (TcpClient)asyncResult.AsyncState;
-                client.EndConnect(asyncResult);
+                _client.Connect(Ip, Port);
                 ConnectionStatus = "Connected!";
                 Connected = true;
             }
@@ -42,7 +42,10 @@ namespace FrozenPizza
             if (!_client.Connected)
             {
                 ConnectionStatus = "Connecting...";
+                Ip = ip;
+                Port = port;
                 _thread = new Thread(threadLoop);
+                _thread.Start();
             }
         }
 
@@ -51,7 +54,32 @@ namespace FrozenPizza
             _thread.Abort();
         }
 
-        public void send()
+        public void sendWhois()
+        {
+
+        }
+        public bool handShake()
+        {
+            if (receive() == ".WELCOME")
+                send(".ACK");
+            else
+                return (false);
+            if (receive() == "?VERSION")
+                send("!VERSION " + Assembly.GetEntryAssembly().GetName().Version.ToString());
+            else
+                return (false);
+            if (receive() == "?WHOIS")
+                sendWhois();
+            else
+                return (false);
+            if (receive() == ".OK")
+                return (true);
+            return (false);
+
+
+        }
+
+        public void send(String msg)
         {
 
         }
@@ -65,7 +93,7 @@ namespace FrozenPizza
 
         void threadLoop()
         {
-            _client.Connect(Ip, Port);
+            ConnectCallback();
             while (Connected)
             {
             }

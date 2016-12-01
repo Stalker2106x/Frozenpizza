@@ -413,6 +413,8 @@ namespace FrozenPizza
 
         public void dropItem(Level level, SlotType slot, int index)
         {
+            if (_hands == null)
+                return;
             List<Item> entities = level.getEntities(_pos);
             if (entities == null)
                 entities = new List<Item>();

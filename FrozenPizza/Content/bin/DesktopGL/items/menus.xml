@@ -6,7 +6,7 @@
       <Item>Create Server</Item>
       <Item>Browse Servers</Item>
       <Item>Options</Item>
-      <Item>Exit</Item>
+      <Item>Exit Game</Item>
   </MainMenu>
   <GameMenu>
 		<Font>hud</Font>
@@ -14,7 +14,7 @@
     <Item>Resume</Item>
     <Item>Disconnect</Item>
     <Item>Options</Item>
-    <Item>Exit</Item>
+    <Item>Exit Game</Item>
   </GameMenu>
 	<BrowseMenu>
 		<Font>hud</Font>

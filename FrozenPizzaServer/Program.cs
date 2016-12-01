@@ -34,7 +34,7 @@ namespace FrozenPizzaServer
             server = new Server(args[0]);
             server.Start();
             while (server.isRunning())
-                server.Update();
+                server.mainLoop();
             return (0);
         }
         public bool isRunning()
@@ -67,9 +67,16 @@ namespace FrozenPizzaServer
             Console.WriteLine("The server is running on port " + _port + "...");
         }
 
-        public void Update()
+        public void mainLoop()
         {
-            _client = _server.AcceptTcpClient();
+            try
+            {
+                _client = _server.AcceptTcpClient();
+            }
+            catch (SocketException e)
+            {
+                Console.WriteLine(" >> " + "Socket error occured!");
+            }
             Console.WriteLine(" >> " + "Client connected with ID " + _connections + "!");
             netCli client = new netCli(_client, _connections);
             client.startClient();
@@ -105,11 +112,6 @@ namespace FrozenPizzaServer
             _cThread.Abort();
         }
 
-        private bool Enumerate()
-        {
-            return (true);
-        }
-
         private bool isConnected()
         {
             if (_client.Client.Poll(0, SelectMode.SelectRead))
@@ -124,21 +126,28 @@ namespace FrozenPizzaServer
             return (true);
         }
 
-        private async void Update()
+        private void Update()
         {
             while (isConnected())
             {
-                int readCount = await _stream.ReadAsync(_buffer, 0, 1024);
-                String msg;
+                String msg = receive();
 
-                msg = Encoding.UTF8.GetString(_buffer, 0, readCount);
                 Console.WriteLine(msg);
             }
         }
 
-        private void WriteData()
+        public void send(String msg)
         {
 
+        }
+
+        public String receive()
+        {
+            int readCount = _stream.Read(_buffer, 0, 1024);
+            String msg;
+
+            msg = Encoding.UTF8.GetString(_buffer, 0, readCount);
+            return (msg);
         }
     }
 }
