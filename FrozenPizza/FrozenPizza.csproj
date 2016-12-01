@@ -60,7 +60,6 @@
     <None Include="Data\font\hud.xnb" />
     <None Include="Data\maps\dev.tmx" />
     <None Include="Data\maps\world.tmx" />
-    <None Include="TiledSharp\AssemblyInfo.cs" />
     <Compile Include="TiledSharp\ImageLayer.cs" />
     <Compile Include="TiledSharp\Layer.cs" />
     <Compile Include="TiledSharp\Map.cs" />
