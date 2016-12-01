@@ -12,6 +12,7 @@ namespace FrozenPizza
     public class NetHandler
     {
         TcpClient _client;
+        NetworkStream _stream;
         Thread _thread;
         public String Ip { get; set; }
         public int Port { get; set; }
@@ -29,6 +30,7 @@ namespace FrozenPizza
             try
             {
                 _client.Connect(Ip, Port);
+                _stream = _client.GetStream();
                 ConnectionStatus = "Connected!";
                 Connected = true;
             }
@@ -81,19 +83,32 @@ namespace FrozenPizza
 
         public void send(String msg)
         {
+            byte[] buffer = new byte[msg.Length];
 
+            buffer = Encoding.UTF8.GetBytes(msg);
+            _stream.Write(buffer, 0, buffer.Length);
         }
 
         public String receive()
         {
-            String msg = "";
+            int receivingBufferSize = (int)_client.ReceiveBufferSize;
+            byte[] buffer = new byte[receivingBufferSize];
+            int readCount = _stream.Read(buffer, 0, receivingBufferSize);
+            String msg;
 
+            if (readCount <= 0)
+                return ("");
+            msg = Encoding.UTF8.GetString(buffer, 0, readCount);
             return (msg);
         }
 
         void threadLoop()
         {
             ConnectCallback();
+            if (Connected)
+            {
+                handShake();
+            }
             while (Connected)
             {
             }

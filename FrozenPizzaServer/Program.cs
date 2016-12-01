@@ -18,10 +18,6 @@ namespace FrozenPizzaServer
         IPAddress _localAddr;
         int _connections;
 
-        //Data
-        Byte[] _bytes;
-        String _data;
-
         //Game
         bool _running;
         String _mapName;
@@ -54,9 +50,6 @@ namespace FrozenPizzaServer
             _running = false;
             _mapName = "maps/world.tmx";
             Console.Write("Starting FrozenPizza Server...\n");
-            // Buffer for reading data
-             _bytes = new Byte[1024];
-             _data = null;
         }
 
         public void Start()
@@ -75,79 +68,12 @@ namespace FrozenPizzaServer
             }
             catch (SocketException e)
             {
-                Console.WriteLine(" >> " + "Socket error occured!");
+                Console.WriteLine("Socket error occured!");
             }
             Console.WriteLine(" >> " + "Client connected with ID " + _connections + "!");
-            netCli client = new netCli(_client, _connections);
+            NetCli client = new NetCli(_client, _connections);
             client.startClient();
             _connections++;
-        }
-    }
-
-    public class netCli
-    {
-        TcpClient _client;
-        Thread _cThread;
-        NetworkStream _stream;
-        byte[] _buffer;
-        int _id;
-        String _name;
-
-        public netCli(TcpClient inClientSocket, int cliId)
-        {
-            _client = inClientSocket;
-            _id = cliId;
-            _buffer = new byte[1024];
-        }
-
-        public void startClient()
-        {
-            _stream = _client.GetStream();
-            _cThread = new Thread(Update);
-            _cThread.Start();
-        }
-
-        public void terminateClient()
-        {
-            _cThread.Abort();
-        }
-
-        private bool isConnected()
-        {
-            if (_client.Client.Poll(0, SelectMode.SelectRead))
-            {
-                byte[] buff = new byte[1];
-                if (_client.Client.Receive(buff, SocketFlags.Peek) == 0)
-                {
-                    // Client disconnected
-                    return (false);
-                }
-            }
-            return (true);
-        }
-
-        private void Update()
-        {
-            while (isConnected())
-            {
-                String msg = receive();
-
-                Console.WriteLine(msg);
-            }
-        }
-
-        public void send(String msg)
-        {
-
-        }
-
-        public String receive()
-        {
-            int readCount = _stream.Read(_buffer, 0, 1024);
-            String msg;
-
-            msg = Encoding.UTF8.GetString(_buffer, 0, readCount);
-            return (msg);
         }
     }
 }

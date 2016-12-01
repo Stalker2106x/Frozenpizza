@@ -6,24 +6,27 @@ using System.Threading.Tasks;
 
 namespace FrozenPizzaServer
 {
-    class CommandHandler
+    public class CommandHandler
     {
         Dictionary<String, Func<String[], bool>> _commands;
 
-        CommandHandler()
+        public CommandHandler()
         {
-            _commands.Add("?ENUMERATE", enumerateItems);
+            _commands.Add("!VERSION", checkVersion);
         }
 
-        bool ParseCmd(String msg)
+        public static String getCmd(String msg)
         {
-            String cmd;
+            return (msg.Substring(0, msg.IndexOf(' ') - 1));
+        }
+
+        public static String[] getArgs(String msg)
+        {
             String[] args;
             int argc;
 
-            argc = msg.Split(' ').Length + 1;
+            argc = msg.Split(' ').Length;
             args = new String[argc];
-            cmd = msg.Substring(0, msg.IndexOf(' ') - 1);
             for (int i = 0; i < argc; i++)
             {
                 int nextSpace = msg.IndexOf(' ');
@@ -36,9 +39,27 @@ namespace FrozenPizzaServer
                 else
                     args[i] = msg;
             }
+            return (args);
+        }
+
+        public bool ParseCmd(String msg)
+        {
+            String cmd;
+            String[] args;
+
+            cmd = getCmd(msg);
+            args = getArgs(msg);
             if (!_commands.ContainsKey(cmd))
                 return (false);
             _commands[cmd](args);
+            return (true);
+        }
+
+        public bool ParseExpectedCmd(String msg, String expected)
+        {
+            if (getCmd(msg) != expected)
+                return (false);
+            ParseCmd(msg);
             return (true);
         }
 
@@ -47,7 +68,7 @@ namespace FrozenPizzaServer
             return (true);
         }
 
-        bool enumerateItems(String[] args)
+        bool checkVersion(String[] args)
         {
             //ENUMERATE ITEMS
             return (true);

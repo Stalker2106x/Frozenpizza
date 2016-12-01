@@ -75,7 +75,7 @@ namespace FrozenPizza
                 case 0:
                     int port;
 
-                    if (Int32.TryParse(_port, out port))
+                    if (_ip.Length > 0 && Int32.TryParse(_port, out port))
                     {
                         _connecting = true;
                         Engine.netHandle.connect(_ip, port);

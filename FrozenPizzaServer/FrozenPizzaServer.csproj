@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="CommandHandler.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="NetCli.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
