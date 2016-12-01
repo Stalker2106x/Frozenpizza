@@ -83,7 +83,7 @@ namespace FrozenPizza
                     break;
                 case 1:
                     if (_connecting || NetHandler.Connected)
-                        Engine.netHandle.disconnect();
+                        NetHandler.disconnect();
                     _engine.setMenu(_bmenu);
                     break;
             }

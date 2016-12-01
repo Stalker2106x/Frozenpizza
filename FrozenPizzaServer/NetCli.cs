@@ -23,10 +23,15 @@ namespace FrozenPizzaServer
             _id = cliId;
         }
 
+        public int Id
+        {
+            get { return (_id); }
+        }
+
         public void startClient()
         {
             _stream = _client.GetStream();
-            _cmdHandle = new CommandHandler();
+            _cmdHandle = new CommandHandler(this);
             _cThread = new Thread(Update);
             _cThread.Start();
         }
@@ -60,12 +65,10 @@ namespace FrozenPizzaServer
                 return (false);
             send("?WHOIS");
             if (!_cmdHandle.ParseExpectedCmd(receive(), "!WHOIS"))
-            {
-                send(".KO");
                 return (false);
-            }
-            else
-                send(".OK");
+            send(".HANDSHAKE");
+            if (!_cmdHandle.ParseExpectedCmd(receive(), ".HANDSHAKE"))
+                return (false);
             return (true); //HandShake success!
         }
 
@@ -84,6 +87,7 @@ namespace FrozenPizzaServer
         {
             byte[] buffer = new byte[msg.Length];
 
+            Console.Write(">[" + _id + "] " + msg + "\n");
             buffer = Encoding.UTF8.GetBytes(msg);
             _stream.Write(buffer, 0, buffer.Length);
         }

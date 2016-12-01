@@ -11,16 +11,18 @@ namespace FrozenPizza
 {
     public class NetHandler
     {
-        TcpClient _client;
-        NetworkStream _stream;
-        Thread _thread;
+        static TcpClient _client;
+        static Thread _thread;
+        CommandHandler _cmdHandle;
+        public static NetworkStream _stream;
         public String Ip { get; set; }
         public int Port { get; set; }
         public static bool Connected { get; set; }
         public static String ConnectionStatus { get; set; }
-        public NetHandler()
+        public NetHandler(Player mainPlayer)
         {
             _client = new TcpClient();
+            _cmdHandle = new CommandHandler(mainPlayer);
             Connected = false;
             ConnectionStatus = "Disconnected.";
         }
@@ -51,37 +53,14 @@ namespace FrozenPizza
             }
         }
 
-        public void disconnect()
+        public static void disconnect()
         {
+            ConnectionStatus = "Disconnected.";
+            _client.Close();
             _thread.Abort();
         }
 
-        public void sendWhois()
-        {
-
-        }
-        public bool handShake()
-        {
-            if (receive() == ".WELCOME")
-                send(".ACK");
-            else
-                return (false);
-            if (receive() == "?VERSION")
-                send("!VERSION " + Assembly.GetEntryAssembly().GetName().Version.ToString());
-            else
-                return (false);
-            if (receive() == "?WHOIS")
-                sendWhois();
-            else
-                return (false);
-            if (receive() == ".OK")
-                return (true);
-            return (false);
-
-
-        }
-
-        public void send(String msg)
+        public static void send(String msg)
         {
             byte[] buffer = new byte[msg.Length];
 
@@ -89,15 +68,24 @@ namespace FrozenPizza
             _stream.Write(buffer, 0, buffer.Length);
         }
 
-        public String receive()
+        public static String receive()
         {
             int receivingBufferSize = (int)_client.ReceiveBufferSize;
             byte[] buffer = new byte[receivingBufferSize];
-            int readCount = _stream.Read(buffer, 0, receivingBufferSize);
+            int readCount = 0;
             String msg;
 
+            try
+            {
+                readCount = _stream.Read(buffer, 0, receivingBufferSize);
+            }
+            catch (System.IO.IOException e)
+            {
+                disconnect();
+                return (null);
+            }
             if (readCount <= 0)
-                return ("");
+                return (null);
             msg = Encoding.UTF8.GetString(buffer, 0, readCount);
             return (msg);
         }
@@ -105,12 +93,12 @@ namespace FrozenPizza
         void threadLoop()
         {
             ConnectCallback();
-            if (Connected)
-            {
-                handShake();
-            }
             while (Connected)
             {
+                String msg = receive();
+
+                if (msg != null)
+                    _cmdHandle.ParseCmd(msg);
             }
         }
     }

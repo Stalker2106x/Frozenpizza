@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FrozenPizza;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,14 +10,20 @@ namespace FrozenPizzaServer
     public class CommandHandler
     {
         Dictionary<String, Func<String[], bool>> _commands;
+        NetCli _client;
 
-        public CommandHandler()
+        public CommandHandler(NetCli client)
         {
+            _client = client;
+            _commands = new Dictionary<String, Func<String[], bool>>();
             _commands.Add("!VERSION", checkVersion);
+            _commands.Add("!WHOIS", whoisClient);
         }
 
         public static String getCmd(String msg)
         {
+            if (msg.IndexOf(' ') == -1)
+                return (msg);
             return (msg.Substring(0, msg.IndexOf(' ') - 1));
         }
 
@@ -25,7 +32,7 @@ namespace FrozenPizzaServer
             String[] args;
             int argc;
 
-            argc = msg.Split(' ').Length;
+            argc = msg.Split(' ').Length - 1;
             args = new String[argc];
             for (int i = 0; i < argc; i++)
             {
@@ -59,19 +66,39 @@ namespace FrozenPizzaServer
         {
             if (getCmd(msg) != expected)
                 return (false);
-            ParseCmd(msg);
-            return (true);
+            return (ParseCmd(msg));
         }
 
-        bool whoIs(String[] args)
-        {
-            return (true);
-        }
-
+        //Handshake
         bool checkVersion(String[] args)
         {
-            //ENUMERATE ITEMS
+            //No mismatch for now
+            accept();
             return (true);
+        }
+
+        bool whoisClient(String[] args)
+        {
+            accept();
+            return (true);
+        }
+
+        bool handShake(String[] args)
+        {
+            _client.send(".HANDSHAKE");
+            return (true);
+        }
+        //Accept / Refuse switches
+        void accept()
+        {
+            Console.Write(">[" +_client.Id + "]OK\n");
+            _client.send(".OK");
+        }
+
+        void refuse()
+        {
+            Console.Write(">[" + _client.Id + "]KO\n");
+            _client.send(".KO");
         }
     }
 }

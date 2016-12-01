@@ -51,7 +51,8 @@
     <Compile Include="Menus\BrowserMenu.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Menus\Menu.cs" />
-    <Compile Include="NetHandler.cs" />
+    <Compile Include="Network\CommandHandler.cs" />
+    <Compile Include="Network\NetHandler.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

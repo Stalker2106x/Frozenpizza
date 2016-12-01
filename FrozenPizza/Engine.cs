@@ -74,13 +74,13 @@ namespace FrozenPizza
             keybStates = new KeyboardState[2];
 			mouseStates = new MouseState[2];
 			collection = new Collection();
-            netHandle = new NetHandler();
+            netHandle = new NetHandler(mainPlayer);
             base.Initialize();
         }
 
         public void InitializeGame()
         {
-            level = new Level("Data/maps/dev.tmx");
+            level = new Level("Data/maps/world.tmx");
             cam = new Camera(GraphicsDevice);
             hud = new HUD(GraphicsDevice, cam);
             projectiles = new List<Projectile>();
