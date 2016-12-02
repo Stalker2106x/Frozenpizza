@@ -1,5 +1,4 @@
-﻿using FrozenPizza;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,13 +17,14 @@ namespace FrozenPizzaServer
             _commands = new Dictionary<String, Func<String[], bool>>();
             _commands.Add("!VERSION", checkVersion);
             _commands.Add("!WHOIS", whoisClient);
+            _commands.Add("?WORLD", sendWorldData);
         }
 
         public static String getCmd(String msg)
         {
             if (msg.IndexOf(' ') == -1)
                 return (msg);
-            return (msg.Substring(0, msg.IndexOf(' ') - 1));
+            return (msg.Substring(0, msg.IndexOf(' ')));
         }
 
         public static String[] getArgs(String msg)
@@ -40,8 +40,8 @@ namespace FrozenPizzaServer
 
                 if (nextSpace < 0)
                 {
-                    args[i] = msg.Substring(0, nextSpace - 1);
-                    msg.Remove(0, nextSpace);
+                    args[i] = msg.Substring(0, nextSpace);
+                    msg.Remove(0, nextSpace + 1);
                 }
                 else
                     args[i] = msg;
@@ -64,7 +64,9 @@ namespace FrozenPizzaServer
 
         public bool ParseExpectedCmd(String msg, String expected)
         {
-            if (getCmd(msg) != expected)
+            String cmd = getCmd(msg);
+
+            if (cmd != expected)
                 return (false);
             return (ParseCmd(msg));
         }
@@ -88,16 +90,38 @@ namespace FrozenPizzaServer
             _client.send(".HANDSHAKE");
             return (true);
         }
+
+        //World data
+        //Send world Data
+        bool sendWorldData(String[] args)
+        {
+            Level level = Server.Level;
+            for (int i = 0; i < level.Entities.Length; i++)
+            {
+                if (level.Entities[i] != null)
+                {
+                    for (int j = 0; j < level.Entities[i].Count; j++)
+                    {
+                        Item item = level.Entities[i][j];
+                        int x, y;
+
+                        x = i % Server.Level.Map.Width;
+                        y = i / Server.Level.Map.Width;
+                        _client.send("!ITEM " + x + " " + y + " " + item.Id);
+                    }
+                }
+            }
+            return (true);
+        }
+
         //Accept / Refuse switches
         void accept()
         {
-            Console.Write(">[" +_client.Id + "]OK\n");
             _client.send(".OK");
         }
 
         void refuse()
         {
-            Console.Write(">[" + _client.Id + "]KO\n");
             _client.send(".KO");
         }
     }

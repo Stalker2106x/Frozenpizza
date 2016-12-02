@@ -35,6 +35,7 @@ namespace FrozenPizza
                     //refresh
                     break;
                 case 3:
+                    Engine.netHandle = new NetHandler(_engine.MainPlayer);
                     _engine.setMenu(new DirectConnectMenu(_engine, this));
                     break;
                 case 4:

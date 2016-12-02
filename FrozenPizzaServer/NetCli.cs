@@ -96,7 +96,17 @@ namespace FrozenPizzaServer
         {
             int receivingBufferSize = (int)_client.ReceiveBufferSize;
             byte[] buffer = new byte[receivingBufferSize];
-            int readCount = _stream.Read(buffer, 0, receivingBufferSize);
+            int readCount = 0;
+
+            try
+            {
+                readCount = _stream.Read(buffer, 0, receivingBufferSize);
+            }
+            catch (System.IO.IOException e)
+            {
+                Console.Write(" >> Client ID " + _id + " disconnected.");
+                terminateClient();
+            }
             String msg;
 
             if (readCount <= 0)

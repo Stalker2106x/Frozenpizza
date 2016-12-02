@@ -36,21 +36,14 @@
     <StartupObject>FrozenPizzaServer.Server</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="NVorbis, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\FrozenPizza\Items\Item.cs">
-      <Link>Items\Item.cs</Link>
-    </Compile>
     <Compile Include="..\FrozenPizza\TiledSharp\ImageLayer.cs">
       <Link>TiledSharp\ImageLayer.cs</Link>
     </Compile>
@@ -70,6 +63,9 @@
       <Link>TiledSharp\Tileset.cs</Link>
     </Compile>
     <Compile Include="CommandHandler.cs" />
+    <Compile Include="Entities\Item.cs" />
+    <Compile Include="Entities\Player.cs" />
+    <Compile Include="Entities\Projectile.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="NetCli.cs" />
     <Compile Include="Program.cs" />

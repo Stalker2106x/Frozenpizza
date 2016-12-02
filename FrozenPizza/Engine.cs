@@ -37,16 +37,19 @@ namespace FrozenPizza
         bool _gameLoaded;
 
         //Game
-        Level level;     
+        Level level;
         Player mainPlayer;
         List<Projectile> projectiles;
 
         //Input
         KeyboardState[] keybStates;
-		MouseState[] mouseStates;
+        MouseState[] mouseStates;
 
         //Timers
         TimeSpan tMinute;
+
+        public Player MainPlayer { get { return (mainPlayer); } }
+        public Level Level { get { return (level); } }
 
         public Engine()
         {
@@ -74,7 +77,6 @@ namespace FrozenPizza
             keybStates = new KeyboardState[2];
 			mouseStates = new MouseState[2];
 			collection = new Collection();
-            netHandle = new NetHandler(mainPlayer);
             base.Initialize();
         }
 

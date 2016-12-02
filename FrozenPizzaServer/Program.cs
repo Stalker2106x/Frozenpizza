@@ -21,6 +21,7 @@ namespace FrozenPizzaServer
         //Game
         bool _running;
         String _mapName;
+        public static Level Level { get; }
         static int Main(string[] args)
         {
             Server server;
