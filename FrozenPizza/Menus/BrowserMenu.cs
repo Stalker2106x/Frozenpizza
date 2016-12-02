@@ -35,7 +35,7 @@ namespace FrozenPizza
                     //refresh
                     break;
                 case 3:
-                    Engine.netHandle = new NetHandler(_engine.MainPlayer);
+                    Engine.netHandle = new NetHandler();
                     _engine.setMenu(new DirectConnectMenu(_engine, this));
                     break;
                 case 4:
@@ -113,6 +113,23 @@ namespace FrozenPizza
         {
             if (!_connecting)
                 updateInput(keybStates);
+            else
+            {
+                if (Engine.netHandle.Handshake && !Engine.netHandle.Hooked)
+                {
+                    Engine.netHandle.Handshake = false;
+                    _engine.InitializeGame();
+                    _engine.LoadGame();
+                    NetHandler.retrieveServerData();
+                }
+                else if (Engine.netHandle.Hooked)
+                {
+                    _engine.toggleMouseVisible();
+                    _engine.gstate = Engine.GameState.Playing;
+                    _engine.setMenu(new GameMenu(_engine));
+                }
+            }
+
             base.Update(keybStates, mStates);
         }
 

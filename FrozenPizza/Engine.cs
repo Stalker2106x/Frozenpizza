@@ -37,8 +37,8 @@ namespace FrozenPizza
         bool _gameLoaded;
 
         //Game
-        Level level;
-        Player mainPlayer;
+        static Level level;
+        static Player mainPlayer;
         List<Projectile> projectiles;
 
         //Input
@@ -48,8 +48,8 @@ namespace FrozenPizza
         //Timers
         TimeSpan tMinute;
 
-        public Player MainPlayer { get { return (mainPlayer); } }
-        public Level Level { get { return (level); } }
+        public static Player MainPlayer { get { return (mainPlayer); } }
+        public static Level Level { get { return (level); } }
 
         public Engine()
         {
@@ -120,7 +120,7 @@ namespace FrozenPizza
             level.Load(this.Content);
             hud.Load(this.Content);
             mainPlayer.Load(this.Content);
-            level.GenerateItems(collection);
+            //level.GenerateItems(collection);
             _gameLoaded = true;
         }
 

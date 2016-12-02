@@ -401,7 +401,7 @@ namespace FrozenPizza
         {
             if (_hands == null)
             {
-                List<Item> entities = level.getEntities(_pos);
+                List<Item> entities = level.getEntities(level.vmapToGrid(_pos));
                 if (entities == null)
                     return;
                 _hands = entities[index];
@@ -415,13 +415,13 @@ namespace FrozenPizza
         {
             if (_hands == null)
                 return;
-            List<Item> entities = level.getEntities(_pos);
+            List<Item> entities = level.getEntities(level.vmapToGrid(_pos));
             if (entities == null)
                 entities = new List<Item>();
             if (slot == SlotType.Hands)
             {
                 entities.Add(_hands);
-                level.setEntities(_pos, entities);
+                level.setEntities(level.vmapToGrid(_pos), entities);
                 _hands = null;
             }
 

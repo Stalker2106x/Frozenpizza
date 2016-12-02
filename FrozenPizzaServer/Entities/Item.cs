@@ -10,9 +10,9 @@ namespace FrozenPizzaServer
     public class Item
     {
         public int Id { get; set; }
-        public Item()
+        public Item(int id)
         {
-
+            Id = id;
         }
     }
 }

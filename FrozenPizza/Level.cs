@@ -16,14 +16,6 @@ namespace FrozenPizza
         Spawn
     }
 
-	public enum Orientation
-	{
-		North,
-		East,
-		South,
-		West
-	}
-
     public enum Meta
     {
         Melee = 257,
@@ -76,7 +68,7 @@ namespace FrozenPizza
 			return (new Vector2((int)pos.X * _twidth, (int)pos.Y * _theight));
 		}
 
-		//Generation
+		/*//Generation
         public void GenerateItems(Collection collection)
         {
             Random rnd = new Random();
@@ -100,7 +92,7 @@ namespace FrozenPizza
                     _entities[i].Add((Firearm)collection.FirearmList[rnd.Next(0, collection.FirearmList.Count)]);
                 }
             }
-        }
+        }*/
 
         public Vector2 getSpawnPoint()
         {
@@ -142,16 +134,14 @@ namespace FrozenPizza
 		//Items management
         public List<Item> getEntities(Vector2 pos)
         {
-            Vector2 realpos = vmapToGrid(pos);
-            List<Item> list = _entities[(int)((realpos.Y * _map.Width) + realpos.X)];
+            List<Item> list = _entities[(int)((pos.Y * _map.Width) + pos.X)];
             
             return (list);
         }
 
         public void setEntities(Vector2 pos, List<Item> list)
         {
-            Vector2 realpos = vmapToGrid(pos);
-            _entities[(int)((realpos.Y * _map.Width) + realpos.X)] = list;
+            _entities[(int)((pos.Y * _map.Width) + pos.X)] = list;
         }
 
 		//base draw call, includes tilemap algorithm

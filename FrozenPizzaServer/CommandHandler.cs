@@ -18,6 +18,8 @@ namespace FrozenPizzaServer
             _commands.Add("!VERSION", checkVersion);
             _commands.Add("!WHOIS", whoisClient);
             _commands.Add("?WORLD", sendWorldData);
+            _commands.Add("?PLAYER", sendPlayers);
+            _commands.Add(".READY", accept);
         }
 
         public static String getCmd(String msg)
@@ -34,14 +36,15 @@ namespace FrozenPizzaServer
 
             argc = msg.Split(' ').Length - 1;
             args = new String[argc];
+            msg = msg.Remove(0, msg.IndexOf(' ') + 1);
             for (int i = 0; i < argc; i++)
             {
                 int nextSpace = msg.IndexOf(' ');
 
-                if (nextSpace < 0)
+                if (nextSpace > 0)
                 {
                     args[i] = msg.Substring(0, nextSpace);
-                    msg.Remove(0, nextSpace + 1);
+                    msg = msg.Remove(0, nextSpace + 1);
                 }
                 else
                     args[i] = msg;
@@ -55,9 +58,12 @@ namespace FrozenPizzaServer
             String[] args;
 
             cmd = getCmd(msg);
+            if (cmd == ".ACK")
+                return (true);
             args = getArgs(msg);
             if (!_commands.ContainsKey(cmd))
                 return (false);
+            
             _commands[cmd](args);
             return (true);
         }
@@ -75,13 +81,13 @@ namespace FrozenPizzaServer
         bool checkVersion(String[] args)
         {
             //No mismatch for now
-            accept();
+            accept(null);
             return (true);
         }
 
         bool whoisClient(String[] args)
         {
-            accept();
+            accept(null);
             return (true);
         }
 
@@ -92,7 +98,6 @@ namespace FrozenPizzaServer
         }
 
         //World data
-        //Send world Data
         bool sendWorldData(String[] args)
         {
             Level level = Server.Level;
@@ -108,16 +113,32 @@ namespace FrozenPizzaServer
                         x = i % Server.Level.Map.Width;
                         y = i / Server.Level.Map.Width;
                         _client.send("!ITEM " + x + " " + y + " " + item.Id);
+                        String ncmd = _client.receive();
+                        if (!ParseExpectedCmd(ncmd, ".ACK"))
+                            return (false);
                     }
                 }
+            }
+            _client.send(".READY");
+            return (true);
+        }
+
+        bool sendPlayers(String[] args)
+        {
+            for (int i = 0; i < Server.Level.Players.Count; i++)
+            {
+                Player player = Server.Level.Players[i];
+
+                _client.send("!PLAYER " + player.Id + " " + player.Pos.X + " " + player.Pos.Y);
             }
             return (true);
         }
 
         //Accept / Refuse switches
-        void accept()
+        bool accept(String[] args)
         {
             _client.send(".OK");
+            return (true);
         }
 
         void refuse()

@@ -7,6 +7,20 @@ using TiledSharp;
 
 namespace FrozenPizzaServer
 {
+    public enum Layers
+    {
+        Floor,
+        Wall,
+        Ceiling,
+        Meta,
+        Spawn
+    }
+    public enum Meta
+    {
+        Melee = 257,
+        Pistol,
+        Rifle
+    }
     public class Level
     {
         //Tiles
@@ -32,6 +46,32 @@ namespace FrozenPizzaServer
             _twidth = _map.Tilesets[0].TileWidth;
             _theight = _map.Tilesets[0].TileHeight;
             _entities = new List<Item>[_map.Width * _map.Height];
+            GenerateItems();
+        }
+        //Generation
+        public void GenerateItems()
+        {
+            Random rnd = new Random();
+
+            for (int i = 0; i < _map.Layers[(int)Layers.Meta].Tiles.Count; i++)
+            {
+                int gid = _map.Layers[(int)Layers.Meta].Tiles[i].Gid;
+
+                if (gid == 0 || rnd.Next(0, 2) == 0) //Skip empty & 50% chance of spawn
+                    continue;
+                if (_entities[i] == null)
+                    _entities[i] = new List<Item>();
+                if (gid == (int)Meta.Melee)
+                {
+
+                    _entities[i].Add(new Item(rnd.Next(1, 4)));
+                }
+                else if (gid == (int)Meta.Pistol)
+                {
+                    _entities[i] = new List<Item>();
+                    _entities[i].Add(new Item(rnd.Next(1000, 1002)));
+                }
+            }
         }
     }
 }

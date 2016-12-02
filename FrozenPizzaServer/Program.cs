@@ -21,7 +21,7 @@ namespace FrozenPizzaServer
         //Game
         bool _running;
         String _mapName;
-        public static Level Level { get; }
+        public static Level Level { get; set; }
         static int Main(string[] args)
         {
             Server server;
@@ -50,6 +50,7 @@ namespace FrozenPizzaServer
             //Game
             _running = false;
             _mapName = "maps/world.tmx";
+            Level = new Level(mapName);
             Console.Write("Starting FrozenPizza Server...\n");
         }
 

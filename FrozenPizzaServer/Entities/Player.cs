@@ -8,13 +8,13 @@ namespace FrozenPizzaServer
 {
     public struct Vector2
     {
-        float X;
-        float Y;
+        public float X;
+        public float Y;
     }
     public class Player
     {
-        int _id;
-        Vector2 _pos;
+        public int Id { get; set; }
+        public Vector2 Pos { get; set; }
 
         public Player()
         {

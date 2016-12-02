@@ -19,10 +19,14 @@ namespace FrozenPizza
         public int Port { get; set; }
         public static bool Connected { get; set; }
         public static String ConnectionStatus { get; set; }
-        public NetHandler(Player mainPlayer)
+        public bool Hooked { get; set; }
+        public bool Handshake { get; set; }
+        public NetHandler()
         {
             _client = new TcpClient();
-            _cmdHandle = new CommandHandler(mainPlayer);
+            _cmdHandle = new CommandHandler();
+            Handshake = false;
+            Hooked = false;
             Connected = false;
             ConnectionStatus = "Disconnected.";
         }
@@ -51,6 +55,11 @@ namespace FrozenPizza
                 _thread = new Thread(threadLoop);
                 _thread.Start();
             }
+        }
+
+        public static void retrieveServerData()
+        {
+            send("?WORLD");
         }
 
         public static void disconnect()

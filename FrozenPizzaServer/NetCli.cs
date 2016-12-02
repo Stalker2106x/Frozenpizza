@@ -14,6 +14,7 @@ namespace FrozenPizzaServer
         Thread _cThread;
         NetworkStream _stream;
         CommandHandler _cmdHandle;
+        bool _worldSent, _dataSent;
         int _id;
         String _name;
 
@@ -21,6 +22,8 @@ namespace FrozenPizzaServer
         {
             _client = inClientSocket;
             _id = cliId;
+            _worldSent = false;
+
         }
 
         public int Id
@@ -79,7 +82,10 @@ namespace FrozenPizzaServer
             {
                 String msg = receive();
 
-                Console.WriteLine(msg);
+                if (msg != null)
+                {
+                    _cmdHandle.ParseCmd(msg);
+                }
             }
         }
 
