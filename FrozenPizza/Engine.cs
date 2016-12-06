@@ -39,6 +39,8 @@ namespace FrozenPizza
         //Game
         static Level level;
         static Player mainPlayer;
+        static Dictionary<int, Player> players;
+
         List<Projectile> projectiles;
 
         //Input
@@ -49,6 +51,7 @@ namespace FrozenPizza
         TimeSpan tMinute;
 
         public static Player MainPlayer { get { return (mainPlayer); } }
+        public static Dictionary<int, Player> Players { get { return (players); } }
         public static Level Level { get { return (level); } }
 
         public Engine()

@@ -19,7 +19,10 @@ namespace FrozenPizza
             _commands.Add(".WELCOME", acknowledge);
             _commands.Add("?VERSION", sendVersion);
             _commands.Add("?WHOIS", sendWhois);
-            _commands.Add("!ITEM", spawnItem);
+            _commands.Add("!PLAYER", addNewPlayer);
+            _commands.Add("!MOVE", movePlayer);
+            _commands.Add("!+ITEM", spawnItem);
+            _commands.Add("!-ITEM", removeItem);
             _commands.Add(".HANDSHAKE", handShake);
             _commands.Add(".READY", ready);
             _commands.Add(".OK", accept);
@@ -99,6 +102,16 @@ namespace FrozenPizza
             return (true);
         }
 
+        //Player
+        bool addNewPlayer(String[] args)
+        {
+            return (true);
+        }
+        bool movePlayer(String[] args)
+        {
+            return (true);
+        }
+
         //World data
         bool spawnItem(String[] args)
         {
@@ -106,9 +119,9 @@ namespace FrozenPizza
             Vector2 pos;
             int id;
 
-            float.TryParse(args[0], out pos.X);
-            float.TryParse(args[1], out pos.Y);
-            Int32.TryParse(args[2], out id);
+            Int32.TryParse(args[0], out id);
+            float.TryParse(args[1], out pos.X);
+            float.TryParse(args[2], out pos.Y);
             if (Engine.Level.getEntities(pos) == null)
                 entities = new List<Item>();
             else
@@ -116,6 +129,17 @@ namespace FrozenPizza
             entities.Add(Engine.collection.getItemById(id));
             Engine.Level.setEntities(pos, entities);
             acknowledge(null);
+            return (true);
+        }
+
+        bool removeItem(String[] args)
+        {
+            int x, y, index;
+
+            Int32.TryParse(args[0], out index);
+            Int32.TryParse(args[1], out x);
+            Int32.TryParse(args[2], out y);
+            Engine.Level.getEntities(new Vector2(x, y)).RemoveAt(index);
             return (true);
         }
 

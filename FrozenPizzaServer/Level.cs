@@ -32,12 +32,10 @@ namespace FrozenPizzaServer
         List<Item>[] _entities;
 
         //Dynamic
-        List<Player> _players;
         List<Projectile> _projectiles;
 
         public TmxMap Map {  get { return (_map); } }
         public List<Item>[] Entities { get { return (_entities); } }
-        public List<Player> Players { get { return (_players); } }
         public List<Projectile> Projectiles { get { return (_projectiles); } }
 
         public Level(String mapName)

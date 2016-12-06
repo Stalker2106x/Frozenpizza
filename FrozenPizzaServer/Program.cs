@@ -15,6 +15,7 @@ namespace FrozenPizzaServer
         int _port;
         TcpListener _server;
         TcpClient _client;
+        public static List<NetCli> ClientList;
         IPAddress _localAddr;
         int _connections;
 
@@ -39,6 +40,16 @@ namespace FrozenPizzaServer
             return (_running);
         }
 
+        public static void broadcast(int senderId, String msg)
+        {
+            for (int i = 0; i < ClientList.Count; i++)
+            {
+                if (i == senderId)
+                    continue;
+                ClientList[i].send(msg);
+            }
+        }
+
         public Server(String mapName)
         {
             //Server
@@ -47,6 +58,7 @@ namespace FrozenPizzaServer
             _server = new TcpListener(_localAddr, _port);
             _client = default(TcpClient);
             _connections = 0;
+            ClientList = new List<NetCli>();
             //Game
             _running = false;
             _mapName = "maps/world.tmx";
@@ -73,8 +85,8 @@ namespace FrozenPizzaServer
                 Console.WriteLine("Socket error occured!");
             }
             Console.WriteLine(" >> " + "Client connected with ID " + _connections + "!");
-            NetCli client = new NetCli(_client, _connections);
-            client.startClient();
+            ClientList.Add(new NetCli(_client, _connections));
+            ClientList.Last().startClient();
             _connections++;
         }
     }

@@ -17,6 +17,8 @@ namespace FrozenPizzaServer
             _commands = new Dictionary<String, Func<String[], bool>>();
             _commands.Add("!VERSION", checkVersion);
             _commands.Add("!WHOIS", whoisClient);
+            _commands.Add("!MOVE", movePlayer);
+            _commands.Add("!-ITEM", removeItem);
             _commands.Add("?WORLD", sendWorldData);
             _commands.Add("?PLAYER", sendPlayers);
             _commands.Add(".READY", accept);
@@ -97,6 +99,13 @@ namespace FrozenPizzaServer
             return (true);
         }
 
+        //Player
+        bool movePlayer(String[] args)
+        {
+            Server.broadcast(_client.Id, "!MOVE " + _client.Id + " " + args[0] + " " + args[1] + " " + args[2]);
+            return (true);
+        }
+
         //World data
         bool sendWorldData(String[] args)
         {
@@ -112,7 +121,7 @@ namespace FrozenPizzaServer
 
                         x = i % Server.Level.Map.Width;
                         y = i / Server.Level.Map.Width;
-                        _client.send("!ITEM " + x + " " + y + " " + item.Id);
+                        _client.send("!+ITEM " + item.Id + " " + x + " " + y);
                         String ncmd = _client.receive();
                         if (!ParseExpectedCmd(ncmd, ".ACK"))
                             return (false);
@@ -125,12 +134,43 @@ namespace FrozenPizzaServer
 
         bool sendPlayers(String[] args)
         {
-            for (int i = 0; i < Server.Level.Players.Count; i++)
+            for (int i = 0; i < Server.ClientList.Count; i++)
             {
-                Player player = Server.Level.Players[i];
+                Player player = Server.ClientList[i].Player;
 
-                _client.send("!PLAYER " + player.Id + " " + player.Pos.X + " " + player.Pos.Y);
+                _client.send("!+PLAYER " + player.Id + " " + player.Pos.X + " " + player.Pos.Y);
             }
+            return (true);
+        }
+        bool spawnItem(String[] args)
+        {
+            Vector2 pos;
+            int id;
+
+            Int32.TryParse(args[0], out id);
+            float.TryParse(args[1], out pos.X);
+            float.TryParse(args[2], out pos.Y);
+            if (Server.Level.Entities[(int)(pos.Y * Server.Level.Map.Width) + (int)pos.X] == null)
+                Server.Level.Entities[(int)(pos.Y * Server.Level.Map.Width) + (int)pos.X] = new List<Item>();
+            Server.Level.Entities[(int)(pos.Y * Server.Level.Map.Width) + (int)pos.X].Add(new Item(id));
+            accept(null);
+            Server.broadcast(_client.Id, "!+ITEM " + args[0] + " " + args[1] + " " + args[2]);
+            return (true);
+        }
+
+        bool removeItem(String[] args)
+        {
+            int x, y, index;
+
+            Int32.TryParse(args[0], out index);
+            Int32.TryParse(args[1], out x);
+            Int32.TryParse(args[2], out y);
+            if (Server.Level.Entities[(y * Server.Level.Map.Width) + x] != null)
+                Server.Level.Entities[(y * Server.Level.Map.Width) + x].RemoveAt(index);
+            else if (Server.Level.Entities[(y * Server.Level.Map.Width) + x].Count == 0)
+                Server.Level.Entities[(y * Server.Level.Map.Width) + x] = null;
+            accept(null);
+            Server.broadcast(_client.Id, "!-ITEM " + args[0] + " " + args[1] + " " + args[2]);
             return (true);
         }
 

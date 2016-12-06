@@ -17,6 +17,7 @@ namespace FrozenPizzaServer
         bool _worldSent, _dataSent;
         int _id;
         String _name;
+        Player _player;
 
         public NetCli(TcpClient inClientSocket, int cliId)
         {
@@ -29,6 +30,11 @@ namespace FrozenPizzaServer
         public int Id
         {
             get { return (_id); }
+        }
+
+        public Player Player
+        {
+            get { return (_player); }
         }
 
         public void startClient()
@@ -66,6 +72,7 @@ namespace FrozenPizzaServer
             send("?VERSION");
             if (!_cmdHandle.ParseExpectedCmd(receive(), "!VERSION"))
                 return (false);
+            _player = new Player();
             send("?WHOIS");
             if (!_cmdHandle.ParseExpectedCmd(receive(), "!WHOIS"))
                 return (false);

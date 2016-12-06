@@ -280,7 +280,10 @@ namespace FrozenPizza
                 move = checkMove(level, keybStates, oldpos);
             }
             if (move)
-				stepSound(gameTime, keybStates[1].IsKeyDown(Keys.LeftShift) ? true : false);
+            {
+                stepSound(gameTime, _sprinting);
+                NetHandler.send("!MOVE " + _pos.X + " " + _pos.Y + " " + _aim);
+            }
         }
 
         //Attack & Cooldown
@@ -399,15 +402,17 @@ namespace FrozenPizza
 
         public void pickupItem(Level level, int index)
         {
+            Vector2 gridpos = level.vmapToGrid(_pos);
             if (_hands == null)
             {
-                List<Item> entities = level.getEntities(level.vmapToGrid(_pos));
+                List<Item> entities = level.getEntities(gridpos);
                 if (entities == null)
                     return;
                 _hands = entities[index];
                 entities.RemoveAt(index);
                 if (entities.Count == 0)
                     entities = null;
+                NetHandler.send("!-ITEM " + index + " " + gridpos.X + " " + gridpos.Y);
             }
         }
 
@@ -415,16 +420,19 @@ namespace FrozenPizza
         {
             if (_hands == null)
                 return;
-            List<Item> entities = level.getEntities(level.vmapToGrid(_pos));
+            Vector2 gridpos = level.vmapToGrid(_pos);
+            int id = _hands.Id;
+
+            List<Item> entities = level.getEntities(gridpos);
             if (entities == null)
                 entities = new List<Item>();
             if (slot == SlotType.Hands)
             {
                 entities.Add(_hands);
-                level.setEntities(level.vmapToGrid(_pos), entities);
+                level.setEntities(gridpos, entities);
                 _hands = null;
             }
-
+            NetHandler.send("!+ITEM " + id + " " + gridpos.X + " " + gridpos.Y);
         }
 
         //Base update call
