@@ -25,6 +25,7 @@ namespace FrozenPizza
 		public List<Firearm> PistolsList { get; }
 		public Texture2D[] Tilesets { get; set; }
         public Texture2D Projectiles { get; set; }
+        public Texture2D Players { get; set; }
 
         public Collection()
 		{
@@ -43,6 +44,7 @@ namespace FrozenPizza
             //Game
             LoadMelee(content);
             LoadPistols(content);
+            LoadPlayers(content);
             LoadProjectiles(content);
 			return (true);
 		}
@@ -84,7 +86,11 @@ namespace FrozenPizza
             }
             return (true);
         }
-
+        public bool LoadPlayers(ContentManager content)
+        {
+            Players = content.Load<Texture2D>("gfx/players");
+            return (true);
+        }
         public bool LoadProjectiles(ContentManager content)
         {
             Projectiles = content.Load<Texture2D>("gfx/projectiles");

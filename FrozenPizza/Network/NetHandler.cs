@@ -18,6 +18,7 @@ namespace FrozenPizza
         public String Ip { get; set; }
         public int Port { get; set; }
         public static bool Connected { get; set; }
+        public bool GetData { get; set; }
         public static String ConnectionStatus { get; set; }
         public bool Hooked { get; set; }
         public bool Handshake { get; set; }
@@ -57,11 +58,6 @@ namespace FrozenPizza
             }
         }
 
-        public static void retrieveServerData()
-        {
-            send("?WORLD");
-        }
-
         public static void disconnect()
         {
             ConnectionStatus = "Disconnected.";
@@ -99,11 +95,29 @@ namespace FrozenPizza
             return (msg);
         }
 
+        bool getServerData()
+        {
+            String msg;
+
+            send("?PLAYERS");
+            msg = receive();
+            while (!_cmdHandle.ParseExpectedCmd(msg, ".OK"))
+            {
+                _cmdHandle.ParseCmd(msg);
+                msg = receive();
+            }
+            send("?WORLD");
+            GetData = false;
+            return (true);
+        }
+
         void threadLoop()
         {
             ConnectCallback();
             while (Connected)
             {
+                if (GetData && !getServerData())
+                    _thread.Abort();
                 String msg = receive();
 
                 if (msg != null)

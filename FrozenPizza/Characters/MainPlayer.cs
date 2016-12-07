@@ -42,7 +42,7 @@ namespace FrozenPizza
         TimeSpan[] _cooldownTimer;
         float _aimSensivity;
 
-		public MainPlayer(String name) : base(name)
+		public MainPlayer(String name) : base(name, new Vector2(0, 0))
         {
             //Set Stats
             _hunger = 50;
@@ -118,7 +118,6 @@ namespace FrozenPizza
         public void Load(ContentManager content)
         {
             _skinRect = new Rectangle(64, 0, 32, 16);
-            _skin = content.Load<Texture2D>(@"gfx/players");
             _origin = new Vector2(16, 8);
             _stepSound = new SoundEffect[8];
             _stepSound[0] = content.Load<SoundEffect>("sounds/player/step1");
@@ -284,7 +283,7 @@ namespace FrozenPizza
             if (move)
             {
                 stepSound(gameTime, _sprinting);
-                NetHandler.send("!MOVE " + _pos.X + " " + _pos.Y + " " + _aim);
+                //NetHandler.send("!MOVE " + _pos.X + " " + _pos.Y + " " + _aim);
             }
         }
 
@@ -458,9 +457,9 @@ namespace FrozenPizza
         }
 
         //Base draw call
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_skin, _pos, _skinRect, Color.White, -_aim, _origin, 1.0f, SpriteEffects.None, 0);
+            spriteBatch.Draw(Engine.collection.Players, _pos, _skinRect, Color.White, -_aim, _origin, 1.0f, SpriteEffects.None, 0);
         }
     }
 

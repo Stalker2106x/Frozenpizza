@@ -21,13 +21,17 @@ namespace FrozenPizza
 
 		//Graphics
         protected Rectangle _skinRect;
-        protected Texture2D _skin;
 
         public Character(String name)
         {
             _name = name;
             _hp = 100;
             _maxHp = 100;
+        }
+
+        public virtual void Load()
+        {
+
         }
 
 		public int Id
@@ -50,6 +54,11 @@ namespace FrozenPizza
         {
             get { return _hp; }
             set { _hp = value; }
+        }
+
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(Engine.collection.Players, _pos, _skinRect, Color.White, -_aim, _origin, 1.0f, SpriteEffects.None, 0);
         }
     }
 }

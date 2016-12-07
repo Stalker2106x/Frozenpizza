@@ -20,7 +20,7 @@ namespace FrozenPizzaServer
             _commands.Add("!MOVE", movePlayer);
             _commands.Add("!-ITEM", removeItem);
             _commands.Add("?WORLD", sendWorldData);
-            _commands.Add("?PLAYER", sendPlayers);
+            _commands.Add("?PLAYERS", sendPlayers);
             _commands.Add(".READY", accept);
         }
 
@@ -138,8 +138,10 @@ namespace FrozenPizzaServer
             {
                 Player player = Server.ClientList[i].Player;
 
-				_client.send("!+PLAYER " + _client.Id + " " + player.Pos.X + " " + player.Pos.Y);
+                if (_client.Id != i)
+				    _client.send("!+PLAYER " + _client.Id + " " + player.Pos.X + " " + player.Pos.Y);
             }
+            accept(null);
             return (true);
         }
         bool spawnItem(String[] args)

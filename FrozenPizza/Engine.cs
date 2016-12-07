@@ -36,7 +36,7 @@ namespace FrozenPizza
         //Game
         static Level level;
         static MainPlayer mainPlayer;
-        static Dictionary<int, Player> players;
+        static List<Player> players;
 
         //Input
         KeyboardState[] keybStates;
@@ -47,7 +47,7 @@ namespace FrozenPizza
 
 		//Static accessors
         public static MainPlayer MainPlayer { get { return (mainPlayer); } }
-        public static Dictionary<int, Player> Players { get { return (players); } }
+        public static List<Player> Players { get { return (players); } }
         public static Level Level { get { return (level); } }
 
         public Engine()
@@ -85,6 +85,7 @@ namespace FrozenPizza
             cam = new Camera(GraphicsDevice);
             hud = new HUD(GraphicsDevice, cam);
             mainPlayer = new MainPlayer("Bernie");
+            players = new List<Player>();
         }
 
 		/// <summary>
@@ -216,6 +217,10 @@ namespace FrozenPizza
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.getTransformation());
             level.Draw(spriteBatch, cam, mainPlayer, collection);
             mainPlayer.Draw(spriteBatch);
+            for (int i = 0; i < players.Count; i++)
+            {
+                players[i].Draw(spriteBatch);
+            }
             spriteBatch.End();
 			//dummy
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);

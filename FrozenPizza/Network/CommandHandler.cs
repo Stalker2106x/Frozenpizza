@@ -113,12 +113,20 @@ namespace FrozenPizza
 			Engine.MainPlayer.Id = id;
 			float.TryParse(args[1], out pos.X);
 			float.TryParse(args[2], out pos.Y);
-			Engine.MainPlayer.Pos = pos;
-			return (true);
+			Engine.MainPlayer.Pos = Engine.Level.vgridToMap(pos);
+            acknowledge(null);
+            return (true);
 		}
 
         bool addNewPlayer(String[] args)
         {
+            int id;
+            Vector2 pos;
+
+            Int32.TryParse(args[0], out id);
+            float.TryParse(args[1], out pos.X);
+            float.TryParse(args[2], out pos.Y);
+            Engine.Players.Add(new Player("RP", Engine.Level.vgridToMap(pos)));
             return (true);
         }
         bool movePlayer(String[] args)

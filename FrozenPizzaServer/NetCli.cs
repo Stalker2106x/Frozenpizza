@@ -79,13 +79,22 @@ namespace FrozenPizzaServer
             send(".HANDSHAKE");
             if (!_cmdHandle.ParseExpectedCmd(receive(), ".HANDSHAKE"))
                 return (false);
-			send("!PLAYER " + Id + " " + _player.Pos.X + " " + _player.Pos.Y);
             return (true); //HandShake success!
+        }
+
+        public bool clientInfo()
+        {
+            send("!PLAYER " + Id + " " + _player.Pos.X + " " + _player.Pos.Y);
+            if (!_cmdHandle.ParseExpectedCmd(receive(), ".ACK"))
+                return (false);
+            return (true);
         }
 
         private void Update()
         {
             handShake();
+            Thread.Sleep(1000); // Timeout for client to generate all placeholders
+            clientInfo();
             while (isConnected())
             {
                 String msg = receive();

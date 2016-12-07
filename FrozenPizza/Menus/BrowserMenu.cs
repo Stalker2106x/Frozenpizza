@@ -120,7 +120,7 @@ namespace FrozenPizza
                     Engine.netHandle.Handshake = false;
                     _engine.InitializeGame();
                     _engine.LoadGame();
-                    NetHandler.retrieveServerData();
+                    Engine.netHandle.GetData = true;
                 }
                 else if (Engine.netHandle.Hooked)
                 {
