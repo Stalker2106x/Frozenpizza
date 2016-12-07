@@ -10,15 +10,20 @@ namespace FrozenPizzaServer
     {
         public float X;
         public float Y;
+
+		public Vector2(float x, float y)
+		{
+			X = x;
+			Y = y;
+		}
     }
     public class Player
     {
-        public int Id { get; set; }
         public Vector2 Pos { get; set; }
 
-        public Player()
+		public Player(Vector2 spawn)
         {
-
+			Pos = spawn;
         }
     }
 }

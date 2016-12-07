@@ -145,7 +145,7 @@ namespace FrozenPizza
         }
 
 		//base draw call, includes tilemap algorithm
-        public void Draw(SpriteBatch spriteBatch, Camera cam, Player mainPlayer, Collection collection)
+        public void Draw(SpriteBatch spriteBatch, Camera cam, MainPlayer mainPlayer, Collection collection)
         {
             Rectangle viewport = cam.getViewport();
             int xoffset = (viewport.X / _twidth);

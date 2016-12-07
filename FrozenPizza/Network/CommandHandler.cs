@@ -19,7 +19,8 @@ namespace FrozenPizza
             _commands.Add(".WELCOME", acknowledge);
             _commands.Add("?VERSION", sendVersion);
             _commands.Add("?WHOIS", sendWhois);
-            _commands.Add("!PLAYER", addNewPlayer);
+			_commands.Add("!PLAYER", setMainPlayer);
+            _commands.Add("!+PLAYER", addNewPlayer);
             _commands.Add("!MOVE", movePlayer);
             _commands.Add("!+ITEM", spawnItem);
             _commands.Add("!-ITEM", removeItem);
@@ -102,7 +103,20 @@ namespace FrozenPizza
             return (true);
         }
 
-        //Player
+		//Player
+		bool setMainPlayer(String[] args)
+		{
+            Vector2 pos;
+			int id;
+
+			Int32.TryParse(args[0], out id);
+			Engine.MainPlayer.Id = id;
+			float.TryParse(args[1], out pos.X);
+			float.TryParse(args[2], out pos.Y);
+			Engine.MainPlayer.Pos = pos;
+			return (true);
+		}
+
         bool addNewPlayer(String[] args)
         {
             return (true);

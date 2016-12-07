@@ -1,17 +1,42 @@
 ﻿<Properties StartupConfiguration="{09A308E1-3F29-4CCE-A029-A5FC2BAF179E}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="FrozenPizza/Camera.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FrozenPizzaServer/CommandHandler.cs">
     <Files>
       <File FileName="../../../Library/Frameworks/MonoGame.framework/v3.5.1.1679/MonoGame.Content.Builder.targets" Line="1" Column="1" />
-      <File FileName="FrozenPizza/HUD.cs" Line="56" Column="56" />
-      <File FileName="FrozenPizza/Level.cs" Line="203" Column="9" />
-      <File FileName="FrozenPizza/Player.cs" Line="180" Column="4" />
+      <File FileName="FrozenPizza/HUD.cs" Line="148" Column="76" />
+      <File FileName="FrozenPizza/Level.cs" Line="150" Column="52" />
       <File FileName="FrozenPizza/Collection.cs" Line="55" Column="1" />
       <File FileName="FrozenPizza/Items/Weapons.cs" Line="51" Column="3" />
-      <File FileName="FrozenPizza/Engine.cs" Line="175" Column="85" />
+      <File FileName="FrozenPizza/Engine.cs" Line="181" Column="85" />
       <File FileName="FrozenPizza/Data/items/melee.xml" Line="1" Column="1" />
-      <File FileName="FrozenPizza/Data/items/firearms.xml" Line="10" Column="25" />
-      <File FileName="FrozenPizza/Camera.cs" Line="1" Column="1" />
+      <File FileName="FrozenPizza/Data/items/firearms.xml" Line="10" Column="24" />
+      <File FileName="FrozenPizza/Camera.cs" Line="28" Column="67" />
+      <File FileName="FrozenPizzaServer/Entities/Player.cs" Line="22" Column="41" />
+      <File FileName="FrozenPizzaServer/Level.cs" Line="79" Column="11" />
+      <File FileName="FrozenPizzaServer/NetCli.cs" Line="82" Column="70" />
+      <File FileName="FrozenPizza/Network/NetHandler.cs" Line="1" Column="1" />
+      <File FileName="FrozenPizza/Network/CommandHandler.cs" Line="116" Column="32" />
+      <File FileName="FrozenPizza/Characters/Character.cs" Line="34" Column="3" />
+      <File FileName="FrozenPizza/Characters/MainPlayer.cs" Line="309" Column="33" />
+      <File FileName="FrozenPizza/Characters/Player.cs" Line="6" Column="16" />
+      <File FileName="FrozenPizzaServer/CommandHandler.cs" Line="141" Column="44" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="FrozenPizza" expanded="True">
+            <Node name="FrozenPizza" expanded="True">
+              <Node name="Characters" expanded="True" />
+              <Node name="Data" expanded="True" />
+            </Node>
+            <Node name="FrozenPizzaServer" expanded="True">
+              <Node name="References" expanded="True" />
+              <Node name="Entities" expanded="True" />
+              <Node name="CommandHandler.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

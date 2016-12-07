@@ -6,9 +6,6 @@ using System.Collections.Generic;
 
 namespace FrozenPizza
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
     public class Engine : Game
     {
         GraphicsDeviceManager graphics;
@@ -38,10 +35,8 @@ namespace FrozenPizza
 
         //Game
         static Level level;
-        static Player mainPlayer;
+        static MainPlayer mainPlayer;
         static Dictionary<int, Player> players;
-
-        List<Projectile> projectiles;
 
         //Input
         KeyboardState[] keybStates;
@@ -50,7 +45,8 @@ namespace FrozenPizza
         //Timers
         TimeSpan tMinute;
 
-        public static Player MainPlayer { get { return (mainPlayer); } }
+		//Static accessors
+        public static MainPlayer MainPlayer { get { return (mainPlayer); } }
         public static Dictionary<int, Player> Players { get { return (players); } }
         public static Level Level { get { return (level); } }
 
@@ -88,11 +84,13 @@ namespace FrozenPizza
             level = new Level("Data/maps/world.tmx");
             cam = new Camera(GraphicsDevice);
             hud = new HUD(GraphicsDevice, cam);
-            projectiles = new List<Projectile>();
-            mainPlayer = new Player("Bernie", level.getSpawnPoint());
+            mainPlayer = new MainPlayer("Bernie");
         }
 
-        protected override void OnDeactivated(Object sender, EventArgs args)
+		/// <summary>
+		/// When losing and getting back focus of window
+		/// </summary>
+		protected override void OnDeactivated(Object sender, EventArgs args)
         {
             hasFocus = false;
             //call the base method and fire the event
@@ -180,11 +178,8 @@ namespace FrozenPizza
                 gstate = GameState.Menu;
             }
             updateTimeEvents(gameTime);
-            mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, _cursor, projectiles);
+            mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, _cursor);
             hud.Update(mouseStates, mainPlayer);
-            for (int p = 0; p < projectiles.Count; p++)
-                if (!projectiles[p].Update(level))
-                    projectiles.RemoveAt(p);
             if (!mainPlayer.InventoryOpen)
                 resetMousePos();
         }
@@ -221,9 +216,8 @@ namespace FrozenPizza
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.getTransformation());
             level.Draw(spriteBatch, cam, mainPlayer, collection);
             mainPlayer.Draw(spriteBatch);
-            for (int p = 0; p < projectiles.Count; p++)
-                projectiles[p].Draw(spriteBatch, collection);
             spriteBatch.End();
+			//dummy
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 			hud.Draw(spriteBatch, GraphicsDevice, mainPlayer, collection, cam);
             spriteBatch.End();

@@ -71,5 +71,18 @@ namespace FrozenPizzaServer
                 }
             }
         }
+
+		public Vector2 getSpawnLocation()
+		{
+			Random rnd = new Random();
+			int pos;
+			TmxLayerTile spawn;
+
+			pos = rnd.Next(0, _map.Layers[(int)Layers.Spawn].Tiles.Count);
+			while (_map.Layers[(int)Layers.Spawn].Tiles[pos].Gid == 0)
+				pos = rnd.Next(0, _map.Layers[(int)Layers.Spawn].Tiles.Count);
+			spawn = _map.Layers[(int)Layers.Spawn].Tiles[pos];
+			return (new Vector2(spawn.X, spawn.Y));
+		}
     }
 }

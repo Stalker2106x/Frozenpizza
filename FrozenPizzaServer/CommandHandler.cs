@@ -138,7 +138,7 @@ namespace FrozenPizzaServer
             {
                 Player player = Server.ClientList[i].Player;
 
-                _client.send("!+PLAYER " + player.Id + " " + player.Pos.X + " " + player.Pos.Y);
+				_client.send("!+PLAYER " + _client.Id + " " + player.Pos.X + " " + player.Pos.Y);
             }
             return (true);
         }

@@ -69,7 +69,7 @@ namespace FrozenPizza
             return (true);
         }
 
-		public void Update(MouseState[] mStates, Player mainPlayer)
+		public void Update(MouseState[] mStates, MainPlayer mainPlayer)
         {
             if (mainPlayer.Cooldown)
                 _cooldownBar.Width = mainPlayer.getCooldownPercent(_handsPanel.Width);
@@ -99,7 +99,7 @@ namespace FrozenPizza
         	return (rect);
 		}
 
-		private void DrawInventory(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Player mainPlayer)
+		private void DrawInventory(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, MainPlayer mainPlayer)
 		{
 			//Background Panel
 			DrawHudPanel(spriteBatch, graphicsDevice, _inventoryPanel, Color.Gray, 0.9f);
@@ -111,7 +111,7 @@ namespace FrozenPizza
 			spriteBatch.Draw(_colorRect, panel, null, color * opacity, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
 		}
 
-		public void drawHandsPanel(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Player mainPlayer, Collection collection)
+		public void drawHandsPanel(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, MainPlayer mainPlayer, Collection collection)
 		{
 			DrawHudPanel(spriteBatch, graphicsDevice, _handsPanel, Color.LightGray, 0.5f);
 			if (mainPlayer.Cooldown)
@@ -131,7 +131,7 @@ namespace FrozenPizza
 			}
 		}
 
-		public void drawAimLines(SpriteBatch spriteBatch, Player mainPlayer, Camera cam)
+		public void drawAimLines(SpriteBatch spriteBatch, MainPlayer mainPlayer, Camera cam)
 		{
 			float[] aimAccuracyAngle = mainPlayer.getAimAccuracyAngle(false);
 			Vector2[] leftLine = new Vector2[2];
@@ -145,7 +145,7 @@ namespace FrozenPizza
 			Engine.DrawLine(spriteBatch, _colorRect, rightLine[0], rightLine[1], Color.Yellow, 1);
 		}
 
-		public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Player mainPlayer, Collection collection, Camera cam)
+		public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, MainPlayer mainPlayer, Collection collection, Camera cam)
         {
 			_hudEntRect.X = 0;
             //Health
