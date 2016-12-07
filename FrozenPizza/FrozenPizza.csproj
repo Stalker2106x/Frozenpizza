@@ -40,9 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
-    <Compile Include="Cursor.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="HUD.cs" />
     <Compile Include="Items\Ammo.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="KeyBinds.cs" />
@@ -67,6 +65,9 @@
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\MainPlayer.cs" />
     <Compile Include="Characters\Player.cs" />
+    <Compile Include="GUI\HUD.cs" />
+    <Compile Include="GUI\Cursor.cs" />
+    <Compile Include="GUI\Inventory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
@@ -90,6 +91,7 @@
   <ItemGroup />
   <ItemGroup>
     <Folder Include="Characters\" />
+    <Folder Include="GUI\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Data.mgcb" />

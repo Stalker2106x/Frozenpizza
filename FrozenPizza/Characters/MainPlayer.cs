@@ -15,6 +15,7 @@ namespace FrozenPizza
         Starving,
         Dehydrated
     }
+
     public class MainPlayer : Player
     {
         //Stats

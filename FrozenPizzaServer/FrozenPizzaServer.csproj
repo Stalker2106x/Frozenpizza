@@ -44,24 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\FrozenPizza\TiledSharp\ImageLayer.cs">
-      <Link>TiledSharp\ImageLayer.cs</Link>
-    </Compile>
-    <Compile Include="..\FrozenPizza\TiledSharp\Layer.cs">
-      <Link>TiledSharp\Layer.cs</Link>
-    </Compile>
-    <Compile Include="..\FrozenPizza\TiledSharp\Map.cs">
-      <Link>TiledSharp\Map.cs</Link>
-    </Compile>
-    <Compile Include="..\FrozenPizza\TiledSharp\ObjectGroup.cs">
-      <Link>TiledSharp\ObjectGroup.cs</Link>
-    </Compile>
-    <Compile Include="..\FrozenPizza\TiledSharp\TiledCore.cs">
-      <Link>TiledSharp\TiledCore.cs</Link>
-    </Compile>
-    <Compile Include="..\FrozenPizza\TiledSharp\Tileset.cs">
-      <Link>TiledSharp\Tileset.cs</Link>
-    </Compile>
     <Compile Include="CommandHandler.cs" />
     <Compile Include="Entities\Item.cs" />
     <Compile Include="Entities\Player.cs" />

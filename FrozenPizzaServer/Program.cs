@@ -61,8 +61,8 @@ namespace FrozenPizzaServer
             ClientList = new List<NetCli>();
             //Game
             _running = false;
-            _mapName = "maps/world.tmx";
-            Level = new Level(mapName);
+			_mapName = mapName;
+            Level = new Level(_mapName);
             Console.Write("Starting FrozenPizza Server...\n");
         }
 
