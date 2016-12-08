@@ -64,7 +64,6 @@ namespace FrozenPizzaServer
             //Game
             _running = false;
 			_mapName = mapName;
-            Level = new Level(_mapName);
             Console.Write("Starting FrozenPizza Server...\n");
         }
 
@@ -72,6 +71,7 @@ namespace FrozenPizzaServer
         {
             _server.Start();
             _running = true;
+            Level = new Level(_mapName);
             Console.Write("DONE!\n");
             Console.Write("Listening on IP: " + _ip + "\n");
             Console.WriteLine("The server is running on port " + _port + "...");

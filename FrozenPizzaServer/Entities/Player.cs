@@ -16,10 +16,16 @@ namespace FrozenPizzaServer
 			X = x;
 			Y = y;
 		}
+
+        public static Vector2 operator +(Vector2 vec, Vector2 vec2)
+        {
+            return (new Vector2(vec.X + vec2.X, vec.Y + vec2.Y));
+        }
     }
     public class Player
     {
         public Vector2 Pos { get; set; }
+        public float Aim { get; set; }
 
 		public Player(Vector2 spawn)
         {

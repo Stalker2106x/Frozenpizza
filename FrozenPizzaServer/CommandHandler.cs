@@ -18,6 +18,8 @@ namespace FrozenPizzaServer
             _commands.Add("!VERSION", checkVersion);
             _commands.Add("!WHOIS", whoisClient);
             _commands.Add("!MOVE", movePlayer);
+            _commands.Add("!AIM", aimPlayer);
+            _commands.Add("!FIRE", fireWeapon);
             _commands.Add("!+ITEM", spawnItem);
             _commands.Add("!-ITEM", removeItem);
             _commands.Add("?WORLD", sendWorldData);
@@ -103,9 +105,25 @@ namespace FrozenPizzaServer
         //Player
         bool movePlayer(String[] args)
         {
+            Vector2 pos;
+            
+            float.TryParse(args[0], out pos.X);
+            float.TryParse(args[1], out pos.Y);
+            Server.ClientList[_client.Id].Player.Pos = pos;
             Server.broadcast(_client.Id, "!MOVE " + _client.Id + " " + args[0] + " " + args[1]);
             return (true);
         }
+
+        bool aimPlayer(String[] args)
+        {
+            float aim;
+            
+            float.TryParse(args[0], out aim);
+            Server.ClientList[_client.Id].Player.Aim = aim;
+            Server.broadcast(_client.Id, "!AIM " + _client.Id + " " + args[0]);
+            return (true);
+        }
+
 
         //World data
         bool sendWorldData(String[] args)
@@ -145,6 +163,23 @@ namespace FrozenPizzaServer
             accept(null);
             return (true);
         }
+        bool fireWeapon(String[] args)
+        {
+            int damage;
+            float angle;
+            float velocity;
+            Vector2 pos;
+
+            float.TryParse(args[0], out pos.X);
+            float.TryParse(args[1], out pos.Y);
+            float.TryParse(args[2], out angle);
+            float.TryParse(args[3], out velocity);
+            Int32.TryParse(args[4], out damage);
+            Server.Level.Projectiles.Add(new Projectile(pos, angle, velocity, damage));
+            accept(null);
+            return (true);
+        }
+
         bool spawnItem(String[] args)
         {
             Vector2 pos;
@@ -184,7 +219,7 @@ namespace FrozenPizzaServer
             return (true);
         }
 
-        void refuse()
+        void refuse(String[] args)
         {
             _client.send(".KO");
         }

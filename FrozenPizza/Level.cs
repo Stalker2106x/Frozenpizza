@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using TiledSharp;
 
 namespace FrozenPizza
@@ -110,23 +111,21 @@ namespace FrozenPizza
 		//Bool checks
         public bool Collide(Vector2 pos)
         {
-            if ((pos.X < 0 || pos.X > (_map.Width * _twidth))
-                || (pos.Y < 0 || pos.Y > (_map.Height * _theight)))
-                return (true);
-            Rectangle posCell = mapToGrid(pos);
+            Vector2 realpos = vmapToGrid(pos);
 
-            if ((_map.Layers[(int)Layers.Wall].Tiles[(int)(posCell.X + (posCell.Y * _map.Width))].Gid != 0)
-                || (_map.Layers[(int)Layers.Wall].Tiles[(int)(posCell.Width + (posCell.Height * _map.Width))].Gid != 0))
+            if ((realpos.X < 0 || realpos.X > _map.Width)
+                || (realpos.Y < 0 || realpos.Y > _map.Height))
+                return (true);
+            if (_map.Layers[(int)Layers.Wall].Tiles[(int)((_map.Width * realpos.Y) + realpos.X)].Gid != 0)
                 return (true);
             return (false);
         }
 
         public bool Indoor(Vector2 pos)
         {
-            Rectangle posCell = mapToGrid(pos);
+            Vector2 realpos = vmapToGrid(pos);
 
-            if ((_map.Layers[(int)Layers.Ceiling].Tiles[(int)(posCell.X + (posCell.Y * _map.Width))].Gid != 0)
-                || (_map.Layers[(int)Layers.Ceiling].Tiles[(int)(posCell.Width + (posCell.Height * _map.Width))].Gid != 0))
+            if (_map.Layers[(int)Layers.Ceiling].Tiles[(int)((_map.Width * realpos.Y) + realpos.X)].Gid != 0)
                 return (true);
             return (false);
         }

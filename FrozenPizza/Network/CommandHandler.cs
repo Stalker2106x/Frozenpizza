@@ -22,6 +22,7 @@ namespace FrozenPizza
 			_commands.Add("!PLAYER", setMainPlayer);
             _commands.Add("!+PLAYER", addNewPlayer);
             _commands.Add("!MOVE", movePlayer);
+            _commands.Add("!AIM", aimPlayer);
             _commands.Add("!+ITEM", spawnItem);
             _commands.Add("!-ITEM", removeItem);
             _commands.Add(".HANDSHAKE", handShake);
@@ -142,6 +143,21 @@ namespace FrozenPizza
             if (player == null)
                 return (false);
             player.Pos = pos;
+            return (true);
+        }
+
+        bool aimPlayer(String[] args)
+        {
+            int id;
+            float aim;
+            Player player;
+
+            Int32.TryParse(args[0], out id);
+            float.TryParse(args[1], out aim);
+            player = Engine.getPlayerById(id);
+            if (player == null)
+                return (false);
+            player.Aim = aim;
             return (true);
         }
 

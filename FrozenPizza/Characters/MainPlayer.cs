@@ -115,7 +115,6 @@ namespace FrozenPizza
         public void Load(ContentManager content)
         {
             _skinRect = new Rectangle(64, 0, 32, 16);
-            _origin = new Vector2(16, 8);
             _stepSound = new SoundEffect[8];
             _stepSound[0] = content.Load<SoundEffect>("sounds/player/step1");
             _stepSound[1] = content.Load<SoundEffect>("sounds/player/step2");
@@ -305,7 +304,7 @@ namespace FrozenPizza
             {
                 Firearm weapon = (Firearm)_hands;
 
-                weapon.fire(null, _pos, getAimAccuracyAngle(true));
+                weapon.fire(_pos, getAimAccuracyAngle(true));
             }
         }
 
@@ -351,7 +350,11 @@ namespace FrozenPizza
 				_aim = MathHelper.TwoPi;
 			else if (_aim > MathHelper.TwoPi)
 				_aim = 0;
-			cam.Rotation = _aim;
+            if (cam.Rotation != _aim)
+            {
+                cam.Rotation = _aim;
+                NetHandler.send("!AIM " + _aim);
+            }
         }
 
         //Player states

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TiledSharp;
 
@@ -34,6 +35,9 @@ namespace FrozenPizzaServer
         //Dynamic
         List<Projectile> _projectiles;
 
+        //Thread
+        Thread _thread;
+
         public TmxMap Map {  get { return (_map); } }
         public List<Item>[] Entities { get { return (_entities); } }
         public List<Projectile> Projectiles { get { return (_projectiles); } }
@@ -45,6 +49,12 @@ namespace FrozenPizzaServer
             _theight = _map.Tilesets[0].TileHeight;
             _entities = new List<Item>[_map.Width * _map.Height];
             GenerateItems();
+        }
+
+        public void startUpdateThread()
+        {
+            _thread = new Thread(Update);
+            _thread.Start();
         }
         //Generation
         public void GenerateItems()
@@ -84,5 +94,23 @@ namespace FrozenPizzaServer
 			spawn = _map.Layers[(int)Layers.Spawn].Tiles[pos];
 			return (new Vector2(spawn.X, spawn.Y));
 		}
+
+        public void updateProjectiles()
+        {
+            for (int i = 0; i < Projectiles.Count; i++)
+            {
+                Projectiles[i].Update();
+                //Server.broadcast("!");
+            }
+        }
+
+        public void Update()
+        {
+            while (true)
+            {
+                updateProjectiles();
+                Thread.Sleep(50);
+            }
+        }
     }
 }

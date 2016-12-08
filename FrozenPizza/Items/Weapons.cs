@@ -75,14 +75,14 @@ namespace FrozenPizza
             return ((float)(rnd.Next(min, max + 1) / 100f));
         }
 
-        public void fire(List<Projectile> projectiles, Vector2 pos, float[] aimAccuracyAngle)
+        public void fire(Vector2 pos, float[] aimAccuracyAngle)
         {
             float angle = getFireAngle(aimAccuracyAngle);
 
             if (LoadedAmmo > 0)
             {
                 Sounds[(int)FirearmActions.Fire].Play();
-                projectiles.Add(new Projectile(ProjectileType.Bullet, pos, angle, 5f));
+                NetHandler.send("!FIRE " + pos.X + " " + pos.Y + " " + angle + " " + 5f + " " + Damage);
                 LoadedAmmo -= 1;
             }
             else
