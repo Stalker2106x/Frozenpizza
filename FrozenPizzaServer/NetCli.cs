@@ -19,8 +19,12 @@ namespace FrozenPizzaServer
         String _name;
         Player _player;
 
+        //Stack
+        Queue<String> _receiveStack;
+
         public NetCli(TcpClient inClientSocket, int cliId)
         {
+            _receiveStack = new Queue<string>();
             _client = inClientSocket;
             _id = cliId;
             _worldSent = false;
@@ -115,7 +119,7 @@ namespace FrozenPizzaServer
             byte[] buffer = new byte[msg.Length];
 
             Console.Write(">[" + _id + "] " + msg + "\n");
-            buffer = Encoding.UTF8.GetBytes(msg);
+            buffer = Encoding.UTF8.GetBytes(msg+"\r\n");
             try
             {
                 _stream.Write(buffer, 0, buffer.Length);
@@ -132,7 +136,10 @@ namespace FrozenPizzaServer
             int receivingBufferSize = (int)_client.ReceiveBufferSize;
             byte[] buffer = new byte[receivingBufferSize];
             int readCount = 0;
+            String msg, msgprocess;
 
+            if (_receiveStack.Count != 0) //If we have loads of messages to treat
+                return (_receiveStack.Dequeue());
             try
             {
                 readCount = _stream.Read(buffer, 0, receivingBufferSize);
@@ -142,12 +149,17 @@ namespace FrozenPizzaServer
                 Console.Write(" >> Client ID " + _id + " disconnected.");
                 terminateClient();
             }
-            String msg;
-
-            if (readCount <= 0)
-                return ("");
             msg = Encoding.UTF8.GetString(buffer, 0, readCount);
-            Console.Write("[" + _id + "] " + msg + "\n");
+            if (msg.IndexOf("\r\n") != -1)
+            {
+                msgprocess = msg;
+                msg = msgprocess.Substring(0, msg.IndexOf("\r\n"));
+                while (msgprocess.IndexOf("\r\n") != -1)
+                {
+                    msgprocess = msgprocess.Substring(msg.IndexOf("\r\n"), msg.Length - msg.IndexOf("\r\n"));
+                    _receiveStack.Enqueue(msgprocess.Substring(0, msg.IndexOf("\r\n")));
+                }
+            }
             return (msg);
         }
     }

@@ -452,7 +452,6 @@ namespace FrozenPizza
                     _netLastPos = _pos;
                     NetHandler.send("!MOVE " + _pos.X + " " + _pos.Y);
                 }
-                Thread.Sleep(1);
                 if (_aim != _netLastAim)
                 {
                     _netLastAim = _aim;

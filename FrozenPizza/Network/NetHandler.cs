@@ -13,7 +13,9 @@ namespace FrozenPizza
     {
         static TcpClient _client;
         static Thread _thread;
+        static Queue<String> _receiveStack;
         CommandHandler _cmdHandle;
+
         public static NetworkStream _stream;
         public String Ip { get; set; }
         public int Port { get; set; }
@@ -22,10 +24,12 @@ namespace FrozenPizza
         public static String ConnectionStatus { get; set; }
         public bool Hooked { get; set; }
         public bool Handshake { get; set; }
+
         public NetHandler()
         {
             _client = new TcpClient();
             _cmdHandle = new CommandHandler();
+            _receiveStack = new Queue<string>();
             Handshake = false;
             Hooked = false;
             Connected = false;
@@ -69,7 +73,7 @@ namespace FrozenPizza
         {
             byte[] buffer = new byte[msg.Length];
 
-            buffer = Encoding.UTF8.GetBytes(msg);
+            buffer = Encoding.UTF8.GetBytes(msg + "\r\n");
             try
             {
                 _stream.Write(buffer, 0, buffer.Length);
@@ -86,20 +90,30 @@ namespace FrozenPizza
             int receivingBufferSize = (int)_client.ReceiveBufferSize;
             byte[] buffer = new byte[receivingBufferSize];
             int readCount = 0;
-            String msg;
+            String msg, msgprocess;
 
+            if (_receiveStack.Count != 0) //If we have loads of messages to treat
+                return (_receiveStack.Dequeue());
             try
             {
                 readCount = _stream.Read(buffer, 0, receivingBufferSize);
             }
-            catch (System.IO.IOException e)
+            catch (System.Exception e)
             {
                 disconnect();
                 return (null);
             }
-            if (readCount <= 0)
-                return (null);
             msg = Encoding.UTF8.GetString(buffer, 0, readCount);
+            if (msg.IndexOf("\r\n") != -1)
+            {
+                msgprocess = msg;
+                msg = msgprocess.Substring(0, msg.IndexOf("\r\n"));
+                while (msgprocess.IndexOf("\r\n") != -1)
+                {
+                    msgprocess = msgprocess.Substring(msg.IndexOf("\r\n"), msg.Length - msg.IndexOf("\r\n"));
+                    _receiveStack.Enqueue(msgprocess.Substring(0, msg.IndexOf("\r\n")));
+                }
+            }
             return (msg);
         }
 
