@@ -18,6 +18,7 @@ namespace FrozenPizzaServer
             _commands.Add("!VERSION", checkVersion);
             _commands.Add("!WHOIS", whoisClient);
             _commands.Add("!MOVE", movePlayer);
+            _commands.Add("!+ITEM", spawnItem);
             _commands.Add("!-ITEM", removeItem);
             _commands.Add("?WORLD", sendWorldData);
             _commands.Add("?PLAYERS", sendPlayers);

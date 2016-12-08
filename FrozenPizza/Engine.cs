@@ -48,6 +48,13 @@ namespace FrozenPizza
 		//Static accessors
         public static MainPlayer MainPlayer { get { return (mainPlayer); } }
         public static List<Player> Players { get { return (players); } }
+        public static Player getPlayerById(int id)
+        {
+            for (int i = 0; i < players.Count; i++)
+                if (players[i].Id == id)
+                    return (players[i]);
+            return (null);
+        }
         public static Level Level { get { return (level); } }
 
         public Engine()

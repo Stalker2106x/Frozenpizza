@@ -87,6 +87,7 @@ namespace FrozenPizzaServer
             send("!PLAYER " + Id + " " + _player.Pos.X + " " + _player.Pos.Y);
             if (!_cmdHandle.ParseExpectedCmd(receive(), ".ACK"))
                 return (false);
+            Server.broadcast(Id, "!+PLAYER " + Id + " " + _player.Pos.X + " " + _player.Pos.Y);
             return (true);
         }
 

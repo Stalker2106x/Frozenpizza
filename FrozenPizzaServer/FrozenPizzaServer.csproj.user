@@ -3,4 +3,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartArguments>maps/world.tmx</StartArguments>
   </PropertyGroup>
+  <PropertyGroup>
+    <PublishUrlHistory>W:\FrozenPizza_Release\Server\|W:\FrozenPizza_Release\|ftp://rs4family.fr/var/FrozenPizza/Server/bin/|ftp://rs4family.fr/var/FrozenPizza/Game/bin/|publier\</PublishUrlHistory>
+    <InstallUrlHistory />
+    <SupportUrlHistory />
+    <UpdateUrlHistory />
+    <BootstrapperUrlHistory />
+    <ErrorReportUrlHistory />
+    <FallbackCulture>fr-FR</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
+  </PropertyGroup>
 </Project>

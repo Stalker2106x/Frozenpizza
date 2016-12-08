@@ -5,8 +5,9 @@ namespace FrozenPizza
 {
 	public class Player : Character
 	{
-		public Player(String name, Vector2 pos) : base(name)
+		public Player(int id, String name, Vector2 pos) : base(name)
         {
+            Id = id;
             _skinRect = new Rectangle(64, 0, 32, 16);
             _pos = pos;
         }

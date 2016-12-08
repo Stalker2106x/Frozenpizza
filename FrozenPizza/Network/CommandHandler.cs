@@ -126,11 +126,25 @@ namespace FrozenPizza
             Int32.TryParse(args[0], out id);
             float.TryParse(args[1], out pos.X);
             float.TryParse(args[2], out pos.Y);
-            Engine.Players.Add(new Player("RP", Engine.Level.vgridToMap(pos)));
+            Engine.Players.Add(new Player(id, "RP", Engine.Level.vgridToMap(pos)));
             return (true);
         }
         bool movePlayer(String[] args)
         {
+            int id;
+            Vector2 pos;
+            float aim;
+            Player player;
+
+            Int32.TryParse(args[0], out id);
+            float.TryParse(args[1], out pos.X);
+            float.TryParse(args[2], out pos.Y);
+            float.TryParse(args[3], out aim);
+            player = Engine.getPlayerById(id);
+            if (player == null)
+                return (false);
+            player.Pos = pos;
+            player.Aim = aim;
             return (true);
         }
 

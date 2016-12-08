@@ -17,7 +17,7 @@ namespace FrozenPizza
 
 		//Movement
         protected Vector2 _pos, _origin;
-		float _aim;
+		protected float _aim;
 
 		//Graphics
         protected Rectangle _skinRect;
@@ -39,11 +39,15 @@ namespace FrozenPizza
 			get { return (_id); }
 			set { _id = value; }
 		}
-
         public Vector2 Pos
         {
             get { return _pos; }
             set { _pos = value; }
+        }
+        public float Aim
+        {
+            get { return _aim; }
+            set { _aim = value; }
         }
         public int maxHP
         {

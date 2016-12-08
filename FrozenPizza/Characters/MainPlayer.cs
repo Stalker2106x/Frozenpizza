@@ -25,12 +25,9 @@ namespace FrozenPizza
         //Triggers
         bool _inventoryOpen, _cooldown, _sprinting, _aimlock;
 
-        //Aim View
-        float _aim;
-
         //Inventory
         Item _hands;
-        List<Item> _inventory;
+        Inventory _inventory;
         List<PlayerStates> _states;
 
         //Sound
@@ -42,7 +39,7 @@ namespace FrozenPizza
         TimeSpan[] _cooldownTimer;
         float _aimSensivity;
 
-		public MainPlayer(String name) : base(name, new Vector2(0, 0))
+		public MainPlayer(String name) : base(-1, name, new Vector2(0, 0))
         {
             //Set Stats
             _hunger = 50;
@@ -63,7 +60,7 @@ namespace FrozenPizza
             _aimSensivity = 0.005f;
 
             //Init Inventory
-            _inventory = new List<Item>();
+            _inventory = new Inventory();
 
             //Init timers
             _stateTimer = new TimeSpan();
@@ -158,10 +155,6 @@ namespace FrozenPizza
         {
             float weight = 0;
 
-            foreach (Item item in _inventory)
-            {
-                weight += item.Weight;
-            }
             return (weight);
         }
 
@@ -283,7 +276,7 @@ namespace FrozenPizza
             if (move)
             {
                 stepSound(gameTime, _sprinting);
-                //NetHandler.send("!MOVE " + _pos.X + " " + _pos.Y + " " + _aim);
+                NetHandler.send("!MOVE " + _pos.X + " " + _pos.Y + " " + _aim);
             }
         }
 
