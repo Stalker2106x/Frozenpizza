@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace FrozenPizza
 {
@@ -37,6 +38,14 @@ namespace FrozenPizza
 		TimeSpan _stepTimer;
         TimeSpan _stateTimer;
         TimeSpan[] _cooldownTimer;
+
+        //Net Timer
+        TimeSpan _netcodeTimer;
+
+        //Netcode
+        Vector2 _netLastPos;
+        float _netLastAim;
+
         float _aimSensivity;
 
 		public MainPlayer(String name) : base(-1, name, new Vector2(0, 0))
@@ -66,7 +75,8 @@ namespace FrozenPizza
             _stateTimer = new TimeSpan();
             _stepTimer = new TimeSpan();
             _cooldownTimer = new TimeSpan[2];
-		}
+            _netcodeTimer = new TimeSpan();
+      }
 
         // ACCESSORS / SETTERS
         public int maxHunger
@@ -274,7 +284,6 @@ namespace FrozenPizza
             }
             if (move)
             {
-                NetHandler.send("!MOVE " + _pos.X + " " + _pos.Y);
                 stepSound(gameTime, _sprinting);
             }
         }
@@ -353,7 +362,6 @@ namespace FrozenPizza
             if (cam.Rotation != _aim)
             {
                 cam.Rotation = _aim;
-                NetHandler.send("!AIM " + _aim);
             }
         }
 
@@ -433,6 +441,26 @@ namespace FrozenPizza
             NetHandler.send("!+ITEM " + id + " " + gridpos.X + " " + gridpos.Y);
         }
 
+        public void updateNetwork(GameTime gameTime)
+        {
+            _netcodeTimer -= gameTime.ElapsedGameTime;
+            if (_netcodeTimer.TotalMilliseconds <= 0)
+            {
+                _netcodeTimer = TimeSpan.FromMilliseconds(10);
+                if (_pos != _netLastPos)
+                {
+                    _netLastPos = _pos;
+                    NetHandler.send("!MOVE " + _pos.X + " " + _pos.Y);
+                }
+                Thread.Sleep(1);
+                if (_aim != _netLastAim)
+                {
+                    _netLastAim = _aim;
+                    NetHandler.send("!AIM " + _aim);
+                }
+            }
+        }
+
         //Base update call
         public void Update(GameTime gameTime, Level level, KeyboardState[] keybStates, MouseState[] mStates, Camera cam, Cursor cursor)
         {
@@ -440,6 +468,7 @@ namespace FrozenPizza
                 updateAimAngle(cam, mStates);
             updateMove(gameTime, keybStates, level);
             updateHands(gameTime, keybStates, mStates);
+            updateNetwork(gameTime);
             if (keybStates[1].IsKeyDown(Keys.Tab) && !keybStates[0].IsKeyDown(Keys.Tab))
                 toggleInventory(cursor);
             if (keybStates[1].IsKeyDown(Keys.E) && !keybStates[0].IsKeyDown(Keys.E))

@@ -45,7 +45,7 @@ namespace FrozenPizzaServer
         {
             for (int i = 0; i < ClientList.Count; i++)
             {
-                if (i == senderId)
+                if (i == senderId || !ClientList[i].Ready)
                     continue;
                 ClientList[i].send(msg);
             }

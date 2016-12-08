@@ -70,7 +70,15 @@ namespace FrozenPizza
             byte[] buffer = new byte[msg.Length];
 
             buffer = Encoding.UTF8.GetBytes(msg);
-            _stream.Write(buffer, 0, buffer.Length);
+            try
+            {
+                _stream.Write(buffer, 0, buffer.Length);
+                _stream.Flush();
+            }
+            catch (System.Exception e)
+            {
+                disconnect();
+            }
         }
 
         public static String receive()

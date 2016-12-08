@@ -101,6 +101,7 @@ namespace FrozenPizza
 		protected override void OnDeactivated(Object sender, EventArgs args)
         {
             hasFocus = false;
+            IsMouseVisible = true;
             //call the base method and fire the event
             base.OnDeactivated(sender, args);
         }
@@ -108,6 +109,7 @@ namespace FrozenPizza
         protected override void OnActivated(object sender, EventArgs args)
         {          
             base.OnActivated(sender, args);
+            IsMouseVisible = false;
             hasFocus = true;
         }
 

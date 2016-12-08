@@ -22,6 +22,18 @@ namespace FrozenPizzaServer
             return (new Vector2(vec.X + vec2.X, vec.Y + vec2.Y));
         }
     }
+
+    public struct Rectangle
+    {
+        public Vector2 Origin;
+        public Vector2 Size;
+
+        public Rectangle(float x, float y, float width, float height)
+        {
+            Origin = new Vector2(x, y);
+            Size = new Vector2(width, height);
+        }
+    }
     public class Player
     {
         public Vector2 Pos { get; set; }

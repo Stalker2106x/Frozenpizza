@@ -24,8 +24,10 @@ namespace FrozenPizzaServer
             _client = inClientSocket;
             _id = cliId;
             _worldSent = false;
-
+            Ready = false;
         }
+
+        public bool Ready { get; set; }
 
         public int Id
         {
@@ -88,6 +90,7 @@ namespace FrozenPizzaServer
             if (!_cmdHandle.ParseExpectedCmd(receive(), ".ACK"))
                 return (false);
             Server.broadcast(Id, "!+PLAYER " + Id + " " + _player.Pos.X + " " + _player.Pos.Y);
+            Ready = true;
             return (true);
         }
 
@@ -113,7 +116,15 @@ namespace FrozenPizzaServer
 
             Console.Write(">[" + _id + "] " + msg + "\n");
             buffer = Encoding.UTF8.GetBytes(msg);
-            _stream.Write(buffer, 0, buffer.Length);
+            try
+            {
+                _stream.Write(buffer, 0, buffer.Length);
+            }
+            catch (System.IO.IOException e)
+            {
+                Console.Write(" >> Client ID " + _id + " disconnected.");
+                terminateClient();
+            }
         }
 
         public String receive()
@@ -126,7 +137,7 @@ namespace FrozenPizzaServer
             {
                 readCount = _stream.Read(buffer, 0, receivingBufferSize);
             }
-            catch (System.IO.IOException e)
+            catch (System.Exception e)
             {
                 Console.Write(" >> Client ID " + _id + " disconnected.");
                 terminateClient();
