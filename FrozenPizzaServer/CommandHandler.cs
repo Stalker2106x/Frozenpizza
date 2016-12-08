@@ -103,7 +103,7 @@ namespace FrozenPizzaServer
         //Player
         bool movePlayer(String[] args)
         {
-            Server.broadcast(_client.Id, "!MOVE " + _client.Id + " " + args[0] + " " + args[1] + " " + args[2]);
+            Server.broadcast(_client.Id, "!MOVE " + _client.Id + " " + args[0] + " " + args[1]);
             return (true);
         }
 
@@ -140,7 +140,7 @@ namespace FrozenPizzaServer
                 Player player = Server.ClientList[i].Player;
 
                 if (_client.Id != i)
-				    _client.send("!+PLAYER " + _client.Id + " " + player.Pos.X + " " + player.Pos.Y);
+				    _client.send("!+PLAYER " + Server.ClientList[i].Id + " " + player.Pos.X + " " + player.Pos.Y);
             }
             accept(null);
             return (true);

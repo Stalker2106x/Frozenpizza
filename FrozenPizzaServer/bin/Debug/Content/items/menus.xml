@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Menus>
+	<MainMenu>
+			<Font>hud</Font>
+			<Background>main</Background>
+      <Item>Create Server</Item>
+      <Item>Browse Servers</Item>
+      <Item>Options</Item>
+      <Item>Exit Game</Item>
+  </MainMenu>
+  <GameMenu>
+		<Font>hud</Font>
+		<Background>main</Background>
+    <Item>Resume</Item>
+    <Item>Disconnect</Item>
+    <Item>Options</Item>
+    <Item>Exit Game</Item>
+  </GameMenu>
+	<BrowseMenu>
+		<Font>hud</Font>
+		<Background>main</Background>
+		<Item>Connect</Item>
+		<Item>Add to favorites</Item>
+		<Item>Refresh</Item>
+		<Item>Direct connect</Item>
+    <Item>Back</Item>
+	</BrowseMenu>
+	<DirectConnectMenu>
+		<Font>hud</Font>
+		<Background>main</Background>
+		<Item>Connect</Item>
+    <Item>Back</Item>
+	</DirectConnectMenu>
+  <OptionsMenu>
+		<Font>hud</Font>
+		<Background>main</Background>
+    <Setting>Fullscreen</Setting>
+    <Setting>Resolution</Setting>
+    <Setting>Sound Volume</Setting>
+    <Item>Apply</Item>
+    <Item>Cancel</Item>
+  </OptionsMenu>
+</Menus>

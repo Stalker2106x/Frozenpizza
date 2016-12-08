@@ -275,8 +275,8 @@ namespace FrozenPizza
             }
             if (move)
             {
+                NetHandler.send("!MOVE " + _pos.X + " " + _pos.Y);
                 stepSound(gameTime, _sprinting);
-                NetHandler.send("!MOVE " + _pos.X + " " + _pos.Y + " " + _aim);
             }
         }
 

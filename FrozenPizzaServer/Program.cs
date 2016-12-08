@@ -17,6 +17,7 @@ namespace FrozenPizzaServer
         TcpClient _client;
         public static List<NetCli> ClientList;
         IPAddress _localAddr;
+        static String _ip;
         int _connections;
 
         //Game
@@ -54,7 +55,8 @@ namespace FrozenPizzaServer
         {
             //Server
             _port = 27420;
-            _localAddr = IPAddress.Parse("127.0.0.1");
+            _localAddr = IPAddress.Any;
+            _ip = _localAddr.ToString();
             _server = new TcpListener(_localAddr, _port);
             _client = default(TcpClient);
             _connections = 0;
@@ -71,6 +73,7 @@ namespace FrozenPizzaServer
             _server.Start();
             _running = true;
             Console.Write("DONE!\n");
+            Console.Write("Listening on IP: " + _ip + "\n");
             Console.WriteLine("The server is running on port " + _port + "...");
         }
 
