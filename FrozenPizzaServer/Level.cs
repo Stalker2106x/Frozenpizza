@@ -18,7 +18,7 @@ namespace FrozenPizzaServer
     }
     public enum Meta
     {
-        Melee = 257,
+        Melee = 1,
         Pistol,
         Rifle
     }
@@ -48,7 +48,18 @@ namespace FrozenPizzaServer
             _twidth = _map.Tilesets[0].TileWidth;
             _theight = _map.Tilesets[0].TileHeight;
             _entities = new List<Item>[_map.Width * _map.Height];
+            _projectiles = new List<Projectile>();
             GenerateItems();
+        }
+
+        public Vector2 vmapToGrid(Vector2 pos)
+        {
+            return (new Vector2((int)pos.X / _twidth, (int)pos.Y / _theight));
+        }
+
+        public Vector2 vgridToMap(Vector2 pos)
+        {
+            return (new Vector2((int)pos.X * _twidth, (int)pos.Y * _theight));
         }
 
         public void startUpdateThread()
@@ -71,18 +82,28 @@ namespace FrozenPizzaServer
                     _entities[i] = new List<Item>();
                 if (gid == (int)Meta.Melee)
                 {
-
                     _entities[i].Add(new Item(rnd.Next(1, 4)));
                 }
                 else if (gid == (int)Meta.Pistol)
                 {
-                    _entities[i] = new List<Item>();
                     _entities[i].Add(new Item(rnd.Next(1000, 1002)));
                 }
             }
         }
+        //Bool checks
+        public bool Collide(Vector2 pos)
+        {
+            Vector2 realpos = vmapToGrid(pos);
 
-		public Vector2 getSpawnLocation()
+            if ((realpos.X < 0 || realpos.X > _map.Width)
+                || (realpos.Y < 0 || realpos.Y > _map.Height))
+                return (true);
+            if (_map.Layers[(int)Layers.Wall].Tiles[(int)((_map.Width * realpos.Y) + realpos.X)].Gid != 0)
+                return (true);
+            return (false);
+        }
+
+        public Vector2 getSpawnLocation()
 		{
 			Random rnd = new Random();
 			int pos;
@@ -97,10 +118,10 @@ namespace FrozenPizzaServer
 
         public void updateProjectiles()
         {
-            for (int i = 0; i < Projectiles.Count; i++)
+            for (int i = Projectiles.Count - 1; i >= 0; i--)
             {
-                Projectiles[i].Update();
-                //Server.broadcast("!");
+                if (!Projectiles[i].Update())
+                    Projectiles.RemoveAt(i);
             }
         }
 
@@ -109,7 +130,7 @@ namespace FrozenPizzaServer
             while (true)
             {
                 updateProjectiles();
-                Thread.Sleep(50);
+                Thread.Sleep(10);
             }
         }
     }

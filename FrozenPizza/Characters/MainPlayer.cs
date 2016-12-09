@@ -229,10 +229,17 @@ namespace FrozenPizza
         }
 
         //Moving mechanism functions
-        bool checkMove(Level level, KeyboardState[] keybStates, Vector2 oldpos)
+        bool checkSprint(KeyboardState[] keybStates)
         {
             if (keybStates[1].IsKeyDown(Keys.LeftShift))
+            {
                 _sprinting = true;
+                return (true);
+            }
+            return (false);
+        }
+        bool checkMove(Level level, KeyboardState[] keybStates, Vector2 oldpos)
+        {
             if (level.Collide(_pos))
 			{
                 Vector2 posx, posy;
@@ -250,8 +257,6 @@ namespace FrozenPizza
 
         void updateMove(GameTime gameTime, KeyboardState[] keybStates, Level level)
         {
-			
-            Vector2 oldpos = _pos;
 			bool move = false;
 			float speed = getSpeed(keybStates[1]);
 
@@ -260,27 +265,31 @@ namespace FrozenPizza
             if (keybStates[1].IsKeyDown(Keys.A))
             {
                 if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))
-                    speed *= 0.75f;
+                    speed *= 0.5f;
                 _pos += new Vector2((float)Math.Cos(_aim) * -speed, (float)Math.Sin(_aim) * speed);
-                move = checkMove(level, keybStates, oldpos);
+                checkSprint(keybStates);
+                move = true;
             }
             else if (keybStates[1].IsKeyDown(Keys.D))
             {
                 if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))
-                    speed *= 0.75f;
+                    speed *= 0.5f;
                 _pos += new Vector2((float)Math.Cos(_aim) * speed, (float)-Math.Sin(_aim) * speed);
-                move = checkMove(level, keybStates, oldpos);
+                checkSprint(keybStates);
+                move = true;
             }
             speed = getSpeed(keybStates[1]); //Reset speed
             if (keybStates[1].IsKeyDown(Keys.W))
             {
                 _pos += new Vector2((float)Math.Sin(_aim) * -speed, (float)Math.Cos(_aim) * -speed);
-                move = checkMove(level, keybStates, oldpos);
+                checkSprint(keybStates);
+                move = true;
             }
             else if (keybStates[1].IsKeyDown(Keys.S))
             {
                 _pos += new Vector2((float)Math.Sin(_aim) * speed, (float)Math.Cos(_aim) * speed);
-                move = checkMove(level, keybStates, oldpos);
+                checkSprint(keybStates);
+                move = true;
             }
             if (move)
             {
@@ -441,6 +450,11 @@ namespace FrozenPizza
             NetHandler.send("!+ITEM " + id + " " + gridpos.X + " " + gridpos.Y);
         }
 
+        public void resetMove()
+        {
+            _pos = _netLastPos;
+        }
+
         public void updateNetwork(GameTime gameTime)
         {
             _netcodeTimer -= gameTime.ElapsedGameTime;
@@ -449,13 +463,13 @@ namespace FrozenPizza
                 _netcodeTimer = TimeSpan.FromMilliseconds(10);
                 if (_pos != _netLastPos)
                 {
+                    NetHandler.send("?MOVE " + _pos.X + " " + _pos.Y);
                     _netLastPos = _pos;
-                    NetHandler.send("!MOVE " + _pos.X + " " + _pos.Y);
                 }
                 if (_aim != _netLastAim)
                 {
-                    _netLastAim = _aim;
                     NetHandler.send("!AIM " + _aim);
+                    _netLastAim = _aim;
                 }
             }
         }

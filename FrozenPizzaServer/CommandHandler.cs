@@ -17,7 +17,7 @@ namespace FrozenPizzaServer
             _commands = new Dictionary<String, Func<String[], bool>>();
             _commands.Add("!VERSION", checkVersion);
             _commands.Add("!WHOIS", whoisClient);
-            _commands.Add("!MOVE", movePlayer);
+            _commands.Add("?MOVE", movePlayer);
             _commands.Add("!AIM", aimPlayer);
             _commands.Add("!FIRE", fireWeapon);
             _commands.Add("!+ITEM", spawnItem);
@@ -109,7 +109,12 @@ namespace FrozenPizzaServer
             
             float.TryParse(args[0], out pos.X);
             float.TryParse(args[1], out pos.Y);
-            Server.ClientList[_client.Id].Player.Pos = pos;
+            if (Server.Level.Collide(pos))
+            {
+                _client.send("!MOVE " + _client.Id + " " + _client.Player.Pos.X + " " + _client.Player.Pos.Y);
+                return (true);
+            }
+            Server.ClientList[_client.Id].Player.Pos = pos;          
             Server.broadcast(_client.Id, "!MOVE " + _client.Id + " " + args[0] + " " + args[1]);
             return (true);
         }
@@ -165,17 +170,18 @@ namespace FrozenPizzaServer
         }
         bool fireWeapon(String[] args)
         {
-            int damage;
-            float angle;
-            float velocity;
+            int type, damage;
+            float angle, velocity;
             Vector2 pos;
 
-            float.TryParse(args[0], out pos.X);
-            float.TryParse(args[1], out pos.Y);
-            float.TryParse(args[2], out angle);
-            float.TryParse(args[3], out velocity);
-            Int32.TryParse(args[4], out damage);
-            Server.Level.Projectiles.Add(new Projectile(pos, angle, velocity, damage));
+            Int32.TryParse(args[0], out type);
+            float.TryParse(args[1], out pos.X);
+            float.TryParse(args[2], out pos.Y);
+            float.TryParse(args[3], out angle);
+            float.TryParse(args[4], out velocity);
+            Int32.TryParse(args[5], out damage);
+            Server.Level.Projectiles.Add(new Projectile((ProjectileType)type, pos, angle, velocity, damage));
+            Server.broadcast(_client.Id, "!FIRE " + args[0] + " " + args[1] + " " + args[2] + " " + args[3] + " " + args[4] + " " + args[5]);
             accept(null);
             return (true);
         }

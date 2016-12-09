@@ -72,6 +72,7 @@ namespace FrozenPizzaServer
             _server.Start();
             _running = true;
             Level = new Level(_mapName);
+            Level.startUpdateThread();
             Console.Write("DONE!\n");
             Console.Write("Listening on IP: " + _ip + "\n");
             Console.WriteLine("The server is running on port " + _port + "...");

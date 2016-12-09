@@ -35,6 +35,9 @@ namespace FrozenPizza
 		//Map
         TmxMap _map;
         List<Item>[] _entities;
+        List<Projectile> _projectiles;
+
+        public List<Projectile> Projectiles { get { return (_projectiles); } }
 
         public Level(string mapName)
         {
@@ -42,6 +45,7 @@ namespace FrozenPizza
             _twidth = _map.Tilesets[0].TileWidth;
             _theight = _map.Tilesets[0].TileHeight;
             _entities = new List<Item>[_map.Width * _map.Height];
+            _projectiles = new List<Projectile>();
             _drawMargin = 10;
         }
 
@@ -143,15 +147,27 @@ namespace FrozenPizza
             _entities[(int)((pos.Y * _map.Width) + pos.X)] = list;
         }
 
-		//base draw call, includes tilemap algorithm
-        public void Draw(SpriteBatch spriteBatch, Camera cam, MainPlayer mainPlayer, Collection collection)
+        public void drawEntities(SpriteBatch spriteBatch, int xoffset, int yoffset, int x, int y)
+        {
+            if (_entities[((yoffset + y) * _map.Width) + xoffset + x] != null)
+            {
+                for (int i = 0; i < _entities[((yoffset + y) * _map.Width) + xoffset + x].Count; i++)
+                {
+                    Item item = _entities[((yoffset + y) * _map.Width) + xoffset + x][i];
+
+                    spriteBatch.Draw(Engine.collection.Tilesets[(int)item.Type], new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), item.SkinRect, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.3f);
+                }
+            }
+        }
+
+        public void drawTiles(SpriteBatch spriteBatch, Camera cam, MainPlayer mainPlayer)
         {
             Rectangle viewport = cam.getViewport();
             int xoffset = (viewport.X / _twidth);
             int xend = ((viewport.X + viewport.Width) / _twidth);
             int yoffset = (viewport.Y / _theight);
             int yend = ((viewport.Y + viewport.Height) / _theight);
-            
+
             if (xoffset > _drawMargin)
                 xoffset -= _drawMargin;
             if (yoffset > _drawMargin)
@@ -166,7 +182,7 @@ namespace FrozenPizza
                 {
                     for (int l = _map.Layers.Count - 1; l >= 0; l--)
                     {
-						if ((Layers)l == Layers.Meta || (Layers)l == Layers.Spawn || (Indoor(mainPlayer.Pos) && (Layers)l == Layers.Ceiling))
+                        if ((Layers)l == Layers.Meta || (Layers)l == Layers.Spawn || (Indoor(mainPlayer.Pos) && (Layers)l == Layers.Ceiling))
                             continue;
                         if (((yoffset + y) < 0 || (xoffset + x) < 0) //TopLeft
                             || ((yoffset + y) > (_map.Height - 1) || (xoffset + x) > (_map.Width - 1))) //TopRight
@@ -177,26 +193,36 @@ namespace FrozenPizza
                         if (gid == 0)
                             continue;
 
-                            int tileFrame = gid - 1;
-                            int column = tileFrame % _ttwidth;
-                            int row = (int)Math.Floor((double)tileFrame / (double)_ttwidth);
+                        int tileFrame = gid - 1;
+                        int column = tileFrame % _ttwidth;
+                        int row = (int)Math.Floor((double)tileFrame / (double)_ttwidth);
 
-                            Rectangle tilesetRec = new Rectangle(_twidth * column, _theight * row, _twidth, _theight);
+                        Rectangle tilesetRec = new Rectangle(_twidth * column, _theight * row, _twidth, _theight);
 
-                            spriteBatch.Draw(_tileset, new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), tilesetRec, Color.White, 0, Vector2.Zero, SpriteEffects.None, (Layers)l == Layers.Ceiling ? 0.2f : 0.5f);
-                            if (_entities[((yoffset + y) * _map.Width) + xoffset + x] != null)
-                            {
-                                for (int i = 0; i < _entities[((yoffset + y) * _map.Width) + xoffset + x].Count; i++)
-                                {
-                                    Item item = _entities[((yoffset + y) * _map.Width) + xoffset + x][i];
-
-									spriteBatch.Draw(collection.Tilesets[(int)item.Type], new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), item.SkinRect, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.3f);
-                                }
-                            }
-                            break;
+                        spriteBatch.Draw(_tileset, new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), tilesetRec, Color.White, 0, Vector2.Zero, SpriteEffects.None, (Layers)l == Layers.Ceiling ? 0.2f : 0.5f);
+                        drawEntities(spriteBatch, xoffset, yoffset, x, y);
+                        break;
                     }
                 }
 
+            }
+        }
+
+        public void Update()
+        {
+            for (int i = _projectiles.Count - 1; i >= 0; i--)
+            {
+                _projectiles[i].Update();
+            }
+        }
+
+        //base draw call, includes tilemap algorithm
+        public void Draw(SpriteBatch spriteBatch, Camera cam, MainPlayer mainPlayer, Collection collection)
+        {
+            drawTiles(spriteBatch, cam, mainPlayer);
+            for (int i = _projectiles.Count - 1; i >= 0; i--)
+            {
+                _projectiles[i].Draw(spriteBatch);
             }
         }
     }

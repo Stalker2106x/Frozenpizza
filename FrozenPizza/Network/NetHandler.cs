@@ -68,7 +68,11 @@ namespace FrozenPizza
             _client.Close();
             _thread.Abort();
         }
-
+        public static String sendAndReceive(String msg)
+        {
+            send(msg);
+            return (receive());
+        }
         public static void send(String msg)
         {
             byte[] buffer = new byte[msg.Length];
@@ -104,14 +108,14 @@ namespace FrozenPizza
                 return (null);
             }
             msg = Encoding.UTF8.GetString(buffer, 0, readCount);
-            if (msg.IndexOf("\r\n") != -1)
+            msg = msg.Substring(0, msg.IndexOf("\r\n"));
+            if (msg.IndexOf("\r\n") != msg.Length - 2)
             {
                 msgprocess = msg;
-                msg = msgprocess.Substring(0, msg.IndexOf("\r\n"));
                 while (msgprocess.IndexOf("\r\n") != -1)
                 {
-                    msgprocess = msgprocess.Substring(msg.IndexOf("\r\n"), msg.Length - msg.IndexOf("\r\n"));
-                    _receiveStack.Enqueue(msgprocess.Substring(0, msg.IndexOf("\r\n")));
+                    msgprocess = msgprocess.Remove(0, msgprocess.IndexOf("\r\n") + 2);
+                    _receiveStack.Enqueue(msgprocess.Substring(0, msgprocess.IndexOf("\r\n")));
                 }
             }
             return (msg);

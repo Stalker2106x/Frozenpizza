@@ -23,6 +23,8 @@ namespace FrozenPizza
             _commands.Add("!+PLAYER", addNewPlayer);
             _commands.Add("!MOVE", movePlayer);
             _commands.Add("!AIM", aimPlayer);
+            _commands.Add("!FIRE", createProjectile);
+            _commands.Add("!HIT", playerHit);
             _commands.Add("!+ITEM", spawnItem);
             _commands.Add("!-ITEM", removeItem);
             _commands.Add(".HANDSHAKE", handShake);
@@ -139,10 +141,10 @@ namespace FrozenPizza
             Int32.TryParse(args[0], out id);
             float.TryParse(args[1], out pos.X);
             float.TryParse(args[2], out pos.Y);
-            player = Engine.getPlayerById(id);
-            if (player == null)
-                return (false);
-            player.Pos = pos;
+            if (id == Engine.MainPlayer.Id)
+                Engine.MainPlayer.Pos = pos;
+            else
+                Engine.getPlayerById(id).Pos = pos;
             return (true);
         }
 
@@ -158,6 +160,37 @@ namespace FrozenPizza
             if (player == null)
                 return (false);
             player.Aim = aim;
+            return (true);
+        }
+
+        bool createProjectile(String[] args)
+        {
+            int type, damage;
+            float angle, velocity;
+            Vector2 pos;
+
+            Int32.TryParse(args[0], out type);
+            float.TryParse(args[1], out pos.X);
+            float.TryParse(args[2], out pos.Y);
+            float.TryParse(args[3], out angle);
+            float.TryParse(args[4], out velocity);
+            Int32.TryParse(args[5], out damage);
+            Engine.Level.Projectiles.Add(new Projectile(ProjectileType.Bullet, pos, angle, velocity, damage));
+            acknowledge(null);
+            return (true);
+        }
+
+        bool playerHit(String[] args)
+        {
+            int id, damage;
+
+            Int32.TryParse(args[0], out id);
+            Int32.TryParse(args[0], out damage);
+            if (id == Engine.MainPlayer.Id)
+                Engine.MainPlayer.HP -= damage;
+            else
+                Engine.getPlayerById(id).HP -= damage;
+            acknowledge(null);
             return (true);
         }
 

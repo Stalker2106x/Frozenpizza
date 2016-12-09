@@ -82,7 +82,8 @@ namespace FrozenPizza
             if (LoadedAmmo > 0)
             {
                 Sounds[(int)FirearmActions.Fire].Play();
-                NetHandler.send("!FIRE " + pos.X + " " + pos.Y + " " + angle + " " + 5f + " " + Damage);
+                Engine.Level.Projectiles.Add(new Projectile(ProjectileType.Bullet, pos, angle, 5f, Damage));
+                NetHandler.send("!FIRE " + (int)ProjectileType.Bullet + " " + pos.X + " " + pos.Y + " " + angle + " " + 5f + " " + Damage);
                 LoadedAmmo -= 1;
             }
             else

@@ -188,6 +188,7 @@ namespace FrozenPizza
                 gstate = GameState.Menu;
             }
             updateTimeEvents(gameTime);
+            level.Update();
             mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, _cursor);
             hud.Update(mouseStates, mainPlayer);
             if (!mainPlayer.InventoryOpen)
@@ -201,8 +202,6 @@ namespace FrozenPizza
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			if (!hasFocus)
-				return;
 			keybStates[1] = Keyboard.GetState();
 			mouseStates[1] = Mouse.GetState();
             if (_cursor.Show)
@@ -210,6 +209,8 @@ namespace FrozenPizza
             switch (gstate)
             {
                 case GameState.Menu:
+                    if (!hasFocus)
+                        return;
                     _menu.Update(keybStates, mouseStates);
                     break;
                 case GameState.Playing:

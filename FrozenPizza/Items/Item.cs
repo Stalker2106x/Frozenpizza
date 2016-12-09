@@ -51,7 +51,7 @@ namespace FrozenPizza
 
         public void setSkin()
         {
-            SkinRect = new Rectangle(Id % 10, Id / 10, 32, 32);
+            SkinRect = new Rectangle((Id % 10) * 32, (Id / 10) * 32, 32, 32);
         }
 	}
 }

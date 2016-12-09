@@ -95,14 +95,16 @@ namespace FrozenPizza
             Keys[] prevInput = keybStates[0].GetPressedKeys();
             Keys[] input = keybStates[1].GetPressedKeys();
 
-            if (prevInput.Length == 0 && input.Length > 0)
+            if (prevInput.Length == 0 || (input.Length > 0 && prevInput[0] != input[0]))
             {
                 for (int i = 0; i < input.Length; i++)
                 {
                     if (((char)input[i] >= '0' && (char)input[i] <= '9'))
-                        _ip += (char)input[i];
+                        _ip += (char)input[i];                    
                     else if (input[i] == Keys.OemPeriod)
                         _ip += ".";
+                    /*else if (input[i] >= Keys.NumPad0 && input[i] >= Keys.NumPad9)
+                        _ip += (char)(input[i] - 48);*/
                 }
             }
             if (_ip.Length > 0 && keybStates[0].IsKeyUp(Keys.Back) && keybStates[1].IsKeyDown(Keys.Back))
