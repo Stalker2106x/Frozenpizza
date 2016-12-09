@@ -9,7 +9,7 @@ namespace FrozenPizza
         {
             Id = id;
             _origin = new Vector2(16, 8);
-            _skinRect = new Rectangle(64, 0, 32, 16);
+            _skinRect = new Rectangle(0, 0, 32, 16);
             _pos = pos;
         }
 

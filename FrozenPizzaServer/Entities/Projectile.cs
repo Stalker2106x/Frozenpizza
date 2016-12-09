@@ -35,7 +35,7 @@ namespace FrozenPizzaServer
             {
                 if (Server.ClientList[i].Player.getHitbox().Contains(Pos))
                 {
-                    //give damage!!
+                    Server.ClientList[i].send("!HIT " + Server.ClientList[i].Id + " " + Damage);
                     return (false);
                 }
             }

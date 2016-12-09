@@ -48,7 +48,7 @@ namespace FrozenPizzaServer
         {
             if ((pos.X >= Origin.X && pos.X <= (Origin.X + Size.X))
                 && (pos.Y >= Origin.Y && pos.Y <= (Origin.Y + Size.Y)))
-                return (true);
+                    return (true);
             return (false);
         }
     }

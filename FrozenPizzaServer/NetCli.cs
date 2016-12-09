@@ -53,6 +53,7 @@ namespace FrozenPizzaServer
 
         public void terminateClient()
         {
+            Console.Write(" >> Client ID " + _id + " disconnected.");
             _cThread.Abort();
         }
 
@@ -126,7 +127,6 @@ namespace FrozenPizzaServer
             }
             catch (System.IO.IOException e)
             {
-                Console.Write(" >> Client ID " + _id + " disconnected.");
                 terminateClient();
             }
         }
@@ -146,9 +146,10 @@ namespace FrozenPizzaServer
             }
             catch (System.Exception e)
             {
-                Console.Write(" >> Client ID " + _id + " disconnected.");
                 terminateClient();
             }
+            if (readCount == 0)
+                terminateClient();
             msg = Encoding.UTF8.GetString(buffer, 0, readCount);
             msg = msg.Substring(0, msg.IndexOf("\r\n"));
             if (msg.IndexOf("\r\n") != msg.Length - 2)

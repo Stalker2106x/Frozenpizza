@@ -62,6 +62,8 @@ namespace FrozenPizzaServer
             String cmd;
             String[] args;
 
+            if (msg == null)
+                return (false);
             cmd = getCmd(msg);
             if (cmd == ".ACK")
                 return (true);
@@ -75,6 +77,8 @@ namespace FrozenPizzaServer
 
         public bool ParseExpectedCmd(String msg, String expected)
         {
+            if (msg == null)
+                return (false);
             String cmd = getCmd(msg);
 
             if (cmd != expected)

@@ -5,8 +5,11 @@ This game requires MonoGame Framework installed.
 It has been compiled and tested on Windows 10 x64 Pro, and MacOS X 10.11 El Capitan.
 
 ### What to do next [UPDATELOG]###
-- Working on Multiplayer protocol (Argh!)
+- Add keybinds
 - Build inventory system (omg)
+- Fix loads of bugs.
+- Enable 'create server'
+- Add Epouvantail (wut?)
 
 ### How do I get set up? ###
 

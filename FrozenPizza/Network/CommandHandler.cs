@@ -68,6 +68,8 @@ namespace FrozenPizza
             String cmd;
             String[] args;
 
+            if (msg == null)
+                return (false);
             cmd = getCmd(msg);
             args = getArgs(msg);
             if (!_commands.ContainsKey(cmd))
@@ -78,6 +80,8 @@ namespace FrozenPizza
 
         public bool ParseExpectedCmd(String msg, String expected)
         {
+            if (msg == null)
+                return (false);
             if (getCmd(msg) != expected)
                 return (false);
             return (ParseCmd(msg));
@@ -185,7 +189,7 @@ namespace FrozenPizza
             int id, damage;
 
             Int32.TryParse(args[0], out id);
-            Int32.TryParse(args[0], out damage);
+            Int32.TryParse(args[1], out damage);
             if (id == Engine.MainPlayer.Id)
                 Engine.MainPlayer.HP -= damage;
             else

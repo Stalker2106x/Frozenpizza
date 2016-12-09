@@ -107,6 +107,8 @@ namespace FrozenPizza
                 disconnect();
                 return (null);
             }
+            if (readCount == 0)
+                disconnect();
             msg = Encoding.UTF8.GetString(buffer, 0, readCount);
             msg = msg.Substring(0, msg.IndexOf("\r\n"));
             if (msg.IndexOf("\r\n") != msg.Length - 2)
