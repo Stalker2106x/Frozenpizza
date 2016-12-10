@@ -54,7 +54,15 @@ namespace FrozenPizza
 
         public virtual void setSkin()
         {
-            SkinRect = new Rectangle((Id % 10) * 32, (Id / 10) * 32, 32, 32);
+            int id = Id;
+
+            switch(Type)
+            {
+                case ItemType.Firearm:
+                    id -= (int)ItemIds.Pistol;
+                    break;
+            }
+            SkinRect = new Rectangle(id * 32, 0, 32, 32);
             Origin = new Vector2(16, 16);
         }
 	}

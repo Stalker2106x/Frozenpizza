@@ -73,7 +73,7 @@ namespace FrozenPizza
             switch(index)
             {
                 case 0:
-
+                    tryConnect();
                     break;
                 case 1:
                     if (_connecting || NetHandler.Connected)
@@ -131,14 +131,13 @@ namespace FrozenPizza
             }
             else
             {
-                if (Engine.netHandle.Handshake && !Engine.netHandle.Hooked)
+                if (Engine.netHandle.Handshake && !Engine.netHandle.GameReady)
                 {
-                    Engine.netHandle.Handshake = false;
                     _engine.InitializeGame();
                     _engine.LoadGame();
-                    Engine.netHandle.GetData = true;
+                    Engine.netHandle.GameReady = true;
                 }
-                else if (Engine.netHandle.Hooked)
+                else if (Engine.netHandle.Ready)
                 {
                     _engine.toggleMouseVisible();
                     _engine.gstate = Engine.GameState.Playing;

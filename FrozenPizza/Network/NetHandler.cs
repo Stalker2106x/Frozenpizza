@@ -20,9 +20,10 @@ namespace FrozenPizza
         public String Ip { get; set; }
         public int Port { get; set; }
         public static bool Connected { get; set; }
-        public bool GetData { get; set; }
+        public bool GameReady { get; set; }
+        public bool WorldData { get; set; }
         public static String ConnectionStatus { get; set; }
-        public bool Hooked { get; set; }
+        public bool Ready { get; set; }
         public bool Handshake { get; set; }
 
         public NetHandler()
@@ -30,25 +31,34 @@ namespace FrozenPizza
             _client = new TcpClient();
             _cmdHandle = new CommandHandler();
             _receiveStack = new Queue<string>();
-            Handshake = false;
-            Hooked = false;
             Connected = false;
+            Handshake = false;
+            GameReady = false;
+            WorldData = false;
+            Ready = false;
             ConnectionStatus = "Disconnected.";
         }
 
-        void ConnectCallback()
+        bool ConnectCallback()
         {
             try
             {
+                if (Ip == "0.0.0.0")
+                {
+                    ConnectionStatus = "Cannot connect to server: Invalid IP.";
+                    return (false);
+                }
                 _client.Connect(Ip, Port);
                 _stream = _client.GetStream();
                 ConnectionStatus = "Connected!";
                 Connected = true;
+                return (true);
             }
             catch (SocketException e)
             {
                 ConnectionStatus = "Cannot connect to server.";
             }
+            return (false);
         }
         public void connect(String ip, int port)
         {
@@ -135,17 +145,24 @@ namespace FrozenPizza
                 msg = receive();
             }
             send("?WORLD");
-            GetData = false;
+            msg = receive();
+            while (!_cmdHandle.ParseExpectedCmd(msg, ".OK"))
+            {
+                _cmdHandle.ParseCmd(msg);
+                msg = receive();
+            }
+            WorldData = true;
             return (true);
         }
 
         void threadLoop()
         {
-            ConnectCallback();
+            if (!ConnectCallback())
+                return;
             while (Connected)
             {
-                if (GetData && !getServerData())
-                    _thread.Abort();
+                if (!WorldData && Handshake && GameReady)
+                    getServerData();
                 String msg = receive();
 
                 if (msg != null)

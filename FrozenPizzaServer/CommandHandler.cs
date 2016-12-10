@@ -145,7 +145,10 @@ namespace FrozenPizzaServer
 			for (int i = 0; i < level.Entities.Count; i++)
             {
 				_client.send("!+ITEM " + level.Entities[i].Uid + " " + level.Entities[i].Id + " " + level.Entities[i].Pos.X + " " + level.Entities[i].Pos.Y);
-			}
+                if (!ParseExpectedCmd(_client.receive(), ".ACK"))
+                    return (false);
+            }
+            _client.send(".OK");
             _client.send(".READY");
             return (true);
         }
@@ -154,12 +157,11 @@ namespace FrozenPizzaServer
         {
             for (int i = 0; i < Server.ClientList.Count; i++)
             {
-                if (Server.ClientList[i] == null)
+                if (Server.ClientList[i] == null || _client.Id == i)
                     continue;
-                Player player = Server.ClientList[i].Player;
-
-                if (_client.Id != i)
-				    _client.send("!+PLAYER " + Server.ClientList[i].Id + " " + player.Pos.X + " " + player.Pos.Y);
+			    _client.send("!+PLAYER " + Server.ClientList[i].Id + " " + Server.ClientList[i].Player.Pos.X + " " + Server.ClientList[i].Player.Pos.Y);
+                if (!ParseExpectedCmd(_client.receive(), ".ACK"))
+                    return (false);
             }
             accept(null);
             return (true);
@@ -211,7 +213,7 @@ namespace FrozenPizzaServer
             pos = new PointF(x, y);
 			Server.Level.Entities.Add(new Item(uid, id, pos));
 			accept(null);
-			Server.broadcast(_client.Id, "!+ITEM " + args[0] + " " + args[1] + " " + args[2] + " " + args[3]);
+			Server.broadcast(-1, "!+ITEM " + args[0] + " " + args[1] + " " + args[2] + " " + args[3]);
             return (true);
         }
 
@@ -222,7 +224,7 @@ namespace FrozenPizzaServer
             Int64.TryParse(args[0], out uid);
 			Server.Level.Entities.RemoveAt(Server.Level.getEntityIndex(uid));
 			accept(null);
-            Server.broadcast(_client.Id, "!-ITEM " + args[0]);
+            Server.broadcast(-1, "!-ITEM " + args[0]);
             return (true);
         }
 

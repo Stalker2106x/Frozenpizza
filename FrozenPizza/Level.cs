@@ -219,7 +219,8 @@ namespace FrozenPizza
             drawTiles(spriteBatch, cam, mainPlayer);
             for (int i = _entities.Count - 1; i >= 0; i--)
             {
-                spriteBatch.Draw(Engine.collection.Tilesets[(int)_entities[i].Type], _entities[i].Pos, _entities[i].SkinRect, Color.White, 0, _entities[i].Origin, 1f, SpriteEffects.None, 0.3f);
+                if (_entities[i].Pos != - Vector2.One)
+                    spriteBatch.Draw(Engine.collection.Tilesets[(int)_entities[i].Type], _entities[i].Pos, _entities[i].SkinRect, Color.White, 0, _entities[i].Origin, 1f, SpriteEffects.None, 0.3f);
             }
             for (int i = _projectiles.Count - 1; i >= 0; i--)
             {

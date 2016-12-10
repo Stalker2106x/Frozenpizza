@@ -134,6 +134,7 @@ namespace FrozenPizza
             float.TryParse(args[1], out pos.X);
             float.TryParse(args[2], out pos.Y);
             Engine.Players.Add(new Player(id, "RP", Engine.Level.vgridToMap(pos)));
+            acknowledge(null);
             return (true);
         }
         bool movePlayer(String[] args)
@@ -229,7 +230,7 @@ namespace FrozenPizza
         bool ready(String[] args)
         {
             NetHandler.send(".READY");
-            Engine.netHandle.Hooked = true;
+            Engine.netHandle.Ready = true;
             return (true);
         }
 

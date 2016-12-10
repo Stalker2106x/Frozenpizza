@@ -108,12 +108,6 @@ namespace FrozenPizza
             LoadedAmmo = ClipSize;
 		}
 
-        public override void setSkin()
-        {
-            int id = Id - (int)ItemIds.Pistol;
-            SkinRect = new Rectangle((id % 10) * 32, (id / 10) * 32, 32, 32);
-        }
-
         public void LoadSounds(ContentManager content)
         {
             Sounds = new SoundEffect[Enum.GetNames(typeof(FirearmActions)).Length];

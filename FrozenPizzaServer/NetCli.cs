@@ -61,7 +61,7 @@ namespace FrozenPizzaServer
         public bool handShake()
         {
             send(".WELCOME");
-            if (receive() != ".ACK")
+            if (!_cmdHandle.ParseExpectedCmd(receive(), ".ACK"))
                 return (false);
             send("?VERSION");
             if (!_cmdHandle.ParseExpectedCmd(receive(), "!VERSION"))
@@ -71,8 +71,10 @@ namespace FrozenPizzaServer
             if (!_cmdHandle.ParseExpectedCmd(receive(), "!WHOIS"))
                 return (false);
             send(".HANDSHAKE");
-            if (!_cmdHandle.ParseExpectedCmd(receive(), ".HANDSHAKE"))
+            if (receive() != ".HANDSHAKE")
                 return (false);
+            send(".OK");
+            Thread.Sleep(1000); //Give client some time to generate.
             return (true); //HandShake success!
         }
 
@@ -88,9 +90,8 @@ namespace FrozenPizzaServer
 
         private void Update()
         {
-            handShake();
-            Thread.Sleep(1000); // Timeout for client to generate all placeholders
-            clientInfo();
+            if (!handShake() || !clientInfo())
+                return;
             while (_client.Connected)
             {
                 String msg = receive();
@@ -136,11 +137,12 @@ namespace FrozenPizzaServer
                 terminateClient();
             }
             msg = Encoding.UTF8.GetString(buffer, 0, readCount);
-            if (msg == "")
+            if (msg == "" || msg.IndexOf("\r\n") == -1)
             {
                 terminateClient();
                 return (null);
             }
+            Console.Write("<[" + _id + "] " + msg + "\n");
             msg = msg.Substring(0, msg.IndexOf("\r\n"));
             if (msg.IndexOf("\r\n") != msg.Length - 2)
             {

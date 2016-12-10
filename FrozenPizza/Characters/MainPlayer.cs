@@ -409,8 +409,10 @@ namespace FrozenPizza
             if (_hands == null)
             {
 				Item ent = Engine.Level.getEntityByPos(_pos);
+
 				if (ent == null)
 					return;
+                ent.Pos = -Vector2.One;
 				_hands = ent;
 				NetHandler.send("!-ITEM " + ent.Uid);
             }
@@ -420,8 +422,6 @@ namespace FrozenPizza
         {
             if (_hands == null)
                 return;
-			
-			Engine.Level.Entities.Add(_hands);
 			NetHandler.send("!+ITEM " + _hands.Uid + " " + _hands.Id + " " + _pos.X + " " + _pos.Y);
 			_hands = null;
         }
