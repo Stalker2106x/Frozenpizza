@@ -29,6 +29,7 @@ namespace FrozenPizza
 		//Tiles
         int _drawMargin;
 		Texture2D _tileset;
+        int _metaOffset;
         int _twidth, _theight;
         int _ttwidth, _ttheight;
 
@@ -47,12 +48,13 @@ namespace FrozenPizza
             _theight = _map.Tilesets[0].TileHeight;
 			_entities = new List<Item>();
             _projectiles = new List<Projectile>();
+            _metaOffset = _map.Tilesets[0].Properties.Count;
             _drawMargin = 10;
         }
 
         public bool Load(ContentManager content)
         { 
-            _tileset = content.Load<Texture2D>("maps/" + _map.Tilesets[0].Name.ToString());
+            _tileset = content.Load<Texture2D>("maps/" + _map.Tilesets[1].Name.ToString());
             _ttwidth = _tileset.Width / _twidth;
             _ttheight = _tileset.Height / _theight;
             return (true);
@@ -191,7 +193,7 @@ namespace FrozenPizza
                         if (gid == 0)
                             continue;
 
-                        int tileFrame = gid - 1;
+                        int tileFrame = gid - _metaOffset - 1;
                         int column = tileFrame % _ttwidth;
                         int row = (int)Math.Floor((double)tileFrame / (double)_ttwidth);
 

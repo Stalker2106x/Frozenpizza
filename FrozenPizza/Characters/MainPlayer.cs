@@ -412,7 +412,6 @@ namespace FrozenPizza
 
 				if (ent == null)
 					return;
-                ent.Pos = -Vector2.One;
 				_hands = ent;
 				NetHandler.send("!-ITEM " + ent.Uid);
             }
@@ -422,7 +421,7 @@ namespace FrozenPizza
         {
             if (_hands == null)
                 return;
-			NetHandler.send("!+ITEM " + _hands.Uid + " " + _hands.Id + " " + _pos.X + " " + _pos.Y);
+			NetHandler.send("!+ITEM " + _hands.Uid + " " + _hands.Id);
 			_hands = null;
         }
 

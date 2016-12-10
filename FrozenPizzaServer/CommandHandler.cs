@@ -208,12 +208,10 @@ namespace FrozenPizzaServer
 
             Int64.TryParse(args[0], out uid);
             Int32.TryParse(args[1], out id);
-            float.TryParse(args[2], out x);
-            float.TryParse(args[3], out y);
-            pos = new PointF(x, y);
+            pos = new PointF(_client.Player.Pos.X, _client.Player.Pos.Y);
 			Server.Level.Entities.Add(new Item(uid, id, pos));
 			accept(null);
-			Server.broadcast(-1, "!+ITEM " + args[0] + " " + args[1] + " " + args[2] + " " + args[3]);
+			Server.broadcast(-1, "!+ITEM " + args[0] + " " + args[1] + " " + pos.X.ToString() + " " + pos.Y.ToString());
             return (true);
         }
 
@@ -223,7 +221,7 @@ namespace FrozenPizzaServer
 
             Int64.TryParse(args[0], out uid);
 			Server.Level.Entities.RemoveAt(Server.Level.getEntityIndex(uid));
-			accept(null);
+            accept(null);
             Server.broadcast(-1, "!-ITEM " + args[0]);
             return (true);
         }
