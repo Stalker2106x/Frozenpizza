@@ -31,9 +31,11 @@ namespace FrozenPizzaServer
 
         public bool Update()
         {
-            Pos += new SizeF((float)Math.Cos(Angle) * -Velocity, (float)Math.Sin(Angle) * Velocity);
+            Pos += new SizeF((float)Math.Sin(Angle) * -Velocity, (float)Math.Cos(Angle) * -Velocity);
             for (int i = 0; i < Server.ClientList.Count; i++)
             {
+                if (Server.ClientList[i] == null)
+                    continue;
                 if (Server.ClientList[i].Player.getHitbox().Contains(Point.Truncate(Pos)))
                 {
                     Server.ClientList[i].send("!HIT " + Server.ClientList[i].Id + " " + Damage);

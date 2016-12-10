@@ -168,6 +168,8 @@ namespace FrozenPizzaServer
         {
             for (int i = 0; i < Server.ClientList.Count; i++)
             {
+                if (Server.ClientList[i] == null)
+                    continue;
                 Player player = Server.ClientList[i].Player;
 
                 if (_client.Id != i)

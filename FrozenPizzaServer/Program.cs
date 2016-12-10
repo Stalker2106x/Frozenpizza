@@ -43,9 +43,9 @@ namespace FrozenPizzaServer
 
         public static void broadcast(int senderId, String msg)
         {
-            for (int i = 0; i < ClientList.Count; i++)
+            for (int i = ClientList.Count - 1; i >= 0 ; i--)
             {
-                if (i == senderId || !ClientList[i].Ready)
+                if (i == senderId || ClientList[i] == null || !ClientList[i].Ready)
                     continue;
                 ClientList[i].send(msg);
             }

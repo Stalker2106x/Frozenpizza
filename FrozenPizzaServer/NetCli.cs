@@ -54,22 +54,8 @@ namespace FrozenPizzaServer
         public void terminateClient()
         {
             Console.Write(" >> Client ID " + _id + " disconnected.");
-            Server.ClientList[Id] = null;
-            _cThread.Abort();
-        }
-
-        private bool isConnected()
-        {
-            if (_client.Client.Poll(0, SelectMode.SelectRead))
-            {
-                byte[] buff = new byte[1];
-                if (_client.Client.Receive(buff, SocketFlags.Peek) == 0)
-                {
-                    // Client disconnected
-                    return (false);
-                }
-            }
-            return (true);
+            _client.Close();
+            Server.ClientList[_id] = null;
         }
 
         public bool handShake()
@@ -105,7 +91,7 @@ namespace FrozenPizzaServer
             handShake();
             Thread.Sleep(1000); // Timeout for client to generate all placeholders
             clientInfo();
-            while (isConnected())
+            while (_client.Connected)
             {
                 String msg = receive();
 
@@ -119,7 +105,7 @@ namespace FrozenPizzaServer
         public void send(String msg)
         {
             byte[] buffer = new byte[msg.Length];
-
+            
             Console.Write(">[" + _id + "] " + msg + "\n");
             buffer = Encoding.UTF8.GetBytes(msg+"\r\n");
             try
@@ -149,9 +135,12 @@ namespace FrozenPizzaServer
             {
                 terminateClient();
             }
-            if (readCount == 0)
-                terminateClient();
             msg = Encoding.UTF8.GetString(buffer, 0, readCount);
+            if (msg == "")
+            {
+                terminateClient();
+                return (null);
+            }
             msg = msg.Substring(0, msg.IndexOf("\r\n"));
             if (msg.IndexOf("\r\n") != msg.Length - 2)
             {
