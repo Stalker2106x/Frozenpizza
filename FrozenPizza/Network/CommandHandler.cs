@@ -204,8 +204,9 @@ namespace FrozenPizza
             List<Item> entities;
             Vector2 pos;
             int id;
+            Int64 uid;
 
-            Int32.TryParse(args[0], out uid);
+            Int64.TryParse(args[0], out uid);
             Int32.TryParse(args[1], out id);
             float.TryParse(args[2], out pos.X);
             float.TryParse(args[3], out pos.Y);
@@ -217,10 +218,10 @@ namespace FrozenPizza
 
         bool removeItem(String[] args)
         {
-            int x, y, index;
+            Int64 uid;
 
-            Int32.TryParse(args[0], out uid);
-			Engine.Level.Entities.RemoveAt(Engine.Level.getEntityByUid(uid));
+            Int64.TryParse(args[0], out uid);
+			Engine.Level.Entities.RemoveAt(Engine.Level.getEntityIndex(uid));
             return (true);
         }
 

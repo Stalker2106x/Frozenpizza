@@ -198,7 +198,6 @@ namespace FrozenPizza
                         Rectangle tilesetRec = new Rectangle(_twidth * column, _theight * row, _twidth, _theight);
 
                         spriteBatch.Draw(_tileset, new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), tilesetRec, Color.White, 0, Vector2.Zero, SpriteEffects.None, (Layers)l == Layers.Ceiling ? 0.2f : 0.5f);
-                        drawEntities(spriteBatch, xoffset, yoffset, x, y);
                         break;
                     }
                 }
@@ -218,6 +217,10 @@ namespace FrozenPizza
         public void Draw(SpriteBatch spriteBatch, Camera cam, MainPlayer mainPlayer, Collection collection)
         {
             drawTiles(spriteBatch, cam, mainPlayer);
+            for (int i = _entities.Count - 1; i >= 0; i--)
+            {
+                spriteBatch.Draw(Engine.collection.Tilesets[(int)_entities[i].Type], _entities[i].Pos, _entities[i].SkinRect, Color.White, 0, _entities[i].Origin, 1f, SpriteEffects.None, 0.3f);
+            }
             for (int i = _projectiles.Count - 1; i >= 0; i--)
             {
                 _projectiles[i].Draw(spriteBatch);

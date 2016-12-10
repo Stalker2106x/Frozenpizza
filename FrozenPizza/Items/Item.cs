@@ -35,8 +35,9 @@ namespace FrozenPizza
 		public float Weight { get; set; }
 		public float Size { get; set; }
         public Rectangle SkinRect { get; set; }
+        public Vector2 Origin { get; set; }
 
-		public Item(Int64 uid, int id, String name, ItemType type, float weight, float size)
+        public Item(Int64 uid, int id, String name, ItemType type, float weight, float size)
 		{
 			Id = id;
 			Name = name;
@@ -54,6 +55,7 @@ namespace FrozenPizza
         public virtual void setSkin()
         {
             SkinRect = new Rectangle((Id % 10) * 32, (Id / 10) * 32, 32, 32);
+            Origin = new Vector2(16, 16);
         }
 	}
 }

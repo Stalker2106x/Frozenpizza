@@ -210,7 +210,7 @@ namespace FrozenPizza
         public void die()
         {
             HP = 0;
-            dropItem(SlotType.Hands, 0);
+            dropItem(0);
             _inventoryOpen = false;
             _dead = true;
             _skinRect = new Rectangle(0, 64, 32, 64);
@@ -404,7 +404,7 @@ namespace FrozenPizza
             cursor.Show = _inventoryOpen;
         }
 
-        public void pickupItem(int index)
+        public void pickupItem()
         {
             if (_hands == null)
             {
@@ -416,7 +416,7 @@ namespace FrozenPizza
             }
         }
 
-        public void dropItem(SlotType slot, int index)
+        public void dropItem(int uid)
         {
             if (_hands == null)
                 return;
@@ -458,9 +458,9 @@ namespace FrozenPizza
             if (keybStates[1].IsKeyDown(KeyBinds.getKey("ToggleInventory")) && !keybStates[0].IsKeyDown(KeyBinds.getKey("ToggleInventory")))
                 toggleInventory(cursor);
             if (keybStates[1].IsKeyDown(KeyBinds.getKey("Pickup")) && !keybStates[0].IsKeyDown(KeyBinds.getKey("Pickup")))
-                pickupItem(level, 0);
+                pickupItem();
             if (keybStates[1].IsKeyDown(KeyBinds.getKey("Drop")) && !keybStates[0].IsKeyDown(KeyBinds.getKey("Drop")))
-                dropItem(SlotType.Hands, 0);
+                dropItem(0);
             updateStates(gameTime);
             if (_states.Count > 0 && _stateTimer.TotalSeconds >= 20)
                 applyStates();
