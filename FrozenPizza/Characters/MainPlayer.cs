@@ -404,19 +404,15 @@ namespace FrozenPizza
             cursor.Show = _inventoryOpen;
         }
 
-        public void pickupItem(Level level, int index)
+        public void pickupItem(int index)
         {
-            Vector2 gridpos = level.vmapToGrid(_pos);
             if (_hands == null)
             {
-                List<Item> entities = level.getEntities(gridpos);
-                if (entities == null)
-                    return;
-                _hands = entities[index];
-                entities.RemoveAt(index);
-                if (entities.Count == 0)
-                    entities = null;
-                NetHandler.send("!-ITEM " + index + " " + gridpos.X + " " + gridpos.Y);
+				Item ent = Engine.Level.getEntityByPos(_pos);
+				if (ent == null)
+					return;
+				_hands = ent;
+				NetHandler.send("!-ITEM " + ent.Uid);
             }
         }
 
@@ -424,19 +420,10 @@ namespace FrozenPizza
         {
             if (_hands == null)
                 return;
-            Vector2 gridpos = Engine.Level.vmapToGrid(_pos);
-            int id = _hands.Id;
-
-            List<Item> entities = Engine.Level.getEntities(gridpos);
-            if (entities == null)
-                entities = new List<Item>();
-            if (slot == SlotType.Hands)
-            {
-                entities.Add(_hands);
-                Engine.Level.setEntities(gridpos, entities);
-                _hands = null;
-            }
-            NetHandler.send("!+ITEM " + id + " " + gridpos.X + " " + gridpos.Y);
+			
+			Engine.Level.Entities.Add(_hands);
+			NetHandler.send("!+ITEM " + _hands.Uid + " " + _hands.Id + " " + _pos.X + " " + _pos.Y);
+			_hands = null;
         }
 
         public void updateNetwork(GameTime gameTime)

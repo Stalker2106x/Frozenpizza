@@ -44,3 +44,4 @@
 /Users/martenm/Frozenpizza/FrozenPizza/bin/DesktopGL/x86/Debug/FrozenPizza.exe
 /Users/martenm/Frozenpizza/FrozenPizza/obj/x86/Debug/FrozenPizza.exe
 /Users/martenm/Frozenpizza/FrozenPizza/obj/x86/Debug/FrozenPizza.exe.mdb
+/Users/martenm/Frozenpizza/FrozenPizza/bin/DesktopGL/x86/Debug/FrozenPizza.exe.config

@@ -49,7 +49,7 @@ namespace FrozenPizza
     }
     public class Ammo : Item
     {
-        public Ammo(int id, String name, float weight, float size) : base(id, name, ItemType.Ammo, weight, size)
+        public Ammo(Int64 uid, int id, String name, float weight, float size) : base(id, name, ItemType.Ammo, weight, size)
         {
 
         }

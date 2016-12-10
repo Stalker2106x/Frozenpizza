@@ -23,7 +23,7 @@ namespace FrozenPizza
         public String ResourceId { get; set; }
         public SoundEffect[] Sounds { get; set; }
 
-        public Weapon(int id, String name, ItemType type, float weight, float size) : base(id, name, type, weight, size)
+        public Weapon(Int64 uid, int id, String name, ItemType type, float weight, float size) : base(uid, id, name, type, weight, size)
 		{
 
 		}
@@ -41,7 +41,7 @@ namespace FrozenPizza
 
 	public class Melee : Weapon
 	{
-		public Melee(int id, String name, float weight, float size) : base(id, name, ItemType.Melee, weight, size)
+		public Melee(Int64 uid, int id, String name, float weight, float size) : base(uid, id, name, ItemType.Melee, weight, size)
 		{
             Sounds = new SoundEffect[1];
 		}
@@ -63,7 +63,7 @@ namespace FrozenPizza
         public int LoadedAmmo { get; set; }
         public int ClipSize { get; set; }
 
-		public Firearm(int id, String name, float weight, float size) : base(id, name, ItemType.Firearm, weight, size)
+		public Firearm(Int64 uid, int id, String name, float weight, float size) : base(uid, id, name, ItemType.Firearm, weight, size)
         {
         }
 

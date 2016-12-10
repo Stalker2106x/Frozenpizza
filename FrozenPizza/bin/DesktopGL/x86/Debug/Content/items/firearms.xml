@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Pistols>
+  <Item>
+    <Id>1000</Id>
+    <Name>Glock 18</Name>
+    <ResourceId>glock18</ResourceId>
+    <Slots>Hands Bag</Slots>
+    <Weight>1</Weight>
+    <Size>1</Size>
+    <Damage>20</Damage>
+    <ClipSize>20</ClipSize>
+	  <Accuracy>7</Accuracy>
+    <Cooldown>0.1</Cooldown>
+  </Item>
+  <Item>
+    <Id>1001</Id>
+    <Name>Beretta M9</Name>
+    <ResourceId>berettam9</ResourceId>
+    <Slots>Hands Bag</Slots>
+    <Weight>1</Weight>
+    <Size>1</Size>
+    <Damage>10</Damage>
+    <ClipSize>15</ClipSize>
+	  <Accuracy>6</Accuracy>
+    <Cooldown>0.1</Cooldown>
+  </Item>
+</Pistols>

@@ -34,9 +34,10 @@ namespace FrozenPizza
 
 		//Map
         TmxMap _map;
-        List<Item>[] _entities;
+        List<Item> _entities;
         List<Projectile> _projectiles;
 
+		public List<Item> Entities { get { return (_entities); } }
         public List<Projectile> Projectiles { get { return (_projectiles); } }
 
         public Level(string mapName)
@@ -44,7 +45,7 @@ namespace FrozenPizza
             _map = new TmxMap(mapName);
             _twidth = _map.Tilesets[0].TileWidth;
             _theight = _map.Tilesets[0].TileHeight;
-            _entities = new List<Item>[_map.Width * _map.Height];
+			_entities = new List<Item>();
             _projectiles = new List<Projectile>();
             _drawMargin = 10;
         }
@@ -135,30 +136,27 @@ namespace FrozenPizza
         }
 
 		//Items management
-        public List<Item> getEntities(Vector2 pos)
+        public int getEntityIndex(Int64 uid)
         {
-            List<Item> list = _entities[(int)((pos.Y * _map.Width) + pos.X)];
-            
-            return (list);
+			for (int i = 0; i < _entities.Count; i++)
+			{
+				if (_entities[i].Uid == uid)
+					return (i);
+			}
+			return (-1);
         }
 
-        public void setEntities(Vector2 pos, List<Item> list)
-        {
-            _entities[(int)((pos.Y * _map.Width) + pos.X)] = list;
-        }
+		public Item getEntityByPos(Vector2 pos)
+		{
+			Rectangle range = new Rectangle((pos - new Vector2(16, 16)).ToPoint(), (pos + new Vector2(16, 16)).ToPoint());
 
-        public void drawEntities(SpriteBatch spriteBatch, int xoffset, int yoffset, int x, int y)
-        {
-            if (_entities[((yoffset + y) * _map.Width) + xoffset + x] != null)
-            {
-                for (int i = 0; i < _entities[((yoffset + y) * _map.Width) + xoffset + x].Count; i++)
-                {
-                    Item item = _entities[((yoffset + y) * _map.Width) + xoffset + x][i];
-
-                    spriteBatch.Draw(Engine.collection.Tilesets[(int)item.Type], new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), item.SkinRect, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.3f);
-                }
-            }
-        }
+			for (int i = 0; i < _entities.Count; i++)
+			{
+				if (range.Contains(_entities[i].Pos))
+					return (_entities[i]);
+			}
+			return (null);
+		}
 
         public void drawTiles(SpriteBatch spriteBatch, Camera cam, MainPlayer mainPlayer)
         {

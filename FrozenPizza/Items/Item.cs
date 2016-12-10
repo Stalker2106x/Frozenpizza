@@ -26,7 +26,9 @@ namespace FrozenPizza
 
 	public abstract class Item
 	{
+		public Int64 Uid { get; set; }
 		public int Id { get; set; }
+		public Vector2 Pos { get; set; }
 		public String Name { get; set; }
 		public ItemType Type { get; set; }
 		public List<SlotType> Slots { get; set; }
@@ -34,7 +36,7 @@ namespace FrozenPizza
 		public float Size { get; set; }
         public Rectangle SkinRect { get; set; }
 
-		public Item(int id, String name, ItemType type, float weight, float size)
+		public Item(Int64 uid, int id, String name, ItemType type, float weight, float size)
 		{
 			Id = id;
 			Name = name;

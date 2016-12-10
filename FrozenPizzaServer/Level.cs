@@ -28,7 +28,10 @@ namespace FrozenPizzaServer
 
         //Map
         TmxMap _map;
-        List<Item>[] _entities;
+        List<Item> _entities;
+
+		//EntIDs
+		Int64 _currentUid;
 
         //Dynamic
         List<Projectile> _projectiles;
@@ -37,7 +40,7 @@ namespace FrozenPizzaServer
         Thread _thread;
 
         public TmxMap Map {  get { return (_map); } }
-        public List<Item>[] Entities { get { return (_entities); } }
+        public List<Item> Entities { get { return (_entities); } }
         public List<Projectile> Projectiles { get { return (_projectiles); } }
 
         public Level(String mapName)
@@ -45,8 +48,9 @@ namespace FrozenPizzaServer
             _map = new TmxMap(mapName);
             _twidth = _map.Tilesets[0].TileWidth;
             _theight = _map.Tilesets[0].TileHeight;
-            _entities = new List<Item>[_map.Width * _map.Height];
+			_entities = new List<Item>();
             _projectiles = new List<Projectile>();
+			_currentUid = 0;
             GenerateItems();
         }
 
@@ -70,24 +74,38 @@ namespace FrozenPizzaServer
         {
             Random rnd = new Random();
 
-            for (int i = 0; i < _map.Layers[(int)Layers.Meta].Tiles.Count; i++)
-            {
-                int gid = _map.Layers[(int)Layers.Meta].Tiles[i].Gid;
+			for (int y = 0; y < _map.Height; y++)
+			{
+				for (int x = 0; x < _map.Width; x++)
+				{
+					int id = 0;
+					int gid = _map.Layers[(int)Layers.Meta].Tiles[(_map.Width * y) + x].Gid;
 
-                if (gid == 0 || rnd.Next(0, 2) == 0) //Skip empty & 50% chance of spawn
-                    continue;
-                if (_entities[i] == null)
-                    _entities[i] = new List<Item>();
-                if (gid == (int)Meta.Melee)
-                {
-                    _entities[i].Add(new Item(rnd.Next(1, 4)));
-                }
-                else if (gid == (int)Meta.Pistol)
-                {
-                    _entities[i].Add(new Item(rnd.Next(1000, 1002)));
-                }
-            }
+					if (gid == 0 || rnd.Next(0, 2) == 0) //Skip empty & 50% chance of spawn
+						continue;
+					if (gid == (int)Meta.Melee)
+					{
+						id = rnd.Next(1, 4);
+					}
+					else if (gid == (int)Meta.Pistol)
+					{
+						id = rnd.Next(1000, 1002);
+					}
+					_entities.Add(new Item(_currentUid, id, new PointF(x, y) + new SizeF(_twidth / 2, _theight / 2)));
+					_currentUid++;
+				}
+			}
         }
+
+		public int getEntityIndex(Int64 uid)
+		{
+			for (int i = 0; i < _entities.Count; i++)
+			{
+				if (_entities[i].Uid == uid)
+					return (i);
+			}
+			return (-1);
+		}
         //Bool checks
         public bool Collide(PointF pos)
         {

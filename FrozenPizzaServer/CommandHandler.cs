@@ -142,24 +142,13 @@ namespace FrozenPizzaServer
         bool sendWorldData(String[] args)
         {
             Level level = Server.Level;
-            for (int i = 0; i < level.Entities.Length; i++)
+			for (int i = 0; i < level.Entities.Count; i++)
             {
-                if (level.Entities[i] != null)
-                {
-                    for (int j = 0; j < level.Entities[i].Count; j++)
-                    {
-                        Item item = level.Entities[i][j];
-                        int x, y;
-
-                        x = i % Server.Level.Map.Width;
-                        y = i / Server.Level.Map.Width;
-                        _client.send("!+ITEM " + item.Id + " " + x + " " + y);
-                        String ncmd = _client.receive();
-                        if (!ParseExpectedCmd(ncmd, ".ACK"))
-                            return (false);
-                    }
-                }
-            }
+				_client.send("+ITEM " + level.Entities[i].Id + " " + level.Entities[i].Pos.X + " " + level.Entities[i].Pos.Y);
+				String ncmd = _client.receive();
+				if (!ParseExpectedCmd(ncmd, ".ACK"))
+					return (false);
+			}
             _client.send(".READY");
             return (true);
         }
@@ -214,32 +203,27 @@ namespace FrozenPizzaServer
         {
             float x, y;
             PointF pos;
+			Int64 uid;
             int id;
 
-            Int32.TryParse(args[0], out id);
-            float.TryParse(args[1], out x);
-            float.TryParse(args[2], out y);
+            Int64.TryParse(args[0], out uid);
+            Int32.TryParse(args[1], out id);
+            float.TryParse(args[2], out x);
+            float.TryParse(args[3], out y);
             pos = new PointF(x, y);
-            if (Server.Level.Entities[(int)(pos.Y * Server.Level.Map.Width) + (int)pos.X] == null)
-                Server.Level.Entities[(int)(pos.Y * Server.Level.Map.Width) + (int)pos.X] = new List<Item>();
-            Server.Level.Entities[(int)(pos.Y * Server.Level.Map.Width) + (int)pos.X].Add(new Item(id));
-            accept(null);
-            Server.broadcast(_client.Id, "!+ITEM " + args[0] + " " + args[1] + " " + args[2]);
+			Server.Level.Entities.Add(new Item(uid, id, pos));
+			accept(null);
+			Server.broadcast(_client.Id, "!+ITEM " + args[0] + " " + args[1] + " " + args[2] + " " + args[3]);
             return (true);
         }
 
         bool removeItem(String[] args)
         {
-            int x, y, index;
+            Int64 uid;
 
-            Int32.TryParse(args[0], out index);
-            Int32.TryParse(args[1], out x);
-            Int32.TryParse(args[2], out y);
-            if (Server.Level.Entities[(y * Server.Level.Map.Width) + x] != null)
-                Server.Level.Entities[(y * Server.Level.Map.Width) + x].RemoveAt(index);
-            if (Server.Level.Entities[(y * Server.Level.Map.Width) + x].Count == 0)
-                Server.Level.Entities[(y * Server.Level.Map.Width) + x] = null;
-            accept(null);
+            Int64.TryParse(args[0], out uid);
+			Server.Level.Entities.RemoveAt(Server.Level.getEntityIndex(uid));
+			accept(null);
             Server.broadcast(_client.Id, "!-ITEM " + args[0] + " " + args[1] + " " + args[2]);
             return (true);
         }

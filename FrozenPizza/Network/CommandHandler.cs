@@ -205,15 +205,12 @@ namespace FrozenPizza
             Vector2 pos;
             int id;
 
-            Int32.TryParse(args[0], out id);
-            float.TryParse(args[1], out pos.X);
-            float.TryParse(args[2], out pos.Y);
-            if (Engine.Level.getEntities(pos) == null)
-                entities = new List<Item>();
-            else
-                entities = Engine.Level.getEntities(pos);
-            entities.Add(Engine.collection.getItemById(id));
-            Engine.Level.setEntities(pos, entities);
+            Int32.TryParse(args[0], out uid);
+            Int32.TryParse(args[1], out id);
+            float.TryParse(args[2], out pos.X);
+            float.TryParse(args[3], out pos.Y);
+			Engine.Level.Entities.Add(Engine.collection.getItemById(id));
+			Engine.Level.Entities.Last().Pos = pos;
             acknowledge(null);
             return (true);
         }
@@ -222,10 +219,8 @@ namespace FrozenPizza
         {
             int x, y, index;
 
-            Int32.TryParse(args[0], out index);
-            Int32.TryParse(args[1], out x);
-            Int32.TryParse(args[2], out y);
-            Engine.Level.getEntities(new Vector2(x, y)).RemoveAt(index);
+            Int32.TryParse(args[0], out uid);
+			Engine.Level.Entities.RemoveAt(Engine.Level.getEntityByUid(uid));
             return (true);
         }
 
