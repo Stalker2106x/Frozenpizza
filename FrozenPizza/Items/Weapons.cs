@@ -52,7 +52,7 @@ namespace FrozenPizza
         public void attack(Vector2 pos)
         {
             Sounds[0].Play();
-            NetHandler.send("!MELEE " + pos.X + " " + pos.Y + " " + Size + " " + Damage);
+            NetHandler.send("!MELEE " + Size + " " + Damage);
         }
 	}
 

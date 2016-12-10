@@ -144,10 +144,7 @@ namespace FrozenPizzaServer
             Level level = Server.Level;
 			for (int i = 0; i < level.Entities.Count; i++)
             {
-				_client.send("+ITEM " + level.Entities[i].Id + " " + level.Entities[i].Pos.X + " " + level.Entities[i].Pos.Y);
-				String ncmd = _client.receive();
-				if (!ParseExpectedCmd(ncmd, ".ACK"))
-					return (false);
+				_client.send("!+ITEM " + level.Entities[i].Uid + " " + level.Entities[i].Id + " " + level.Entities[i].Pos.X + " " + level.Entities[i].Pos.Y);
 			}
             _client.send(".READY");
             return (true);
@@ -185,17 +182,18 @@ namespace FrozenPizzaServer
 
         bool meleeHit(String[] args)
         {
-            float size, x, y;
+            float size;
             int damage;
-            PointF pos;
-            Rectangle hit;
-
-            float.TryParse(args[0], out x);
-            float.TryParse(args[1], out y);
-            float.TryParse(args[2], out size);
-            Int32.TryParse(args[3], out damage);
-            pos = new PointF(x, y);
-            //Check for hit
+            
+            float.TryParse(args[0], out size);
+            Int32.TryParse(args[1], out damage);
+            for (int i = 0; i < Server.ClientList.Count; i++)
+            {
+                if (Server.ClientList[i] == null || i == _client.Id)
+                    continue;
+                if (Server.ClientList[i].Player.getHitbox().Contains(Point.Truncate(_client.Player.calcFirePos())))
+                    _client.send("!HIT " + Server.ClientList[i].Id + " " + damage);
+            }
             return (true);
         }
 
@@ -224,7 +222,7 @@ namespace FrozenPizzaServer
             Int64.TryParse(args[0], out uid);
 			Server.Level.Entities.RemoveAt(Server.Level.getEntityIndex(uid));
 			accept(null);
-            Server.broadcast(_client.Id, "!-ITEM " + args[0] + " " + args[1] + " " + args[2]);
+            Server.broadcast(_client.Id, "!-ITEM " + args[0]);
             return (true);
         }
 

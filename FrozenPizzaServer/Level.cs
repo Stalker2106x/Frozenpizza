@@ -91,7 +91,7 @@ namespace FrozenPizzaServer
 					{
 						id = rnd.Next(1000, 1002);
 					}
-					_entities.Add(new Item(_currentUid, id, new PointF(x, y) + new SizeF(_twidth / 2, _theight / 2)));
+					_entities.Add(new Item(_currentUid, id, new PointF(x * _twidth, y * _theight) + new SizeF(_twidth / 2, _theight / 2)));
 					_currentUid++;
 				}
 			}

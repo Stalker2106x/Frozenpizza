@@ -22,12 +22,12 @@ namespace FrozenPizzaServer
 
         public PointF calcFirePos()
         {
-            return (Pos + new SizeF((float)Math.Sin(Aim) * -15, (float)Math.Cos(Aim) * -15));
+            return (Pos + new SizeF((float)Math.Sin(Aim) * -17f, (float)Math.Cos(Aim) * -17f));
         }
 
         public Rectangle getHitbox()
         {
-            return (new Rectangle(Point.Truncate(Pos - new SizeF(8, 8)), new Size(Point.Truncate(Pos + new SizeF(8, 8)))));
+            return (new Rectangle(Point.Truncate(Pos - new SizeF(8, 8)), new Size(Point.Truncate(new PointF(16, 16)))));
         }
     }
 }
