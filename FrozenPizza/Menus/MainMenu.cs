@@ -68,7 +68,10 @@ namespace FrozenPizza
                 case 1:
                     _engine.UnloadGame();
                     if (NetHandler.Connected)
+                    {
                         NetHandler.disconnect();
+                        Engine.netHandle = null;
+                    }
                     _engine.setMenu(new MainMenu(_engine));
                     break;
                 case 2:

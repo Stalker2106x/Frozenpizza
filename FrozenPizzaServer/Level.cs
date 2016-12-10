@@ -1,9 +1,7 @@
 ﻿using System;
+using System.Drawing;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using TiledSharp;
 
 namespace FrozenPizzaServer
@@ -52,14 +50,14 @@ namespace FrozenPizzaServer
             GenerateItems();
         }
 
-        public Vector2 vmapToGrid(Vector2 pos)
+        public PointF vmapToGrid(PointF pos)
         {
-            return (new Vector2((int)pos.X / _twidth, (int)pos.Y / _theight));
+            return (new PointF((int)pos.X / _twidth, (int)pos.Y / _theight));
         }
 
-        public Vector2 vgridToMap(Vector2 pos)
+        public PointF vgridToMap(PointF pos)
         {
-            return (new Vector2((int)pos.X * _twidth, (int)pos.Y * _theight));
+            return (new PointF((int)pos.X * _twidth, (int)pos.Y * _theight));
         }
 
         public void startUpdateThread()
@@ -91,9 +89,9 @@ namespace FrozenPizzaServer
             }
         }
         //Bool checks
-        public bool Collide(Vector2 pos)
+        public bool Collide(PointF pos)
         {
-            Vector2 realpos = vmapToGrid(pos);
+            PointF realpos = vmapToGrid(pos);
 
             if ((realpos.X < 0 || realpos.X > _map.Width)
                 || (realpos.Y < 0 || realpos.Y > _map.Height))
@@ -103,7 +101,7 @@ namespace FrozenPizzaServer
             return (false);
         }
 
-        public Vector2 getSpawnLocation()
+        public PointF getSpawnLocation()
 		{
 			Random rnd = new Random();
 			int pos;
@@ -113,7 +111,7 @@ namespace FrozenPizzaServer
 			while (_map.Layers[(int)Layers.Spawn].Tiles[pos].Gid == 0)
 				pos = rnd.Next(0, _map.Layers[(int)Layers.Spawn].Tiles.Count);
 			spawn = _map.Layers[(int)Layers.Spawn].Tiles[pos];
-			return (new Vector2(spawn.X, spawn.Y));
+			return (new PointF(spawn.X, spawn.Y));
 		}
 
         public void updateProjectiles()
@@ -121,7 +119,9 @@ namespace FrozenPizzaServer
             for (int i = Projectiles.Count - 1; i >= 0; i--)
             {
                 if (!Projectiles[i].Update())
+                {
                     Projectiles.RemoveAt(i);
+                }
             }
         }
 

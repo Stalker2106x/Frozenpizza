@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,7 @@ namespace FrozenPizzaServer
             _commands.Add("?MOVE", movePlayer);
             _commands.Add("!AIM", aimPlayer);
             _commands.Add("!FIRE", fireWeapon);
+            _commands.Add("!MELEE", meleeHit);
             _commands.Add("!+ITEM", spawnItem);
             _commands.Add("!-ITEM", removeItem);
             _commands.Add("?WORLD", sendWorldData);
@@ -109,10 +111,12 @@ namespace FrozenPizzaServer
         //Player
         bool movePlayer(String[] args)
         {
-            Vector2 pos;
+            float x, y;
+            PointF pos;
             
-            float.TryParse(args[0], out pos.X);
-            float.TryParse(args[1], out pos.Y);
+            float.TryParse(args[0], out x);
+            float.TryParse(args[1], out y);
+            pos = new PointF(x, y);
             if (Server.Level.Collide(pos))
             {
                 _client.send("!MOVE " + _client.Id + " " + _client.Player.Pos.X + " " + _client.Player.Pos.Y);
@@ -175,29 +179,45 @@ namespace FrozenPizzaServer
         bool fireWeapon(String[] args)
         {
             int type, damage;
-            float angle, velocity;
-            Vector2 pos;
+            float velocity;
+            PointF firepos;
 
             Int32.TryParse(args[0], out type);
-            float.TryParse(args[1], out pos.X);
-            float.TryParse(args[2], out pos.Y);
-            float.TryParse(args[3], out angle);
-            float.TryParse(args[4], out velocity);
-            Int32.TryParse(args[5], out damage);
-            Server.Level.Projectiles.Add(new Projectile((ProjectileType)type, pos, angle, velocity, damage));
-            Server.broadcast(_client.Id, "!FIRE " + args[0] + " " + args[1] + " " + args[2] + " " + args[3] + " " + args[4] + " " + args[5]);
+            float.TryParse(args[1], out velocity);
+            Int32.TryParse(args[2], out damage);
+            firepos = _client.Player.calcFirePos();
+            Server.Level.Projectiles.Add(new Projectile((ProjectileType)type, firepos, _client.Player.Aim, velocity, damage));
+            Server.broadcast(-1, "!+FIRE " + args[0] + " " + firepos.X + " " + firepos.Y + " " + _client.Player.Aim + " " + args[1] + " " + args[2]);
             accept(null);
+            return (true);
+        }
+
+        bool meleeHit(String[] args)
+        {
+            float size, x, y;
+            int damage;
+            PointF pos;
+            Rectangle hit;
+
+            float.TryParse(args[0], out x);
+            float.TryParse(args[1], out y);
+            float.TryParse(args[2], out size);
+            Int32.TryParse(args[3], out damage);
+            pos = new PointF(x, y);
+            //Check for hit
             return (true);
         }
 
         bool spawnItem(String[] args)
         {
-            Vector2 pos;
+            float x, y;
+            PointF pos;
             int id;
 
             Int32.TryParse(args[0], out id);
-            float.TryParse(args[1], out pos.X);
-            float.TryParse(args[2], out pos.Y);
+            float.TryParse(args[1], out x);
+            float.TryParse(args[2], out y);
+            pos = new PointF(x, y);
             if (Server.Level.Entities[(int)(pos.Y * Server.Level.Map.Width) + (int)pos.X] == null)
                 Server.Level.Entities[(int)(pos.Y * Server.Level.Map.Width) + (int)pos.X] = new List<Item>();
             Server.Level.Entities[(int)(pos.Y * Server.Level.Map.Width) + (int)pos.X].Add(new Item(id));
@@ -215,7 +235,7 @@ namespace FrozenPizzaServer
             Int32.TryParse(args[2], out y);
             if (Server.Level.Entities[(y * Server.Level.Map.Width) + x] != null)
                 Server.Level.Entities[(y * Server.Level.Map.Width) + x].RemoveAt(index);
-            else if (Server.Level.Entities[(y * Server.Level.Map.Width) + x].Count == 0)
+            if (Server.Level.Entities[(y * Server.Level.Map.Width) + x].Count == 0)
                 Server.Level.Entities[(y * Server.Level.Map.Width) + x] = null;
             accept(null);
             Server.broadcast(_client.Id, "!-ITEM " + args[0] + " " + args[1] + " " + args[2]);

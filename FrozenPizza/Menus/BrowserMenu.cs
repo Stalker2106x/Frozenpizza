@@ -35,7 +35,6 @@ namespace FrozenPizza
                     //refresh
                     break;
                 case 3:
-                    Engine.netHandle = new NetHandler();
                     _engine.setMenu(new DirectConnectMenu(_engine, this));
                     break;
                 case 4:
@@ -74,19 +73,28 @@ namespace FrozenPizza
             switch(index)
             {
                 case 0:
-                    int port;
 
-                    if (_ip.Length > 0 && Int32.TryParse(_port, out port))
-                    {
-                        _connecting = true;
-                        Engine.netHandle.connect(_ip, port);
-                    }
                     break;
                 case 1:
                     if (_connecting || NetHandler.Connected)
+                    {
                         NetHandler.disconnect();
+                        Engine.netHandle = null;
+                    }
                     _engine.setMenu(_bmenu);
                     break;
+            }
+        }
+
+        public void tryConnect()
+        {
+            Engine.netHandle = new NetHandler();
+            int port;
+
+            if (_ip.Length > 0 && Int32.TryParse(_port, out port))
+            {
+                _connecting = true;
+                Engine.netHandle.connect(_ip, port);
             }
         }
 
@@ -101,10 +109,10 @@ namespace FrozenPizza
                 {
                     if (((char)input[i] >= '0' && (char)input[i] <= '9'))
                         _ip += (char)input[i];                    
-                    else if (input[i] == Keys.OemPeriod)
+                    else if (input[i] == Keys.OemPeriod || input[i] == Keys.Decimal)
                         _ip += ".";
-                    /*else if (input[i] >= Keys.NumPad0 && input[i] >= Keys.NumPad9)
-                        _ip += (char)(input[i] - 48);*/
+                    else if (input[i] >= Keys.NumPad0 && input[i] <= Keys.NumPad9)
+                        _ip += (char)(input[i] - 48);
                 }
             }
             if (_ip.Length > 0 && keybStates[0].IsKeyUp(Keys.Back) && keybStates[1].IsKeyDown(Keys.Back))
@@ -114,7 +122,13 @@ namespace FrozenPizza
         public override void Update(KeyboardState[] keybStates, MouseState[] mStates)
         {
             if (!_connecting)
+            {
                 updateInput(keybStates);
+                if (keybStates[0].IsKeyUp(Keys.Enter) && keybStates[1].IsKeyDown(Keys.Enter))
+                {
+                    tryConnect();
+                }
+            }
             else
             {
                 if (Engine.netHandle.Handshake && !Engine.netHandle.Hooked)

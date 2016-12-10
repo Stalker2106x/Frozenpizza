@@ -23,7 +23,7 @@ namespace FrozenPizza
             _commands.Add("!+PLAYER", addNewPlayer);
             _commands.Add("!MOVE", movePlayer);
             _commands.Add("!AIM", aimPlayer);
-            _commands.Add("!FIRE", createProjectile);
+            _commands.Add("!+FIRE", createProjectile);
             _commands.Add("!HIT", playerHit);
             _commands.Add("!+ITEM", spawnItem);
             _commands.Add("!-ITEM", removeItem);
@@ -172,7 +172,7 @@ namespace FrozenPizza
             int type, damage;
             float angle, velocity;
             Vector2 pos;
-
+            
             Int32.TryParse(args[0], out type);
             float.TryParse(args[1], out pos.X);
             float.TryParse(args[2], out pos.Y);

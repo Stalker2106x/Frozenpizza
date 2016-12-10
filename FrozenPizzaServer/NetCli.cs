@@ -54,6 +54,7 @@ namespace FrozenPizzaServer
         public void terminateClient()
         {
             Console.Write(" >> Client ID " + _id + " disconnected.");
+            Server.ClientList[Id] = null;
             _cThread.Abort();
         }
 

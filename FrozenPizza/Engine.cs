@@ -21,7 +21,6 @@ namespace FrozenPizza
         bool hasFocus;
         public GameState gstate { get; set; }
         Camera cam;
-        KeyBinds keybinds;
         HUD hud;
 
         //Database & Netcode
@@ -39,6 +38,7 @@ namespace FrozenPizza
         static List<Player> players;
 
         //Input
+        KeyBinds keybinds;
         KeyboardState[] keybStates;
         MouseState[] mouseStates;
 
@@ -80,6 +80,7 @@ namespace FrozenPizza
 		{
             IsMouseVisible = false;
             _cursor = new Cursor();
+            keybinds = new KeyBinds();
             keybStates = new KeyboardState[2];
 			mouseStates = new MouseState[2];
 			collection = new Collection();
@@ -276,6 +277,11 @@ namespace FrozenPizza
 
         public void exit()
         {
+            if (netHandle != null)
+            {
+                NetHandler.disconnect();
+                netHandle = null;
+            }
             Exit();
         }
     }

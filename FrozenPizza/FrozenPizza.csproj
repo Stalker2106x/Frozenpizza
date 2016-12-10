@@ -89,11 +89,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Characters\" />
-    <Folder Include="GUI\" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="Data\cfg\controls.cfg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Data\Data.mgcb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -271,3 +271,6 @@
 /processorParam:Quality=Best
 /build:sounds/menu/hover.wav
 
+#begin cfg/controls.cfg
+/copy:cfg/controls.cfg
+

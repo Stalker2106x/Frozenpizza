@@ -49,9 +49,10 @@ namespace FrozenPizza
         {
             Sounds[0] = content.Load<SoundEffect>("sounds/weapon/" + ResourceId + "/attack");
         }
-        public void attack()
+        public void attack(Vector2 pos)
         {
             Sounds[0].Play();
+            NetHandler.send("!MELEE " + pos.X + " " + pos.Y + " " + Size + " " + Damage);
         }
 	}
 
@@ -81,10 +82,8 @@ namespace FrozenPizza
 
             if (LoadedAmmo > 0)
             {
-                pos += new Vector2((float)Math.Sin(angle) * -15, (float)Math.Cos(angle) * -15);
                 Sounds[(int)FirearmActions.Fire].Play();
-                Engine.Level.Projectiles.Add(new Projectile(ProjectileType.Bullet, pos, angle, 5f, Damage));
-                NetHandler.send("!FIRE " + (int)ProjectileType.Bullet + " " + pos.X + " " + pos.Y + " " + angle + " " + 5f + " " + Damage);
+                NetHandler.send("!FIRE " + (int)ProjectileType.Bullet + " " + 6f + " " + Damage);
                 LoadedAmmo -= 1;
             }
             else
@@ -108,6 +107,12 @@ namespace FrozenPizza
             ClipSize = clipsize;
             LoadedAmmo = ClipSize;
 		}
+
+        public override void setSkin()
+        {
+            int id = Id - (int)ItemIds.Pistol;
+            SkinRect = new Rectangle((id % 10) * 32, (id / 10) * 32, 32, 32);
+        }
 
         public void LoadSounds(ContentManager content)
         {

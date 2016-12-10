@@ -79,7 +79,7 @@ namespace FrozenPizza
 			Tilesets[(int)ItemType.Firearm] = content.Load<Texture2D>("gfx/firearms");
             foreach (var item in bundle.Elements("Item"))
             {
-                PistolsList.Add(new Firearm((int)item.Element("Id") - (int)ItemIds.Pistol, item.Element("Name").Value, (float)item.Element("Weight"), (float)item.Element("Size")));
+                PistolsList.Add(new Firearm((int)item.Element("Id"), item.Element("Name").Value, (float)item.Element("Weight"), (float)item.Element("Size")));
                 PistolsList.Last().SetWeaponAttributes(item.Element("ResourceId").Value.ToString(), (int)item.Element("Damage"), (float)item.Element("Cooldown"));
                 PistolsList.Last().SetFirearmAttributes((int)item.Element("Accuracy"), (int)item.Element("ClipSize"));
                 PistolsList.Last().LoadSounds(content);

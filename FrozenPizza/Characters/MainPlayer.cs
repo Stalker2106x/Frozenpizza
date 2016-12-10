@@ -210,6 +210,7 @@ namespace FrozenPizza
         public void die()
         {
             HP = 0;
+            dropItem(SlotType.Hands, 0);
             _inventoryOpen = false;
             _dead = true;
             _skinRect = new Rectangle(0, 64, 32, 64);
@@ -243,54 +244,38 @@ namespace FrozenPizza
             }
             return (false);
         }
-        bool checkMove(Level level, KeyboardState[] keybStates, Vector2 oldpos)
-        {
-            if (level.Collide(_pos))
-			{
-                Vector2 posx, posy;
-
-                posx = new Vector2(oldpos.X, _pos.Y);
-                posy = new Vector2(_pos.X, oldpos.Y);
-                if (!level.Collide(posx))
-				    _pos = posx;
-                else if (!level.Collide(posy))
-                    _pos = posy;
-                return (false);
-			}
-			return (true);
-        }
 
         void updateMove(GameTime gameTime, KeyboardState[] keybStates, Level level)
         {
 			bool move = false;
 			float speed = getSpeed(keybStates[1]);
 
-            if (keybStates[1].IsKeyUp(Keys.LeftShift))
+            if (keybStates[1].IsKeyUp(KeyBinds.getKey("Sprint")))
                 _sprinting = false;
-            if (keybStates[1].IsKeyDown(Keys.A))
+            if (keybStates[1].IsKeyDown(KeyBinds.getKey("StrafeLeft")))
             {
-                if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))
+                if (keybStates[1].IsKeyDown(KeyBinds.getKey("Forward")) || keybStates[1].IsKeyDown(KeyBinds.getKey("Backward")))
                     speed *= 0.5f;
                 _pos += new Vector2((float)Math.Cos(_aim) * -speed, (float)Math.Sin(_aim) * speed);
                 checkSprint(keybStates);
                 move = true;
             }
-            else if (keybStates[1].IsKeyDown(Keys.D))
+            else if (keybStates[1].IsKeyDown(KeyBinds.getKey("StrafeRight")))
             {
-                if (keybStates[1].IsKeyDown(Keys.W) || keybStates[1].IsKeyDown(Keys.S))
+                if (keybStates[1].IsKeyDown(KeyBinds.getKey("Forward")) || keybStates[1].IsKeyDown(KeyBinds.getKey("Backward")))
                     speed *= 0.5f;
                 _pos += new Vector2((float)Math.Cos(_aim) * speed, (float)-Math.Sin(_aim) * speed);
                 checkSprint(keybStates);
                 move = true;
             }
             speed = getSpeed(keybStates[1]); //Reset speed
-            if (keybStates[1].IsKeyDown(Keys.W))
+            if (keybStates[1].IsKeyDown(KeyBinds.getKey("Forward")))
             {
                 _pos += new Vector2((float)Math.Sin(_aim) * -speed, (float)Math.Cos(_aim) * -speed);
                 checkSprint(keybStates);
                 move = true;
             }
-            else if (keybStates[1].IsKeyDown(Keys.S))
+            else if (keybStates[1].IsKeyDown(KeyBinds.getKey("Backward")))
             {
                 _pos += new Vector2((float)Math.Sin(_aim) * speed, (float)Math.Cos(_aim) * speed);
                 checkSprint(keybStates);
@@ -321,7 +306,7 @@ namespace FrozenPizza
                     weapon = Engine.collection.MeleeList[0];
                 else
                     weapon = (Melee)_hands;
-                weapon.attack();
+                weapon.attack(_pos);
             }
             else if (_hands.GetType() == typeof(Firearm))
             {
@@ -338,7 +323,7 @@ namespace FrozenPizza
             if (_inventoryOpen)
                 return;
             if ((_hands != null && _hands.Type == ItemType.Firearm)
-                && (keybStates[0].IsKeyUp(Keys.R) && keybStates[1].IsKeyDown(Keys.R)))
+                && (keybStates[0].IsKeyUp(KeyBinds.getKey("Reload")) && keybStates[1].IsKeyDown(KeyBinds.getKey("Reload"))))
             {
                 Firearm weapon = (Firearm)_hands;
                 if (weapon.reload())
@@ -435,28 +420,23 @@ namespace FrozenPizza
             }
         }
 
-        public void dropItem(Level level, SlotType slot, int index)
+        public void dropItem(SlotType slot, int index)
         {
             if (_hands == null)
                 return;
-            Vector2 gridpos = level.vmapToGrid(_pos);
+            Vector2 gridpos = Engine.Level.vmapToGrid(_pos);
             int id = _hands.Id;
 
-            List<Item> entities = level.getEntities(gridpos);
+            List<Item> entities = Engine.Level.getEntities(gridpos);
             if (entities == null)
                 entities = new List<Item>();
             if (slot == SlotType.Hands)
             {
                 entities.Add(_hands);
-                level.setEntities(gridpos, entities);
+                Engine.Level.setEntities(gridpos, entities);
                 _hands = null;
             }
             NetHandler.send("!+ITEM " + id + " " + gridpos.X + " " + gridpos.Y);
-        }
-
-        public void resetMove()
-        {
-            _pos = _netLastPos;
         }
 
         public void updateNetwork(GameTime gameTime)
@@ -488,12 +468,12 @@ namespace FrozenPizza
             updateMove(gameTime, keybStates, level);
             updateHands(gameTime, keybStates, mStates);
             updateNetwork(gameTime);
-            if (keybStates[1].IsKeyDown(Keys.Tab) && !keybStates[0].IsKeyDown(Keys.Tab))
+            if (keybStates[1].IsKeyDown(KeyBinds.getKey("ToggleInventory")) && !keybStates[0].IsKeyDown(KeyBinds.getKey("ToggleInventory")))
                 toggleInventory(cursor);
-            if (keybStates[1].IsKeyDown(Keys.E) && !keybStates[0].IsKeyDown(Keys.E))
+            if (keybStates[1].IsKeyDown(KeyBinds.getKey("Pickup")) && !keybStates[0].IsKeyDown(KeyBinds.getKey("Pickup")))
                 pickupItem(level, 0);
-            if (keybStates[1].IsKeyDown(Keys.G) && !keybStates[0].IsKeyDown(Keys.G))
-                dropItem(level, SlotType.Hands, 0);
+            if (keybStates[1].IsKeyDown(KeyBinds.getKey("Drop")) && !keybStates[0].IsKeyDown(KeyBinds.getKey("Drop")))
+                dropItem(SlotType.Hands, 0);
             updateStates(gameTime);
             if (_states.Count > 0 && _stateTimer.TotalSeconds >= 20)
                 applyStates();
