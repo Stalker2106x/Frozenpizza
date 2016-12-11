@@ -50,6 +50,8 @@ namespace FrozenPizza
         public static List<Player> Players { get { return (players); } }
         public static Player getPlayerById(int id)
         {
+            if (players == null)
+                return (null);
             for (int i = 0; i < players.Count; i++)
                 if (players[i].Id == id)
                     return (players[i]);

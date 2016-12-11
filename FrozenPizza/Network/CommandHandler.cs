@@ -148,9 +148,9 @@ namespace FrozenPizza
             Int32.TryParse(args[0], out id);
             float.TryParse(args[1], out pos.X);
             float.TryParse(args[2], out pos.Y);
-            if (id == Engine.MainPlayer.Id)
+            if (Engine.MainPlayer != null && id == Engine.MainPlayer.Id)
                 Engine.MainPlayer.Pos = pos;
-            else
+            else if (Engine.getPlayerById(id) != null)
                 Engine.getPlayerById(id).Pos = pos;
             return (true);
         }

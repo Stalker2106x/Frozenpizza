@@ -150,6 +150,7 @@ namespace FrozenPizzaServer
             }
             _client.send(".OK");
             _client.send(".READY");
+            _client.Ready = true;
             return (true);
         }
 
@@ -193,12 +194,12 @@ namespace FrozenPizzaServer
             Int32.TryParse(args[1], out damage);
             for (int i = 0; i < Server.ClientList.Count; i++)
             {
-                if (Server.ClientList[i] == null || i == _client.Id)
+                if (Server.ClientList[i] == null || Server.ClientList[i].Id == _client.Id)
                     continue;
-                if (Server.ClientList[i].Player.getHitbox().Contains(Point.Truncate(_client.Player.Pos)))
+                if (Server.ClientList[i].Player.getHitbox().Contains(Point.Truncate(_client.Player.calcFirePos())))
                 {
                     Server.ClientList[i].Player.HP -= damage;
-                    _client.send("!HIT " + Server.ClientList[i].Id + " " + damage);
+                    Server.broadcast(-1, "!HIT " + Server.ClientList[i].Id + " " + damage);
                 }
             }
             return (true);
