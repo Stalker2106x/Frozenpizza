@@ -25,8 +25,10 @@ namespace FrozenPizza
             _commands.Add("!AIM", aimPlayer);
             _commands.Add("!+FIRE", createProjectile);
             _commands.Add("!HIT", playerHit);
-            _commands.Add("!+ITEM", spawnItem);
-            _commands.Add("!-ITEM", removeItem);
+            _commands.Add("!DIE", killPlayer);
+            _commands.Add("!++ITEM", spawnItem);
+            _commands.Add("!+ITEM", dropItem);
+            _commands.Add("!-ITEM", pickItem);
             _commands.Add(".HANDSHAKE", handShake);
             _commands.Add(".READY", ready);
             _commands.Add(".OK", accept);
@@ -199,10 +201,22 @@ namespace FrozenPizza
             return (true);
         }
 
+        bool killPlayer(String[] args)
+        {
+
+            int id;
+
+            Int32.TryParse(args[0], out id);
+            if (id == Engine.MainPlayer.Id)
+                Engine.MainPlayer.die();
+            else
+                Engine.getPlayerById(id).die();
+            return (true);
+        }
+
         //World data
         bool spawnItem(String[] args)
         {
-            List<Item> entities;
             Vector2 pos;
             int id;
             Int64 uid;
@@ -211,19 +225,31 @@ namespace FrozenPizza
             Int32.TryParse(args[1], out id);
             float.TryParse(args[2], out pos.X);
             float.TryParse(args[3], out pos.Y);
-			Engine.Level.Entities.Add(Engine.collection.getItemById(id));
+			Engine.Level.Entities.Add(Engine.collection.getNewItemById(uid, id));
 			Engine.Level.Entities.Last().Pos = pos;
             acknowledge(null);
             return (true);
         }
 
-        bool removeItem(String[] args)
+        bool dropItem(String[] args)
+        {
+            Vector2 pos;
+            Int64 uid;
+
+            Int64.TryParse(args[0], out uid);
+            float.TryParse(args[1], out pos.X);
+            float.TryParse(args[2], out pos.Y);
+            Engine.Level.Entities[Engine.Level.getEntityIndex(uid)].Pos = pos;
+            acknowledge(null);
+            return (true);
+        }
+
+        bool pickItem(String[] args)
         {
             Int64 uid;
 
             Int64.TryParse(args[0], out uid);
             Engine.Level.Entities[Engine.Level.getEntityIndex(uid)].Pos = -Vector2.One;
-			Engine.Level.Entities.RemoveAt(Engine.Level.getEntityIndex(uid));
             return (true);
         }
 

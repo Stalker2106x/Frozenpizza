@@ -34,11 +34,12 @@ namespace FrozenPizzaServer
             Pos += new SizeF((float)Math.Sin(Angle) * -Velocity, (float)Math.Cos(Angle) * -Velocity);
             for (int i = 0; i < Server.ClientList.Count; i++)
             {
-                if (Server.ClientList[i] == null)
+                if (Server.ClientList[i] == null || Server.ClientList[i].Player == null)
                     continue;
                 if (Server.ClientList[i].Player.getHitbox().Contains(Point.Truncate(Pos)))
                 {
                     Server.ClientList[i].send("!HIT " + Server.ClientList[i].Id + " " + Damage);
+                    Server.ClientList[i].Player.HP -= Damage;
                     return (false);
                 }
                 else if (Server.Level.Collide(Pos))

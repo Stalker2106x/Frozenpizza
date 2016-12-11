@@ -10,12 +10,14 @@ namespace FrozenPizzaServer
 
     public class Player
     {
+        public int HP { get; set; }
         public PointF Pos { get; set; }
         public PointF Origin { get; set; }
         public float Aim { get; set; }
 
 		public Player(PointF spawn)
         {
+            HP = 100;
 			Pos = spawn;
             Origin = new PointF(12, 12);
         }

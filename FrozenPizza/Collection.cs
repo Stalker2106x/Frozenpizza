@@ -17,27 +17,29 @@ namespace FrozenPizza
         Consumable = 3000,
         Wearable = 4000
     }
-	public class Collection
-	{
+    public class Collection
+    {
         public Texture2D GameLogo { get; set; }
         public SoundEffect[] MenuSounds { get; set; }
-		public List<Melee> MeleeList { get; }
-		public List<Firearm> PistolsList { get; }
-		public Texture2D[] Tilesets { get; set; }
+        public List<Melee> MeleeList { get; }
+        public List<Firearm> PistolsList { get; }
+        public Texture2D[] Tilesets { get; set; }
         public Texture2D Projectiles { get; set; }
         public Texture2D Players { get; set; }
+        public ContentManager Content { get; set; }
 
         public Collection()
-		{
+        {
             MenuSounds = new SoundEffect[2];
             //Game
-			MeleeList = new List<Melee>();
+            MeleeList = new List<Melee>();
             PistolsList = new List<Firearm>();
-			Tilesets = new Texture2D[Enum.GetNames(typeof(ItemType)).Length];
-		}
+            Tilesets = new Texture2D[Enum.GetNames(typeof(ItemType)).Length];
+        }
 
-		public bool Load(ContentManager content)
-		{
+        public bool Load(ContentManager content)
+        {
+            Content = content;
             GameLogo = content.Load<Texture2D>("gfx/logo");
             MenuSounds[0] = content.Load<SoundEffect>("sounds/menu/hover");
             MenuSounds[1] = content.Load<SoundEffect>("sounds/menu/click");
@@ -46,15 +48,43 @@ namespace FrozenPizza
             LoadPistols(content);
             LoadPlayers(content);
             LoadProjectiles(content);
-			return (true);
-		}
+            return (true);
+        }
 
         public Item getItemById(int id)
         {
             if (id < (int)ItemIds.Pistol) //Melee
+            {
                 return (MeleeList[id]);
-            else if (id < (int)ItemIds.Rifle) //Pistol
+            }
+            else if (id >= (int)ItemIds.Pistol && id < (int)ItemIds.Rifle) //Pistol
+            {
                 return (PistolsList[id - (int)ItemIds.Pistol]);
+            }
+            return (null);
+        }
+
+        public Item getNewItemById(Int64 Uid, int id)
+        {
+            if (id < (int)ItemIds.Pistol) //Melee
+            {
+                Melee copy, item = MeleeList[id];
+
+                copy = new Melee(Uid, item.Id, item.Name, item.Weight, item.Size);
+                copy.SetWeaponAttributes(item.ResourceId, item.Damage, item.Cooldown);
+                copy.LoadSounds(Content);
+                return (copy);
+            }
+            else if (id >= (int)ItemIds.Pistol && id < (int)ItemIds.Rifle) //Pistol
+            {
+                Firearm copy, item = PistolsList[id - (int)ItemIds.Pistol];
+
+                copy = new Firearm(Uid, item.Id, item.Name, item.Weight, item.Size);
+                copy.SetWeaponAttributes(item.ResourceId, item.Damage, item.Cooldown);
+                copy.SetFirearmAttributes(item.Accuracy, item.ClipSize);
+                copy.LoadSounds(Content);
+                return (copy);
+            }
             return (null);
         }
 

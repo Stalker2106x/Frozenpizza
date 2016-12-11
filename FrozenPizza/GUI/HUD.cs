@@ -116,19 +116,22 @@ namespace FrozenPizza
 			DrawHudPanel(spriteBatch, graphicsDevice, _handsPanel, Color.LightGray, 0.5f);
 			if (mainPlayer.Cooldown)
 				DrawHudPanel(spriteBatch, graphicsDevice, _cooldownBar, Color.White, 0.75f);
-			if (mainPlayer.Hands == null)
-				spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
-			else
-			{
-				spriteBatch.DrawString(_font, mainPlayer.Hands.Name, _handsPanel.Location.ToVector2(), Color.White);
-				spriteBatch.Draw(collection.Tilesets[(int)mainPlayer.HandsType], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), mainPlayer.Hands.SkinRect, Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
+            if (mainPlayer.Hands == null)
+            {
+                spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
+                spriteBatch.Draw(collection.Tilesets[(int)ItemType.Melee], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), new Rectangle(0, 0, 32, 32), Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
+            }
+            else
+            {
+                spriteBatch.DrawString(_font, mainPlayer.Hands.Name, _handsPanel.Location.ToVector2(), Color.White);
+                spriteBatch.Draw(collection.Tilesets[(int)mainPlayer.HandsType], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), mainPlayer.Hands.SkinRect, Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
                 if (mainPlayer.Hands.Type == ItemType.Firearm)
                 {
                     Firearm weapon = (Firearm)mainPlayer.Hands;
 
                     spriteBatch.DrawString(_font, weapon.LoadedAmmo.ToString(), _handsPanel.Location.ToVector2() + new Vector2(_handsPanel.Width - 10, _handsPanel.Height - 10), Color.White);
                 }
-			}
+            }
 		}
 
 		public void drawAimLines(SpriteBatch spriteBatch, MainPlayer mainPlayer, Camera cam)

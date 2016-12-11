@@ -81,18 +81,21 @@ namespace FrozenPizzaServer
 					int id = 0;
 					int gid = _map.Layers[(int)Layers.Meta].Tiles[(_map.Width * y) + x].Gid;
 
-					if (gid == 0 || rnd.Next(0, 2) == 0) //Skip empty & 50% chance of spawn
-						continue;
-					if (gid == (int)Meta.Melee)
-					{
-						id = rnd.Next(1, 4);
-					}
-					else if (gid == (int)Meta.Pistol)
-					{
-						id = rnd.Next(1000, 1002);
-					}
-					_entities.Add(new Item(_currentUid, id, new PointF(x * _twidth, y * _theight) + new SizeF(_twidth / 2, _theight / 2)));
-					_currentUid++;
+                    if (gid == 0 || rnd.Next(0, 2) == 0) //Skip empty & 50% chance of spawn
+                        continue;
+                    else
+                    {
+                        if (gid == (int)Meta.Melee)
+                        {
+                            id = rnd.Next(1, 4);
+                        }
+                        else if (gid == (int)Meta.Pistol)
+                        {
+                            id = rnd.Next(1000, 1002);
+                        }
+                        _entities.Add(new Item(_currentUid, id, new PointF(x * _twidth, y * _theight) + new SizeF(_twidth / 2, _theight / 2)));
+                        _currentUid++;
+                    }
 				}
 			}
         }
@@ -111,8 +114,8 @@ namespace FrozenPizzaServer
         {
             PointF realpos = vmapToGrid(pos);
 
-            if ((realpos.X < 0 || realpos.X > _map.Width)
-                || (realpos.Y < 0 || realpos.Y > _map.Height))
+            if ((realpos.X < 0 || realpos.X >= _map.Width)
+                || (realpos.Y < 0 || realpos.Y >= _map.Height))
                 return (true);
             if (_map.Layers[(int)Layers.Wall].Tiles[(int)((_map.Width * realpos.Y) + realpos.X)].Gid != 0)
                 return (true);
@@ -148,6 +151,13 @@ namespace FrozenPizzaServer
             while (true)
             {
                 updateProjectiles();
+                for (int i = 0; i < Server.ClientList.Count; i++)
+                {
+                    if (Server.ClientList[i] == null || Server.ClientList[i].Player == null)
+                        continue;
+                    if (Server.ClientList[i].Player.HP <= 0)
+                        Server.broadcast(-1, "!DIE " + i);
+                }
                 Thread.Sleep(10);
             }
         }

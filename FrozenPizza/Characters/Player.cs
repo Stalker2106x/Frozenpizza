@@ -13,6 +13,13 @@ namespace FrozenPizza
             _pos = pos;
         }
 
+        public virtual void die()
+        {
+            HP = 0;
+            _alive = false;
+            _skinRect = new Rectangle(0, 64, 32, 64);
+        }
+
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);

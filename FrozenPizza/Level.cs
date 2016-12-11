@@ -48,7 +48,7 @@ namespace FrozenPizza
             _theight = _map.Tilesets[0].TileHeight;
 			_entities = new List<Item>();
             _projectiles = new List<Projectile>();
-            _metaOffset = _map.Tilesets[0].Properties.Count;
+            _metaOffset = (int)(_map.Tilesets[0].Image.Width / _twidth);
             _drawMargin = 10;
         }
 
@@ -150,7 +150,7 @@ namespace FrozenPizza
 
 		public Item getEntityByPos(Vector2 pos)
 		{
-			Rectangle range = new Rectangle((pos - new Vector2(16, 16)).ToPoint(), (pos + new Vector2(16, 16)).ToPoint());
+			Rectangle range = new Rectangle((pos - new Vector2(16, 16)).ToPoint(), new Vector2(32, 32).ToPoint());
 
 			for (int i = 0; i < _entities.Count; i++)
 			{

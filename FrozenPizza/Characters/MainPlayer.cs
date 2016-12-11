@@ -25,7 +25,6 @@ namespace FrozenPizza
 
         //Triggers
         bool _inventoryOpen, _cooldown, _sprinting, _aimlock;
-        bool _dead;
 
         //Inventory
         Item _hands;
@@ -64,7 +63,6 @@ namespace FrozenPizza
             _cooldown = false;
             _aimlock = false;
 			_sprinting = false;
-            _dead = false;
 
             //Set aim view
             _aim = 0;
@@ -207,12 +205,12 @@ namespace FrozenPizza
         }
 
         //Miscillaneous
-        public void die()
+        public override void die()
         {
             HP = 0;
             dropItem(0);
             _inventoryOpen = false;
-            _dead = true;
+            _alive = false;
             _skinRect = new Rectangle(0, 64, 32, 64);
         }
         void stepSound(GameTime gameTime, bool run)
@@ -376,10 +374,6 @@ namespace FrozenPizza
         void updateStates(GameTime gameTime)
         {
             _stateTimer += gameTime.ElapsedGameTime;
-            if (HP <= 0)
-            {
-                die();
-            }
             if (_hunger > 0 && _hunger < 50 && !checkState(PlayerStates.Hungry))
                 _states.Add(PlayerStates.Hungry);
             else if (_hunger <= 0 && !checkState(PlayerStates.Starving))
@@ -447,7 +441,7 @@ namespace FrozenPizza
         //Base update call
         public void Update(GameTime gameTime, Level level, KeyboardState[] keybStates, MouseState[] mStates, Camera cam, Cursor cursor)
         {
-            if (_dead)
+            if (!_alive)
                 return;
             if (!_inventoryOpen)
                 updateAimAngle(cam, mStates);

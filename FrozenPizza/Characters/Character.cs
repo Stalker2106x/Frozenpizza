@@ -14,8 +14,9 @@ namespace FrozenPizza
 		int _id;
         String _name;
         int _hp, _maxHp;
+        protected bool _alive;
 
-		//Movement
+        //Movement
         protected Vector2 _pos, _origin;
 		protected float _aim;
 
@@ -24,6 +25,7 @@ namespace FrozenPizza
 
         public Character(String name)
         {
+            _alive = true;
             _name = name;
             _hp = 100;
             _maxHp = 100;
