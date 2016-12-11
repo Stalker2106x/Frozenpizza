@@ -39,6 +39,12 @@ namespace FrozenPizza
         public bool Update()
         {
             Pos += new Vector2((float)Math.Sin(Angle) * -Velocity, (float)Math.Cos(Angle) * -Velocity);
+            if (Pos.X < 0 || Pos.Y < 0
+                || (Pos.X >= Engine.Level.Map.Width * Engine.Level.Map.TileWidth)
+                || (Pos.X >= Engine.Level.Map.Height * Engine.Level.Map.TileHeight))
+                return (false);
+            else if (Engine.Level.Collide(Pos))
+                return (false);
             return (true);
         }
 

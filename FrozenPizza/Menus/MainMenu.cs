@@ -35,6 +35,7 @@ namespace FrozenPizza
                     _engine.setMenu(new BrowserMenu(_engine));
                     break;
                 case 2:
+                    _engine.setMenu(new OptionsMenu(_engine, this));
                     break;
                 case 3:
                     _engine.exit();

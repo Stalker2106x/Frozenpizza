@@ -14,12 +14,14 @@ namespace FrozenPizzaServer
         public PointF Pos { get; set; }
         public PointF Origin { get; set; }
         public float Aim { get; set; }
+        public bool Alive { get; set; }
 
 		public Player(PointF spawn)
         {
             HP = 100;
 			Pos = spawn;
             Origin = new PointF(12, 12);
+            Alive = true;
         }
 
         public PointF calcFirePos()

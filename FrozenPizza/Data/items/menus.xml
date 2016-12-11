@@ -36,8 +36,10 @@
 		<Background>main</Background>
     <Setting>Fullscreen</Setting>
     <Setting>Resolution</Setting>
+    <Setting>Music Volume</Setting>
     <Setting>Sound Volume</Setting>
     <Item>Apply</Item>
-    <Item>Cancel</Item>
+		<Item>Default</Item>
+    <Item>Back</Item>
   </OptionsMenu>
 </Menus>

@@ -38,6 +38,7 @@ namespace FrozenPizza
         List<Item> _entities;
         List<Projectile> _projectiles;
 
+        public TmxMap Map { get { return (_map);  } }
 		public List<Item> Entities { get { return (_entities); } }
         public List<Projectile> Projectiles { get { return (_projectiles); } }
 
@@ -211,7 +212,8 @@ namespace FrozenPizza
         {
             for (int i = _projectiles.Count - 1; i >= 0; i--)
             {
-                _projectiles[i].Update();
+                if (!_projectiles[i].Update())
+                    _projectiles.RemoveAt(i);
             }
         }
 

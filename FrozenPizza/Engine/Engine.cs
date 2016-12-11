@@ -26,6 +26,7 @@ namespace FrozenPizza
         //Database & Netcode
         public static NetHandler netHandle;
         public static Collection collection;
+        public static Options options;
 
         //Menu
         Cursor _cursor;
@@ -62,6 +63,7 @@ namespace FrozenPizza
         public Engine()
         {
             graphics = new GraphicsDeviceManager(this);
+            options = new Options(this, graphics);
             graphics.IsFullScreen = false;
             graphics.PreferredBackBufferWidth = 1024;
             graphics.PreferredBackBufferHeight = 768;
@@ -79,7 +81,8 @@ namespace FrozenPizza
 		/// and initialize them as well.
 		/// </summary>
 		protected override void Initialize()
-		{
+        {
+            options.Load(GraphicsDevice.Adapter);
             IsMouseVisible = false;
             _cursor = new Cursor();
             keybinds = new KeyBinds();
@@ -158,7 +161,7 @@ namespace FrozenPizza
         public void setMenu(Menu menu)
         {
             _menu = menu;
-            _menu.Load(this.Content);
+            _menu.Load(this.Content);            
         }
 
         protected void updateTimeEvents(GameTime gameTime)

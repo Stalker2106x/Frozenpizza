@@ -143,7 +143,6 @@ namespace FrozenPizza
         {
             int id;
             Vector2 pos;
-            Player player;
 
             Int32.TryParse(args[0], out id);
             float.TryParse(args[1], out pos.X);

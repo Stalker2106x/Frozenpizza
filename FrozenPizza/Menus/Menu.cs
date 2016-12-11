@@ -32,7 +32,7 @@ namespace FrozenPizza
             _engine = engine;
             _selected = 0;
             _gameVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
-            _itemCount = menu.Elements("Item").Count() + menu.Elements("Setting").Count();
+            _itemCount = menu.Elements("Item").Count();
             _items = new String[_itemCount];
             _itemRect = new Rectangle[_itemCount];
             _fontfile = menu.Elements("Font").First().Value.ToString();
@@ -45,7 +45,7 @@ namespace FrozenPizza
             }
         }
 
-        public void Load(ContentManager content)
+        public virtual void Load(ContentManager content)
         {
             _background = content.Load<Texture2D>("gfx/bg/"+_bgfile);
             _font = content.Load<SpriteFont>("font/"+_fontfile);
@@ -87,10 +87,15 @@ namespace FrozenPizza
             }
         }
 
+        public void drawBase(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        {
+            spriteBatch.DrawString(_font, _gameVersion, Vector2.Zero, Color.White, 0f, Vector2.Zero, 1.25f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_background, new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
+        }
+
         public virtual void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            spriteBatch.DrawString(_font, _gameVersion,Vector2.Zero, Color.White, 0f, Vector2.Zero, 1.25f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(_background, new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
+            drawBase(spriteBatch, graphicsDevice);
             for (int i = 0; i < _itemCount; i++)
             {
                 Color color = Color.White;

@@ -155,8 +155,11 @@ namespace FrozenPizzaServer
                 {
                     if (Server.ClientList[i] == null || Server.ClientList[i].Player == null)
                         continue;
-                    if (Server.ClientList[i].Player.HP <= 0)
+                    if (Server.ClientList[i].Player.HP <= 0 && Server.ClientList[i].Player.Alive)
+                    {
+                        Server.ClientList[i].Player.Alive = false;
                         Server.broadcast(-1, "!DIE " + i);
+                    }
                 }
                 Thread.Sleep(10);
             }

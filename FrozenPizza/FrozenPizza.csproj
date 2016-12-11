@@ -39,8 +39,9 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Camera.cs" />
-    <Compile Include="Engine.cs" />
+    <Compile Include="Engine\Camera.cs" />
+    <Compile Include="Engine\Engine.cs" />
+    <Compile Include="Engine\Options.cs" />
     <Compile Include="Items\Ammo.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="KeyBinds.cs" />
@@ -48,6 +49,8 @@
     <Compile Include="Menus\BrowserMenu.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Menus\Menu.cs" />
+    <Compile Include="Menus\OptionsMenu.cs" />
+    <Compile Include="Menus\SettingMenu.cs" />
     <Compile Include="Network\CommandHandler.cs" />
     <Compile Include="Network\NetHandler.cs" />
     <Compile Include="Program.cs" />
