@@ -7,10 +7,11 @@
     <Slots>Hands Bag</Slots>
     <Weight>1</Weight>
     <Size>1</Size>
-    <Damage>20</Damage>
+    <Damage>15</Damage>
     <ClipSize>20</ClipSize>
-	  <Accuracy>7</Accuracy>
+	  <Accuracy>37</Accuracy>
     <Cooldown>0.1</Cooldown>
+    <ReloadCooldown>0.7</ReloadCooldown>
   </Item>
   <Item>
     <Id>1001</Id>
@@ -21,8 +22,9 @@
     <Size>1</Size>
     <Damage>10</Damage>
     <ClipSize>15</ClipSize>
-	  <Accuracy>6</Accuracy>
+	  <Accuracy>32</Accuracy>
     <Cooldown>0.1</Cooldown>
+    <ReloadCooldown>0.7</ReloadCooldown>
   </Item>
   <Item>
     <Id>1002</Id>
@@ -31,10 +33,11 @@
     <Slots>Hands Bag</Slots>
     <Weight>1</Weight>
     <Size>1</Size>
-    <Damage>40</Damage>
+    <Damage>60</Damage>
     <ClipSize>6</ClipSize>
-	  <Accuracy>6</Accuracy>
+	  <Accuracy>40</Accuracy>
     <Cooldown>0.5</Cooldown>
+    <ReloadCooldown>1.5</ReloadCooldown>
   </Item>
   <Item>
     <Id>1003</Id>
@@ -43,9 +46,10 @@
     <Slots>Hands Bag</Slots>
     <Weight>2</Weight>
     <Size>1</Size>
-    <Damage>30</Damage>
+    <Damage>43</Damage>
     <ClipSize>7</ClipSize>
-	  <Accuracy>7</Accuracy>
+	  <Accuracy>40</Accuracy>
     <Cooldown>0.5</Cooldown>
+    <ReloadCooldown>1</ReloadCooldown>
   </Item>
 </Pistols>

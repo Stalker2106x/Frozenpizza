@@ -39,6 +39,7 @@ namespace FrozenPizza
 
         public Item(Int64 uid, int id, String name, ItemType type, float weight, float size)
 		{
+            Uid = uid;
 			Id = id;
 			Name = name;
 			Type = type;

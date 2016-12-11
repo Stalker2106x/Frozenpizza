@@ -81,7 +81,7 @@ namespace FrozenPizza
 
                 copy = new Firearm(Uid, item.Id, item.Name, item.Weight, item.Size);
                 copy.SetWeaponAttributes(item.ResourceId, item.Damage, item.Cooldown);
-                copy.SetFirearmAttributes(item.Accuracy, item.ClipSize);
+                copy.SetFirearmAttributes(item.Accuracy, item.ClipSize, item.ReloadCooldown);
                 copy.LoadSounds(Content);
                 return (copy);
             }
@@ -111,7 +111,7 @@ namespace FrozenPizza
             {
                 PistolsList.Add(new Firearm(-1, (int)item.Element("Id"), item.Element("Name").Value, (float)item.Element("Weight"), (float)item.Element("Size")));
                 PistolsList.Last().SetWeaponAttributes(item.Element("ResourceId").Value.ToString(), (int)item.Element("Damage"), (float)item.Element("Cooldown"));
-                PistolsList.Last().SetFirearmAttributes((int)item.Element("Accuracy"), (int)item.Element("ClipSize"));
+                PistolsList.Last().SetFirearmAttributes((int)item.Element("Accuracy"), (int)item.Element("ClipSize"), (float)item.Element("ReloadCooldown"));
                 PistolsList.Last().LoadSounds(content);
             }
             return (true);

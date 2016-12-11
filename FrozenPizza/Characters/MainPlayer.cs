@@ -173,19 +173,20 @@ namespace FrozenPizza
 		{
 			float[] aimAccuracyAngle = new float[2];
 
-			aimAccuracyAngle[0] = MathHelper.PiOver2 * 1.5f;
-			aimAccuracyAngle[1] = MathHelper.PiOver2 * 0.5f;
-			if (_hands != null && _hands.Type == ItemType.Firearm)
-			{
-				Firearm weapon = (Firearm)_hands;
 
-				aimAccuracyAngle[0] -= weapon.Accuracy * 0.1f;
-				aimAccuracyAngle[1] += weapon.Accuracy * 0.1f;
-			}
-			if (_sprinting)
+            aimAccuracyAngle[0] = MathHelper.PiOver2 * 1.5f;
+            aimAccuracyAngle[1] = MathHelper.PiOver2 * 0.5f;
+            if (_hands != null && _hands.Type == ItemType.Firearm)
+            {
+                Firearm weapon = (Firearm)_hands;
+
+                aimAccuracyAngle[0] -= (float)(Math.PI / 180) * weapon.Accuracy;
+                aimAccuracyAngle[1] += (float)(Math.PI / 180) * weapon.Accuracy;
+            }
+            if (_sprinting)
 			{
-				aimAccuracyAngle[0] += 0.2f;
-				aimAccuracyAngle[1] -= 0.2f;
+				aimAccuracyAngle[0] += 0.15f;
+				aimAccuracyAngle[1] -= 0.15f;
 			}
             if (real)
             {
@@ -327,7 +328,7 @@ namespace FrozenPizza
                 if (weapon.reload())
                 {
                     _cooldown = true;
-                    _cooldownTimer[1] = TimeSpan.FromMilliseconds(getCooldown() * 10);
+                    _cooldownTimer[1] = TimeSpan.FromSeconds(weapon.ReloadCooldown);
                     _cooldownTimer[0] = _cooldownTimer[1];
                 }
             }

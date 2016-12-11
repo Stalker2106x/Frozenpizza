@@ -62,6 +62,7 @@ namespace FrozenPizza
 		public int Accuracy { get; set; }
         public int LoadedAmmo { get; set; }
         public int ClipSize { get; set; }
+        public float ReloadCooldown { get; set; }
 
 		public Firearm(Int64 uid, int id, String name, float weight, float size) : base(uid, id, name, ItemType.Firearm, weight, size)
         {
@@ -101,12 +102,13 @@ namespace FrozenPizza
             return (true);
         }
 
-		public void SetFirearmAttributes(int accuracy, int clipsize)
+		public void SetFirearmAttributes(int accuracy, int clipsize, float reloadCooldown)
 		{
 			Accuracy = accuracy;
             ClipSize = clipsize;
             LoadedAmmo = ClipSize;
-		}
+            ReloadCooldown = reloadCooldown;
+        }
 
         public void LoadSounds(ContentManager content)
         {
