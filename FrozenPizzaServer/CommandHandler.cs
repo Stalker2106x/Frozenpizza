@@ -223,6 +223,7 @@ namespace FrozenPizzaServer
 
             Int64.TryParse(args[0], out uid);
             accept(null);
+			Server.Level.Entities[Server.Level.getEntityIndex(uid)].Pos = new PointF(-1, -1);
             Server.broadcast(-1, "!-ITEM " + args[0]);
             return (true);
         }
