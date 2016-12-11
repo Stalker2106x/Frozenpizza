@@ -174,12 +174,12 @@ namespace FrozenPizzaServer
 
             Int32.TryParse(args[0], out type);
             float.TryParse(args[1], out angle);
-            float.TryParse(args[1], out velocity);
-            Int32.TryParse(args[2], out damage);
+            float.TryParse(args[2], out velocity);
+            Int32.TryParse(args[3], out damage);
             firepos = _client.Player.calcFirePos();
             _client.Player.Aim = angle;
             Server.Level.Projectiles.Add(new Projectile((ProjectileType)type, firepos, _client.Player.Aim, velocity, damage));
-            Server.broadcast(-1, "!+FIRE " + args[0] + " " + firepos.X + " " + firepos.Y + " " + _client.Player.Aim + " " + args[1] + " " + args[2]);
+            Server.broadcast(-1, "!+FIRE " + args[0] + " " + firepos.X + " " + firepos.Y + " " + _client.Player.Aim + " " + args[2] + " " + args[3]);
             accept(null);
             return (true);
         }

@@ -91,7 +91,7 @@ namespace FrozenPizzaServer
                         }
                         else if (gid == (int)Meta.Pistol)
                         {
-                            id = rnd.Next(1000, 1002);
+                            id = rnd.Next(1000, 1004);
                         }
                         _entities.Add(new Item(_currentUid, id, new PointF(x * _twidth, y * _theight) + new SizeF(_twidth / 2, _theight / 2)));
                         _currentUid++;

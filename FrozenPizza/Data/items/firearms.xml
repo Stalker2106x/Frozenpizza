@@ -24,4 +24,28 @@
 	  <Accuracy>6</Accuracy>
     <Cooldown>0.1</Cooldown>
   </Item>
+  <Item>
+    <Id>1002</Id>
+    <Name>.357 Magnum</Name>
+    <ResourceId>357magnum</ResourceId>
+    <Slots>Hands Bag</Slots>
+    <Weight>1</Weight>
+    <Size>1</Size>
+    <Damage>40</Damage>
+    <ClipSize>6</ClipSize>
+	  <Accuracy>6</Accuracy>
+    <Cooldown>0.5</Cooldown>
+  </Item>
+  <Item>
+    <Id>1003</Id>
+    <Name>Desert Eagle</Name>
+    <ResourceId>deagle</ResourceId>
+    <Slots>Hands Bag</Slots>
+    <Weight>2</Weight>
+    <Size>1</Size>
+    <Damage>30</Damage>
+    <ClipSize>7</ClipSize>
+	  <Accuracy>7</Accuracy>
+    <Cooldown>0.5</Cooldown>
+  </Item>
 </Pistols>

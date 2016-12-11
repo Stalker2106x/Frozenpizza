@@ -274,3 +274,27 @@
 #begin cfg/controls.cfg
 /copy:cfg/controls.cfg
 
+#begin sounds/weapon/deagle/fire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/weapon/deagle/fire.wav
+
+#begin sounds/weapon/deagle/reload.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/weapon/deagle/reload.wav
+
+#begin sounds/weapon/357magnum/fire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/weapon/357magnum/fire.wav
+
+#begin sounds/weapon/357magnum/reload.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/weapon/357magnum/reload.wav
+
