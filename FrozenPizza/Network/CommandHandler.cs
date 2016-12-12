@@ -19,6 +19,7 @@ namespace FrozenPizza
             _commands.Add(".WELCOME", acknowledge);
             _commands.Add("?VERSION", sendVersion);
             _commands.Add("?WHOIS", sendWhois);
+            _commands.Add("!MAP", setMap);
 			_commands.Add("!PLAYER", setMainPlayer);
             _commands.Add("!+PLAYER", addNewPlayer);
             _commands.Add("!MOVE", movePlayer);
@@ -126,6 +127,25 @@ namespace FrozenPizza
             acknowledge(null);
             return (true);
 		}
+
+        bool setMap(String[] args)
+        {
+            List<String> levels = Level.getAvailableLevels();
+            int index = args[0].LastIndexOf('/') + 1;
+
+            for (int i = 0; i < levels.Count; i++)
+            {
+                if (levels[i] == args[0].Substring(index, args[0].Length - (index + 4)))
+                {
+                    Level.MapName = "Data/maps/" + levels[i] + ".tmx";
+                    acknowledge(null);
+                    return (true);
+                }
+            }
+            NetHandler.ConnectionStatus = args[0].Substring(index, args[0].Length - (index + 4)) + ": Missing map.";
+            nacknowledge(null);
+            return (false);
+        }
 
         bool addNewPlayer(String[] args)
         {

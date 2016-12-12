@@ -17,7 +17,7 @@ namespace FrozenPizza
         {
             _settingValues[0] = new List<String>() { "Default FrozenPizza Server", "HELP!!!", "I'm too young to die", "Too late." };
             _settingValues[1] = new List<String>() { "1", "2", "5", "10", "25", "50" };
-            _settingValues[2] = new List<String>() { "world", "dev" };
+            _settingValues[2] = Level.getAvailableLevels();
         }
 
         public override void itemClicked(int index)

@@ -18,11 +18,11 @@ namespace FrozenPizzaServer
         public static List<NetCli> ClientList;
         IPAddress _localAddr;
         static String _ip;
+        public static String MapName;
         int _connections;
 
         //Game
         bool _running;
-        String _mapName;
         public static Level Level { get; set; }
         static int Main(string[] args)
         {
@@ -63,7 +63,7 @@ namespace FrozenPizzaServer
             ClientList = new List<NetCli>();
             //Game
             _running = false;
-			_mapName = mapName;
+			MapName = mapName;
             Console.Write("Starting FrozenPizza Server...\n");
         }
 
@@ -71,7 +71,7 @@ namespace FrozenPizzaServer
         {
             _server.Start();
             _running = true;
-            Level = new Level(_mapName);
+            Level = new Level(MapName);
             Level.startUpdateThread();
             Console.Write("DONE!\n");
             Console.Write("Listening on IP: " + _ip + "\n");

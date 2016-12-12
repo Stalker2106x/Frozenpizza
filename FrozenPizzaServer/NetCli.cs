@@ -70,6 +70,9 @@ namespace FrozenPizzaServer
             send("?WHOIS");
             if (!_cmdHandle.ParseExpectedCmd(receive(), "!WHOIS"))
                 return (false);
+            send("!MAP " + Server.MapName);
+            if (receive() != ".ACK")
+                return (false);
             send(".HANDSHAKE");
             if (receive() != ".HANDSHAKE")
                 return (false);

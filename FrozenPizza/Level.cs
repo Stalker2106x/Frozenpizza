@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using TiledSharp;
 
@@ -33,18 +34,19 @@ namespace FrozenPizza
         int _twidth, _theight;
         int _ttwidth, _ttheight;
 
-		//Map
+        //Map
         TmxMap _map;
         List<Item> _entities;
         List<Projectile> _projectiles;
 
+        public static String MapName { get; set; }
         public TmxMap Map { get { return (_map);  } }
 		public List<Item> Entities { get { return (_entities); } }
         public List<Projectile> Projectiles { get { return (_projectiles); } }
 
-        public Level(string mapName)
+        public Level()
         {
-            _map = new TmxMap(mapName);
+            _map = new TmxMap(MapName);
             _twidth = _map.Tilesets[0].TileWidth;
             _theight = _map.Tilesets[0].TileHeight;
 			_entities = new List<Item>();
@@ -61,7 +63,21 @@ namespace FrozenPizza
             return (true);
         }
 
-		//Convesion of Coordinates
+        public static List<String> getAvailableLevels()
+        {
+            List<String> levelList = new List<String>();
+            String[] levels = Directory.GetFiles(@"Data/maps/", "*.tmx", SearchOption.TopDirectoryOnly);
+
+            for (int i = 0; i < levels.Length; i++)
+            {
+                int index = levels[i].LastIndexOf('/') + 1;
+
+                levelList.Add(levels[i].Substring(index, levels[i].Length - (index + 4)));
+            }
+            return (levelList);
+        }
+
+        //Convesion of Coordinates
         public Rectangle mapToGrid(Vector2 pos)
         {
             return (new Rectangle((int)pos.X / _twidth, (int)pos.Y / _theight, ((int)pos.X / _twidth), (int)pos.Y / _twidth));
@@ -76,32 +92,6 @@ namespace FrozenPizza
 		{
 			return (new Vector2((int)pos.X * _twidth, (int)pos.Y * _theight));
 		}
-
-		/*//Generation
-        public void GenerateItems(Collection collection)
-        {
-            Random rnd = new Random();
-
-            for (int i = 0; i < _map.Layers[(int)Layers.Meta].Tiles.Count; i++)
-            {
-                int gid = _map.Layers[(int)Layers.Meta].Tiles[i].Gid;
-
-                if (gid == 0 || rnd.Next(0, 2) == 0) //Skip empty & 50% chance of spawn
-                    continue;
-                if (_entities[i] == null)
-                    _entities[i] = new List<Item>();
-                if (gid == (int)Meta.Melee)
-                {
-                    
-                    _entities[i].Add((Melee)collection.MeleeList[rnd.Next(1, collection.MeleeList.Count)]);
-                }
-                else if (gid == (int)Meta.Pistol)
-                {
-                    _entities[i] = new List<Item>();
-                    _entities[i].Add((Firearm)collection.FirearmList[rnd.Next(0, collection.FirearmList.Count)]);
-                }
-            }
-        }*/
 
         public Vector2 getSpawnPoint()
         {

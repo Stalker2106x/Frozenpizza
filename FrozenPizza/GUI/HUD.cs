@@ -129,7 +129,7 @@ namespace FrozenPizza
                 {
                     Firearm weapon = (Firearm)mainPlayer.Hands;
 
-                    spriteBatch.DrawString(_font, weapon.LoadedAmmo.ToString(), _handsPanel.Location.ToVector2() + new Vector2(_handsPanel.Width - 10, _handsPanel.Height - 10), Color.White);
+                    spriteBatch.DrawString(_font, weapon.LoadedAmmo.ToString(), _handsPanel.Location.ToVector2() + new Vector2(_handsPanel.Width - _font.MeasureString(weapon.LoadedAmmo.ToString()).X, _handsPanel.Height - _font.MeasureString(weapon.LoadedAmmo.ToString()).Y), Color.White);
                 }
             }
 		}

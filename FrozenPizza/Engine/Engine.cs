@@ -94,7 +94,7 @@ namespace FrozenPizza
 
         public void InitializeGame()
         {
-            level = new Level("Data/maps/world.tmx");
+            level = new Level();
             cam = new Camera(GraphicsDevice);
             hud = new HUD(GraphicsDevice, cam);
             mainPlayer = new MainPlayer("Bernie");
@@ -238,10 +238,12 @@ namespace FrozenPizza
                 players[i].Draw(spriteBatch);
             }
             spriteBatch.End();
-			//dummy
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-			hud.Draw(spriteBatch, GraphicsDevice, mainPlayer, collection, cam);
-            spriteBatch.End();
+            if (gstate == GameState.Playing)
+            {
+                spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                hud.Draw(spriteBatch, GraphicsDevice, mainPlayer, collection, cam);
+                spriteBatch.End();
+            }
         }
 
         /// <summary>
