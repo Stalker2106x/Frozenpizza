@@ -121,8 +121,8 @@ namespace FrozenPizza
         {
             Vector2 realpos = vmapToGrid(pos);
 
-            if ((realpos.X < 0 || realpos.X > _map.Width)
-                || (realpos.Y < 0 || realpos.Y > _map.Height))
+            if ((realpos.X < 0 || realpos.X >= _map.Width)
+                || (realpos.Y < 0 || realpos.Y >= _map.Height))
                 return (true);
             if (_map.Layers[(int)Layers.Wall].Tiles[(int)((_map.Width * realpos.Y) + realpos.X)].Gid != 0)
                 return (true);

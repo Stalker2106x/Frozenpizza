@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
@@ -78,6 +79,16 @@ namespace FrozenPizza
             _client.Close();
             _thread.Abort();
         }
+
+        public static void startServer(String mapName)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+
+            startInfo.Arguments = "Data/maps/" + mapName + ".tmx";
+            startInfo.FileName = "FrozenPizzaServer.exe";
+            Process.Start(startInfo);
+        }
+
         public static String sendAndReceive(String msg)
         {
             send(msg);

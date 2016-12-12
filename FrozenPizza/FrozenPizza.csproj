@@ -47,6 +47,7 @@
     <Compile Include="KeyBinds.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Menus\BrowserMenu.cs" />
+    <Compile Include="Menus\CreateServerMenu.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Menus\Menu.cs" />
     <Compile Include="Menus\OptionsMenu.cs" />

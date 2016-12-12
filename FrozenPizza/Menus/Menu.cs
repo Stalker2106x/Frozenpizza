@@ -23,6 +23,8 @@ namespace FrozenPizza
         Texture2D _background;
         protected Engine _engine;
 
+        public float BackgroundOpacity { get; set; }
+
         public Menu(Engine engine, String name)
         {
             XElement bundle = XElement.Load("Data/items/menus.xml");
@@ -36,8 +38,9 @@ namespace FrozenPizza
             _items = new String[_itemCount];
             _itemRect = new Rectangle[_itemCount];
             _fontfile = menu.Elements("Font").First().Value.ToString();
-            _fontsize = 2f;
+            _fontsize = 1f;
             _bgfile = menu.Elements("Background").First().Value.ToString();
+            BackgroundOpacity = 1f;
             foreach (var item in menu.Elements("Item"))
             {
                 _items[id] = item.Value.ToString();
@@ -49,6 +52,11 @@ namespace FrozenPizza
         {
             _background = content.Load<Texture2D>("gfx/bg/"+_bgfile);
             _font = content.Load<SpriteFont>("font/"+_fontfile);
+            initItems();
+        }
+
+        public void initItems()
+        {
             for (int id = 0; id < _itemCount; id++)
             {
                 Vector2 size = _font.MeasureString(_items[id]);
@@ -89,8 +97,8 @@ namespace FrozenPizza
 
         public void drawBase(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            spriteBatch.DrawString(_font, _gameVersion, Vector2.Zero, Color.White, 0f, Vector2.Zero, 1.25f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(_background, new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
+            spriteBatch.DrawString(_font, _gameVersion, Vector2.Zero, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_background, new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), null, Color.White * BackgroundOpacity, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)

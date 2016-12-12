@@ -50,7 +50,7 @@ namespace FrozenPizza
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Engine.collection.Projectiles, Pos, _skinRect, Color.White, -Angle, _origin, 1.0f, SpriteEffects.None, 0);
+            spriteBatch.Draw(Engine.collection.Projectiles, Pos, _skinRect, Color.White, -Angle, _origin, 1.0f, SpriteEffects.None, 0.3f);
         }
     }
     public class Ammo : Item

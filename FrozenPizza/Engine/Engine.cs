@@ -254,6 +254,8 @@ namespace FrozenPizza
             switch (gstate)
             {
                 case GameState.Menu:
+                    if (_menu.GetType() == typeof(GameMenu))
+                        DrawGame(gameTime);
                     spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
                     _menu.Draw(spriteBatch, GraphicsDevice);
                     spriteBatch.End();

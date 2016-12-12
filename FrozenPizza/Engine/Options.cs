@@ -58,9 +58,14 @@ namespace FrozenPizza
 
         public static void applyConfig()
         {
-            GDevice.IsFullScreen = Config.Fullscreen;
+
             setResolution(Config.DisplayMode);
             GDevice.ApplyChanges();
+            if (GDevice.IsFullScreen != Config.Fullscreen)
+            {
+                GDevice.IsFullScreen = Config.Fullscreen;
+                GDevice.ApplyChanges();
+            }
         }
 
         public static List<String> getResolutions()

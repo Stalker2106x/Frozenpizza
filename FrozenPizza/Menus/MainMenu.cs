@@ -25,11 +25,7 @@ namespace FrozenPizza
             switch (index)
             {
                 case 0:
-                    /*_engine.InitializeGame();
-                    _engine.LoadGame();
-                    _engine.gstate = Engine.GameState.Playing;
-                    _engine.toggleMouseVisible();
-                    _engine.setMenu(new GameMenu(_engine));*/
+                    _engine.setMenu(new CreateServerMenu(_engine));
                     break;
                 case 1:
                     _engine.setMenu(new BrowserMenu(_engine));
@@ -55,7 +51,7 @@ namespace FrozenPizza
     {
         public GameMenu(Engine engine) : base(engine, "GameMenu")
         {
-
+            BackgroundOpacity = 0.7f;
         }
 
         public override void itemClicked(int index)

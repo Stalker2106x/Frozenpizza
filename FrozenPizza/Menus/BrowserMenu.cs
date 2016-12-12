@@ -88,6 +88,7 @@ namespace FrozenPizza
 
         public void tryConnect()
         {
+            _items[0] = "Try again";
             Engine.netHandle = new NetHandler();
             int port;
 

@@ -14,7 +14,6 @@ namespace FrozenPizza
         public OptionsMenu(Engine engine, Menu prevmenu) : base(engine, "OptionsMenu")
         {
             prevMenu = prevmenu;
-            setSettingValues();
         }
 
         public override void setSettingValues()
@@ -35,10 +34,14 @@ namespace FrozenPizza
                     Options.Config.MusicVolume = 0.25f * _settingSelectedValue[2];
                     Options.Config.SoundVolume = 0.25f * _settingSelectedValue[2];
                     Options.applyConfig();
+                    initItems();
+                    initSettings();
                     break;
                 case 1:
                     Options.Config = new EngineSettings();
                     Options.applyConfig();
+                    initItems();
+                    initSettings();
                     break;
                 case 2:
                     _engine.setMenu(prevMenu);

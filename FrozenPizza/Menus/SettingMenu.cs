@@ -12,7 +12,7 @@ using System.Xml.Linq;
 
 namespace FrozenPizza
 {
-    abstract class SettingMenu : Menu
+    public abstract class SettingMenu : Menu
     {
         protected int _settingCount;
         String[] _settings;
@@ -37,17 +37,23 @@ namespace FrozenPizza
                 _settingSelectedValue[id] = 0;
                 id++;
             }
+            setSettingValues();
         }
 
-        public override void Load(ContentManager content)
+        public void initSettings()
         {
-            base.Load(content);
             for (int id = 0; id < _settingCount; id++)
             {
                 Vector2 size = _font.MeasureString(_settings[id]);
 
                 _settingRect[id] = new Rectangle(50, 50 + (int)(id * (size.Y * _fontsize)), (int)(size.X * _fontsize), (int)(size.Y * _fontsize));
             }
+        }
+
+        public override void Load(ContentManager content)
+        {
+            base.Load(content);
+            initSettings();
         }
 
         public abstract override void itemClicked(int index);
@@ -123,7 +129,7 @@ namespace FrozenPizza
                 if (i == _selected)
                     color = Color.Red;
                 spriteBatch.DrawString(_font, _settings[i], _settingRect[i].Location.ToVector2(), color, 0f, Vector2.Zero, _fontsize, SpriteEffects.None, 0f);
-                spriteBatch.DrawString(_font, _settingValues[i][_settingSelectedValue[i]], _settingRect[i].Location.ToVector2() + new Vector2(_engine.GraphicsDevice.Viewport.Width - (50 + 400), 0), Color.White, 0f, Vector2.Zero, _fontsize, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(_font, _settingValues[i][_settingSelectedValue[i]], _settingRect[i].Location.ToVector2() + new Vector2(_engine.GraphicsDevice.Viewport.Width - (100 + (_fontsize * _font.MeasureString(_settingValues[i][_settingSelectedValue[i]]).X)), 0), Color.White, 0f, Vector2.Zero, _fontsize, SpriteEffects.None, 0f);
             }
             for (int i = 0; i < _itemCount; i++)
             {
