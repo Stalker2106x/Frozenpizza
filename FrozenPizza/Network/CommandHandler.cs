@@ -272,6 +272,7 @@ namespace FrozenPizza
 
             Int64.TryParse(args[0], out uid);
             Engine.Level.Entities[Engine.Level.getEntityIndex(uid)].Pos = -Vector2.One;
+            acknowledge(null);
             return (true);
         }
 

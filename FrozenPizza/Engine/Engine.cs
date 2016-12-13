@@ -190,7 +190,8 @@ namespace FrozenPizza
             if (keybStates[0].IsKeyUp(Keys.Escape) && keybStates[1].IsKeyDown(Keys.Escape))
             {
                 mainPlayer.InventoryOpen = false;
-                toggleMouseVisible();
+                if (_cursor.Show == false)
+                    toggleMouseVisible();
                 gstate = GameState.Menu;
             }
             updateTimeEvents(gameTime);

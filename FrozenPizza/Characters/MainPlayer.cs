@@ -398,7 +398,7 @@ namespace FrozenPizza
         {
             if (_hands == null)
                 return;
-			NetHandler.send("!+ITEM " + _hands.Uid);
+            NetHandler.send("!+ITEM " + _hands.Uid);
 			_hands = null;
         }
 
