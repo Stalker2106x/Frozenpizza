@@ -197,7 +197,7 @@ namespace FrozenPizza
             level.Update();
             mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, _cursor);
             hud.Update(mouseStates, mainPlayer);
-            if (!mainPlayer.InventoryOpen)
+            if (mainPlayer.Alive && !mainPlayer.InventoryOpen)
                 resetMousePos();
         }
 

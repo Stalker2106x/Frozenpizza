@@ -17,6 +17,7 @@ namespace FrozenPizza
         Dehydrated
     }
 
+
     public class MainPlayer : Player
     {
         //Stats
@@ -31,8 +32,6 @@ namespace FrozenPizza
         Inventory _inventory;
         List<PlayerStates> _states;
 
-        //Sound
-        SoundEffect[] _stepSound;
 
         //Timers
 		TimeSpan _stepTimer;
@@ -121,21 +120,6 @@ namespace FrozenPizza
             get { return (_cooldown); }
         }
 
-        //Initialization routine
-        public void Load(ContentManager content)
-        {
-            _skinRect = new Rectangle(0, 0, 32, 16);
-            _stepSound = new SoundEffect[8];
-            _stepSound[0] = content.Load<SoundEffect>("sounds/player/step1");
-            _stepSound[1] = content.Load<SoundEffect>("sounds/player/step2");
-            _stepSound[2] = content.Load<SoundEffect>("sounds/player/step3");
-            _stepSound[3] = content.Load<SoundEffect>("sounds/player/step4");
-            _stepSound[4] = content.Load<SoundEffect>("sounds/player/rstep1");
-            _stepSound[5] = content.Load<SoundEffect>("sounds/player/rstep2");
-            _stepSound[6] = content.Load<SoundEffect>("sounds/player/rstep3");
-            _stepSound[7] = content.Load<SoundEffect>("sounds/player/rstep4");
-        }
-
         //Getters for private attributes or with operations
 
         public int getCooldownPercent(int width)
@@ -208,27 +192,25 @@ namespace FrozenPizza
         //Miscillaneous
         public override void die()
         {
-            HP = 0;
+            base.die();
             dropItem(0);
             _inventoryOpen = false;
-            _alive = false;
-            _skinRect = new Rectangle(0, 64, 32, 64);
         }
         void stepSound(GameTime gameTime, bool run)
 		{
 			_stepTimer += gameTime.ElapsedGameTime;
-			if (run && _stepTimer >= _stepSound[4].Duration)
+			if (run && _stepTimer >= _sounds[(int)PlayerSounds.RunStep1].Duration)
 			{
 				Random rnd = new Random();
 
-				_stepSound[rnd.Next(4, 8)].Play(0.5f, 0f, 0f);
+				_sounds[rnd.Next(4, 8)].Play(0.5f, 0f, 0f);
 				_stepTimer = TimeSpan.Zero;
 			}
-			else if (!run && _stepTimer >= _stepSound[0].Duration)
+			else if (!run && _stepTimer >= _sounds[(int)PlayerSounds.Step1].Duration)
 			{
 				Random rnd = new Random();
 
-				_stepSound[rnd.Next(0, 4)].Play(0.5f, 0f, 0f);
+				_sounds[rnd.Next(0, 4)].Play(0.5f, 0f, 0f);
                 _stepTimer = TimeSpan.Zero;
 			}
         }

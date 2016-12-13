@@ -81,7 +81,7 @@ namespace FrozenPizza
                 else if ((!_settingRect[i].Contains(mStates[0].Position) && _settingRect[i].Contains(mStates[1].Position))
                     || (_settingRect[i].Contains(mStates[0].Position) && _settingRect[i].Contains(mStates[1].Position) && _selected != i))
                 {
-                    Engine.collection.MenuSounds[0].Play();
+                    Engine.collection.MenuSounds[0].Play(Options.Config.SoundVolume, 0f, 0f);
                     _selected = i;
                     return (true);
                 }
@@ -93,7 +93,7 @@ namespace FrozenPizza
                 else if ((!_itemRect[i].Contains(mStates[0].Position) && _itemRect[i].Contains(mStates[1].Position))
                     || (_itemRect[i].Contains(mStates[0].Position) && _itemRect[i].Contains(mStates[1].Position) && _selected != _settingCount + i))
                 {
-                    Engine.collection.MenuSounds[0].Play();
+                    Engine.collection.MenuSounds[0].Play(Options.Config.SoundVolume, 0f, 0f);
                     _selected = _settingCount + i;
                     return (true);
                 }
@@ -107,7 +107,7 @@ namespace FrozenPizza
                 _selected = -1;
             if (_selected >= 0 && mStates[0].LeftButton == ButtonState.Released && mStates[1].LeftButton == ButtonState.Pressed)
             {
-                Engine.collection.MenuSounds[1].Play();
+                Engine.collection.MenuSounds[1].Play(Options.Config.SoundVolume, 0f, 0f);
                 if (_selected < _settingCount)
                     settingClicked(_selected, true);
                 else

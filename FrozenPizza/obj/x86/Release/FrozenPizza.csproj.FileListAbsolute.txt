@@ -41,6 +41,7 @@ C:\Users\stalk\Documents\Visual Studio 2015\Projects\FrozenPizza\FrozenPizza\bin
 C:\Users\stalk\Documents\Visual Studio 2015\Projects\FrozenPizza\FrozenPizza\bin\DesktopGL\x86\Release\MonoGame.Framework.dll
 C:\Users\stalk\Documents\Visual Studio 2015\Projects\FrozenPizza\FrozenPizza\bin\DesktopGL\x86\Release\NVorbis.dll
 C:\Users\stalk\Documents\Visual Studio 2015\Projects\FrozenPizza\FrozenPizza\bin\DesktopGL\x86\Release\OpenTK.dll
-C:\Users\stalk\Documents\Visual Studio 2015\Projects\FrozenPizza\FrozenPizza\obj\x86\Release\FrozenPizza.csprojResolveAssemblyReference.cache
 C:\Users\stalk\Documents\Visual Studio 2015\Projects\FrozenPizza\FrozenPizza\obj\x86\Release\FrozenPizza.exe
 C:\Users\stalk\Documents\Visual Studio 2015\Projects\FrozenPizza\FrozenPizza\obj\x86\Release\FrozenPizza.pdb
+C:\Users\stalk\documents\visual studio 2015\Projects\FrozenPizza\FrozenPizza\bin\DesktopGL\x86\Release\Data\cfg\controls.cfg
+C:\Users\stalk\documents\visual studio 2015\Projects\FrozenPizza\FrozenPizza\obj\x86\Release\FrozenPizza.csprojResolveAssemblyReference.cache

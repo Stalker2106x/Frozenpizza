@@ -316,3 +316,15 @@
 /processorParam:TextureFormat=Color
 /build:gfx/bg/wood.jpg
 
+#begin sounds/player/die.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/player/die.wav
+
+#begin sounds/player/hurt.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/player/hurt.wav
+

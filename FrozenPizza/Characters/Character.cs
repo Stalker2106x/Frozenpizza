@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -23,6 +25,9 @@ namespace FrozenPizza
 		//Graphics
         protected Rectangle _skinRect;
 
+        //Sound
+        protected SoundEffect[] _sounds;
+
         public Character(String name)
         {
             _alive = true;
@@ -31,12 +36,24 @@ namespace FrozenPizza
             _maxHp = 100;
         }
 
-        public virtual void Load()
+        //Initialization routine
+        public void Load(ContentManager content)
         {
-
+            _skinRect = new Rectangle(0, 0, 32, 16);
+            _sounds = new SoundEffect[Enum.GetNames(typeof(PlayerSounds)).Length];
+            _sounds[(int)PlayerSounds.Step1] = content.Load<SoundEffect>("sounds/player/step1");
+            _sounds[(int)PlayerSounds.Step2] = content.Load<SoundEffect>("sounds/player/step2");
+            _sounds[(int)PlayerSounds.Step3] = content.Load<SoundEffect>("sounds/player/step3");
+            _sounds[(int)PlayerSounds.Step4] = content.Load<SoundEffect>("sounds/player/step4");
+            _sounds[(int)PlayerSounds.RunStep1] = content.Load<SoundEffect>("sounds/player/rstep1");
+            _sounds[(int)PlayerSounds.RunStep2] = content.Load<SoundEffect>("sounds/player/rstep2");
+            _sounds[(int)PlayerSounds.RunStep3] = content.Load<SoundEffect>("sounds/player/rstep3");
+            _sounds[(int)PlayerSounds.RunStep4] = content.Load<SoundEffect>("sounds/player/rstep4");
+            _sounds[(int)PlayerSounds.Hurt] = content.Load<SoundEffect>("sounds/player/hurt");
+            _sounds[(int)PlayerSounds.Die] = content.Load<SoundEffect>("sounds/player/die");
         }
 
-		public int Id
+        public int Id
 		{
 			get { return (_id); }
 			set { _id = value; }
@@ -61,6 +78,22 @@ namespace FrozenPizza
             get { return _hp; }
             set { _hp = value; }
         }
+
+        public bool Alive
+        {
+            get { return (_alive);  }
+        }
+
+        public Rectangle getHitbox()
+        {
+            return (new Rectangle((Pos - new Vector2(8, 8)).ToPoint(), new Point(16, 16)));
+        }
+
+        public float getDistanceTo(Vector2 pos)
+        {
+            return ((float)Math.Sqrt(Math.Pow(Pos.X - pos.X, 2) + Math.Pow(Pos.Y - pos.Y, 2)));
+        }
+
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {

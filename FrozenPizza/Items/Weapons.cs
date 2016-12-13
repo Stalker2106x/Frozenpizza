@@ -51,7 +51,7 @@ namespace FrozenPizza
         }
         public void attack(Vector2 pos)
         {
-            Sounds[0].Play();
+            Sounds[0].Play(Options.Config.SoundVolume, 0f, 0f);
             NetHandler.send("!MELEE " + Size + " " + Damage);
         }
 	}
@@ -83,13 +83,12 @@ namespace FrozenPizza
 
             if (LoadedAmmo > 0)
             {
-                Sounds[(int)FirearmActions.Fire].Play();
-                NetHandler.send("!FIRE " + (int)ProjectileType.Bullet + " " + angle + " " + 7f + " " + Damage);
+                NetHandler.send("!FIRE " + Id + " " + (int)ProjectileType.Bullet + " " + angle + " " + 7f + " " + Damage);
                 LoadedAmmo -= 1;
             }
             else
             {
-                Sounds[(int)FirearmActions.DryFire].Play();
+                Sounds[(int)FirearmActions.DryFire].Play(Options.Config.SoundVolume, 0f, 0f);
             }
         }
 
@@ -97,7 +96,7 @@ namespace FrozenPizza
         {
             if (LoadedAmmo == ClipSize)
                 return (false);
-            Sounds[(int)FirearmActions.Reload].Play();
+            Sounds[(int)FirearmActions.Reload].Play(Options.Config.SoundVolume, 0f, 0f);
             LoadedAmmo = ClipSize;
             return (true);
         }

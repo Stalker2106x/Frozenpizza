@@ -160,7 +160,7 @@ namespace FrozenPizzaServer
             {
                 if (Server.ClientList[i] == null || _client.Id == i)
                     continue;
-			    _client.send("!+PLAYER " + Server.ClientList[i].Id + " " + Server.ClientList[i].Player.Pos.X + " " + Server.ClientList[i].Player.Pos.Y);
+			    _client.send("!+PLAYER " + Server.ClientList[i].Id + " " + Server.ClientList[i].Player.HP + " " + Server.ClientList[i].Player.Pos.X + " " + Server.ClientList[i].Player.Pos.Y);
                 if (!ParseExpectedCmd(_client.receive(), ".ACK"))
                     return (false);
             }
@@ -169,18 +169,18 @@ namespace FrozenPizzaServer
         }
         bool fireWeapon(String[] args)
         {
-            int type, damage;
+            int id, type, damage;
             float angle, velocity;
             PointF firepos;
 
-            Int32.TryParse(args[0], out type);
-            float.TryParse(args[1], out angle);
-            float.TryParse(args[2], out velocity);
-            Int32.TryParse(args[3], out damage);
+            Int32.TryParse(args[0], out id);
+            Int32.TryParse(args[1], out type);
+            float.TryParse(args[2], out angle);
+            float.TryParse(args[3], out velocity);
+            Int32.TryParse(args[4], out damage);
             firepos = _client.Player.calcFirePos();
-            _client.Player.Aim = angle;
-            Server.Level.Projectiles.Add(new Projectile((ProjectileType)type, firepos, _client.Player.Aim, velocity, damage));
-            Server.broadcast(-1, "!+FIRE " + args[0] + " " + firepos.X + " " + firepos.Y + " " + _client.Player.Aim + " " + args[2] + " " + args[3]);
+            Server.Level.Projectiles.Add(new Projectile((ProjectileType)type, firepos, angle, velocity, damage));
+            Server.broadcast(-1, "!+FIRE " + args[0] + " " + args[1] + " " + firepos.X + " " + firepos.Y + " " + args[2] + " " + args[3] + " " + args[4]);
             accept(null);
             return (true);
         }

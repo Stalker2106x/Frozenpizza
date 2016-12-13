@@ -86,7 +86,7 @@ namespace FrozenPizzaServer
             send("!PLAYER " + Id + " " + _player.Pos.X + " " + _player.Pos.Y);
             if (!_cmdHandle.ParseExpectedCmd(receive(), ".ACK"))
                 return (false);
-            Server.broadcast(Id, "!+PLAYER " + Id + " " + _player.Pos.X + " " + _player.Pos.Y);
+            Server.broadcast(Id, "!+PLAYER " + Id + " " + _player.HP + " " + _player.Pos.X + " " + _player.Pos.Y);
             return (true);
         }
 
@@ -129,7 +129,11 @@ namespace FrozenPizzaServer
             String msg, msgprocess;
 
             if (_receiveStack.Count != 0) //If we have loads of messages to treat
+            {
+                if (_receiveStack.First().IndexOf("!MOVE") == -1 && _receiveStack.First().IndexOf("!AIM") == -1)
+                    Console.Write("<[" + _id + "] " + _receiveStack.First() + "\n");
                 return (_receiveStack.Dequeue());
+            }
             try
             {
                 readCount = _stream.Read(buffer, 0, receivingBufferSize);
@@ -144,7 +148,6 @@ namespace FrozenPizzaServer
                 terminateClient();
                 return (null);
             }
-            Console.Write("<[" + _id + "] " + msg + "\n");
             msg = msg.Substring(0, msg.IndexOf("\r\n"));
             if (msg.IndexOf("\r\n") != msg.Length - 2)
             {
@@ -155,6 +158,8 @@ namespace FrozenPizzaServer
                     _receiveStack.Enqueue(msgprocess.Substring(0, msgprocess.IndexOf("\r\n")));
                 }
             }
+            if (msg.IndexOf("!MOVE") == -1 && msg.IndexOf("!AIM") == -1)
+                Console.Write("<[" + _id + "] " + msg + "\n");
             return (msg);
         }
     }

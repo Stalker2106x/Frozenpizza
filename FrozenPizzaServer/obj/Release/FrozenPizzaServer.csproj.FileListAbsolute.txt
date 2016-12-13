@@ -47,3 +47,4 @@ C:\Users\stalk\Documents\Visual Studio 2015\Projects\FrozenPizza\FrozenPizzaServ
 C:\Users\stalk\Documents\Visual Studio 2015\Projects\FrozenPizza\FrozenPizzaServer\obj\Release\FrozenPizzaServer.csprojResolveAssemblyReference.cache
 C:\Users\stalk\Documents\Visual Studio 2015\Projects\FrozenPizza\FrozenPizzaServer\obj\Release\FrozenPizzaServer.exe
 C:\Users\stalk\Documents\Visual Studio 2015\Projects\FrozenPizza\FrozenPizzaServer\obj\Release\FrozenPizzaServer.pdb
+C:\Users\stalk\documents\visual studio 2015\Projects\FrozenPizza\FrozenPizzaServer\bin\Release\Data\cfg\controls.cfg

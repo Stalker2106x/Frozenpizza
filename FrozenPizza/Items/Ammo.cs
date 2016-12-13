@@ -25,13 +25,19 @@ namespace FrozenPizza
         Vector2 _origin;
 
 
-        public Projectile(ProjectileType type, Vector2 pos, float angle, float velocity, int damage)
+        public Projectile(int id, ProjectileType type, Vector2 pos, float angle, float velocity, int damage)
         {
             Type = type;
             Pos = pos;
             Angle = angle;
             Velocity = velocity;
             Damage = damage;
+            Weapon weapon = (Weapon)Engine.collection.getItemById(id);
+            if (Engine.MainPlayer.getDistanceTo(pos) <= (Engine.Level.Map.TileWidth * 40))
+            {
+                float distVolume = (Engine.MainPlayer.getDistanceTo(pos) / (Engine.Level.Map.TileWidth * 40));
+                weapon.Sounds[(int)FirearmActions.Fire].Play(Options.Config.SoundVolume / distVolume, 0f, 0f);
+            }
             _skinRect = new Rectangle(0, 0, 32, 32);
             _origin = new Vector2(16, 16);
         }
@@ -45,6 +51,13 @@ namespace FrozenPizza
                 return (false);
             else if (Engine.Level.Collide(Pos))
                 return (false);
+            else if (Engine.MainPlayer.getHitbox().Contains(Pos))
+                return (false);
+            for (int i = 0; i < Engine.Players.Count; i++)
+            {
+                if (Engine.Players[i].getHitbox().Contains(Pos))
+                    return (false);
+            }
             return (true);
         }
 

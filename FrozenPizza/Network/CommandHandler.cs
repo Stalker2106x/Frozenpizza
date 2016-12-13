@@ -149,13 +149,15 @@ namespace FrozenPizza
 
         bool addNewPlayer(String[] args)
         {
-            int id;
+            int id, hp;
             Vector2 pos;
 
             Int32.TryParse(args[0], out id);
-            float.TryParse(args[1], out pos.X);
-            float.TryParse(args[2], out pos.Y);
-            Engine.Players.Add(new Player(id, "RP", Engine.Level.vgridToMap(pos)));
+            Int32.TryParse(args[1], out hp);
+            float.TryParse(args[2], out pos.X);
+            float.TryParse(args[3], out pos.Y);
+            Engine.Players.Add(new Player(id, "RP", Engine.Level.vgridToMap(pos), hp));
+            Engine.Players.Last().Load(Engine.collection.Content);
             acknowledge(null);
             return (true);
         }
@@ -191,17 +193,18 @@ namespace FrozenPizza
 
         bool createProjectile(String[] args)
         {
-            int type, damage;
+            int id, type, damage;
             float angle, velocity;
             Vector2 pos;
-            
-            Int32.TryParse(args[0], out type);
-            float.TryParse(args[1], out pos.X);
-            float.TryParse(args[2], out pos.Y);
-            float.TryParse(args[3], out angle);
-            float.TryParse(args[4], out velocity);
-            Int32.TryParse(args[5], out damage);
-            Engine.Level.Projectiles.Add(new Projectile(ProjectileType.Bullet, pos, angle, velocity, damage));
+
+            Int32.TryParse(args[0], out id);
+            Int32.TryParse(args[1], out type);
+            float.TryParse(args[2], out pos.X);
+            float.TryParse(args[3], out pos.Y);
+            float.TryParse(args[4], out angle);
+            float.TryParse(args[5], out velocity);
+            Int32.TryParse(args[6], out damage);
+            Engine.Level.Projectiles.Add(new Projectile(id, ProjectileType.Bullet, pos, angle, velocity, damage));
             acknowledge(null);
             return (true);
         }
@@ -213,9 +216,9 @@ namespace FrozenPizza
             Int32.TryParse(args[0], out id);
             Int32.TryParse(args[1], out damage);
             if (id == Engine.MainPlayer.Id)
-                Engine.MainPlayer.HP -= damage;
+                Engine.MainPlayer.hurt(damage);
             else
-                Engine.getPlayerById(id).HP -= damage;
+                Engine.getPlayerById(id).hurt(damage);
             acknowledge(null);
             return (true);
         }
