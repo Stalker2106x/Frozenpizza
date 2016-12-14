@@ -85,7 +85,7 @@ namespace FrozenPizza
         }
         public int Hunger
         {
-            get { return _hunger; }
+            get { return (_hunger); }
             set { _hunger = value; }
         }
         public int maxThirst
@@ -95,7 +95,7 @@ namespace FrozenPizza
         }
         public int Thirst
         {
-            get { return _thirst; }
+            get { return (_thirst); }
             set { _thirst = value; }
         }
 		public bool InventoryOpen
@@ -120,8 +120,7 @@ namespace FrozenPizza
             get { return (_cooldown); }
         }
 
-        //Getters for private attributes or with operations
-
+        //Converts Cooldown time to percent for the bar
         public int getCooldownPercent(int width)
         {
             float elapsed = (float)(_cooldownTimer[1].TotalMilliseconds - _cooldownTimer[0].TotalMilliseconds);
@@ -129,6 +128,7 @@ namespace FrozenPizza
             return ((int)((float)(elapsed / _cooldownTimer[1].TotalMilliseconds) * width));
         }
 
+        //Get the 'use' (or fire) cooldown from currently held item
         public float getCooldown()
         {
             Weapon hands = (Weapon)_hands;
@@ -139,11 +139,13 @@ namespace FrozenPizza
                 return ((float)TimeSpan.FromSeconds(Engine.collection.MeleeList[0].Cooldown).TotalMilliseconds);
         }
 
+        //Placeholder
         public int getArmor()
         {
             return (0);
         }
 
+        //Placeholder
         public float getWeight()
         {
             float weight = 0;
@@ -151,8 +153,7 @@ namespace FrozenPizza
             return (weight);
         }
 
-
-
+        //Returns the two angles of aim calculating weapon accuracy (0 is left, 1 is right)
 		public float[] getAimAccuracyAngle(bool real)
 		{
 			float[] aimAccuracyAngle = new float[2];
@@ -180,6 +181,7 @@ namespace FrozenPizza
 			return (aimAccuracyAngle);
 		}
 
+        //Returns speed accordint to weight and sprint states
 		public float getSpeed(KeyboardState keybState)
         {
 			float speed = 1.25f;
@@ -189,13 +191,15 @@ namespace FrozenPizza
 			return (speed - (getWeight() / 10));
         }
 
-        //Miscillaneous
+        //Make player drop item on death & closes inventory
         public override void die()
         {
             base.die();
             dropItem(0);
             _inventoryOpen = false;
         }
+
+        //Plays if needed the correct stepsound
         void stepSound(GameTime gameTime, bool run)
 		{
 			_stepTimer += gameTime.ElapsedGameTime;
@@ -215,10 +219,10 @@ namespace FrozenPizza
 			}
         }
 
-        //Moving mechanism functions
+        //check wether the user is sprinting or not [DEPRECATED]
         bool checkSprint(KeyboardState[] keybStates)
         {
-            if (keybStates[1].IsKeyDown(Keys.LeftShift))
+            if (keybStates[1].IsKeyDown(KeyBinds.getKey("Sprint")))
             {
                 _sprinting = true;
                 return (true);
@@ -226,6 +230,7 @@ namespace FrozenPizza
             return (false);
         }
 
+        //Code to move the player
         void updateMove(GameTime gameTime, KeyboardState[] keybStates, Level level)
         {
 			bool move = false;
@@ -277,6 +282,7 @@ namespace FrozenPizza
                     _cooldown = false;
         }
 
+        //Use Hands
         public void useHands()
         {
             if (_hands == null || _hands.GetType() == typeof(Melee))
@@ -297,6 +303,7 @@ namespace FrozenPizza
             }
         }
 
+        //Check Hands events (Reload, fire, ...)
         public void updateHands(GameTime gameTime, KeyboardState[] keybStates, MouseState[] mStates)
         {
             if (_cooldown)
@@ -367,6 +374,7 @@ namespace FrozenPizza
 				_states.Add(PlayerStates.Dehydrated);
         }
 
+        //Used to hurt player
         void applyStates()
         {
             _stateTimer = TimeSpan.Zero;

@@ -55,6 +55,7 @@ namespace FrozenPizza
         Texture2D _colorRect;
         BrowserMenu _bmenu;
         String _ip, _port;
+        int _periodCount;
         Rectangle _inputBox;
         bool _connecting;
 
@@ -62,6 +63,7 @@ namespace FrozenPizza
         {
             _bmenu = menu;
             _ip = "";
+            _periodCount = 0;
             _port = "27420";
             _inputBox = new Rectangle((int)(_engine.GraphicsDevice.Viewport.Width * 0.25f), _engine.GraphicsDevice.Viewport.Height / 2, _engine.GraphicsDevice.Viewport.Width / 2, 40);
             _colorRect = new Texture2D(engine.GraphicsDevice, 1, 1);
@@ -86,6 +88,7 @@ namespace FrozenPizza
             }
         }
 
+        //Try to connect to the entered IP
         public void tryConnect()
         {
             _items[0] = "Try again";
@@ -99,6 +102,7 @@ namespace FrozenPizza
             }
         }
 
+        //Gets input for IP
         public void updateInput(KeyboardState[] keybStates)
         {
             Keys[] prevInput = keybStates[0].GetPressedKeys();
@@ -109,9 +113,12 @@ namespace FrozenPizza
                 for (int i = 0; i < input.Length; i++)
                 {
                     if (((char)input[i] >= '0' && (char)input[i] <= '9'))
-                        _ip += (char)input[i];                    
-                    else if (input[i] == Keys.OemPeriod || input[i] == Keys.Decimal)
+                        _ip += (char)input[i];
+                    else if (input[i] == Keys.OemPeriod || input[i] == Keys.Decimal && _periodCount <= 4)
+                    {
                         _ip += ".";
+                        _periodCount++;
+                    }
                     else if (input[i] >= Keys.NumPad0 && input[i] <= Keys.NumPad9)
                         _ip += (char)(input[i] - 48);
                 }
@@ -120,6 +127,7 @@ namespace FrozenPizza
                 _ip = _ip.Remove(_ip.Length - 1);
         }
 
+        //Update menu & connection [NEEDS UPGRADE]
         public override void Update(KeyboardState[] keybStates, MouseState[] mStates)
         {
             if (!_connecting)
@@ -141,7 +149,7 @@ namespace FrozenPizza
                 else if (Engine.netHandle.Ready)
                 {
                     _engine.toggleMouseVisible();
-                    _engine.gstate = Engine.GameState.Playing;
+                    _engine.gstate = GameState.Playing;
                     _engine.setMenu(new GameMenu(_engine));
                 }
             }
@@ -149,6 +157,7 @@ namespace FrozenPizza
             base.Update(keybStates, mStates);
         }
 
+        //Draws addition IP box and connection status
         public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
             if (_connecting)

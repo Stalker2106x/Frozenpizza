@@ -24,7 +24,7 @@ namespace FrozenPizza
         Rectangle _skinRect;
         Vector2 _origin;
 
-
+        //Creates a projectile from network
         public Projectile(int id, ProjectileType type, Vector2 pos, float angle, float velocity, int damage)
         {
             Type = type;
@@ -43,6 +43,7 @@ namespace FrozenPizza
             _origin = new Vector2(16, 16);
         }
 
+        //Update locally
         public bool Update()
         {
             Pos += new Vector2((float)Math.Sin(Angle) * -Velocity, (float)Math.Cos(Angle) * -Velocity);
@@ -62,11 +63,13 @@ namespace FrozenPizza
             return (true);
         }
 
+        //Draw projectile
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Engine.collection.Projectiles, Pos, _skinRect, Color.White, -Angle, _origin, 1.0f, SpriteEffects.None, 0.3f);
         }
     }
+
     public class Ammo : Item
     {
         public Ammo(Int64 uid, int id, String name, float weight, float size) : base(uid, id, name, ItemType.Ammo, weight, size)

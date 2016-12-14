@@ -6,16 +6,18 @@ using System.Collections.Generic;
 
 namespace FrozenPizza
 {
+    //Enum for state managment
+    public enum GameState
+    {
+        Menu,
+        Playing,
+    }
+
     public class Engine : Game
     {
+        //Base Monogame Graphics
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
-        public enum GameState
-        {
-            Menu,
-            Playing,
-        }
 
         //GAME MECHANICS
         bool hasFocus;
@@ -23,28 +25,25 @@ namespace FrozenPizza
         Camera cam;
         HUD hud;
 
-        //Database & Netcode
+        //Database, Config and Netcode
         public static NetHandler netHandle;
         public static Collection collection;
         public static Options options;
 
-        //Menu
+        //Menu & Cursor
         Cursor _cursor;
         Menu _menu;
-        bool _gameLoaded;
 
         //Game
         static Level level;
         static MainPlayer mainPlayer;
         static List<Player> players;
+        bool _gameLoaded;
 
-        //Input
+        //Input management
         KeyBinds keybinds;
         KeyboardState[] keybStates;
         MouseState[] mouseStates;
-
-        //Timers
-        TimeSpan tMinute;
 
 		//Static accessors
         public static MainPlayer MainPlayer { get { return (mainPlayer); } }
@@ -63,13 +62,12 @@ namespace FrozenPizza
         public Engine()
         {
             graphics = new GraphicsDeviceManager(this);
-            options = new Options(this, graphics);
+            options = new Options(this, graphics, "./Data/cfg/config.cfg");
             graphics.IsFullScreen = false;
             graphics.PreferredBackBufferWidth = 1024;
             graphics.PreferredBackBufferHeight = 768;
             TargetElapsedTime = TimeSpan.FromSeconds(1.0f / 90.0f);
             Content.RootDirectory = "Data";
-            tMinute = new TimeSpan(0);
             gstate = GameState.Menu;
             _gameLoaded = false;
         }
@@ -164,18 +162,6 @@ namespace FrozenPizza
             _menu.Load(this.Content);            
         }
 
-        protected void updateTimeEvents(GameTime gameTime)
-        {
-            tMinute += gameTime.ElapsedGameTime;
-            //TODO: hunger and thirst over time
-            if (tMinute.TotalMinutes >= 1)
-            {
-                mainPlayer.Hunger -= 2;
-                mainPlayer.Thirst -= 1;
-                tMinute = TimeSpan.Zero;
-            }
-        }
-
         public void toggleMouseVisible()
         {
             _cursor.Show = _cursor.Show == true ? false : true;
@@ -187,18 +173,17 @@ namespace FrozenPizza
 
         void updateGame(GameTime gameTime)
         {
-            if (keybStates[0].IsKeyUp(Keys.Escape) && keybStates[1].IsKeyDown(Keys.Escape))
+            if (keybStates[0].IsKeyUp(Keys.Escape) && keybStates[1].IsKeyDown(Keys.Escape)) //Pause
             {
                 mainPlayer.InventoryOpen = false;
                 if (_cursor.Show == false)
                     toggleMouseVisible();
                 gstate = GameState.Menu;
             }
-            updateTimeEvents(gameTime);
-            level.Update();
+            level.Update(); //Update world
             mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, _cursor);
             hud.Update(mouseStates, mainPlayer);
-            if (mainPlayer.Alive && !mainPlayer.InventoryOpen)
+            if (mainPlayer.Alive && !mainPlayer.InventoryOpen) //If we are ingame reset mouse each loop
                 resetMousePos();
         }
 
@@ -234,12 +219,12 @@ namespace FrozenPizza
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.getTransformation());
             level.Draw(spriteBatch, cam, mainPlayer, collection);
             mainPlayer.Draw(spriteBatch);
-            for (int i = 0; i < players.Count; i++)
+            for (int i = 0; i < players.Count; i++) //Draw players
             {
                 players[i].Draw(spriteBatch);
             }
             spriteBatch.End();
-            if (gstate == GameState.Playing)
+            if (gstate == GameState.Playing) //Draw HUD
             {
                 spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
                 hud.Draw(spriteBatch, GraphicsDevice, mainPlayer, collection, cam);
@@ -258,7 +243,7 @@ namespace FrozenPizza
             {
                 case GameState.Menu:
                     if (_menu.GetType() == typeof(GameMenu))
-                        DrawGame(gameTime);
+                        DrawGame(gameTime); //Draw Game Anyway
                     spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
                     _menu.Draw(spriteBatch, GraphicsDevice);
                     spriteBatch.End();

@@ -18,6 +18,7 @@ namespace FrozenPizza
     }
     public class Player : Character
 	{
+        //Constructor for players
         public Player(int id, String name, Vector2 pos) : base(name)
         {
             Id = id;
@@ -25,6 +26,8 @@ namespace FrozenPizza
             _skinRect = new Rectangle(0, 0, 32, 16);
             _pos = pos;
         }
+
+        //Constructor for remote players
         public Player(int id, String name, Vector2 pos, int hp) : base(name)
         {
             Id = id;
@@ -34,12 +37,14 @@ namespace FrozenPizza
             _pos = pos;
         }
 
+        //Reports damage from server to player
         public virtual void hurt(int damage)
         {
             HP -= damage;
             _sounds[(int)PlayerSounds.Hurt].Play(Options.Config.SoundVolume, 0f, 0f);
         }
 
+        //Reports death from server to player
         public virtual void die()
         {
             HP = 0;
@@ -48,6 +53,7 @@ namespace FrozenPizza
             _skinRect = new Rectangle(0, 64, 32, 64);
         }
 
+        //Draws the player
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);

@@ -53,6 +53,7 @@ namespace FrozenPizza
 
         }
 
+        //Set correct skinRect with itemId
         public virtual void setSkin()
         {
             int id = Id;

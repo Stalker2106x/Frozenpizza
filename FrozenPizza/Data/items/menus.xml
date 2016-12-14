@@ -48,6 +48,7 @@
     <Setting>Music Volume</Setting>
     <Setting>Sound Volume</Setting>
     <Item>Apply</Item>
+		<Item>Controls</Item>
 		<Item>Default</Item>
     <Item>Back</Item>
   </OptionsMenu>

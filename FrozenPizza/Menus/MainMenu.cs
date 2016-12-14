@@ -60,7 +60,7 @@ namespace FrozenPizza
             {
                 case 0:
                     _engine.toggleMouseVisible();
-                    _engine.gstate = Engine.GameState.Playing;
+                    _engine.gstate = GameState.Playing;
                     break;
                 case 1:
                     _engine.UnloadGame();
@@ -72,6 +72,7 @@ namespace FrozenPizza
                     _engine.setMenu(new MainMenu(_engine));
                     break;
                 case 2:
+                    _engine.setMenu(new OptionsMenu(_engine, this));
                     break;
                 case 3:
                     _engine.exit();

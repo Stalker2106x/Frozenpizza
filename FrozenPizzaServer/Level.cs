@@ -9,6 +9,7 @@ namespace FrozenPizzaServer
     public enum Layers
     {
         Floor,
+        HWall,
         Wall,
         Ceiling,
         Meta,

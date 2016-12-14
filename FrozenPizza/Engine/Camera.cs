@@ -10,9 +10,12 @@ namespace FrozenPizza
 {
     public class Camera
     {
+        //Camera settings
         float _zoom, _rotation;
         Vector2 _origin;
         Matrix _transform;
+
+        //Reference to graphicsdevice
         GraphicsDevice _graphics;
 
         public Camera(GraphicsDevice graphicsDevice)
@@ -43,17 +46,20 @@ namespace FrozenPizza
             _origin += amount;
         }
 
+        //Returns real viewport
         public Rectangle getViewport()
         {
             return (new Rectangle((int)_origin.X - _graphics.Viewport.Width / 2, (int)_origin.Y - _graphics.Viewport.Height / 2,
                                     _graphics.Viewport.Width, _graphics.Viewport.Height));
         }
 
+        //returns viewport relative origin
 		public Vector2 getViewportCenter()
 		{
 			return (new Vector2(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2));
 		}
 
+        //Returns the player view
         public Matrix getTransformation()
         {
             _transform = Matrix.CreateTranslation(new Vector3(-_origin.X, -_origin.Y, 0)) *

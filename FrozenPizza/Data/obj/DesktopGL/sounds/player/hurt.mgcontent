@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/player/hurt.wav</SourceFile>
   <SourceTime>2016-12-13T20:45:59.0065196+01:00</SourceTime>
   <DestFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/bin/DesktopGL/sounds/player/hurt.xnb</DestFile>
-  <DestTime>2016-12-13T20:47:08.5471221+01:00</DestTime>
+  <DestTime>2016-12-14T23:36:33.0244895+01:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

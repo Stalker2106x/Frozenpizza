@@ -328,3 +328,18 @@
 /processorParam:Quality=Best
 /build:sounds/player/hurt.wav
 
+#begin gfx/shadowmap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gfx/shadowmap.png
+
+#begin cfg/config.cfg
+/copy:cfg/config.cfg
+

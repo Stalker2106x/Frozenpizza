@@ -68,6 +68,7 @@ namespace FrozenPizza
         {
         }
 
+        //Get a random angle between the aim angles
         public float getFireAngle(float[] angle)
         {
             Random rnd = new Random();
@@ -77,6 +78,7 @@ namespace FrozenPizza
             return ((float)(rnd.Next(min, max + 1) / 100f));
         }
 
+        //Send a fire event to the server
         public void fire(Vector2 pos, float[] aimAccuracyAngle)
         {
             float angle = getFireAngle(aimAccuracyAngle);
@@ -92,6 +94,7 @@ namespace FrozenPizza
             }
         }
 
+        //Reload locally
         public bool reload()
         {
             if (LoadedAmmo == ClipSize)
@@ -101,6 +104,7 @@ namespace FrozenPizza
             return (true);
         }
 
+        //Create firearm
 		public void SetFirearmAttributes(int accuracy, int clipsize, float reloadCooldown)
 		{
 			Accuracy = accuracy;
@@ -109,6 +113,7 @@ namespace FrozenPizza
             ReloadCooldown = reloadCooldown;
         }
 
+        //Load firearm sounds
         public void LoadSounds(ContentManager content)
         {
             Sounds = new SoundEffect[Enum.GetNames(typeof(FirearmActions)).Length];
