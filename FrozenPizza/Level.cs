@@ -28,14 +28,9 @@ namespace FrozenPizza
 
     public enum Shadows
     {
-        Top,
-        TopRight,
-        Right,
-        BottomRight,
-        Bottom,
+        Full,
         BottomLeft,
-        Left,
-        TopLeft
+        TopRight
     }
 
     public class Level
@@ -167,27 +162,35 @@ namespace FrozenPizza
 
         public void drawShadow(SpriteBatch spriteBatch, int layer, int xoffset, int yoffset, int x, int y)
         {
-            Shadows shadow = Shadows.Bottom;
+            Shadows shadow = Shadows.Full;
 
-            if (_map.Layers[(int)Layers.Ceiling].Tiles[((yoffset + y) * _map.Width) + (xoffset + x + 1)].Gid != 0) //Under ceiling! no shadow
+            if (yoffset <= 1 || xoffset <= 1
+                || _map.Layers[(int)Layers.Ceiling].Tiles[((yoffset + y) * _map.Width) + (xoffset + x + 1)].Gid != 0
+                || _map.Layers[(int)Layers.Wall].Tiles[((yoffset + y) * _map.Width) + (xoffset + x)].Gid == 0) //Under ceiling! no shadow
                 return;
-            if (_map.Layers[layer].Tiles[((yoffset + y + 1) * _map.Width) + (xoffset + x)].Gid == 0) //Down shadow
+            if (_map.Layers[(int)Layers.Wall].Tiles[((yoffset + y + 1) * _map.Width) + (xoffset + x)].Gid == 0) //Down shadow
             {
-                if (_map.Layers[layer].Tiles[((yoffset + y) * _map.Width) + (xoffset + x - 1)].Gid == 0) //Left tile
-                    shadow = Shadows.BottomLeft;
+                if (_map.Layers[(int)Layers.Wall].Tiles[((yoffset + y) * _map.Width) + (xoffset + x - 1)].Gid == 0) //Left tile
+                    shadow = Shadows.TopRight;
                 spriteBatch.Draw(_shadows, new Rectangle((xoffset + x) * _twidth, (yoffset + y + 1) * _theight, _twidth, _theight), new Rectangle((int)shadow * _twidth, 0, _twidth, _theight), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.4f);
             }
-            shadow = Shadows.Right;
+            shadow = Shadows.Full;
             if (_map.Layers[layer].Tiles[((yoffset + y) * _map.Width) + (xoffset + x + 1)].Gid == 0) //Right shadow
             {
-                if (_map.Layers[layer].Tiles[((yoffset + y - 1) * _map.Width) + (xoffset + x)].Gid == 0) //Top tile
-                    shadow = Shadows.TopRight;
+                if (_map.Layers[(int)Layers.Wall].Tiles[((yoffset + y - 1) * _map.Width) + (xoffset + x)].Gid == 0) //Top tile
+                    shadow = Shadows.BottomLeft;
                 else if (_map.Layers[layer].Tiles[(((yoffset + y) + 1) * _map.Width) + (xoffset + x)].Gid == 0) //Bottom tile
-                {
-                    shadow = Shadows.Right;
-                    spriteBatch.Draw(_shadows, new Rectangle((xoffset + x + 1) * _twidth, (yoffset + y) * _theight, _twidth, _theight), new Rectangle((int)Shadows.BottomRight * _twidth, 0, _twidth, _theight), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.4f);
-                }
+                    shadow = Shadows.Full;
                 spriteBatch.Draw(_shadows, new Rectangle((xoffset + x + 1) * _twidth, (yoffset + y) * _theight, _twidth, _theight), new Rectangle((int)shadow * _twidth, 0, _twidth, _theight), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.4f);
+            }
+            if (_map.Layers[(int)Layers.Wall].Tiles[((yoffset + y + 1) * _map.Width) + (xoffset + x + 1)].Gid == 0) //Bottom Right shadow
+            {
+                if (_map.Layers[(int)Layers.Wall].Tiles[((yoffset + y) * _map.Width) + (xoffset + x)].Gid != 0
+                    && _map.Layers[(int)Layers.Wall].Tiles[((yoffset + y + 1) * _map.Width) + (xoffset + x)].Gid == 0) //Top tile
+                {
+                    shadow = Shadows.Full;
+                    spriteBatch.Draw(_shadows, new Rectangle((xoffset + x + 1) * _twidth, (yoffset + y + 1) * _theight, _twidth, _theight), new Rectangle((int)shadow * _twidth, 0, _twidth, _theight), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.4f);
+                }
             }
         }
 
@@ -211,6 +214,8 @@ namespace FrozenPizza
             {
                 for (int x = 0; x <= xend; x++)
                 {
+                    bool shadow = false;
+
                     for (int l = _map.Layers.Count - 1; l >= 0; l--)
                     {
                         if ((Layers)l == Layers.Meta || (Layers)l == Layers.Spawn || (Indoor(mainPlayer.Pos) && (Layers)l == Layers.Ceiling))
@@ -231,8 +236,11 @@ namespace FrozenPizza
                         Rectangle tilesetRec = new Rectangle(_twidth * column, _theight * row, _twidth, _theight);
 
                         spriteBatch.Draw(_tileset, new Rectangle((int)(xoffset + x) * _twidth, (int)(yoffset + y) * _theight, _twidth, _theight), tilesetRec, Color.White, 0, Vector2.Zero, SpriteEffects.None, (Layers)l == Layers.Ceiling ? 0.2f : 0.5f);
-                        if ((Layers)l == Layers.Wall || (Layers)l == Layers.HWall)
+                        if (!shadow)
+                        {
                             drawShadow(spriteBatch, l, xoffset, yoffset, x, y);
+                            shadow = true;
+                        }
                         break;
                     }
                 }

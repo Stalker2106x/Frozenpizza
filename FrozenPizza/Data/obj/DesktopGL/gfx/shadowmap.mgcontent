@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/gfx/shadowmap.png</SourceFile>
-  <SourceTime>2016-12-14T17:32:51.8426762+01:00</SourceTime>
+  <SourceTime>2016-12-15T01:42:59.7485266+01:00</SourceTime>
   <DestFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/bin/DesktopGL/gfx/shadowmap.xnb</DestFile>
-  <DestTime>2016-12-14T23:36:33.0354999+01:00</DestTime>
+  <DestTime>2016-12-15T01:43:17.1120416+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

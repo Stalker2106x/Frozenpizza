@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/sounds/weapon/357magnum/reload.wav</SourceFile>
   <SourceTime>2016-11-30T18:53:28.4402976+01:00</SourceTime>
   <DestFile>C:/Users/stalk/Documents/Visual Studio 2015/Projects/FrozenPizza/FrozenPizza/Data/bin/DesktopGL/sounds/weapon/357magnum/reload.xnb</DestFile>
-  <DestTime>2016-12-14T23:36:32.3879376+01:00</DestTime>
+  <DestTime>2016-12-15T01:43:16.4147376+01:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

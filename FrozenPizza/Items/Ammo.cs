@@ -37,7 +37,8 @@ namespace FrozenPizza
             {
                 float distVolume = (Engine.MainPlayer.getDistanceTo(pos) / (Engine.Level.Map.TileWidth * 40));
 
-                weapon.Sounds[(int)FirearmActions.Fire].Play((Options.Config.SoundVolume - distVolume) / Options.Config.SoundVolume, 0f, 0f);
+                distVolume = (Options.Config.SoundVolume - distVolume) / Options.Config.SoundVolume;
+                weapon.Sounds[(int)FirearmActions.Fire].Play(distVolume > 0 ? distVolume : 0, 0f, 0f);
             }
             _skinRect = new Rectangle(0, 0, 32, 32);
             _origin = new Vector2(16, 16);
