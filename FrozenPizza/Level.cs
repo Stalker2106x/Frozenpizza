@@ -168,11 +168,12 @@ namespace FrozenPizza
                 || _map.Layers[(int)Layers.Ceiling].Tiles[((yoffset + y) * _map.Width) + (xoffset + x + 1)].Gid != 0
                 || _map.Layers[(int)Layers.Wall].Tiles[((yoffset + y) * _map.Width) + (xoffset + x)].Gid == 0) //Under ceiling! no shadow
                 return;
-            if (_map.Layers[(int)Layers.Wall].Tiles[((yoffset + y + 1) * _map.Width) + (xoffset + x)].Gid == 0) //Down shadow
+            if (_map.Layers[(int)Layers.Wall].Tiles[((yoffset + y + 1) * _map.Width) + (xoffset + x)].Gid == 0 //Down shadow
+                && _map.Layers[layer].Tiles[((yoffset + y + 1) * _map.Width) + (xoffset + x - 1)].Gid == 0) //Check for duplicate
             {
                 if (_map.Layers[(int)Layers.Wall].Tiles[((yoffset + y) * _map.Width) + (xoffset + x - 1)].Gid == 0) //Left tile
                     shadow = Shadows.TopRight;
-                spriteBatch.Draw(_shadows, new Rectangle((xoffset + x) * _twidth, (yoffset + y + 1) * _theight, _twidth, _theight), new Rectangle((int)shadow * _twidth, 0, _twidth, _theight), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.4f);
+                spriteBatch.Draw(_shadows, new Rectangle((xoffset + x) * _twidth, (yoffset + y + 1) * _theight, _twidth, _theight), new Rectangle((int)shadow * _twidth, 0, _twidth, _theight), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.25f);
             }
             shadow = Shadows.Full;
             if (_map.Layers[layer].Tiles[((yoffset + y) * _map.Width) + (xoffset + x + 1)].Gid == 0) //Right shadow
@@ -181,15 +182,16 @@ namespace FrozenPizza
                     shadow = Shadows.BottomLeft;
                 else if (_map.Layers[layer].Tiles[(((yoffset + y) + 1) * _map.Width) + (xoffset + x)].Gid == 0) //Bottom tile
                     shadow = Shadows.Full;
-                spriteBatch.Draw(_shadows, new Rectangle((xoffset + x + 1) * _twidth, (yoffset + y) * _theight, _twidth, _theight), new Rectangle((int)shadow * _twidth, 0, _twidth, _theight), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.4f);
+                spriteBatch.Draw(_shadows, new Rectangle((xoffset + x + 1) * _twidth, (yoffset + y) * _theight, _twidth, _theight), new Rectangle((int)shadow * _twidth, 0, _twidth, _theight), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.25f);
             }
             if (_map.Layers[(int)Layers.Wall].Tiles[((yoffset + y + 1) * _map.Width) + (xoffset + x + 1)].Gid == 0) //Bottom Right shadow
             {
                 if (_map.Layers[(int)Layers.Wall].Tiles[((yoffset + y) * _map.Width) + (xoffset + x)].Gid != 0
-                    && _map.Layers[(int)Layers.Wall].Tiles[((yoffset + y + 1) * _map.Width) + (xoffset + x)].Gid == 0) //Top tile
+                    && _map.Layers[(int)Layers.Wall].Tiles[((yoffset + y + 1) * _map.Width) + (xoffset + x)].Gid == 0
+                    && _map.Layers[(int)Layers.Wall].Tiles[((yoffset + y) * _map.Width) + (xoffset + x + 1)].Gid == 0) //Top tile
                 {
                     shadow = Shadows.Full;
-                    spriteBatch.Draw(_shadows, new Rectangle((xoffset + x + 1) * _twidth, (yoffset + y + 1) * _theight, _twidth, _theight), new Rectangle((int)shadow * _twidth, 0, _twidth, _theight), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.4f);
+                    spriteBatch.Draw(_shadows, new Rectangle((xoffset + x + 1) * _twidth, (yoffset + y + 1) * _theight, _twidth, _theight), new Rectangle((int)shadow * _twidth, 0, _twidth, _theight), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.25f);
                 }
             }
         }

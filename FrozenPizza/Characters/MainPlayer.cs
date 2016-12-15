@@ -454,7 +454,7 @@ namespace FrozenPizza
         //Base draw call
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Engine.collection.Players, _pos, _skinRect, Color.White, -_aim, _origin, 1.0f, SpriteEffects.None, 0);
+            spriteBatch.Draw(Engine.collection.Players, _pos, _skinRect, Color.White, -_aim, _origin, 1.0f, SpriteEffects.None, 0.3f);
         }
     }
 
