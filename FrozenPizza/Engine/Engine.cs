@@ -182,6 +182,8 @@ namespace FrozenPizza
             }
             level.Update(); //Update world
             mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, _cursor);
+            for (int i = 0; i < players.Count; i++)
+                players[i].Update(gameTime);
             hud.Update(mouseStates, mainPlayer);
             if (mainPlayer.Alive && !mainPlayer.InventoryOpen) //If we are ingame reset mouse each loop
                 resetMousePos();

@@ -22,6 +22,7 @@ namespace FrozenPizza
             _commands.Add("!MAP", setMap);
 			_commands.Add("!PLAYER", setMainPlayer);
             _commands.Add("!+PLAYER", addNewPlayer);
+            _commands.Add("!SETPOS", setPlayerPos);
             _commands.Add("!MOVE", movePlayer);
             _commands.Add("!AIM", aimPlayer);
             _commands.Add("!+FIRE", createProjectile);
@@ -123,7 +124,7 @@ namespace FrozenPizza
 			Engine.MainPlayer.Id = id;
 			float.TryParse(args[1], out pos.X);
 			float.TryParse(args[2], out pos.Y);
-			Engine.MainPlayer.Pos = Engine.Level.vgridToMap(pos);
+			Engine.MainPlayer.Pos = pos;
             acknowledge(null);
             return (true);
 		}
@@ -156,12 +157,12 @@ namespace FrozenPizza
             Int32.TryParse(args[1], out hp);
             float.TryParse(args[2], out pos.X);
             float.TryParse(args[3], out pos.Y);
-            Engine.Players.Add(new Player(id, "RP", Engine.Level.vgridToMap(pos), hp));
+            Engine.Players.Add(new Player(id, "RP", pos, hp));
             Engine.Players.Last().Load(Engine.collection.Content);
             acknowledge(null);
             return (true);
         }
-        bool movePlayer(String[] args)
+        bool setPlayerPos(String[] args)
         {
             int id;
             Vector2 pos;
@@ -170,9 +171,27 @@ namespace FrozenPizza
             float.TryParse(args[1], out pos.X);
             float.TryParse(args[2], out pos.Y);
             if (Engine.MainPlayer != null && id == Engine.MainPlayer.Id)
+            {
                 Engine.MainPlayer.Pos = pos;
+                Engine.MainPlayer.BadMove = true;
+            }
             else if (Engine.getPlayerById(id) != null)
                 Engine.getPlayerById(id).Pos = pos;
+            return (true);
+        }
+
+        bool movePlayer(String[] args)
+        {
+            int id;
+            Vector2 move;
+
+            Int32.TryParse(args[0], out id);
+            float.TryParse(args[1], out move.X);
+            float.TryParse(args[2], out move.Y);
+            if (Engine.MainPlayer != null && id == Engine.MainPlayer.Id)
+                Engine.MainPlayer.Move = move;
+            else if (Engine.getPlayerById(id) != null)
+                Engine.getPlayerById(id).Move = move;
             return (true);
         }
 
@@ -225,7 +244,6 @@ namespace FrozenPizza
 
         bool killPlayer(String[] args)
         {
-
             int id;
 
             Int32.TryParse(args[0], out id);
@@ -233,6 +251,7 @@ namespace FrozenPizza
                 Engine.MainPlayer.die();
             else
                 Engine.getPlayerById(id).die();
+            acknowledge(null);
             return (true);
         }
 

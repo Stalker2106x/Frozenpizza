@@ -66,7 +66,7 @@ namespace FrozenPizzaServer
             send("?VERSION");
             if (!_cmdHandle.ParseExpectedCmd(receive(), "!VERSION"))
                 return (false);
-			_player = new Player(Server.Level.getSpawnLocation());
+			_player = new Player(Id, Server.Level.getSpawnLocation());
             send("?WHOIS");
             if (!_cmdHandle.ParseExpectedCmd(receive(), "!WHOIS"))
                 return (false);

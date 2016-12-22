@@ -75,6 +75,8 @@ namespace FrozenPizza
             int max = (int)(angle[0] * 100);
             int min = (int)(angle[1] * 100);
 
+            if (min > max)
+                return ((min + ((max - min) / 2)) / 100f);
             return ((float)(rnd.Next(min, max + 1) / 100f));
         }
 

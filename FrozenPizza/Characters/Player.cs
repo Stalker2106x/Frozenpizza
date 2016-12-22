@@ -53,6 +53,16 @@ namespace FrozenPizza
             _skinRect = new Rectangle(0, 64, 32, 64);
         }
 
+        //Update player pos
+        public virtual void Update(GameTime gameTime)
+        {
+            Vector2 syncVector = new Vector2();
+
+            syncVector.X = (float)(_move.X * gameTime.ElapsedGameTime.TotalSeconds);
+            syncVector.Y = (float)(_move.Y * gameTime.ElapsedGameTime.TotalSeconds);
+            Pos += syncVector;
+        }
+
         //Draws the player
         public virtual void Draw(SpriteBatch spriteBatch)
         {

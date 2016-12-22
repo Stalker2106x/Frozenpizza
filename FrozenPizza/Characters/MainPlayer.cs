@@ -25,7 +25,7 @@ namespace FrozenPizza
         int _maxHunger, _maxThirst;
 
         //Triggers
-        bool _inventoryOpen, _cooldown, _sprinting, _aimlock;
+        bool _inventoryOpen, _cooldown, _sprinting, _aimlock, _badMove;
 
         //Inventory
         Item _hands;
@@ -42,10 +42,11 @@ namespace FrozenPizza
         TimeSpan _netcodeTimer;
 
         //Netcode
-        Vector2 _netLastPos;
+        Vector2 _netLastMove;
         float _netLastAim;
 
         float _aimSensivity;
+
 
 		public MainPlayer(String name) : base(-1, name, new Vector2(0, 0))
         {
@@ -62,6 +63,7 @@ namespace FrozenPizza
             _cooldown = false;
             _aimlock = false;
 			_sprinting = false;
+            BadMove = false;
 
             //Set aim view
             _aim = 0;
@@ -109,8 +111,12 @@ namespace FrozenPizza
             get { return (_hands); }
             set { _hands = value; }
         }
-
-		public ItemType HandsType
+        public bool BadMove
+        {
+            get { return (_badMove); }
+            set { _badMove = value; }
+        }
+        public ItemType HandsType
 		{
 			get { return (_hands.Type); }
 		}
@@ -169,10 +175,23 @@ namespace FrozenPizza
                 aimAccuracyAngle[1] += (float)(Math.PI / 180) * weapon.Accuracy;
             }
             if (_sprinting)
-			{
-				aimAccuracyAngle[0] += 0.15f;
-				aimAccuracyAngle[1] -= 0.15f;
-			}
+            {
+                aimAccuracyAngle[0] += 0.15f;
+                aimAccuracyAngle[1] -= 0.15f;
+            }
+            else
+            {
+                if (_move == Vector2.Zero)
+                {
+                    aimAccuracyAngle[0] -= 0.05f;
+                    aimAccuracyAngle[1] += 0.05f;
+                }
+                if (_aimlock)
+                {
+                    aimAccuracyAngle[0] -= 0.05f;
+                    aimAccuracyAngle[1] += 0.05f;
+                }
+            }
             if (real)
             {
                 aimAccuracyAngle[0] += _aim - MathHelper.PiOver2;
@@ -184,11 +203,11 @@ namespace FrozenPizza
         //Returns speed accordint to weight and sprint states
 		public float getSpeed(KeyboardState keybState)
         {
-			float speed = 1.25f;
+			float speed = 120f;
 
 			if (_sprinting)
-				speed = 2.0f;
-			return (speed - (getWeight() / 10));
+				speed += 30f;
+			return (speed);
         }
 
         //Make player drop item on death & closes inventory
@@ -220,55 +239,48 @@ namespace FrozenPizza
         }
 
         //check wether the user is sprinting or not [DEPRECATED]
-        bool checkSprint(KeyboardState[] keybStates)
+        void setSprinting(KeyboardState[] keybStates)
         {
-            if (keybStates[1].IsKeyDown(KeyBinds.getKey("Sprint")))
-            {
+            if (!_sprinting && keybStates[1].IsKeyDown(KeyBinds.getKey("Sprint")))
                 _sprinting = true;
-                return (true);
-            }
-            return (false);
         }
 
         //Code to move the player
         void updateMove(GameTime gameTime, KeyboardState[] keybStates, Level level)
         {
-			bool move = false;
 			float speed = getSpeed(keybStates[1]);
 
+            _move = Vector2.Zero;
             if (keybStates[1].IsKeyUp(KeyBinds.getKey("Sprint")))
                 _sprinting = false;
             if (keybStates[1].IsKeyDown(KeyBinds.getKey("StrafeLeft")))
             {
                 if (keybStates[1].IsKeyDown(KeyBinds.getKey("Forward")) || keybStates[1].IsKeyDown(KeyBinds.getKey("Backward")))
                     speed *= 0.5f;
-                _pos += new Vector2((float)Math.Cos(_aim) * -speed, (float)Math.Sin(_aim) * speed);
-                checkSprint(keybStates);
-                move = true;
+                _move += new Vector2((float)Math.Cos(_aim) * -speed, (float)Math.Sin(_aim) * speed);
             }
             else if (keybStates[1].IsKeyDown(KeyBinds.getKey("StrafeRight")))
             {
                 if (keybStates[1].IsKeyDown(KeyBinds.getKey("Forward")) || keybStates[1].IsKeyDown(KeyBinds.getKey("Backward")))
                     speed *= 0.5f;
-                _pos += new Vector2((float)Math.Cos(_aim) * speed, (float)-Math.Sin(_aim) * speed);
-                checkSprint(keybStates);
-                move = true;
+                _move += new Vector2((float)Math.Cos(_aim) * speed, (float)-Math.Sin(_aim) * speed);
             }
+
             speed = getSpeed(keybStates[1]); //Reset speed
             if (keybStates[1].IsKeyDown(KeyBinds.getKey("Forward")))
-            {
-                _pos += new Vector2((float)Math.Sin(_aim) * -speed, (float)Math.Cos(_aim) * -speed);
-                checkSprint(keybStates);
-                move = true;
-            }
+                _move += new Vector2((float)Math.Sin(_aim) * -speed, (float)Math.Cos(_aim) * -speed);
             else if (keybStates[1].IsKeyDown(KeyBinds.getKey("Backward")))
+                _move += new Vector2((float)Math.Sin(_aim) * speed, (float)Math.Cos(_aim) * speed);
+
+            if (_move != Vector2.Zero)
             {
-                _pos += new Vector2((float)Math.Sin(_aim) * speed, (float)Math.Cos(_aim) * speed);
-                checkSprint(keybStates);
-                move = true;
-            }
-            if (move)
-            {
+                Vector2 syncVector = new Vector2((float)(_move.X * gameTime.ElapsedGameTime.TotalSeconds), (float)(_move.Y * gameTime.ElapsedGameTime.TotalSeconds));
+
+                setSprinting(keybStates);
+                if (_badMove && _netLastMove == _move)
+                    return;
+                _badMove = false;
+                Pos += syncVector;
                 stepSound(gameTime, _sprinting);
             }
         }
@@ -416,10 +428,10 @@ namespace FrozenPizza
             if (_netcodeTimer.TotalMilliseconds <= 0)
             {
                 _netcodeTimer = TimeSpan.FromMilliseconds(10);
-                if (_pos != _netLastPos)
+                if (_move != _netLastMove)
                 {
-                    NetHandler.send("?MOVE " + _pos.X + " " + _pos.Y);
-                    _netLastPos = _pos;
+                    NetHandler.send("?MOVE " + _move.X + " " + _move.Y);
+                    _netLastMove = _move;
                 }
                 if (_aim != _netLastAim)
                 {

@@ -21,6 +21,7 @@ namespace FrozenPizza
         //Movement
         protected Vector2 _pos, _origin;
 		protected float _aim;
+        protected Vector2 _move;
 
 		//Graphics
         protected Rectangle _skinRect;
@@ -62,6 +63,12 @@ namespace FrozenPizza
         {
             get { return _pos; }
             set { _pos = value; }
+        }
+
+        public Vector2 Move
+        {
+            get { return (_move); }
+            set { _move = value; }
         }
         public float Aim
         {

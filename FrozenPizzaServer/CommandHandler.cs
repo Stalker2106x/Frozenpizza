@@ -112,17 +112,12 @@ namespace FrozenPizzaServer
         bool movePlayer(String[] args)
         {
             float x, y;
-            PointF pos;
+            PointF move;
             
             float.TryParse(args[0], out x);
             float.TryParse(args[1], out y);
-            pos = new PointF(x, y);
-            if (Server.Level.Collide(pos))
-            {
-                _client.send("!MOVE " + _client.Id + " " + _client.Player.Pos.X + " " + _client.Player.Pos.Y);
-                return (true);
-            }
-            Server.ClientList[_client.Id].Player.Pos = pos;          
+            move = new PointF(x, y);
+            Server.ClientList[_client.Id].Player.Move = move;          
             Server.broadcast(_client.Id, "!MOVE " + _client.Id + " " + args[0] + " " + args[1]);
             return (true);
         }

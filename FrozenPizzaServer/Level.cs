@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Threading;
 using TiledSharp;
+using System.Diagnostics;
 
 namespace FrozenPizzaServer
 {
@@ -39,6 +40,7 @@ namespace FrozenPizzaServer
 
         //Thread
         Thread _thread;
+        DateTime _lastTick;
 
         public TmxMap Map {  get { return (_map); } }
         public List<Item> Entities { get { return (_entities); } }
@@ -53,6 +55,7 @@ namespace FrozenPizzaServer
             _projectiles = new List<Projectile>();
 			_currentUid = 0;
             GenerateItems();
+            _lastTick = DateTime.Now;
         }
 
         public PointF vmapToGrid(PointF pos)
@@ -70,6 +73,7 @@ namespace FrozenPizzaServer
             _thread = new Thread(Update);
             _thread.Start();
         }
+
         //Generation
         public void GenerateItems()
         {
@@ -123,6 +127,16 @@ namespace FrozenPizzaServer
             return (false);
         }
 
+        public bool RCollide(Rectangle rect)
+        {
+            if ((Collide(rect.Location) || Collide(rect.Location + rect.Size))
+                || Collide(rect.Location + new Size(rect.Width, 0)) || Collide(rect.Location + new Size(0, rect.Height)))
+                return (true);
+            return (false);
+        }
+
+
+
         public PointF getSpawnLocation()
 		{
 			Random rnd = new Random();
@@ -133,7 +147,7 @@ namespace FrozenPizzaServer
 			while (_map.Layers[(int)Layers.Spawn].Tiles[pos].Gid == 0)
 				pos = rnd.Next(0, _map.Layers[(int)Layers.Spawn].Tiles.Count);
 			spawn = _map.Layers[(int)Layers.Spawn].Tiles[pos];
-			return (new PointF(spawn.X, spawn.Y));
+			return (new PointF((spawn.X * _twidth) + (_twidth / 2), (spawn.Y * _theight) + (_theight / 2)));
 		}
 
         public void updateProjectiles()
@@ -147,20 +161,19 @@ namespace FrozenPizzaServer
             }
         }
 
-        public void Update()
+        void Update(object state)
         {
             while (true)
             {
+                TimeSpan elapsedTime = DateTime.Now - _lastTick;
+                _lastTick = DateTime.Now;
+
                 updateProjectiles();
                 for (int i = 0; i < Server.ClientList.Count; i++)
                 {
                     if (Server.ClientList[i] == null || Server.ClientList[i].Player == null)
                         continue;
-                    if (Server.ClientList[i].Player.HP <= 0 && Server.ClientList[i].Player.Alive)
-                    {
-                        Server.ClientList[i].Player.Alive = false;
-                        Server.broadcast(-1, "!DIE " + i);
-                    }
+                    Server.ClientList[i].Player.Update(elapsedTime);
                 }
                 Thread.Sleep(10);
             }

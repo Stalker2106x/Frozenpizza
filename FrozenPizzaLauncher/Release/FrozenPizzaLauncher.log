@@ -1,1 +1,3 @@
-﻿
+﻿  main.cpp
+  Updater.cpp
+c:\users\stalk\documents\visual studio 2015\projects\frozenpizza\frozenpizzalauncher\Updater.hh(4): fatal error C1083: Impossible d'ouvrir le fichier include : 'QApplication' : No such file or directory

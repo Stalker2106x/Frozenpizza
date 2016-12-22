@@ -218,12 +218,14 @@ namespace FrozenPizza
                 {
                     bool shadow = false;
 
+                    if (((yoffset + y) < 0 || (xoffset + x) < 0) //TopLeft
+                        || ((yoffset + y) > (_map.Height - 1) || (xoffset + x) > (_map.Width - 1))) //BottomRight
+                        continue;
+                    if (Indoor(mainPlayer.Pos) && _map.Layers[(int)Layers.Ceiling].Tiles[((yoffset + y) * _map.Width) + xoffset + x].Gid == 0)
+                        continue;
                     for (int l = _map.Layers.Count - 1; l >= 0; l--)
                     {
                         if ((Layers)l == Layers.Meta || (Layers)l == Layers.Spawn || (Indoor(mainPlayer.Pos) && (Layers)l == Layers.Ceiling))
-                            continue;
-                        if (((yoffset + y) < 0 || (xoffset + x) < 0) //TopLeft
-                            || ((yoffset + y) > (_map.Height - 1) || (xoffset + x) > (_map.Width - 1))) //TopRight
                             continue;
                         int gid = _map.Layers[l].Tiles[((yoffset + y) * _map.Width) + xoffset + x].Gid;
 

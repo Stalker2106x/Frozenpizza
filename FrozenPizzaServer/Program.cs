@@ -89,6 +89,7 @@ namespace FrozenPizzaServer
                 Console.WriteLine("Socket error occured!");
             }
             Console.WriteLine(" >> " + "Client connected with ID " + _connections + "!");
+            _client.NoDelay = true;
             ClientList.Add(new NetCli(_client, _connections));
             ClientList.Last().startClient();
             _connections++;

@@ -94,7 +94,7 @@ namespace FrozenPizza
                 else if (lines[i].Contains("width"))
                     lines[i] = "width=" + Config.Width;
                 else if (lines[i].Contains("height"))
-                    lines[i] = "width=" + Config.Height;
+                    lines[i] = "height=" + Config.Height;
                 else if (lines[i].Contains("musicvolume"))
                     lines[i] = "musicvolume=" + Config.MusicVolume;
                 else if (lines[i].Contains("soundvolume"))

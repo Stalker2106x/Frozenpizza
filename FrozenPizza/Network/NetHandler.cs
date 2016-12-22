@@ -30,6 +30,7 @@ namespace FrozenPizza
         public NetHandler()
         {
             _client = new TcpClient();
+            _client.NoDelay = true;
             _cmdHandle = new CommandHandler();
             _receiveStack = new Queue<string>();
             Connected = false;
