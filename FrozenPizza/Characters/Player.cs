@@ -57,9 +57,14 @@ namespace FrozenPizza
         public virtual void Update(GameTime gameTime)
         {
             Vector2 syncVector = new Vector2();
+            Rectangle newhit = getHitbox();
 
             syncVector.X = (float)(_move.X * gameTime.ElapsedGameTime.TotalSeconds);
             syncVector.Y = (float)(_move.Y * gameTime.ElapsedGameTime.TotalSeconds);
+            newhit.X += (int)syncVector.X;
+            newhit.Y += (int)syncVector.Y;
+            if (Engine.Level.RCollide(newhit))
+                return;
             Pos += syncVector;
         }
 

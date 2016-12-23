@@ -120,10 +120,18 @@ namespace FrozenPizza
         {
             Vector2 realpos = vmapToGrid(pos);
 
-            if ((realpos.X < 0 || realpos.X >= _map.Width)
-                || (realpos.Y < 0 || realpos.Y >= _map.Height))
+            if ((realpos.X < 0 || realpos.X >= _map.Width - 1)
+                || (realpos.Y < 0 || realpos.Y >= _map.Height - 1))
                 return (true);
             if (_map.Layers[(int)Layers.Wall].Tiles[(int)((_map.Width * realpos.Y) + realpos.X)].Gid != 0)
+                return (true);
+            return (false);
+        }
+
+        public bool RCollide(Rectangle rect)
+        {
+            if ((Collide(rect.Location.ToVector2()) || Collide(rect.Location.ToVector2() + rect.Size.ToVector2()))
+                || Collide(rect.Location.ToVector2() + new Vector2(rect.Width, 0)) || Collide(rect.Location.ToVector2() + new Vector2(0, rect.Height)))
                 return (true);
             return (false);
         }

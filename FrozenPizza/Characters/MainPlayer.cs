@@ -275,10 +275,20 @@ namespace FrozenPizza
             if (_move != Vector2.Zero)
             {
                 Vector2 syncVector = new Vector2((float)(_move.X * gameTime.ElapsedGameTime.TotalSeconds), (float)(_move.Y * gameTime.ElapsedGameTime.TotalSeconds));
+                Rectangle newhit = getHitbox();
 
                 setSprinting(keybStates);
+                newhit.X += (int)syncVector.X;
+                newhit.Y += (int)syncVector.Y;
                 if (_badMove && _netLastMove == _move)
+                {
+                    _move = Vector2.Zero;
                     return;
+                }
+                if (Engine.Level.RCollide(newhit))
+                {
+                    return;                
+                }
                 _badMove = false;
                 Pos += syncVector;
                 stepSound(gameTime, _sprinting);
