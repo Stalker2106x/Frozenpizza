@@ -226,14 +226,14 @@ namespace FrozenPizza
 			{
 				Random rnd = new Random();
 
-				_sounds[rnd.Next(4, 8)].Play(0.5f, 0f, 0f);
+				_sounds[rnd.Next(4, 8)].Play(Options.Config.SoundVolume, 0f, 0f);
 				_stepTimer = TimeSpan.Zero;
 			}
 			else if (!run && _stepTimer >= _sounds[(int)PlayerSounds.Step1].Duration)
 			{
 				Random rnd = new Random();
 
-				_sounds[rnd.Next(0, 4)].Play(0.5f, 0f, 0f);
+				_sounds[rnd.Next(0, 4)].Play(Options.Config.SoundVolume, 0f, 0f);
                 _stepTimer = TimeSpan.Zero;
 			}
         }
