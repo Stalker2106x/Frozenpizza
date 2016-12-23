@@ -34,7 +34,7 @@ namespace FrozenPizzaServer
 
         public Rectangle getHitbox()
         {
-            return (new Rectangle(Point.Truncate(Pos - new SizeF(8, 8)), new Size(Point.Truncate(new PointF(16, 16)))));
+            return (new Rectangle(Point.Truncate(Pos - new SizeF(8, 8)), new Size(16, 16)));
         }
 
         public void Update(TimeSpan delta)
