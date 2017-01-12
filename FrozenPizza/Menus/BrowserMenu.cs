@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using FrozenPizza;
 
 namespace FrozenPizza
 {
@@ -110,6 +105,11 @@ namespace FrozenPizza
 
             if (prevInput.Length == 0 || (input.Length > 0 && prevInput[0] != input[0]))
             {
+                if (keybStates[1].IsKeyDown(Keys.LeftControl) && keybStates[1].IsKeyDown(Keys.V) && keybStates[0].IsKeyUp(Keys.V))
+                {
+                    _ip += System.Windows.Forms.Clipboard.GetText();
+                    return;
+                }
                 for (int i = 0; i < input.Length; i++)
                 {
                     if (((char)input[i] >= '0' && (char)input[i] <= '9'))

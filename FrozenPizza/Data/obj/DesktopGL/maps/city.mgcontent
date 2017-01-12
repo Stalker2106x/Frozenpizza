@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/maps/city.jpg</SourceFile>
-  <SourceTime>2016-11-26T20:25:01.321566+01:00</SourceTime>
-  <DestFile>C:/Users/stalk/documents/visual studio 2015/Projects/FrozenPizza/FrozenPizza/Data/bin/DesktopGL/maps/city.xnb</DestFile>
-  <DestTime>2016-12-23T03:02:38.1682444+01:00</DestTime>
+  <SourceFile>W:/Projets/FrozenPizza/Frozenpizza/FrozenPizza/Data/maps/city.jpg</SourceFile>
+  <SourceTime>2017-01-04T22:38:51.541801+01:00</SourceTime>
+  <DestFile>W:/Projets/FrozenPizza/Frozenpizza/FrozenPizza/Data/bin/DesktopGL/maps/city.xnb</DestFile>
+  <DestTime>2017-01-13T00:50:56.9911771+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

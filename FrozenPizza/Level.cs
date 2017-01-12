@@ -227,7 +227,7 @@ namespace FrozenPizza
                     bool shadow = false;
 
                     if (((yoffset + y) < 0 || (xoffset + x) < 0) //TopLeft
-                        || ((yoffset + y) > (_map.Height - 1) || (xoffset + x) > (_map.Width - 1))) //BottomRight
+                        || ((yoffset + y) >= (_map.Height - 1) || (xoffset + x) >= (_map.Width - 1))) //BottomRight
                         continue;
                     if (Indoor(mainPlayer.Pos) && _map.Layers[(int)Layers.Ceiling].Tiles[((yoffset + y) * _map.Width) + xoffset + x].Gid == 0)
                         continue;
@@ -253,7 +253,8 @@ namespace FrozenPizza
                             drawShadow(spriteBatch, l, xoffset, yoffset, x, y);
                             shadow = true;
                         }
-                        break;
+                        if (l != (int)Layers.Ceiling)
+                            break;
                     }
                 }
 
@@ -275,7 +276,7 @@ namespace FrozenPizza
             drawTiles(spriteBatch, cam, mainPlayer);
             for (int i = _entities.Count - 1; i >= 0; i--)
             {
-                if (_entities[i].Pos != - Vector2.One)
+                if (_entities[i].Pos != - Vector2.One && (!Indoor(mainPlayer.Pos) || (Indoor(mainPlayer.Pos) && Indoor(_entities[i].Pos))))
                     spriteBatch.Draw(Engine.collection.Tilesets[(int)_entities[i].Type], _entities[i].Pos, _entities[i].SkinRect, Color.White, 0, _entities[i].Origin, 1f, SpriteEffects.None, 0.3f);
             }
             for (int i = _projectiles.Count - 1; i >= 0; i--)
