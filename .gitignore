@@ -1,0 +1,70 @@
+# Compiled source #
+###################
+/lib
+*.com
+*.class
+*.dll
+*.res
+*.exe
+*.lib
+*.so
+*.o
+*.a
+*.obj
+
+# Symbols db #
+##############
+*.pdb
+*.ilk
+
+# Visual Studio #
+#################
+/.vscode
+*.VC.db
+*.sbr
+*.opensdf
+*.opendb
+*.suo
+*.sdf
+*.idb
+*.bsc
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.gz
+*.rar
+*.tar
+*.zip
+
+# Logs and temp #
+#################
+*.log
+*.tlog
+*~
+*#
+.#*
+
+# CMake #
+#########
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+~$
