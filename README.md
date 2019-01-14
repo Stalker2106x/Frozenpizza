@@ -6,10 +6,10 @@ It has been compiled and tested on Windows 10 x64 Pro, and MacOS X 10.11 El Capi
 
 ### What to do next [UPDATELOG]###
 - Add keybinds
-- Build inventory system (omg)
-- Fix loads of bugs.
+- Build inventory system (who knew)
+- Fix loads of bugs. (no shit)
 - Enable 'create server'
-- Add Epouvantail (wut?)
+- Add scarecrow (wut?)
 
 ### How do I get set up? ###
 
