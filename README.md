@@ -1,6 +1,6 @@
 # README #
 
-![./FrozenPizza/Data/gfx/logo.png]()
+![FP Logo](./FrozenPizza/Data/gfx/logo.png)
 
 This game requires MonoGame Framework installed.
 
