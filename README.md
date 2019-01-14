@@ -1,5 +1,7 @@
 # README #
 
+![./FrozenPizza/Data/gfx/logo.png]()
+
 This game requires MonoGame Framework installed.
 
 It has been compiled and tested on Windows 10 x64 Pro, and MacOS X 10.11 El Capitan.
