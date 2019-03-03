@@ -1,0 +1,14 @@
+D:\Projets\Frozenpizza\FrozenPizzaServer\bin\Debug\FrozenPizzaServer.exe.config
+D:\Projets\Frozenpizza\FrozenPizzaServer\bin\Debug\Data\cfg\controls.cfg
+D:\Projets\Frozenpizza\FrozenPizzaServer\bin\Debug\OpenTK.dll.config
+D:\Projets\Frozenpizza\FrozenPizzaServer\bin\Debug\FrozenPizzaServer.exe
+D:\Projets\Frozenpizza\FrozenPizzaServer\bin\Debug\FrozenPizzaServer.pdb
+D:\Projets\Frozenpizza\FrozenPizzaServer\bin\Debug\FrozenPizza.exe
+D:\Projets\Frozenpizza\FrozenPizzaServer\bin\Debug\MonoGame.Framework.dll
+D:\Projets\Frozenpizza\FrozenPizzaServer\bin\Debug\FrozenPizza.pdb
+D:\Projets\Frozenpizza\FrozenPizzaServer\obj\Debug\FrozenPizzaServer.exe
+D:\Projets\Frozenpizza\FrozenPizzaServer\obj\Debug\FrozenPizzaServer.pdb
+D:\Projets\Frozenpizza\FrozenPizzaServer\obj\Debug\FrozenPizzaServer.csprojAssemblyReference.cache
+D:\Projets\Frozenpizza\FrozenPizzaServer\obj\Debug\FrozenPizzaServer.csproj.CoreCompileInputs.cache
+D:\Projets\Frozenpizza\FrozenPizzaServer\bin\Debug\FrozenPizza.exe.config
+D:\Projets\Frozenpizza\FrozenPizzaServer\obj\Debug\FrozenPizzaServer.csproj.CopyComplete

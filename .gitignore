@@ -19,6 +19,7 @@
 
 # Visual Studio #
 #################
+/.vs
 /.vscode
 *.VC.db
 *.sbr
