@@ -71,7 +71,7 @@ namespace FrozenPizza
 
 		public void Update(MouseState[] mStates, MainPlayer mainPlayer)
         {
-            if (mainPlayer.Cooldown)
+            if (mainPlayer.cooldown)
                 _cooldownBar.Width = mainPlayer.getCooldownPercent(_handsPanel.Width);
             if (mainPlayer.checkState(PlayerStates.Hungry) && _foodBackground[0] != Color.Orange)
 				_foodBackground[0] = Color.Orange;
@@ -114,20 +114,20 @@ namespace FrozenPizza
 		public void drawHandsPanel(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, MainPlayer mainPlayer, Collection collection)
 		{
 			DrawHudPanel(spriteBatch, graphicsDevice, _handsPanel, Color.LightGray, 0.5f);
-			if (mainPlayer.Cooldown)
+			if (mainPlayer.cooldown)
 				DrawHudPanel(spriteBatch, graphicsDevice, _cooldownBar, Color.White, 0.75f);
-            if (mainPlayer.Hands == null)
+            if (mainPlayer.hands == null)
             {
                 spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
                 spriteBatch.Draw(collection.Tilesets[(int)ItemType.Melee], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), new Rectangle(0, 0, 32, 32), Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
             }
             else
             {
-                spriteBatch.DrawString(_font, mainPlayer.Hands.Name, _handsPanel.Location.ToVector2(), Color.White);
-                spriteBatch.Draw(collection.Tilesets[(int)mainPlayer.HandsType], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), mainPlayer.Hands.SkinRect, Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
-                if (mainPlayer.Hands.Type == ItemType.Firearm)
+                spriteBatch.DrawString(_font, mainPlayer.hands.Name, _handsPanel.Location.ToVector2(), Color.White);
+                spriteBatch.Draw(collection.Tilesets[(int)mainPlayer.hands.Type], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), mainPlayer.hands.SkinRect, Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
+                if (mainPlayer.hands.Type == ItemType.Firearm)
                 {
-                    Firearm weapon = (Firearm)mainPlayer.Hands;
+                    Firearm weapon = (Firearm)mainPlayer.hands;
 
                     spriteBatch.DrawString(_font, weapon.LoadedAmmo.ToString(), _handsPanel.Location.ToVector2() + new Vector2(_handsPanel.Width - _font.MeasureString(weapon.LoadedAmmo.ToString()).X, _handsPanel.Height - _font.MeasureString(weapon.LoadedAmmo.ToString()).Y), Color.White);
                 }
@@ -160,10 +160,10 @@ namespace FrozenPizza
             _hudEntRect.X += 64;
 			//Hunger
 			spriteBatch.Draw(_hudEntities, _foodPos, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
-            spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.maxHunger, mainPlayer.Hunger, false), calcHeadsUpRect(mainPlayer.maxHunger, mainPlayer.Hunger), _foodBackground[0], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.maxHunger, mainPlayer.hunger, false), calcHeadsUpRect(mainPlayer.maxHunger, mainPlayer.hunger), _foodBackground[0], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
 			//Thirst
 			spriteBatch.Draw(_hudEntities, _foodPos + _hudOffset, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
-            spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.maxThirst, mainPlayer.Thirst, true), calcHeadsUpRect(mainPlayer.maxThirst, mainPlayer.Thirst), _foodBackground[1], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.maxThirst, mainPlayer.thirst, true), calcHeadsUpRect(mainPlayer.maxThirst, mainPlayer.thirst), _foodBackground[1], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
 			//Hands Panel
 			drawHandsPanel(spriteBatch, graphicsDevice, mainPlayer, collection);
 			//Inventory

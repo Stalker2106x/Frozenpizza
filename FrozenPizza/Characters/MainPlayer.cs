@@ -21,14 +21,17 @@ namespace FrozenPizza
     public class MainPlayer : Player
     {
         //Stats
-        int _hunger, _thirst;
-        int _maxHunger, _maxThirst;
+        public int hunger { get; set; }
+        public int thirst { get; set; }
+        public int maxHunger { get; set; }
+        public int maxThirst { get; set; }
 
         //Triggers
-        bool _inventoryOpen, _cooldown, _sprinting, _aimlock, _badMove;
+        public bool cooldown { get; set; }
+        bool _inventoryOpen, _sprinting, _aimlock, _badMove;
 
         //Inventory
-        Item _hands;
+        public Item hands { get; set; }
         Inventory _inventory;
         List<PlayerStates> _states;
 
@@ -51,16 +54,16 @@ namespace FrozenPizza
 		public MainPlayer(String name) : base(-1, name, new Vector2(0, 0))
         {
             //Set Stats
-            _hunger = 50;
-            _maxHunger = 100;
-            _thirst = 25;
-            _maxThirst = 100;
+            hunger = 50;
+            maxHunger = 100;
+            thirst = 25;
+            maxThirst = 100;
 			Pos = Vector2.Zero;
 
             _states = new List<PlayerStates>();
             //Set triggers
             _inventoryOpen = false;
-            _cooldown = false;
+            cooldown = false;
             _aimlock = false;
 			_sprinting = false;
             BadMove = false;
@@ -77,53 +80,18 @@ namespace FrozenPizza
             _stepTimer = new TimeSpan();
             _cooldownTimer = new TimeSpan[2];
             _netcodeTimer = new TimeSpan();
-      }
+        }
 
-        // ACCESSORS / SETTERS
-        public int maxHunger
-        {
-            get { return (_maxHunger); }
-            set { _maxHunger = value; }
-        }
-        public int Hunger
-        {
-            get { return (_hunger); }
-            set { _hunger = value; }
-        }
-        public int maxThirst
-        {
-            get { return (_maxThirst); }
-            set { _maxThirst = value; }
-        }
-        public int Thirst
-        {
-            get { return (_thirst); }
-            set { _thirst = value; }
-        }
 		public bool InventoryOpen
 		{
 			get { return (_inventoryOpen); }
 			set { _inventoryOpen = value; }
 		}
 
-        public Item Hands
-        {
-            get { return (_hands); }
-            set { _hands = value; }
-        }
         public bool BadMove
         {
             get { return (_badMove); }
             set { _badMove = value; }
-        }
-        public ItemType HandsType
-		{
-			get { return (_hands.Type); }
-		}
-
-        public bool Cooldown
-        {
-            get { return (_cooldown); }
         }
 
         //Converts Cooldown time to percent for the bar
@@ -137,10 +105,9 @@ namespace FrozenPizza
         //Get the 'use' (or fire) cooldown from currently held item
         public float getCooldown()
         {
-            Weapon hands = (Weapon)_hands;
-
-            if (hands != null)
-                return ((float)TimeSpan.FromSeconds(hands.Cooldown).TotalMilliseconds);
+            Weapon whands = (Weapon)hands;
+            if (whands != null)
+                return ((float)TimeSpan.FromSeconds(whands.Cooldown).TotalMilliseconds);
             else
                 return ((float)TimeSpan.FromSeconds(Engine.collection.MeleeList[0].Cooldown).TotalMilliseconds);
         }
@@ -167,9 +134,9 @@ namespace FrozenPizza
 
             aimAccuracyAngle[0] = MathHelper.PiOver2 * 1.5f;
             aimAccuracyAngle[1] = MathHelper.PiOver2 * 0.5f;
-            if (_hands != null && _hands.Type == ItemType.Firearm)
+            if (hands != null && hands.Type == ItemType.Firearm)
             {
-                Firearm weapon = (Firearm)_hands;
+                Firearm weapon = (Firearm)hands;
 
                 aimAccuracyAngle[0] -= (float)(Math.PI / 180) * weapon.Accuracy;
                 aimAccuracyAngle[1] += (float)(Math.PI / 180) * weapon.Accuracy;
@@ -301,25 +268,25 @@ namespace FrozenPizza
 
             _cooldownTimer[0] -= gameTime.ElapsedGameTime;
             if (_cooldownTimer[0].TotalMilliseconds <= 0)
-                    _cooldown = false;
+                    cooldown = false;
         }
 
         //Use Hands
         public void useHands()
         {
-            if (_hands == null || _hands.GetType() == typeof(Melee))
+            if (hands == null || hands.GetType() == typeof(Melee))
             {
                 Melee weapon;
 
-                if (_hands == null)
+                if (hands == null)
                     weapon = Engine.collection.MeleeList[0];
                 else
-                    weapon = (Melee)_hands;
+                    weapon = (Melee)hands;
                 weapon.attack(_pos);
             }
-            else if (_hands.GetType() == typeof(Firearm))
+            else if (hands.GetType() == typeof(Firearm))
             {
-                Firearm weapon = (Firearm)_hands;
+                Firearm weapon = (Firearm)hands;
 
                 weapon.fire(_pos, getAimAccuracyAngle(true));
             }
@@ -328,25 +295,25 @@ namespace FrozenPizza
         //Check Hands events (Reload, fire, ...)
         public void updateHands(GameTime gameTime, KeyboardState[] keybStates, MouseState[] mStates)
         {
-            if (_cooldown)
+            if (cooldown)
                 updateCooldown(gameTime);
             if (_inventoryOpen)
                 return;
-            if ((_hands != null && _hands.Type == ItemType.Firearm)
+            if ((hands != null && hands.Type == ItemType.Firearm)
                 && (keybStates[0].IsKeyUp(KeyBinds.getKey("Reload")) && keybStates[1].IsKeyDown(KeyBinds.getKey("Reload"))))
             {
-                Firearm weapon = (Firearm)_hands;
+                Firearm weapon = (Firearm)hands;
                 if (weapon.reload())
                 {
-                    _cooldown = true;
+                    cooldown = true;
                     _cooldownTimer[1] = TimeSpan.FromSeconds(weapon.ReloadCooldown);
                     _cooldownTimer[0] = _cooldownTimer[1];
                 }
             }
-            if (mStates[1].LeftButton == ButtonState.Pressed && mStates[0].LeftButton == ButtonState.Released && !_cooldown)
+            if (mStates[1].LeftButton == ButtonState.Pressed && mStates[0].LeftButton == ButtonState.Released && !cooldown)
             {
 				useHands();
-                _cooldown = true;
+                cooldown = true;
                 _cooldownTimer[1] = TimeSpan.FromMilliseconds(getCooldown());
                 _cooldownTimer[0] = _cooldownTimer[1];
             }
@@ -386,13 +353,13 @@ namespace FrozenPizza
         void updateStates(GameTime gameTime)
         {
             _stateTimer += gameTime.ElapsedGameTime;
-            if (_hunger > 0 && _hunger < 50 && !checkState(PlayerStates.Hungry))
+            if (hunger > 0 && hunger < 50 && !checkState(PlayerStates.Hungry))
                 _states.Add(PlayerStates.Hungry);
-            else if (_hunger <= 0 && !checkState(PlayerStates.Starving))
+            else if (hunger <= 0 && !checkState(PlayerStates.Starving))
                 _states.Add(PlayerStates.Starving);
-			if (_thirst > 0 && _thirst < 50 && !checkState(PlayerStates.Thirsty))
+			if (thirst > 0 && thirst < 50 && !checkState(PlayerStates.Thirsty))
 				_states.Add(PlayerStates.Thirsty);
-			else if (_thirst <= 0 && !checkState(PlayerStates.Dehydrated))
+			else if (thirst <= 0 && !checkState(PlayerStates.Dehydrated))
 				_states.Add(PlayerStates.Dehydrated);
         }
 
@@ -413,23 +380,23 @@ namespace FrozenPizza
 
         public void pickupItem()
         {
-            if (_hands == null)
+            if (hands == null)
             {
 				Item ent = Engine.Level.getEntityByPos(_pos);
 
 				if (ent == null)
 					return;
-				_hands = ent;
+				hands = ent;
 				NetHandler.send("!-ITEM " + ent.Uid);
             }
         }
 
         public void dropItem(int uid)
         {
-            if (_hands == null)
+            if (hands == null)
                 return;
-            NetHandler.send("!+ITEM " + _hands.Uid);
-			_hands = null;
+            NetHandler.send("!+ITEM " + hands.Uid);
+			hands = null;
         }
 
         public void updateNetwork(GameTime gameTime)

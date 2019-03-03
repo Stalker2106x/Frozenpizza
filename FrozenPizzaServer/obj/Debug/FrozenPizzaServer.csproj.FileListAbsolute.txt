@@ -12,3 +12,4 @@ D:\Projets\Frozenpizza\FrozenPizzaServer\obj\Debug\FrozenPizzaServer.csprojAssem
 D:\Projets\Frozenpizza\FrozenPizzaServer\obj\Debug\FrozenPizzaServer.csproj.CoreCompileInputs.cache
 D:\Projets\Frozenpizza\FrozenPizzaServer\bin\Debug\FrozenPizza.exe.config
 D:\Projets\Frozenpizza\FrozenPizzaServer\obj\Debug\FrozenPizzaServer.csproj.CopyComplete
+D:\Projets\Frozenpizza\FrozenPizzaServer\bin\Debug\MonoGame.Framework.dll.config
