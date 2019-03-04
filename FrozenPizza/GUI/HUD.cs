@@ -123,9 +123,9 @@ namespace FrozenPizza
             }
             else
             {
-                spriteBatch.DrawString(_font, mainPlayer.hands.Name, _handsPanel.Location.ToVector2(), Color.White);
-                spriteBatch.Draw(collection.Tilesets[(int)mainPlayer.hands.Type], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), mainPlayer.hands.SkinRect, Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
-                if (mainPlayer.hands.Type == ItemType.Firearm)
+                spriteBatch.DrawString(_font, mainPlayer.hands.name, _handsPanel.Location.ToVector2(), Color.White);
+                spriteBatch.Draw(collection.Tilesets[(int)mainPlayer.hands.type], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), mainPlayer.hands.skinRect, Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
+                if (mainPlayer.hands.type == ItemType.Firearm)
                 {
                     Firearm weapon = (Firearm)mainPlayer.hands;
 
@@ -136,7 +136,7 @@ namespace FrozenPizza
 
 		public void drawAimLines(SpriteBatch spriteBatch, MainPlayer mainPlayer, Camera cam)
 		{
-			float[] aimAccuracyAngle = mainPlayer.getAimAccuracyAngle(false);
+			float[] aimAccuracyAngle = mainPlayer.getAimAccuracyAngle();
 			Vector2[] leftLine = new Vector2[2];
 			Vector2[] rightLine = new Vector2[2];
 
@@ -153,21 +153,21 @@ namespace FrozenPizza
 			_hudEntRect.X = 0;
             //Health
             spriteBatch.Draw(_hudEntities, _statsPos, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
-            spriteBatch.Draw(_hudEntities, _statsPos + getHeadsUpHeight(mainPlayer.maxHP, mainPlayer.HP, false), calcHeadsUpRect(mainPlayer.maxHP, mainPlayer.HP), Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
+            spriteBatch.Draw(_hudEntities, _statsPos + getHeadsUpHeight(mainPlayer.hp.max, mainPlayer.hp.get(), false), calcHeadsUpRect(mainPlayer.hp.max, mainPlayer.hp.get()), Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
 			//Armor
 			spriteBatch.Draw(_hudEntities, _statsPos + _hudOffset, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
 			spriteBatch.DrawString(_font, "999", _statsPos + _hudOffset, Color.White);
             _hudEntRect.X += 64;
 			//Hunger
 			spriteBatch.Draw(_hudEntities, _foodPos, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
-            spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.maxHunger, mainPlayer.hunger, false), calcHeadsUpRect(mainPlayer.maxHunger, mainPlayer.hunger), _foodBackground[0], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.hunger.max, mainPlayer.hunger.get(), false), calcHeadsUpRect(mainPlayer.hunger.max, mainPlayer.hunger.get()), _foodBackground[0], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
 			//Thirst
 			spriteBatch.Draw(_hudEntities, _foodPos + _hudOffset, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
-            spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.maxThirst, mainPlayer.thirst, true), calcHeadsUpRect(mainPlayer.maxThirst, mainPlayer.thirst), _foodBackground[1], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.thirst.max, mainPlayer.thirst.get(), true), calcHeadsUpRect(mainPlayer.thirst.max, mainPlayer.thirst.get()), _foodBackground[1], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
 			//Hands Panel
 			drawHandsPanel(spriteBatch, graphicsDevice, mainPlayer, collection);
 			//Inventory
-            if (mainPlayer.InventoryOpen)
+            if (mainPlayer.inventoryOpen)
 				DrawInventory(spriteBatch, graphicsDevice, mainPlayer);
 			//Cursor & AimLines
 			drawAimLines(spriteBatch, mainPlayer, cam);

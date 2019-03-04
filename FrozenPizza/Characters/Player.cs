@@ -16,56 +16,40 @@ namespace FrozenPizza
         Hurt,
         Die
     }
+
     public class Player : Character
-	{
-        //Constructor for players
-        public Player(int id, String name, Vector2 pos) : base(name)
-        {
-            Id = id;
-            _origin = new Vector2(16, 8);
-            _skinRect = new Rectangle(0, 0, 32, 16);
-            _pos = pos;
-        }
+    {
+        public String name { get; set; }
+        public int id { get; set; }
 
         //Constructor for remote players
-        public Player(int id, String name, Vector2 pos, int hp) : base(name)
+        public Player(int vid, String vname, Vector2 vpos, int vhp = 100) : base(vhp)
         {
-            Id = id;
-            HP = hp;
-            _origin = new Vector2(16, 8);
+            name = vname;
+            id = vid;
             _skinRect = new Rectangle(0, 0, 32, 16);
-            _pos = pos;
+            pos = vpos;
         }
 
         //Reports damage from server to player
         public virtual void hurt(int damage)
         {
-            HP -= damage;
+            hp.set(hp.get() - damage);
             _sounds[(int)PlayerSounds.Hurt].Play(Options.Config.SoundVolume, 0f, 0f);
+            if (hp.get() == hp.min) die();
         }
 
         //Reports death from server to player
         public virtual void die()
         {
-            HP = 0;
             _sounds[(int)PlayerSounds.Die].Play(Options.Config.SoundVolume, 0f, 0f);
-            _alive = false;
+            alive = false;
             _skinRect = new Rectangle(0, 64, 32, 64);
         }
 
         //Update player pos
         public virtual void Update(GameTime gameTime)
         {
-            Vector2 syncVector = new Vector2();
-            Rectangle newhit = getHitbox();
-
-            syncVector.X = (float)(_move.X * gameTime.ElapsedGameTime.TotalSeconds);
-            syncVector.Y = (float)(_move.Y * gameTime.ElapsedGameTime.TotalSeconds);
-            newhit.X += (int)syncVector.X;
-            newhit.Y += (int)syncVector.Y;
-            if (Engine.Level.RCollide(newhit))
-                return;
-            Pos += syncVector;
         }
 
         //Draws the player

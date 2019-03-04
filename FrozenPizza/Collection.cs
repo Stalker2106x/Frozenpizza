@@ -64,13 +64,13 @@ namespace FrozenPizza
             return (null);
         }
 
-        public Item getNewItemById(Int64 Uid, int id)
+        public Item getNewItemById(Int64 uid, int id)
         {
             if (id < (int)ItemIds.Pistol) //Melee
             {
                 Melee copy, item = MeleeList[id];
 
-                copy = new Melee(Uid, item.Id, item.Name, item.Weight, item.Size);
+                copy = new Melee(uid, item.id, item.name, item.weight, item.size);
                 copy.SetWeaponAttributes(item.ResourceId, item.Damage, item.Cooldown);
                 copy.LoadSounds(Content);
                 return (copy);
@@ -79,7 +79,7 @@ namespace FrozenPizza
             {
                 Firearm copy, item = PistolsList[id - (int)ItemIds.Pistol];
 
-                copy = new Firearm(Uid, item.Id, item.Name, item.Weight, item.Size);
+                copy = new Firearm(uid, item.id, item.name, item.weight, item.size);
                 copy.SetWeaponAttributes(item.ResourceId, item.Damage, item.Cooldown);
                 copy.SetFirearmAttributes(item.Accuracy, item.ClipSize, item.ReloadCooldown);
                 copy.LoadSounds(Content);

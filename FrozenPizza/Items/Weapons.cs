@@ -52,7 +52,7 @@ namespace FrozenPizza
         public void attack(Vector2 pos)
         {
             Sounds[0].Play(Options.Config.SoundVolume, 0f, 0f);
-            NetHandler.send("!MELEE " + Size + " " + Damage);
+            NetHandler.send("!MELEE " + size + " " + Damage);
         }
 	}
 
@@ -87,7 +87,7 @@ namespace FrozenPizza
 
             if (LoadedAmmo > 0)
             {
-                NetHandler.send("!FIRE " + Id + " " + (int)ProjectileType.Bullet + " " + angle + " " + 7f + " " + Damage);
+                NetHandler.send("!FIRE " + id + " " + (int)ProjectileType.Bullet + " " + angle + " " + 7f + " " + Damage);
                 LoadedAmmo -= 1;
             }
             else

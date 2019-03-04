@@ -26,7 +26,6 @@ namespace FrozenPizzaServer
     {
         //Tiles
         int _twidth, _theight;
-        int _ttwidth, _ttheight;
 
         //Map
         TmxMap _map;

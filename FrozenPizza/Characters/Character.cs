@@ -13,15 +13,12 @@ namespace FrozenPizza
     public class Character
     {
 		//Stats
-		int _id;
-        String _name;
-        int _hp, _maxHp;
-        protected bool _alive;
+        public Gauge hp { get; set; }
+        public bool alive { get; set; }
 
         //Movement
-        protected Vector2 _pos, _origin;
-		protected float _aim;
-        protected Vector2 _move;
+        public Vector2 pos { get; set; }
+        public float orientation { get; set; }
 
 		//Graphics
         protected Rectangle _skinRect;
@@ -29,12 +26,10 @@ namespace FrozenPizza
         //Sound
         protected SoundEffect[] _sounds;
 
-        public Character(String name)
+        public Character(int vhp)
         {
-            _alive = true;
-            _name = name;
-            _hp = 100;
-            _maxHp = 100;
+            alive = true;
+            hp = new Gauge(vhp, 0, 100);
         }
 
         //Initialization routine
@@ -53,58 +48,21 @@ namespace FrozenPizza
             _sounds[(int)PlayerSounds.Hurt] = content.Load<SoundEffect>("sounds/player/hurt");
             _sounds[(int)PlayerSounds.Die] = content.Load<SoundEffect>("sounds/player/die");
         }
-
-        public int Id
-		{
-			get { return (_id); }
-			set { _id = value; }
-		}
-        public Vector2 Pos
-        {
-            get { return _pos; }
-            set { _pos = value; }
-        }
-
-        public Vector2 Move
-        {
-            get { return (_move); }
-            set { _move = value; }
-        }
-        public float Aim
-        {
-            get { return _aim; }
-            set { _aim = value; }
-        }
-        public int maxHP
-        {
-            get { return (_maxHp); }
-            set { _maxHp = value; }
-        }
-        public int HP
-        {
-            get { return _hp; }
-            set { _hp = value; }
-        }
-
-        public bool Alive
-        {
-            get { return (_alive);  }
-        }
-
+        
         public Rectangle getHitbox()
         {
-            return (new Rectangle((Pos - new Vector2(8, 8)).ToPoint(), new Point(16, 16)));
+            return (new Rectangle((pos - new Vector2(8, 8)).ToPoint(), new Point(16, 16)));
         }
 
         public float getDistanceTo(Vector2 pos)
         {
-            return ((float)Math.Sqrt(Math.Pow(Pos.X - pos.X, 2) + Math.Pow(Pos.Y - pos.Y, 2)));
+            return ((float)Math.Sqrt(Math.Pow(pos.X - pos.X, 2) + Math.Pow(pos.Y - pos.Y, 2)));
         }
 
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Engine.collection.Players, _pos, _skinRect, Color.White, -_aim, _origin, 1.0f, SpriteEffects.None, 0.3f);
+            spriteBatch.Draw(Engine.collection.Players, pos, _skinRect, Color.White, -orientation, new Vector2(16, 8), 1.0f, SpriteEffects.None, 0.3f);
         }
     }
 }

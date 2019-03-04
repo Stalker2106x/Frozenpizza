@@ -26,25 +26,25 @@ namespace FrozenPizza
 
 	public abstract class Item
 	{
-		public Int64 Uid { get; set; }
-		public int Id { get; set; }
-		public Vector2 Pos { get; set; }
-		public String Name { get; set; }
-		public ItemType Type { get; set; }
-		public List<SlotType> Slots { get; set; }
-		public float Weight { get; set; }
-		public float Size { get; set; }
-        public Rectangle SkinRect { get; set; }
-        public Vector2 Origin { get; set; }
+		public Int64 uid { get; set; }
+		public int id { get; set; }
+		public Vector2 pos { get; set; }
+		public String name { get; set; }
+		public ItemType type { get; set; }
+		public List<SlotType> slots { get; set; }
+		public float weight { get; set; }
+		public float size { get; set; }
+        public Rectangle skinRect { get; set; }
+        public Vector2 origin { get; set; }
 
-        public Item(Int64 uid, int id, String name, ItemType type, float weight, float size)
+        public Item(Int64 vuid, int vid, String vname, ItemType vtype, float vweight, float vsize)
 		{
-            Uid = uid;
-			Id = id;
-			Name = name;
-			Type = type;
-			Weight = weight;
-			Size = size;
+            uid = vuid;
+            id = vid;
+            name = vname;
+            type = vtype;
+            weight = vweight;
+            size = vsize;
             setSkin();
 		}
 
@@ -56,16 +56,16 @@ namespace FrozenPizza
         //Set correct skinRect with itemId
         public virtual void setSkin()
         {
-            int id = Id;
+            int rId = id;
 
-            switch(Type)
+            switch(type)
             {
                 case ItemType.Firearm:
-                    id -= (int)ItemIds.Pistol;
+                    rId -= (int)ItemIds.Pistol;
                     break;
             }
-            SkinRect = new Rectangle(id * 32, 0, 32, 32);
-            Origin = new Vector2(16, 16);
+            skinRect = new Rectangle(rId * 32, 0, 32, 32);
+            origin = new Vector2(16, 16);
         }
 	}
 }

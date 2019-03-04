@@ -22,12 +22,9 @@ namespace FrozenPizza
             _commands.Add("!MAP", setMap);
 			_commands.Add("!PLAYER", setMainPlayer);
             _commands.Add("!+PLAYER", addNewPlayer);
-            _commands.Add("!SETPOS", setPlayerPos);
-            _commands.Add("!MOVE", movePlayer);
-            _commands.Add("!AIM", aimPlayer);
+            _commands.Add("!STATE", playerState);
             _commands.Add("!+FIRE", createProjectile);
             _commands.Add("!HIT", playerHit);
-            _commands.Add("!DIE", killPlayer);
             _commands.Add("!++ITEM", spawnItem);
             _commands.Add("!+ITEM", dropItem);
             _commands.Add("!-ITEM", pickItem);
@@ -121,10 +118,10 @@ namespace FrozenPizza
 			int id;
 
 			Int32.TryParse(args[0], out id);
-			Engine.MainPlayer.Id = id;
+			Engine.MainPlayer.id = id;
 			float.TryParse(args[1], out pos.X);
 			float.TryParse(args[2], out pos.Y);
-			Engine.MainPlayer.Pos = pos;
+			Engine.MainPlayer.pos = pos;
             acknowledge(null);
             return (true);
 		}
@@ -162,51 +159,27 @@ namespace FrozenPizza
             acknowledge(null);
             return (true);
         }
-        bool setPlayerPos(String[] args)
+
+        bool playerState(String[] args)
         {
             int id;
             Vector2 pos;
+            float orientation;
 
             Int32.TryParse(args[0], out id);
             float.TryParse(args[1], out pos.X);
             float.TryParse(args[2], out pos.Y);
-            if (Engine.MainPlayer != null && id == Engine.MainPlayer.Id)
+            float.TryParse(args[3], out orientation);
+            if (Engine.MainPlayer != null && id == Engine.MainPlayer.id)
             {
-                Engine.MainPlayer.Pos = pos;
-                Engine.MainPlayer.BadMove = true;
+                Engine.MainPlayer.pos = pos;
+                Engine.MainPlayer.orientation = orientation;
             }
             else if (Engine.getPlayerById(id) != null)
-                Engine.getPlayerById(id).Pos = pos;
-            return (true);
-        }
-
-        bool movePlayer(String[] args)
-        {
-            int id;
-            Vector2 move;
-
-            Int32.TryParse(args[0], out id);
-            float.TryParse(args[1], out move.X);
-            float.TryParse(args[2], out move.Y);
-            if (Engine.MainPlayer != null && id == Engine.MainPlayer.Id)
-                Engine.MainPlayer.Move = move;
-            else if (Engine.getPlayerById(id) != null)
-                Engine.getPlayerById(id).Move = move;
-            return (true);
-        }
-
-        bool aimPlayer(String[] args)
-        {
-            int id;
-            float aim;
-            Player player;
-
-            Int32.TryParse(args[0], out id);
-            float.TryParse(args[1], out aim);
-            player = Engine.getPlayerById(id);
-            if (player == null)
-                return (false);
-            player.Aim = aim;
+            {
+                Engine.getPlayerById(id).pos = pos;
+                Engine.getPlayerById(id).orientation = orientation;
+            }
             return (true);
         }
 
@@ -234,23 +207,10 @@ namespace FrozenPizza
 
             Int32.TryParse(args[0], out id);
             Int32.TryParse(args[1], out damage);
-            if (id == Engine.MainPlayer.Id)
+            if (id == Engine.MainPlayer.id)
                 Engine.MainPlayer.hurt(damage);
             else
                 Engine.getPlayerById(id).hurt(damage);
-            acknowledge(null);
-            return (true);
-        }
-
-        bool killPlayer(String[] args)
-        {
-            int id;
-
-            Int32.TryParse(args[0], out id);
-            if (id == Engine.MainPlayer.Id)
-                Engine.MainPlayer.die();
-            else
-                Engine.getPlayerById(id).die();
             acknowledge(null);
             return (true);
         }
@@ -267,7 +227,7 @@ namespace FrozenPizza
             float.TryParse(args[2], out pos.X);
             float.TryParse(args[3], out pos.Y);
 			Engine.Level.Entities.Add(Engine.collection.getNewItemById(uid, id));
-			Engine.Level.Entities.Last().Pos = pos;
+			Engine.Level.Entities.Last().pos = pos;
             acknowledge(null);
             return (true);
         }
@@ -280,7 +240,7 @@ namespace FrozenPizza
             Int64.TryParse(args[0], out uid);
             float.TryParse(args[1], out pos.X);
             float.TryParse(args[2], out pos.Y);
-            Engine.Level.Entities[Engine.Level.getEntityIndex(uid)].Pos = pos;
+            Engine.Level.Entities[Engine.Level.getEntityIndex(uid)].pos = pos;
             acknowledge(null);
             return (true);
         }
@@ -290,7 +250,7 @@ namespace FrozenPizza
             Int64 uid;
 
             Int64.TryParse(args[0], out uid);
-            Engine.Level.Entities[Engine.Level.getEntityIndex(uid)].Pos = -Vector2.One;
+            Engine.Level.Entities[Engine.Level.getEntityIndex(uid)].pos = -Vector2.One;
             acknowledge(null);
             return (true);
         }

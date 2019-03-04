@@ -42,6 +42,7 @@
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\Engine.cs" />
     <Compile Include="Engine\Options.cs" />
+    <Compile Include="Engine\Utils.cs" />
     <Compile Include="Items\Ammo.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="KeyBinds.cs" />

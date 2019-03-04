@@ -53,7 +53,7 @@ namespace FrozenPizza
             if (players == null)
                 return (null);
             for (int i = 0; i < players.Count; i++)
-                if (players[i].Id == id)
+                if (players[i].id == id)
                     return (players[i]);
             return (null);
         }
@@ -175,7 +175,7 @@ namespace FrozenPizza
         {
             if (keybStates[0].IsKeyUp(Keys.Escape) && keybStates[1].IsKeyDown(Keys.Escape)) //Pause
             {
-                mainPlayer.InventoryOpen = false;
+                mainPlayer.inventoryOpen = false;
                 if (_cursor.Show == false)
                     toggleMouseVisible();
                 gstate = GameState.Menu;
@@ -185,7 +185,7 @@ namespace FrozenPizza
             for (int i = 0; i < players.Count; i++)
                 players[i].Update(gameTime);
             hud.Update(mouseStates, mainPlayer);
-            if (mainPlayer.Alive && !mainPlayer.InventoryOpen) //If we are ingame reset mouse each loop
+            if (mainPlayer.alive && !mainPlayer.inventoryOpen) //If we are ingame reset mouse each loop
                 resetMousePos();
         }
 

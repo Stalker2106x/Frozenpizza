@@ -39,7 +39,7 @@ namespace FrozenPizzaServer
                 if (Server.ClientList[i].Player.getHitbox().Contains(Point.Truncate(Pos)))
                 {
                     Server.ClientList[i].send("!HIT " + Server.ClientList[i].Id + " " + Damage);
-                    Server.ClientList[i].Player.HP -= Damage;
+                    Server.ClientList[i].Player.hp -= Damage;
                     return (false);
                 }
                 else if (Server.Level.Collide(Pos))

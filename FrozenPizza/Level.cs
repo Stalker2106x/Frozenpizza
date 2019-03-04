@@ -150,7 +150,7 @@ namespace FrozenPizza
         {
 			for (int i = 0; i < _entities.Count; i++)
 			{
-				if (_entities[i].Uid == uid)
+				if (_entities[i].uid == uid)
 					return (i);
 			}
 			return (-1);
@@ -162,7 +162,7 @@ namespace FrozenPizza
 
 			for (int i = 0; i < _entities.Count; i++)
 			{
-				if (range.Contains(_entities[i].Pos))
+				if (range.Contains(_entities[i].pos))
 					return (_entities[i]);
 			}
 			return (null);
@@ -229,11 +229,11 @@ namespace FrozenPizza
                     if (((yoffset + y) < 0 || (xoffset + x) < 0) //TopLeft
                         || ((yoffset + y) >= (_map.Height - 1) || (xoffset + x) >= (_map.Width - 1))) //BottomRight
                         continue;
-                    if (Indoor(mainPlayer.Pos) && _map.Layers[(int)Layers.Ceiling].Tiles[((yoffset + y) * _map.Width) + xoffset + x].Gid == 0)
+                    if (Indoor(mainPlayer.pos) && _map.Layers[(int)Layers.Ceiling].Tiles[((yoffset + y) * _map.Width) + xoffset + x].Gid == 0)
                         continue;
                     for (int l = _map.Layers.Count - 1; l >= 0; l--)
                     {
-                        if ((Layers)l == Layers.Meta || (Layers)l == Layers.Spawn || (Indoor(mainPlayer.Pos) && (Layers)l == Layers.Ceiling))
+                        if ((Layers)l == Layers.Meta || (Layers)l == Layers.Spawn || (Indoor(mainPlayer.pos) && (Layers)l == Layers.Ceiling))
                             continue;
                         int gid = _map.Layers[l].Tiles[((yoffset + y) * _map.Width) + xoffset + x].Gid;
 
@@ -276,8 +276,8 @@ namespace FrozenPizza
             drawTiles(spriteBatch, cam, mainPlayer);
             for (int i = _entities.Count - 1; i >= 0; i--)
             {
-                if (_entities[i].Pos != - Vector2.One && (!Indoor(mainPlayer.Pos) || (Indoor(mainPlayer.Pos) && Indoor(_entities[i].Pos))))
-                    spriteBatch.Draw(Engine.collection.Tilesets[(int)_entities[i].Type], _entities[i].Pos, _entities[i].SkinRect, Color.White, 0, _entities[i].Origin, 1f, SpriteEffects.None, 0.3f);
+                if (_entities[i].pos != - Vector2.One && (!Indoor(mainPlayer.pos) || (Indoor(mainPlayer.pos) && Indoor(_entities[i].pos))))
+                    spriteBatch.Draw(Engine.collection.Tilesets[(int)_entities[i].type], _entities[i].pos, _entities[i].skinRect, Color.White, 0, _entities[i].origin, 1f, SpriteEffects.None, 0.3f);
             }
             for (int i = _projectiles.Count - 1; i >= 0; i--)
             {

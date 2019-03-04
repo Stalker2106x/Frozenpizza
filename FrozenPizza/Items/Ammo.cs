@@ -22,7 +22,6 @@ namespace FrozenPizza
         public ProjectileType Type { get; set; }
 
         Rectangle _skinRect;
-        Vector2 _origin;
 
         //Creates a projectile from network
         public Projectile(int id, ProjectileType type, Vector2 pos, float angle, float velocity, int damage)
@@ -41,7 +40,6 @@ namespace FrozenPizza
                 weapon.Sounds[(int)FirearmActions.Fire].Play(distVolume > 0 ? distVolume : 0, 0f, 0f);
             }
             _skinRect = new Rectangle(0, 0, 32, 32);
-            _origin = new Vector2(16, 16);
         }
 
         //Update locally
@@ -67,7 +65,7 @@ namespace FrozenPizza
         //Draw projectile
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Engine.collection.Projectiles, Pos, _skinRect, Color.White, -Angle, _origin, 1.0f, SpriteEffects.None, 0.3f);
+            spriteBatch.Draw(Engine.collection.Projectiles, Pos, _skinRect, Color.White, -Angle, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0.3f);
         }
     }
 

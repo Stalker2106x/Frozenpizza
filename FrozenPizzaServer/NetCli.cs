@@ -83,10 +83,10 @@ namespace FrozenPizzaServer
 
         public bool clientInfo()
         {
-            send("!PLAYER " + Id + " " + _player.Pos.X + " " + _player.Pos.Y);
+            send("!PLAYER " + Id + " " + _player.pos.X + " " + _player.pos.Y);
             if (!_cmdHandle.ParseExpectedCmd(receive(), ".ACK"))
                 return (false);
-            Server.broadcast(Id, "!+PLAYER " + Id + " " + _player.HP + " " + _player.Pos.X + " " + _player.Pos.Y);
+            Server.broadcast(Id, "!+PLAYER " + Id + " " + _player.hp + " " + _player.pos.X + " " + _player.pos.Y);
             return (true);
         }
 

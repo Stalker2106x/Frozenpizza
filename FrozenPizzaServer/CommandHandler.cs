@@ -18,8 +18,7 @@ namespace FrozenPizzaServer
             _commands = new Dictionary<String, Func<String[], bool>>();
             _commands.Add("!VERSION", checkVersion);
             _commands.Add("!WHOIS", whoisClient);
-            _commands.Add("?MOVE", movePlayer);
-            _commands.Add("!AIM", aimPlayer);
+            _commands.Add("!STATE", playerState);
             _commands.Add("!FIRE", fireWeapon);
             _commands.Add("!MELEE", meleeHit);
             _commands.Add("!+ITEM", dropItem);
@@ -109,16 +108,17 @@ namespace FrozenPizzaServer
         }
 
         //Player
-        bool movePlayer(String[] args)
+        bool playerState(String[] args)
         {
             float x, y;
-            PointF move;
-            
-            float.TryParse(args[0], out x);
-            float.TryParse(args[1], out y);
-            move = new PointF(x, y);
-            Server.ClientList[_client.Id].Player.Move = move;          
-            Server.broadcast(_client.Id, "!MOVE " + _client.Id + " " + args[0] + " " + args[1]);
+            float orientation;
+
+            float.TryParse(args[1], out x);
+            float.TryParse(args[2], out y);
+            float.TryParse(args[3], out orientation);
+            Server.ClientList[_client.Id].Player.pos = new PointF(x, y);
+            Server.ClientList[_client.Id].Player.orientation = orientation;
+            Server.broadcast(_client.Id, "!STATE " + _client.Id + " " + args[1] + " " + args[2] + " " + args[3]);
             return (true);
         }
 
@@ -127,7 +127,7 @@ namespace FrozenPizzaServer
             float aim;
             
             float.TryParse(args[0], out aim);
-            Server.ClientList[_client.Id].Player.Aim = aim;
+            Server.ClientList[_client.Id].Player.orientation = aim;
             Server.broadcast(_client.Id, "!AIM " + _client.Id + " " + args[0]);
             return (true);
         }
@@ -155,7 +155,7 @@ namespace FrozenPizzaServer
             {
                 if (Server.ClientList[i] == null || _client.Id == i)
                     continue;
-			    _client.send("!+PLAYER " + Server.ClientList[i].Id + " " + Server.ClientList[i].Player.HP + " " + Server.ClientList[i].Player.Pos.X + " " + Server.ClientList[i].Player.Pos.Y);
+			    _client.send("!+PLAYER " + Server.ClientList[i].Id + " " + Server.ClientList[i].Player.hp + " " + Server.ClientList[i].Player.pos.X + " " + Server.ClientList[i].Player.pos.Y);
                 if (!ParseExpectedCmd(_client.receive(), ".ACK"))
                     return (false);
             }
@@ -193,7 +193,7 @@ namespace FrozenPizzaServer
                     continue;
                 if (Server.ClientList[i].Player.getHitbox().Contains(Point.Truncate(_client.Player.calcFirePos())))
                 {
-                    Server.ClientList[i].Player.HP -= damage;
+                    Server.ClientList[i].Player.hp -= damage;
                     Server.broadcast(-1, "!HIT " + Server.ClientList[i].Id + " " + damage);
                 }
             }
@@ -207,9 +207,9 @@ namespace FrozenPizzaServer
             Int64.TryParse(args[0], out uid);
             if (Server.Level.getEntityIndex(uid) == -1)
                 return (refuse(null));
-            Server.Level.Entities[Server.Level.getEntityIndex(uid)].Pos = _client.Player.Pos;
+            Server.Level.Entities[Server.Level.getEntityIndex(uid)].Pos = _client.Player.pos;
             accept(null);
-            Server.broadcast(-1, "!+ITEM " + args[0] + " " + _client.Player.Pos.X.ToString() + " " + _client.Player.Pos.Y.ToString());
+            Server.broadcast(-1, "!+ITEM " + args[0] + " " + _client.Player.pos.X.ToString() + " " + _client.Player.pos.Y.ToString());
             return (true);
         }
 
