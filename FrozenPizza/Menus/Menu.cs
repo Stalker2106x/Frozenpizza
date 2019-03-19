@@ -1,17 +1,45 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+﻿using Myra.Graphics2D.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace FrozenPizza
 {
+    class Menu
+    {
+        public static void MainMenu(Desktop host)
+        {
+            Grid grid = new Grid();
+
+            grid.ColumnsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+
+            Button hostBtn = new Button();
+            hostBtn.Text = "Host Game";
+            hostBtn.Width = 100;
+            hostBtn.GridColumn = 0;
+            hostBtn.GridRow = 0;
+            grid.Widgets.Add(hostBtn);
+
+            Button playBtn = new Button();
+            playBtn.Text = "Join Game";
+            playBtn.Width = 100;
+            hostBtn.GridColumn = 0;
+            hostBtn.GridRow = 1;
+            grid.Widgets.Add(playBtn);
+
+            Button quitBtn = new Button();
+            quitBtn.Text = "Quit";
+            quitBtn.Width = 100;
+            hostBtn.GridColumn = 0;
+            hostBtn.GridRow = 2;
+            grid.Widgets.Add(quitBtn);
+
+            host.Widgets.Add(grid);
+        }
+    }
+    /*
     public abstract class Menu
     {
         protected String[] _items;
@@ -113,5 +141,5 @@ namespace FrozenPizza
                 spriteBatch.DrawString(_font, _items[i], _itemRect[i].Location.ToVector2(), color, 0f, Vector2.Zero, _fontsize, SpriteEffects.None, 0f);
             }
         }
-    }
+    }*/
 }

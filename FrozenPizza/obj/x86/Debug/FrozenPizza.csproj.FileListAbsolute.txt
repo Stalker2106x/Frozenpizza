@@ -5,7 +5,5 @@ D:\Projets\Frozenpizza\FrozenPizza\bin\DesktopGL\x86\Debug\FrozenPizza.pdb
 D:\Projets\Frozenpizza\FrozenPizza\bin\DesktopGL\x86\Debug\MonoGame.Framework.dll
 D:\Projets\Frozenpizza\FrozenPizza\obj\x86\Debug\FrozenPizza.exe
 D:\Projets\Frozenpizza\FrozenPizza\obj\x86\Debug\FrozenPizza.pdb
-D:\Projets\Frozenpizza\FrozenPizza\obj\x86\Debug\FrozenPizza.csprojAssemblyReference.cache
-D:\Projets\Frozenpizza\FrozenPizza\obj\x86\Debug\FrozenPizza.csproj.CoreCompileInputs.cache
-D:\Projets\Frozenpizza\FrozenPizza\bin\DesktopGL\x86\Debug\MonoGame.Framework.dll.config
-D:\Projets\Frozenpizza\FrozenPizza\obj\x86\Debug\FrozenPizza.csproj.CopyComplete
+D:\Projets\frozenpizza\FrozenPizza\bin\DesktopGL\x86\Debug\Myra.dll
+D:\Projets\frozenpizza\FrozenPizza\obj\x86\Debug\FrozenPizza.csprojResolveAssemblyReference.cache

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Myra;
+using Myra.Graphics2D.UI;
 using System;
 using System.Collections.Generic;
 
@@ -31,8 +33,9 @@ namespace FrozenPizza
         public static Options options;
 
         //Menu & Cursor
-        Cursor _cursor;
-        Menu _menu;
+        private Desktop desktop;
+        private Cursor _cursor;
+        //Menu _menu;
 
         //Game
         static Level level;
@@ -69,6 +72,7 @@ namespace FrozenPizza
             TargetElapsedTime = TimeSpan.FromSeconds(1.0f / 90.0f);
             Content.RootDirectory = "Data";
             gstate = GameState.Menu;
+            MyraEnvironment.Game = this;
             _gameLoaded = false;
         }
 
@@ -83,6 +87,8 @@ namespace FrozenPizza
             options.Load(GraphicsDevice.Adapter);
             IsMouseVisible = false;
             _cursor = new Cursor();
+            desktop = new Desktop();
+            desktop.Bounds = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
             keybinds = new KeyBinds();
             keybStates = new KeyboardState[2];
 			mouseStates = new MouseState[2];
@@ -126,8 +132,7 @@ namespace FrozenPizza
             _cursor.Load(this.Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             collection.Load(this.Content);
-            setMenu(new MainMenu(this));
-            _menu.Load(this.Content);
+            Menu.MainMenu(desktop);
         }
 
         public void LoadGame()
@@ -154,12 +159,6 @@ namespace FrozenPizza
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
-        }
-
-        public void setMenu(Menu menu)
-        {
-            _menu = menu;
-            _menu.Load(this.Content);            
         }
 
         public void toggleMouseVisible()
@@ -205,7 +204,7 @@ namespace FrozenPizza
                 case GameState.Menu:
                     if (!hasFocus)
                         return;
-                    _menu.Update(keybStates, mouseStates);
+                    //_menu.Update(keybStates, mouseStates);
                     break;
                 case GameState.Playing:
                     updateGame(gameTime);
@@ -244,10 +243,9 @@ namespace FrozenPizza
             switch (gstate)
             {
                 case GameState.Menu:
-                    if (_menu.GetType() == typeof(GameMenu))
-                        DrawGame(gameTime); //Draw Game Anyway
+                    //DrawGame(gameTime); //Draw Game Anyway behind
                     spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-                    _menu.Draw(spriteBatch, GraphicsDevice);
+                    //_menu.Draw(spriteBatch, GraphicsDevice);
                     spriteBatch.End();
                     break;
                 case GameState.Playing:
@@ -255,6 +253,7 @@ namespace FrozenPizza
                     break;
             }
             base.Draw(gameTime);
+            desktop.Render();
             if (_cursor.Show)
             {
                 spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
