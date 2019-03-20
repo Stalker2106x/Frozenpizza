@@ -1,5 +1,6 @@
 ﻿using Myra.Graphics2D.UI;
 using System;
+using System.Collections.Generic;
 
 namespace FrozenPizza
 {
@@ -100,6 +101,8 @@ namespace FrozenPizza
             mapCombo.GridColumn = 1;
             mapCombo.GridRow = 1;
             mapCombo.HorizontalAlignment = HorizontalAlignment.Right;
+            List<string> maps = Level.getAvailableLevels();
+            maps.ForEach(e => { mapCombo.Items.Add(new ListItem(e)); });
             grid.Widgets.Add(mapCombo);
 
             TextBlock slotsLabel = new TextBlock();
@@ -109,7 +112,7 @@ namespace FrozenPizza
             slotsLabel.HorizontalAlignment = HorizontalAlignment.Left;
             grid.Widgets.Add(slotsLabel);
 
-            HorizontalSlider slotsSlider = new HorizontalSlider();
+            SpinButton slotsSlider = new SpinButton();
             slotsSlider.GridColumn = 1;
             slotsSlider.GridRow = 2;
             slotsSlider.HorizontalAlignment = HorizontalAlignment.Right;
@@ -121,7 +124,7 @@ namespace FrozenPizza
             hostBtn.HorizontalAlignment = HorizontalAlignment.Center;
             hostBtn.MouseDown += (s, a) =>
             {
-                //NetHandler.startServer();
+                NetHandler.startServer(mapCombo.SelectedItem.Text);
             };
             grid.Widgets.Add(hostBtn);
 
@@ -224,6 +227,7 @@ namespace FrozenPizza
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
 
             TextBlock playerLabel = new TextBlock();
             playerLabel.Text = "Player name";
@@ -250,6 +254,8 @@ namespace FrozenPizza
             resolutionCombo.GridColumn = 1;
             resolutionCombo.GridRow = 1;
             resolutionCombo.HorizontalAlignment = HorizontalAlignment.Right;
+            List<string> resolutions = Options.getResolutions();
+            resolutions.ForEach(e => { resolutionCombo.Items.Add(new ListItem(e)); });
             grid.Widgets.Add(resolutionCombo);
 
             TextBlock musicLabel = new TextBlock();
