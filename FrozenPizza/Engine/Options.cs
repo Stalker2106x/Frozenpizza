@@ -162,12 +162,7 @@ namespace FrozenPizza
                 resolutions.Add(Resolutions[i].Width + "x" + Resolutions[i].Height);
             return (resolutions);
         }
-
-        public static DisplayMode getDisplayModeById(int id)
-        {
-            return (Resolutions[id]);
-        }
-
+        
         public static int getDisplayMode()
         {
             for (int i = 0; i < Resolutions.Count; i++)

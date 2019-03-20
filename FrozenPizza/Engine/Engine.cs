@@ -66,9 +66,6 @@ namespace FrozenPizza
         {
             graphics = new GraphicsDeviceManager(this);
             options = new Options(this, graphics, "./Data/cfg/config.cfg");
-            graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferWidth = 1024;
-            graphics.PreferredBackBufferHeight = 768;
             TargetElapsedTime = TimeSpan.FromSeconds(1.0f / 90.0f);
             Content.RootDirectory = "Data";
             gstate = GameState.Menu;
@@ -88,12 +85,17 @@ namespace FrozenPizza
             IsMouseVisible = false;
             _cursor = new Cursor();
             desktop = new Desktop();
-            desktop.Bounds = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            InitializeGraphics();
             keybinds = new KeyBinds();
             keybStates = new KeyboardState[2];
 			mouseStates = new MouseState[2];
 			collection = new Collection();
             base.Initialize();
+        }
+
+        public void InitializeGraphics()
+        {
+            desktop.Bounds = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
         }
 
         public void InitializeGame()
@@ -132,6 +134,7 @@ namespace FrozenPizza
             _cursor.Load(this.Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             collection.Load(this.Content);
+            Menu.Init(this.Content);
             Menu.MainMenu(this, desktop);
         }
 
@@ -245,7 +248,7 @@ namespace FrozenPizza
                 case GameState.Menu:
                     //DrawGame(gameTime); //Draw Game Anyway behind
                     spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-                    //_menu.Draw(spriteBatch, GraphicsDevice);
+                    desktop.Render();
                     spriteBatch.End();
                     break;
                 case GameState.Playing:
@@ -253,7 +256,6 @@ namespace FrozenPizza
                     break;
             }
             base.Draw(gameTime);
-            desktop.Render();
             if (_cursor.Show)
             {
                 spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
