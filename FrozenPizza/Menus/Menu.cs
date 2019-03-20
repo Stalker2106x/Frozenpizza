@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace FrozenPizza
 {
@@ -227,9 +227,8 @@ namespace FrozenPizza
                 if (pos != -1) Int32.TryParse(server.Substring(pos, server.Length - pos), out port);
                 else port = 27420;
                 Engine.netHandle.connect(server, port);
-                Dialog joinDialog = Dialog.CreateMessageBox("Joining game", "Connecting to server...");
-                joinDialog.ShowModal(host);
-                while (true)
+                TimeSpan connectionTimeout = new TimeSpan();
+                while (connectionTimeout.Seconds < 10) //10s timeout
                 {
                     if (Engine.netHandle.Handshake && !Engine.netHandle.GameReady)
                     {
@@ -244,7 +243,12 @@ namespace FrozenPizza
                         GameMenu(engine, host);
                         return;
                     }
+                    Thread.Sleep(1000);
+                    connectionTimeout = connectionTimeout.Add(TimeSpan.FromSeconds(1));
                 }
+                Dialog errorBox = Dialog.CreateMessageBox("Error", "Could not reach server");
+                errorBox.ShowModal(host);
+                return;
             };
             grid.Widgets.Add(joinBtn);
 
