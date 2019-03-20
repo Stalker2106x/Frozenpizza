@@ -13,15 +13,20 @@ namespace FrozenPizza
 
             grid.RowSpacing = 8;
 
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
             grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
+            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
 
             Button hostBtn = new Button();
             hostBtn.Text = "Host Game";
-            hostBtn.GridRow = 0;
+            hostBtn.GridColumn = 1;
+            hostBtn.GridRow = 1;
             hostBtn.HorizontalAlignment = HorizontalAlignment.Center;
             hostBtn.MouseDown += (s, a) =>
             {
@@ -31,7 +36,8 @@ namespace FrozenPizza
 
             Button playBtn = new Button();
             playBtn.Text = "Join Game";
-            playBtn.GridRow = 1;
+            playBtn.GridColumn = 1;
+            playBtn.GridRow = 2;
             playBtn.HorizontalAlignment = HorizontalAlignment.Center;
             playBtn.MouseDown += (s, a) =>
             {
@@ -41,7 +47,8 @@ namespace FrozenPizza
 
             Button optionsBtn = new Button();
             optionsBtn.Text = "Options";
-            optionsBtn.GridRow = 2;
+            optionsBtn.GridColumn = 1;
+            optionsBtn.GridRow = 3;
             optionsBtn.HorizontalAlignment = HorizontalAlignment.Center;
             optionsBtn.MouseDown += (s, a) =>
             {
@@ -51,7 +58,8 @@ namespace FrozenPizza
 
             Button quitBtn = new Button();
             quitBtn.Text = "Quit";
-            quitBtn.GridRow = 3;
+            quitBtn.GridColumn = 1;
+            quitBtn.GridRow = 4;
             quitBtn.HorizontalAlignment = HorizontalAlignment.Center;
             quitBtn.MouseDown += (s, a) =>
             {
@@ -66,40 +74,43 @@ namespace FrozenPizza
         {
             host.Widgets.Clear();
             Grid grid = new Grid();
-
             grid.RowSpacing = 8;
 
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
             grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
             grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
+            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
 
             TextBlock nameLabel = new TextBlock();
             nameLabel.Text = "Server name";
-            nameLabel.GridColumn = 0;
-            nameLabel.GridRow = 0;
+            nameLabel.GridColumn = 1;
+            nameLabel.GridRow = 1;
             nameLabel.HorizontalAlignment = HorizontalAlignment.Left;
             grid.Widgets.Add(nameLabel);
 
             TextField nameInput = new TextField();
             nameInput.Text = "FP Server";
-            nameInput.GridColumn = 1;
-            nameInput.GridRow = 0;
+            nameInput.GridColumn = 2;
+            nameInput.GridRow = 1;
             nameInput.HorizontalAlignment = HorizontalAlignment.Right;
             grid.Widgets.Add(nameInput);
 
             TextBlock mapLabel = new TextBlock();
             mapLabel.Text = "Map";
-            mapLabel.GridColumn = 0;
-            mapLabel.GridRow = 1;
+            mapLabel.GridColumn = 1;
+            mapLabel.GridRow = 2;
             mapLabel.HorizontalAlignment = HorizontalAlignment.Left;
             grid.Widgets.Add(mapLabel);
 
             ComboBox mapCombo = new ComboBox();
-            mapCombo.GridColumn = 1;
-            mapCombo.GridRow = 1;
+            mapCombo.GridColumn = 2;
+            mapCombo.GridRow = 2;
             mapCombo.HorizontalAlignment = HorizontalAlignment.Right;
             List<string> maps = Level.getAvailableLevels();
             maps.ForEach(e => { mapCombo.Items.Add(new ListItem(e)); });
@@ -107,30 +118,40 @@ namespace FrozenPizza
 
             TextBlock slotsLabel = new TextBlock();
             slotsLabel.Text = "Slots";
-            slotsLabel.GridColumn = 0;
-            slotsLabel.GridRow = 2;
+            slotsLabel.GridColumn = 1;
+            slotsLabel.GridRow = 3;
             slotsLabel.HorizontalAlignment = HorizontalAlignment.Left;
             grid.Widgets.Add(slotsLabel);
 
             SpinButton slotsSlider = new SpinButton();
-            slotsSlider.GridColumn = 1;
-            slotsSlider.GridRow = 2;
+            slotsSlider.GridColumn = 2;
+            slotsSlider.GridRow = 3;
             slotsSlider.HorizontalAlignment = HorizontalAlignment.Right;
             grid.Widgets.Add(slotsSlider);
 
             Button hostBtn = new Button();
             hostBtn.Text = "Host";
-            hostBtn.GridRow = 3;
+            hostBtn.GridColumn = 1;
+            hostBtn.GridRow = 4;
+            hostBtn.GridColumnSpan = 2;
             hostBtn.HorizontalAlignment = HorizontalAlignment.Center;
             hostBtn.MouseDown += (s, a) =>
             {
+                if (mapCombo.SelectedItem == null)
+                {
+                    var messageBox = Dialog.CreateMessageBox("Error", "You must select a map!");
+                    messageBox.ShowModal(host);
+                    return;
+                }
                 NetHandler.startServer(mapCombo.SelectedItem.Text);
             };
             grid.Widgets.Add(hostBtn);
 
             Button backBtn = new Button();
             backBtn.Text = "Back";
-            backBtn.GridRow = 4;
+            backBtn.GridColumn = 1;
+            backBtn.GridRow = 5;
+            backBtn.GridColumnSpan = 2;
             backBtn.HorizontalAlignment = HorizontalAlignment.Center;
             backBtn.MouseDown += (s, a) =>
             {
@@ -148,30 +169,35 @@ namespace FrozenPizza
 
             grid.RowSpacing = 8;
 
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
             grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
             grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
+            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
-            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
 
             TextBlock serverLabel = new TextBlock();
             serverLabel.Text = "Server IP";
-            serverLabel.GridColumn = 0;
-            serverLabel.GridRow = 0;
+            serverLabel.GridColumn = 1;
+            serverLabel.GridRow = 1;
             serverLabel.HorizontalAlignment = HorizontalAlignment.Left;
             grid.Widgets.Add(serverLabel);
 
             TextField serverInput = new TextField();
             serverInput.Text = "localhost";
-            serverInput.GridColumn = 1;
-            serverInput.GridRow = 0;
+            serverInput.GridColumn = 2;
+            serverInput.GridRow = 1;
             serverInput.HorizontalAlignment = HorizontalAlignment.Right;
             grid.Widgets.Add(serverInput);
 
             Button joinBtn = new Button();
             joinBtn.Text = "Join";
-            joinBtn.GridRow = 1;
+            joinBtn.GridColumn = 1;
+            joinBtn.GridRow = 2;
+            joinBtn.GridColumnSpan = 2;
             joinBtn.HorizontalAlignment = HorizontalAlignment.Center;
             joinBtn.MouseDown += (s, a) =>
             {
@@ -203,7 +229,9 @@ namespace FrozenPizza
 
             Button backBtn = new Button();
             backBtn.Text = "Back";
-            backBtn.GridRow = 2;
+            backBtn.GridColumn = 1;
+            backBtn.GridRow = 3;
+            backBtn.GridColumnSpan = 2;
             backBtn.HorizontalAlignment = HorizontalAlignment.Center;
             backBtn.MouseDown += (s, a) =>
             {
@@ -221,38 +249,43 @@ namespace FrozenPizza
 
             grid.RowSpacing = 8;
 
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
             grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
             grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
+            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part));
 
             TextBlock playerLabel = new TextBlock();
             playerLabel.Text = "Player name";
-            playerLabel.GridColumn = 0;
-            playerLabel.GridRow = 0;
+            playerLabel.GridColumn = 1;
+            playerLabel.GridRow = 1;
             playerLabel.HorizontalAlignment = HorizontalAlignment.Left;
             grid.Widgets.Add(playerLabel);
 
             TextField playerInput = new TextField();
             playerInput.Text = "player";
-            playerInput.GridColumn = 1;
-            playerInput.GridRow = 0;
+            playerInput.GridColumn = 2;
+            playerInput.GridRow = 1;
             playerInput.HorizontalAlignment = HorizontalAlignment.Right;
             grid.Widgets.Add(playerInput);
 
             TextBlock resolutionLabel = new TextBlock();
             resolutionLabel.Text = "Resolution";
-            resolutionLabel.GridColumn = 0;
-            resolutionLabel.GridRow = 1;
+            resolutionLabel.GridColumn = 1;
+            resolutionLabel.GridRow = 2;
             resolutionLabel.HorizontalAlignment = HorizontalAlignment.Left;
             grid.Widgets.Add(resolutionLabel);
 
             ComboBox resolutionCombo = new ComboBox();
-            resolutionCombo.GridColumn = 1;
-            resolutionCombo.GridRow = 1;
+            resolutionCombo.GridColumn = 2;
+            resolutionCombo.GridRow = 2;
             resolutionCombo.HorizontalAlignment = HorizontalAlignment.Right;
             List<string> resolutions = Options.getResolutions();
             resolutions.ForEach(e => { resolutionCombo.Items.Add(new ListItem(e)); });
@@ -260,41 +293,49 @@ namespace FrozenPizza
 
             TextBlock musicLabel = new TextBlock();
             musicLabel.Text = "Music volume";
-            musicLabel.GridColumn = 0;
-            musicLabel.GridRow = 2;
+            musicLabel.GridColumn = 1;
+            musicLabel.GridRow = 3;
             musicLabel.HorizontalAlignment = HorizontalAlignment.Left;
             grid.Widgets.Add(musicLabel);
 
             HorizontalSlider musicSlider = new HorizontalSlider();
-            musicSlider.GridColumn = 1;
-            musicSlider.GridRow = 2;
+            musicSlider.GridColumn = 2;
+            musicSlider.GridRow = 3;
+            musicSlider.Width = 100;
             musicSlider.HorizontalAlignment = HorizontalAlignment.Right;
+            musicSlider.Minimum = 0f;
+            musicSlider.Maximum = 1f;
             grid.Widgets.Add(musicSlider);
 
             TextBlock soundLabel = new TextBlock();
             soundLabel.Text = "Sounds volume";
-            soundLabel.GridColumn = 0;
-            soundLabel.GridRow = 3;
+            soundLabel.GridColumn = 1;
+            soundLabel.GridRow = 4;
             soundLabel.HorizontalAlignment = HorizontalAlignment.Left;
             grid.Widgets.Add(soundLabel);
 
             HorizontalSlider soundSlider = new HorizontalSlider();
-            soundSlider.GridColumn = 1;
-            soundSlider.GridRow = 3;
+            soundSlider.GridColumn = 2;
+            soundSlider.GridRow = 4;
+            soundSlider.Width = 100;
             soundSlider.HorizontalAlignment = HorizontalAlignment.Right;
+            soundSlider.Minimum = 0f;
+            soundSlider.Maximum = 1f;
             grid.Widgets.Add(soundSlider);
 
             Button applyBtn = new Button();
             applyBtn.Text = "Apply";
-            applyBtn.GridRow = 4;
+            applyBtn.GridColumn = 1;
+            applyBtn.GridRow = 5;
+            applyBtn.GridColumnSpan = 2;
             applyBtn.HorizontalAlignment = HorizontalAlignment.Center;
             applyBtn.MouseDown += (s, a) =>
             {
                 //Options.Config.Fullscreen = _settingSelectedValue[0] == 1 ? true : false;
-                //Options.Config.Width = Options.getDisplayModeById(_settingSelectedValue[1]).Width;
-                //Options.Config.Height = Options.getDisplayModeById(_settingSelectedValue[1]).Height;
-                //Options.Config.MusicVolume = 0.25f * _settingSelectedValue[2];
-                //Options.Config.SoundVolume = 0.25f * _settingSelectedValue[2];
+                Options.Config.Width = Options.Resolutions[(int)resolutionCombo.SelectedIndex].Width;
+                Options.Config.Height = Options.Resolutions[(int)resolutionCombo.SelectedIndex].Height;
+                Options.Config.MusicVolume = musicSlider.Value;
+                Options.Config.SoundVolume = soundSlider.Value;
                 Options.applyConfig();
                 Options.SetConfigFile();
             };
@@ -302,7 +343,9 @@ namespace FrozenPizza
 
             Button backBtn = new Button();
             backBtn.Text = "Back";
-            backBtn.GridRow = 5;
+            backBtn.GridColumn = 1;
+            backBtn.GridRow = 6;
+            backBtn.GridColumnSpan = 2;
             backBtn.HorizontalAlignment = HorizontalAlignment.Center;
             backBtn.MouseDown += (s, a) =>
             {

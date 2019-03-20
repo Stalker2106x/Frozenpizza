@@ -6,4 +6,3 @@ D:\Projets\Frozenpizza\FrozenPizza\bin\DesktopGL\x86\Debug\MonoGame.Framework.dl
 D:\Projets\Frozenpizza\FrozenPizza\obj\x86\Debug\FrozenPizza.exe
 D:\Projets\Frozenpizza\FrozenPizza\obj\x86\Debug\FrozenPizza.pdb
 D:\Projets\frozenpizza\FrozenPizza\bin\DesktopGL\x86\Debug\Myra.dll
-D:\Projets\frozenpizza\FrozenPizza\obj\x86\Debug\FrozenPizza.csprojResolveAssemblyReference.cache

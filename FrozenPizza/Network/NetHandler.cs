@@ -87,7 +87,11 @@ namespace FrozenPizza
 
             startInfo.Arguments = "Data/maps/" + mapName + ".tmx";
             startInfo.FileName = "FrozenPizzaServer.exe";
-            Process.Start(startInfo);
+            try {
+                Process.Start(startInfo);
+            } catch (Exception e) {
+                //Error
+            }
         }
 
         public static String sendAndReceive(String msg)
