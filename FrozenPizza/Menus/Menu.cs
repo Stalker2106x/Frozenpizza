@@ -13,6 +13,9 @@ namespace FrozenPizza
         {
             /*SpriteFont font = content.Load<SpriteFont>("font/general");
             Stylesheet.Current.TextBlockStyle.Font = font;*/
+            Stylesheet.Current.ButtonStyle.Width = 100;
+            Stylesheet.Current.ComboBoxStyle.Width = 100;
+            Stylesheet.Current.TextFieldStyle.Width = 100;
         }
 
         public static void MainMenu(Engine engine, Desktop host)
@@ -216,7 +219,7 @@ namespace FrozenPizza
 
                 if (server.Length <= 0)
                 {
-                    var messageBox = Dialog.CreateMessageBox("Error", "Bad server provided!");
+                    Dialog messageBox = Dialog.CreateMessageBox("Error", "Bad server provided!");
                     messageBox.ShowModal(host);
                     return;
                 }
@@ -224,10 +227,10 @@ namespace FrozenPizza
                 if (pos != -1) Int32.TryParse(server.Substring(pos, server.Length - pos), out port);
                 else port = 27420;
                 Engine.netHandle.connect(server, port);
+                Dialog joinDialog = Dialog.CreateMessageBox("Joining game", "Connecting to server...");
+                joinDialog.ShowModal(host);
                 while (true)
                 {
-                    var messageBox = Dialog.CreateMessageBox("Joining game", "Connecting to server...");
-                    messageBox.ShowModal(host);
                     if (Engine.netHandle.Handshake && !Engine.netHandle.GameReady)
                     {
                         engine.InitializeGame();
@@ -308,6 +311,7 @@ namespace FrozenPizza
             resolutionCombo.HorizontalAlignment = HorizontalAlignment.Right;
             List<string> resolutions = Options.getResolutions();
             resolutions.ForEach(e => { resolutionCombo.Items.Add(new ListItem(e)); });
+            resolutionCombo.SelectedIndex = Options.getDisplayMode();
             grid.Widgets.Add(resolutionCombo);
 
             TextBlock displayLabel = new TextBlock();
@@ -323,6 +327,7 @@ namespace FrozenPizza
             displayCombo.HorizontalAlignment = HorizontalAlignment.Right;
             displayCombo.Items.Add(new ListItem("Windowed"));
             displayCombo.Items.Add(new ListItem("Fullscreen"));
+            displayCombo.SelectedIndex = Convert.ToInt32(Options.Config.Fullscreen);
             grid.Widgets.Add(displayCombo);
 
             TextBlock musicLabel = new TextBlock();

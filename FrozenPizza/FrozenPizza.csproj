@@ -72,7 +72,6 @@
   <ItemGroup>
     <Reference Include="Myra, Version=0.8.7.167, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Myra.0.8.7.167\lib\net45\Myra.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\OpenTK.dll</HintPath>
