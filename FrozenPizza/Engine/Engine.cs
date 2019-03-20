@@ -132,7 +132,7 @@ namespace FrozenPizza
             _cursor.Load(this.Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             collection.Load(this.Content);
-            Menu.MainMenu(desktop);
+            Menu.MainMenu(this, desktop);
         }
 
         public void LoadGame()

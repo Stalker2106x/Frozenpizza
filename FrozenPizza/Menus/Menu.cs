@@ -5,11 +5,14 @@ namespace FrozenPizza
 {
     class Menu
     {
-        public static void MainMenu(Desktop host)
+        public static void MainMenu(Engine engine, Desktop host)
         {
+            host.Widgets.Clear();
             Grid grid = new Grid();
 
-            grid.ColumnsProportions.Add(new Grid.Proportion());
+            grid.RowSpacing = 8;
+
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
             grid.RowsProportions.Add(new Grid.Proportion());
@@ -17,129 +20,291 @@ namespace FrozenPizza
 
             Button hostBtn = new Button();
             hostBtn.Text = "Host Game";
-            hostBtn.Width = 100;
-            hostBtn.GridColumn = 0;
             hostBtn.GridRow = 0;
+            hostBtn.HorizontalAlignment = HorizontalAlignment.Center;
+            hostBtn.MouseDown += (s, a) =>
+            {
+                HostMenu(engine, host);
+            };
             grid.Widgets.Add(hostBtn);
 
             Button playBtn = new Button();
             playBtn.Text = "Join Game";
-            playBtn.Width = 100;
-            hostBtn.GridColumn = 0;
-            hostBtn.GridRow = 1;
+            playBtn.GridRow = 1;
+            playBtn.HorizontalAlignment = HorizontalAlignment.Center;
+            playBtn.MouseDown += (s, a) =>
+            {
+                JoinMenu(engine, host);
+            };
             grid.Widgets.Add(playBtn);
+
+            Button optionsBtn = new Button();
+            optionsBtn.Text = "Options";
+            optionsBtn.GridRow = 2;
+            optionsBtn.HorizontalAlignment = HorizontalAlignment.Center;
+            optionsBtn.MouseDown += (s, a) =>
+            {
+                OptionsMenu(engine, host);
+            };
+            grid.Widgets.Add(optionsBtn);
 
             Button quitBtn = new Button();
             quitBtn.Text = "Quit";
-            quitBtn.Width = 100;
-            hostBtn.GridColumn = 0;
-            hostBtn.GridRow = 2;
+            quitBtn.GridRow = 3;
+            quitBtn.HorizontalAlignment = HorizontalAlignment.Center;
+            quitBtn.MouseDown += (s, a) =>
+            {
+                engine.exit();
+            };
             grid.Widgets.Add(quitBtn);
 
             host.Widgets.Add(grid);
         }
-    }
-    /*
-    public abstract class Menu
-    {
-        protected String[] _items;
-        protected Rectangle[] _itemRect;
-        protected int _selected, _itemCount;
-        protected float _fontsize;
-        String _fontfile, _bgfile, _gameVersion;
-        protected SpriteFont _font;
-        Texture2D _background;
-        protected Engine _engine;
 
-        public float BackgroundOpacity { get; set; }
-
-        public Menu(Engine engine, String name)
+        public static void HostMenu(Engine engine, Desktop host)
         {
-            XElement bundle = XElement.Load("Data/items/menus.xml");
-            var menu = bundle.Elements(name);
-            int id = 0;
+            host.Widgets.Clear();
+            Grid grid = new Grid();
 
-            _engine = engine;
-            _selected = 0;
-            _gameVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
-            _itemCount = menu.Elements("Item").Count();
-            _items = new String[_itemCount];
-            _itemRect = new Rectangle[_itemCount];
-            _fontfile = menu.Elements("Font").First().Value.ToString();
-            _fontsize = 1f;
-            _bgfile = menu.Elements("Background").First().Value.ToString();
-            BackgroundOpacity = 1f;
-            foreach (var item in menu.Elements("Item"))
+            grid.RowSpacing = 8;
+
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+
+            TextBlock nameLabel = new TextBlock();
+            nameLabel.Text = "Server name";
+            nameLabel.GridColumn = 0;
+            nameLabel.GridRow = 0;
+            nameLabel.HorizontalAlignment = HorizontalAlignment.Left;
+            grid.Widgets.Add(nameLabel);
+
+            TextField nameInput = new TextField();
+            nameInput.Text = "FP Server";
+            nameInput.GridColumn = 1;
+            nameInput.GridRow = 0;
+            nameInput.HorizontalAlignment = HorizontalAlignment.Right;
+            grid.Widgets.Add(nameInput);
+
+            TextBlock mapLabel = new TextBlock();
+            mapLabel.Text = "Map";
+            mapLabel.GridColumn = 0;
+            mapLabel.GridRow = 1;
+            mapLabel.HorizontalAlignment = HorizontalAlignment.Left;
+            grid.Widgets.Add(mapLabel);
+
+            ComboBox mapCombo = new ComboBox();
+            mapCombo.GridColumn = 1;
+            mapCombo.GridRow = 1;
+            mapCombo.HorizontalAlignment = HorizontalAlignment.Right;
+            grid.Widgets.Add(mapCombo);
+
+            TextBlock slotsLabel = new TextBlock();
+            slotsLabel.Text = "Slots";
+            slotsLabel.GridColumn = 0;
+            slotsLabel.GridRow = 2;
+            slotsLabel.HorizontalAlignment = HorizontalAlignment.Left;
+            grid.Widgets.Add(slotsLabel);
+
+            HorizontalSlider slotsSlider = new HorizontalSlider();
+            slotsSlider.GridColumn = 1;
+            slotsSlider.GridRow = 2;
+            slotsSlider.HorizontalAlignment = HorizontalAlignment.Right;
+            grid.Widgets.Add(slotsSlider);
+
+            Button hostBtn = new Button();
+            hostBtn.Text = "Host";
+            hostBtn.GridRow = 3;
+            hostBtn.HorizontalAlignment = HorizontalAlignment.Center;
+            hostBtn.MouseDown += (s, a) =>
             {
-                _items[id] = item.Value.ToString();
-                id++;
-            }
+                //NetHandler.startServer();
+            };
+            grid.Widgets.Add(hostBtn);
+
+            Button backBtn = new Button();
+            backBtn.Text = "Back";
+            backBtn.GridRow = 4;
+            backBtn.HorizontalAlignment = HorizontalAlignment.Center;
+            backBtn.MouseDown += (s, a) =>
+            {
+                MainMenu(engine, host);
+            };
+            grid.Widgets.Add(backBtn);
+
+            host.Widgets.Add(grid);
         }
 
-        public virtual void Load(ContentManager content)
+        public static void JoinMenu(Engine engine, Desktop host)
         {
-            _background = content.Load<Texture2D>("gfx/bg/"+_bgfile);
-            _font = content.Load<SpriteFont>("font/"+_fontfile);
-            initItems();
-        }
+            host.Widgets.Clear();
+            Grid grid = new Grid();
 
-        public void initItems()
-        {
-            for (int id = 0; id < _itemCount; id++)
+            grid.RowSpacing = 8;
+
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+
+            TextBlock serverLabel = new TextBlock();
+            serverLabel.Text = "Server IP";
+            serverLabel.GridColumn = 0;
+            serverLabel.GridRow = 0;
+            serverLabel.HorizontalAlignment = HorizontalAlignment.Left;
+            grid.Widgets.Add(serverLabel);
+
+            TextField serverInput = new TextField();
+            serverInput.Text = "localhost";
+            serverInput.GridColumn = 1;
+            serverInput.GridRow = 0;
+            serverInput.HorizontalAlignment = HorizontalAlignment.Right;
+            grid.Widgets.Add(serverInput);
+
+            Button joinBtn = new Button();
+            joinBtn.Text = "Join";
+            joinBtn.GridRow = 1;
+            joinBtn.HorizontalAlignment = HorizontalAlignment.Center;
+            joinBtn.MouseDown += (s, a) =>
             {
-                Vector2 size = _font.MeasureString(_items[id]);
+                /*Engine.netHandle = new NetHandler();
+                int port;
 
-                _itemRect[id] = new Rectangle(50, (int)(_engine.GraphicsDevice.Viewport.Height - 50) - (int)((_itemCount - id) * (size.Y * _fontsize)), (int)(size.X * _fontsize), (int)(size.Y * _fontsize));
-            }
-        }
-
-        abstract public void itemClicked(int index);
-
-        bool itemHovered(MouseState[] mStates)
-        {
-            for (int i = 0; i < _itemCount; i++)
-            {
-                if (_itemRect[i].Contains(mStates[0].Position) && _itemRect[i].Contains(mStates[1].Position) && _selected == i)
-                    return (true);
-                else if ((!_itemRect[i].Contains(mStates[0].Position) && _itemRect[i].Contains(mStates[1].Position))
-                    || (_itemRect[i].Contains(mStates[0].Position) && _itemRect[i].Contains(mStates[1].Position) && _selected != i))
+                if (_ip.Length > 0 && Int32.TryParse(_port, out port))
                 {
-                    Engine.collection.MenuSounds[0].Play(Options.Config.SoundVolume, 0f, 0f);
-                    _selected = i;
-                    return (true);
+                    _connecting = true;
+                    Engine.netHandle.connect(_ip, port);
                 }
-            }
-            return (false);
-        }
+                
+                
+                if (Engine.netHandle.Handshake && !Engine.netHandle.GameReady)
+                {
+                    _engine.InitializeGame();
+                    _engine.LoadGame();
+                    Engine.netHandle.GameReady = true;
+                }
+                else if (Engine.netHandle.Ready)
+                {
+                    _engine.toggleMouseVisible();
+                    _engine.gstate = GameState.Playing;
+                    _engine.setMenu(new GameMenu(_engine));
+                }
+                 */
+            };
+            grid.Widgets.Add(joinBtn);
 
-        public virtual void Update(KeyboardState[] keybStates, MouseState[] mStates)
-        {
-            if (!itemHovered(mStates))
-                _selected = -1;
-            if (_selected >= 0 && mStates[0].LeftButton == ButtonState.Released && mStates[1].LeftButton == ButtonState.Pressed)
+            Button backBtn = new Button();
+            backBtn.Text = "Back";
+            backBtn.GridRow = 2;
+            backBtn.HorizontalAlignment = HorizontalAlignment.Center;
+            backBtn.MouseDown += (s, a) =>
             {
-                Engine.collection.MenuSounds[1].Play(Options.Config.SoundVolume, 0f, 0f);
-                itemClicked(_selected);
-            }
+                MainMenu(engine, host);
+            };
+            grid.Widgets.Add(backBtn);
+
+            host.Widgets.Add(grid);
         }
 
-        public void drawBase(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public static void OptionsMenu(Engine engine, Desktop host)
         {
-            spriteBatch.DrawString(_font, _gameVersion, Vector2.Zero, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(_background, new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), null, Color.White * BackgroundOpacity, 0f, Vector2.Zero, SpriteEffects.None, 0.5f);
-        }
+            host.Widgets.Clear();
+            Grid grid = new Grid();
 
-        public virtual void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
-        {
-            drawBase(spriteBatch, graphicsDevice);
-            for (int i = 0; i < _itemCount; i++)
+            grid.RowSpacing = 8;
+
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
+            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200));
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+            grid.RowsProportions.Add(new Grid.Proportion());
+
+            TextBlock playerLabel = new TextBlock();
+            playerLabel.Text = "Player name";
+            playerLabel.GridColumn = 0;
+            playerLabel.GridRow = 0;
+            playerLabel.HorizontalAlignment = HorizontalAlignment.Left;
+            grid.Widgets.Add(playerLabel);
+
+            TextField playerInput = new TextField();
+            playerInput.Text = "player";
+            playerInput.GridColumn = 1;
+            playerInput.GridRow = 0;
+            playerInput.HorizontalAlignment = HorizontalAlignment.Right;
+            grid.Widgets.Add(playerInput);
+
+            TextBlock resolutionLabel = new TextBlock();
+            resolutionLabel.Text = "Resolution";
+            resolutionLabel.GridColumn = 0;
+            resolutionLabel.GridRow = 1;
+            resolutionLabel.HorizontalAlignment = HorizontalAlignment.Left;
+            grid.Widgets.Add(resolutionLabel);
+
+            ComboBox resolutionCombo = new ComboBox();
+            resolutionCombo.GridColumn = 1;
+            resolutionCombo.GridRow = 1;
+            resolutionCombo.HorizontalAlignment = HorizontalAlignment.Right;
+            grid.Widgets.Add(resolutionCombo);
+
+            TextBlock musicLabel = new TextBlock();
+            musicLabel.Text = "Music volume";
+            musicLabel.GridColumn = 0;
+            musicLabel.GridRow = 2;
+            musicLabel.HorizontalAlignment = HorizontalAlignment.Left;
+            grid.Widgets.Add(musicLabel);
+
+            HorizontalSlider musicSlider = new HorizontalSlider();
+            musicSlider.GridColumn = 1;
+            musicSlider.GridRow = 2;
+            musicSlider.HorizontalAlignment = HorizontalAlignment.Right;
+            grid.Widgets.Add(musicSlider);
+
+            TextBlock soundLabel = new TextBlock();
+            soundLabel.Text = "Sounds volume";
+            soundLabel.GridColumn = 0;
+            soundLabel.GridRow = 3;
+            soundLabel.HorizontalAlignment = HorizontalAlignment.Left;
+            grid.Widgets.Add(soundLabel);
+
+            HorizontalSlider soundSlider = new HorizontalSlider();
+            soundSlider.GridColumn = 1;
+            soundSlider.GridRow = 3;
+            soundSlider.HorizontalAlignment = HorizontalAlignment.Right;
+            grid.Widgets.Add(soundSlider);
+
+            Button applyBtn = new Button();
+            applyBtn.Text = "Apply";
+            applyBtn.GridRow = 4;
+            applyBtn.HorizontalAlignment = HorizontalAlignment.Center;
+            applyBtn.MouseDown += (s, a) =>
             {
-                Color color = Color.White;
+                //Options.Config.Fullscreen = _settingSelectedValue[0] == 1 ? true : false;
+                //Options.Config.Width = Options.getDisplayModeById(_settingSelectedValue[1]).Width;
+                //Options.Config.Height = Options.getDisplayModeById(_settingSelectedValue[1]).Height;
+                //Options.Config.MusicVolume = 0.25f * _settingSelectedValue[2];
+                //Options.Config.SoundVolume = 0.25f * _settingSelectedValue[2];
+                Options.applyConfig();
+                Options.SetConfigFile();
+            };
+            grid.Widgets.Add(applyBtn);
 
-                if (i == _selected)
-                    color = Color.Red;
-                spriteBatch.DrawString(_font, _items[i], _itemRect[i].Location.ToVector2(), color, 0f, Vector2.Zero, _fontsize, SpriteEffects.None, 0f);
-            }
+            Button backBtn = new Button();
+            backBtn.Text = "Back";
+            backBtn.GridRow = 5;
+            backBtn.HorizontalAlignment = HorizontalAlignment.Center;
+            backBtn.MouseDown += (s, a) =>
+            {
+                MainMenu(engine, host);
+            };
+            grid.Widgets.Add(backBtn);
+
+            host.Widgets.Add(grid);
         }
-    }*/
+    }
 }
