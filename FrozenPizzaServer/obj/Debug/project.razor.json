@@ -1,0 +1,14 @@
+{
+  "ProjectFilePath": "d:\\Projets\\frozenpizza\\FrozenPizzaServer\\FrozenPizzaServer.csproj",
+  "TargetFramework": "v4.5",
+  "TagHelpers": [],
+  "Configuration": {
+    "ConfigurationName": "UnsupportedRazor",
+    "LanguageVersion": "1.0",
+    "Extensions": [
+      {
+        "ExtensionName": "UnsupportedRazorExtension"
+      }
+    ]
+  }
+}

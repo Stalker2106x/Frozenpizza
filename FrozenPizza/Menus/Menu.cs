@@ -226,29 +226,22 @@ namespace FrozenPizza
                 int pos = server.IndexOf(":");
                 if (pos != -1) Int32.TryParse(server.Substring(pos, server.Length - pos), out port);
                 else port = 27420;
-                Engine.netHandle.connect(server, port);
-                TimeSpan connectionTimeout = new TimeSpan();
-                while (connectionTimeout.Seconds < 10) //10s timeout
+                NetHandler.HandshakeCallback = () =>
                 {
-                    if (Engine.netHandle.Handshake && !Engine.netHandle.GameReady)
-                    {
-                        engine.InitializeGame();
-                        engine.LoadGame();
-                        Engine.netHandle.GameReady = true;
-                    }
-                    else if (Engine.netHandle.Ready)
-                    {
-                        engine.toggleMouseVisible();
-                        engine.gstate = GameState.Playing;
-                        GameMenu(engine, host);
-                        return;
-                    }
-                    Thread.Sleep(1000);
-                    connectionTimeout = connectionTimeout.Add(TimeSpan.FromSeconds(1));
-                }
-                Dialog errorBox = Dialog.CreateMessageBox("Error", "Could not reach server");
-                errorBox.ShowModal(host);
-                return;
+                    engine.InitializeGame();
+                    engine.LoadGame();
+                    Engine.netHandle.GameReady = true;
+                    engine.toggleMouseVisible();
+                    engine.gstate = GameState.Playing;
+                    GameMenu(engine, host);
+                };
+                NetHandler.FailureCallback = () =>
+                {
+                    engine.UnloadGame(); //Unload any loaded content
+                    Dialog errorBox = Dialog.CreateMessageBox("Error", "Could not reach server");
+                    errorBox.ShowModal(host);
+                };
+                Engine.netHandle.connect(server, port);
             };
             grid.Widgets.Add(joinBtn);
 

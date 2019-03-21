@@ -17,7 +17,9 @@ namespace FrozenPizza
         static Queue<String> _receiveStack;
         CommandHandler _cmdHandle;
 
-        public static NetworkStream _stream;
+        public static Action FailureCallback;
+        public static Action HandshakeCallback;
+        static NetworkStream _stream;
         public String Ip { get; set; }
         public int Port { get; set; }
         public static bool Connected { get; set; }
@@ -45,11 +47,6 @@ namespace FrozenPizza
         {
             try
             {
-                if (Ip == "0.0.0.0")
-                {
-                    ConnectionStatus = "Cannot connect to server: Invalid IP.";
-                    return (false);
-                }
                 _client.Connect(Ip, Port);
                 _stream = _client.GetStream();
                 ConnectionStatus = "Connected!";
@@ -173,8 +170,7 @@ namespace FrozenPizza
 
         void threadLoop()
         {
-            if (!ConnectCallback())
-                return;
+            if (!ConnectCallback()) NetHandler.FailureCallback();
             while (Connected)
             {
                 if (!WorldData && Handshake && GameReady)

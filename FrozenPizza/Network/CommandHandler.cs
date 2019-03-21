@@ -107,6 +107,7 @@ namespace FrozenPizza
         {
             NetHandler.send(".HANDSHAKE");
             NetHandler.ConnectionStatus = "Handshake success!";
+            NetHandler.HandshakeCallback();
             Engine.netHandle.Handshake = true;
             return (true);
         }
@@ -118,10 +119,10 @@ namespace FrozenPizza
 			int id;
 
 			Int32.TryParse(args[0], out id);
-			Engine.MainPlayer.id = id;
+			Engine.mainPlayer.id = id;
 			float.TryParse(args[1], out pos.X);
 			float.TryParse(args[2], out pos.Y);
-			Engine.MainPlayer.pos = pos;
+			Engine.mainPlayer.pos = pos;
             acknowledge(null);
             return (true);
 		}
@@ -170,10 +171,10 @@ namespace FrozenPizza
             float.TryParse(args[1], out pos.X);
             float.TryParse(args[2], out pos.Y);
             float.TryParse(args[3], out orientation);
-            if (Engine.MainPlayer != null && id == Engine.MainPlayer.id)
+            if (Engine.mainPlayer != null && id == Engine.mainPlayer.id)
             {
-                Engine.MainPlayer.pos = pos;
-                Engine.MainPlayer.orientation = orientation;
+                Engine.mainPlayer.pos = pos;
+                Engine.mainPlayer.orientation = orientation;
             }
             else if (Engine.getPlayerById(id) != null)
             {
@@ -207,8 +208,8 @@ namespace FrozenPizza
 
             Int32.TryParse(args[0], out id);
             Int32.TryParse(args[1], out damage);
-            if (id == Engine.MainPlayer.id)
-                Engine.MainPlayer.hurt(damage);
+            if (id == Engine.mainPlayer.id)
+                Engine.mainPlayer.hurt(damage);
             else
                 Engine.getPlayerById(id).hurt(damage);
             acknowledge(null);

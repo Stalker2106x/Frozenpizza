@@ -32,9 +32,9 @@ namespace FrozenPizza
             Velocity = velocity;
             Damage = damage;
             Weapon weapon = (Weapon)Engine.collection.getItemById(id);
-            if (Engine.MainPlayer.getDistanceTo(pos) <= (Engine.Level.Map.TileWidth * 40))
+            if (Engine.mainPlayer.getDistanceTo(pos) <= (Engine.Level.Map.TileWidth * 40))
             {
-                float distVolume = (Engine.MainPlayer.getDistanceTo(pos) / (Engine.Level.Map.TileWidth * 40));
+                float distVolume = (Engine.mainPlayer.getDistanceTo(pos) / (Engine.Level.Map.TileWidth * 40));
 
                 distVolume = (Options.Config.SoundVolume - distVolume) / Options.Config.SoundVolume;
                 weapon.Sounds[(int)FirearmActions.Fire].Play(distVolume > 0 ? distVolume : 0, 0f, 0f);
@@ -52,7 +52,7 @@ namespace FrozenPizza
                 return (false);
             else if (Engine.Level.Collide(Pos))
                 return (false);
-            else if (Engine.MainPlayer.getHitbox().Contains(Pos))
+            else if (Engine.mainPlayer.getHitbox().Contains(Pos))
                 return (false);
             for (int i = 0; i < Engine.Players.Count; i++)
             {

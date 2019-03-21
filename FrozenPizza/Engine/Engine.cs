@@ -39,9 +39,8 @@ namespace FrozenPizza
 
         //Game
         static Level level;
-        static MainPlayer mainPlayer;
+        public static MainPlayer mainPlayer { get; set; }
         static List<Player> players;
-        bool _gameLoaded;
 
         //Input management
         KeyBinds keybinds;
@@ -49,7 +48,6 @@ namespace FrozenPizza
         MouseState[] mouseStates;
 
 		//Static accessors
-        public static MainPlayer MainPlayer { get { return (mainPlayer); } }
         public static List<Player> Players { get { return (players); } }
         public static Player getPlayerById(int id)
         {
@@ -70,7 +68,6 @@ namespace FrozenPizza
             Content.RootDirectory = "Data";
             gstate = GameState.Menu;
             MyraEnvironment.Game = this;
-            _gameLoaded = false;
         }
 
 		/// <summary>
@@ -100,7 +97,6 @@ namespace FrozenPizza
 
         public void InitializeGame()
         {
-            level = new Level();
             cam = new Camera(GraphicsDevice);
             hud = new HUD(GraphicsDevice, cam);
             mainPlayer = new MainPlayer("Bernie");
@@ -140,11 +136,11 @@ namespace FrozenPizza
 
         public void LoadGame()
         {
+            level = new Level();
             level.Load(this.Content);
             hud.Load(this.Content);
             mainPlayer.Load(this.Content);
             //level.GenerateItems(collection);
-            _gameLoaded = true;
         }
 
         public void UnloadGame()
@@ -152,7 +148,6 @@ namespace FrozenPizza
             level = null;
             hud = null;
             mainPlayer = null;
-            _gameLoaded = false;
         }
 
         /// <summary>
