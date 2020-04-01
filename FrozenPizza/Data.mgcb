@@ -1,0 +1,366 @@
+
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:bin/$(Platform)
+/intermediateDir:obj/$(Platform)
+/platform:DesktopGL
+/config:
+/profile:Reach
+/compress:False
+
+#-------------------------------- References --------------------------------#
+
+
+#---------------------------------- Content ---------------------------------#
+
+#begin Data/font/army.spritefont
+/copy:Data/font/army.spritefont
+
+#begin Data/font/general.spritefont
+/copy:Data/font/general.spritefont
+
+#begin Data/font/hud.xnb
+/copy:Data/font/hud.xnb
+
+#begin Data/gfx/bg/main.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/bg/main.jpg
+
+#begin Data/gfx/bg/wood.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/bg/wood.jpg
+
+#begin Data/gfx/cursors.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/cursors.png
+
+#begin Data/gfx/firearms.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/firearms.png
+
+#begin Data/gfx/hud.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/hud.png
+
+#begin Data/gfx/logo.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/logo.png
+
+#begin Data/gfx/melee.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/melee.png
+
+#begin Data/gfx/players.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/players.png
+
+#begin Data/gfx/projectiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/projectiles.png
+
+#begin Data/gfx/shadowmap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/shadowmap.png
+
+#begin Data/items/firearms.xml
+/copy:Data/items/firearms.xml
+
+#begin Data/items/food.xml
+/copy:Data/items/food.xml
+
+#begin Data/items/melee.xml
+/copy:Data/items/melee.xml
+
+#begin Data/items/menus.xml
+/copy:Data/items/menus.xml
+
+#begin Data/items/wearables.xml
+/copy:Data/items/wearables.xml
+
+#begin Data/maps/BP3NO.tmx
+/copy:Data/maps/BP3NO.tmx
+
+#begin Data/maps/city.jpg
+/copy:Data/maps/city.jpg
+
+#begin Data/maps/dev.tmx
+/copy:Data/maps/dev.tmx
+
+#begin Data/maps/meta.png
+/copy:Data/maps/meta.png
+
+#begin Data/maps/meta16.png
+/copy:Data/maps/meta16.png
+
+#begin Data/maps/official.tmx
+/copy:Data/maps/official.tmx
+
+#begin Data/maps/props.png
+/copy:Data/maps/props.png
+
+#begin Data/maps/tiles.jpg
+/copy:Data/maps/tiles.jpg
+
+#begin Data/maps/tiles.png
+/copy:Data/maps/tiles.png
+
+#begin Data/maps/tileset16.png
+/copy:Data/maps/tileset16.png
+
+#begin Data/maps/tilesetnew16.png
+/copy:Data/maps/tilesetnew16.png
+
+#begin Data/maps/tilesss.png
+/copy:Data/maps/tilesss.png
+
+#begin Data/maps/world.tmx
+/copy:Data/maps/world.tmx
+
+#begin Data/maps/world.tmx.jx7116
+/copy:Data/maps/world.tmx.jx7116
+
+#begin Data/maps/world.tmx.s12824
+/copy:Data/maps/world.tmx.s12824
+
+#begin Data/pizza.ico
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/pizza.ico
+
+#begin Data/sounds/menu/click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/menu/click.wav
+
+#begin Data/sounds/menu/hover.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/menu/hover.wav
+
+#begin Data/sounds/player/attack.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/player/attack.wav
+
+#begin Data/sounds/player/die.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/player/die.wav
+
+#begin Data/sounds/player/hurt.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/player/hurt.wav
+
+#begin Data/sounds/player/rstep1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/player/rstep1.wav
+
+#begin Data/sounds/player/rstep2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/player/rstep2.wav
+
+#begin Data/sounds/player/rstep3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/player/rstep3.wav
+
+#begin Data/sounds/player/rstep4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/player/rstep4.wav
+
+#begin Data/sounds/player/step1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/player/step1.wav
+
+#begin Data/sounds/player/step2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/player/step2.wav
+
+#begin Data/sounds/player/step3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/player/step3.wav
+
+#begin Data/sounds/player/step4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/player/step4.wav
+
+#begin Data/sounds/weapon/357magnum/fire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapon/357magnum/fire.wav
+
+#begin Data/sounds/weapon/357magnum/reload.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapon/357magnum/reload.wav
+
+#begin Data/sounds/weapon/berettam9/fire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapon/berettam9/fire.wav
+
+#begin Data/sounds/weapon/berettam9/reload.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapon/berettam9/reload.wav
+
+#begin Data/sounds/weapon/blade/attack.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapon/blade/attack.wav
+
+#begin Data/sounds/weapon/deagle/fire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapon/deagle/fire.wav
+
+#begin Data/sounds/weapon/deagle/reload.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapon/deagle/reload.wav
+
+#begin Data/sounds/weapon/dryfire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapon/dryfire.wav
+
+#begin Data/sounds/weapon/glock18/fire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapon/glock18/fire.wav
+
+#begin Data/sounds/weapon/glock18/reload.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapon/glock18/reload.wav
+
+#begin Data/sounds/weapon/hands/attack.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapon/hands/attack.wav
+
+#begin Data/sounds/weapon/tool/attack.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapon/tool/attack.wav
+
