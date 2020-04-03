@@ -64,7 +64,7 @@ namespace FrozenPizza
         {
             _hudEntRect = new Rectangle(0, 0, 64, 64);
             _hudEntities = content.Load<Texture2D>(@"gfx/hud");
-            _font = content.Load<SpriteFont>(@"font/army");
+            _font = content.Load<SpriteFont>(@"font/hud");
 			_foodBackground = new Color[2] { Color.White, Color.White };
             return (true);
         }

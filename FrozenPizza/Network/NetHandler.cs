@@ -19,6 +19,7 @@ namespace FrozenPizza
 
         public static Action FailureCallback;
         public static Action HandshakeCallback;
+        static Process activeProcess;
         static NetworkStream _stream;
         public String Ip { get; set; }
         public int Port { get; set; }
@@ -80,18 +81,25 @@ namespace FrozenPizza
 
         public static void startServer(String mapName)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo();
+          ProcessStartInfo startInfo = new ProcessStartInfo();
 
-            startInfo.Arguments = "Data/maps/" + mapName + ".tmx";
-            startInfo.FileName = "FrozenPizzaServer.exe";
-            try {
-                Process.Start(startInfo);
-            } catch (Exception e) {
-                //Error
-            }
+          startInfo.Arguments = "exec Server.dll Data/maps/" + mapName + ".tmx";
+          startInfo.FileName = "dotnet";
+          try
+          {
+            activeProcess = Process.Start(startInfo);
+          }
+          catch (Exception e)
+          {
+            //Error
+          }
+        }
+        public static void closeServer()
+        {
+          if (activeProcess != null) activeProcess.Kill();
         }
 
-        public static String sendAndReceive(String msg)
+    public static String sendAndReceive(String msg)
         {
             send(msg);
             return (receive());
