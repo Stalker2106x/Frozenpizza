@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/player/step1.wav</SourceFile>
+  <SourceTime>2020-04-01T22:22:40.8546597+02:00</SourceTime>
+  <DestFile>D:/Projets/FpRevamp/FrozenPizza/Data/bin/DesktopGL/Data/sounds/player/step1.xnb</DestFile>
+  <DestTime>2020-04-04T00:52:10.1021537+02:00</DestTime>
+  <Importer>WavImporter</Importer>
+  <ImporterTime>2018-01-13T19:18:24+01:00</ImporterTime>
+  <Processor>SoundEffectProcessor</Processor>
+  <ProcessorTime>2018-01-13T19:18:24+01:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

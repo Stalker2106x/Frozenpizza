@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>W:/Projets/FrozenPizza/Frozenpizza/FrozenPizza/Data/font/army.spritefont</SourceFile>
+  <SourceTime>2017-01-04T22:38:51.500262+01:00</SourceTime>
+  <DestFile>W:/Projets/FrozenPizza/Frozenpizza/FrozenPizza/Data/bin/DesktopGL/font/army.xnb</DestFile>
+  <DestTime>2017-01-13T00:51:00.6589265+01:00</DestTime>
+  <Importer>FontDescriptionImporter</Importer>
+  <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
+  <Processor>FontDescriptionProcessor</Processor>
+  <ProcessorTime>2016-03-30T08:36:08+02:00</ProcessorTime>
+  <Parameters>
+    <Key>TextureFormat</Key>
+    <Value>Compressed</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

@@ -108,7 +108,7 @@ namespace FrozenPizza
             NetHandler.send(".HANDSHAKE");
             NetHandler.ConnectionStatus = "Handshake success!";
             NetHandler.HandshakeCallback();
-            GameMain.netHandle.Handshake = true;
+            Engine.netHandle.Handshake = true;
             return (true);
         }
 
@@ -119,10 +119,10 @@ namespace FrozenPizza
 			int id;
 
 			Int32.TryParse(args[0], out id);
-      GameMain.mainPlayer.id = id;
+			Engine.mainPlayer.id = id;
 			float.TryParse(args[1], out pos.X);
 			float.TryParse(args[2], out pos.Y);
-      GameMain.mainPlayer.pos = pos;
+			Engine.mainPlayer.pos = pos;
             acknowledge(null);
             return (true);
 		}
@@ -155,8 +155,8 @@ namespace FrozenPizza
             Int32.TryParse(args[1], out hp);
             float.TryParse(args[2], out pos.X);
             float.TryParse(args[3], out pos.Y);
-            GameMain.players.Add(new Player(id, "RP", pos, hp));
-            GameMain.players.Last().Load(Resources.Content);
+            Engine.Players.Add(new Player(id, "RP", pos, hp));
+            Engine.Players.Last().Load(Engine.collection.Content);
             acknowledge(null);
             return (true);
         }
@@ -171,22 +171,18 @@ namespace FrozenPizza
             float.TryParse(args[1], out pos.X);
             float.TryParse(args[2], out pos.Y);
             float.TryParse(args[3], out orientation);
-      if (GameMain.mainPlayer != null && id == GameMain.mainPlayer.id)
-      {
-        GameMain.mainPlayer.pos = pos;
-        GameMain.mainPlayer.orientation = orientation;
-      }
-      else
-      {
-        var player = GameMain.players.First((p) => { return (p.id == id); });
-        if (player != null)
-        {
-          player.pos = pos;
-          player.orientation = orientation;
+            if (Engine.mainPlayer != null && id == Engine.mainPlayer.id)
+            {
+                Engine.mainPlayer.pos = pos;
+                Engine.mainPlayer.orientation = orientation;
+            }
+            else if (Engine.getPlayerById(id) != null)
+            {
+                Engine.getPlayerById(id).pos = pos;
+                Engine.getPlayerById(id).orientation = orientation;
+            }
+            return (true);
         }
-      }
-      return (true);
-    }
 
         bool createProjectile(String[] args)
         {
@@ -201,7 +197,7 @@ namespace FrozenPizza
             float.TryParse(args[4], out angle);
             float.TryParse(args[5], out velocity);
             Int32.TryParse(args[6], out damage);
-            GameMain.level.Projectiles.Add(new Projectile(id, ProjectileType.Bullet, pos, angle, velocity, damage));
+            Engine.Level.Projectiles.Add(new Projectile(id, ProjectileType.Bullet, pos, angle, velocity, damage));
             acknowledge(null);
             return (true);
         }
@@ -212,10 +208,10 @@ namespace FrozenPizza
 
             Int32.TryParse(args[0], out id);
             Int32.TryParse(args[1], out damage);
-            if (id == GameMain.mainPlayer.id)
-                GameMain.mainPlayer.hurt(damage);
+            if (id == Engine.mainPlayer.id)
+                Engine.mainPlayer.hurt(damage);
             else
-              GameMain.players.First((p) => { return (p.id == id); }).hurt(damage);
+                Engine.getPlayerById(id).hurt(damage);
             acknowledge(null);
             return (true);
         }
@@ -231,8 +227,8 @@ namespace FrozenPizza
             Int32.TryParse(args[1], out id);
             float.TryParse(args[2], out pos.X);
             float.TryParse(args[3], out pos.Y);
-            GameMain.level.Entities.Add(Resources.getItemById(id).Copy());
-            GameMain.level.Entities.Last().pos = pos;
+			Engine.Level.Entities.Add(Engine.collection.getNewItemById(uid, id));
+			Engine.Level.Entities.Last().pos = pos;
             acknowledge(null);
             return (true);
         }
@@ -245,7 +241,7 @@ namespace FrozenPizza
             Int64.TryParse(args[0], out uid);
             float.TryParse(args[1], out pos.X);
             float.TryParse(args[2], out pos.Y);
-            GameMain.level.Entities[GameMain.level.getEntityIndex(uid)].pos = pos;
+            Engine.Level.Entities[Engine.Level.getEntityIndex(uid)].pos = pos;
             acknowledge(null);
             return (true);
         }
@@ -255,7 +251,7 @@ namespace FrozenPizza
             Int64 uid;
 
             Int64.TryParse(args[0], out uid);
-            GameMain.level.Entities[GameMain.level.getEntityIndex(uid)].pos = -Vector2.One;
+            Engine.Level.Entities[Engine.Level.getEntityIndex(uid)].pos = -Vector2.One;
             acknowledge(null);
             return (true);
         }
@@ -264,7 +260,7 @@ namespace FrozenPizza
         bool ready(String[] args)
         {
             NetHandler.send(".READY");
-            GameMain.netHandle.Ready = true;
+            Engine.netHandle.Ready = true;
             return (true);
         }
 

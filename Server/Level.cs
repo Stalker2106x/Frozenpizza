@@ -50,9 +50,9 @@ namespace FrozenPizzaServer
             _map = new TmxMap(mapName);
             _twidth = _map.Tilesets[0].TileWidth;
             _theight = _map.Tilesets[0].TileHeight;
-			      _entities = new List<Item>();
+			_entities = new List<Item>();
             _projectiles = new List<Projectile>();
-			      _currentUid = 0;
+			_currentUid = 0;
             GenerateItems();
             _lastTick = DateTime.Now;
         }

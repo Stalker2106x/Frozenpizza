@@ -1,5 +1,4 @@
-﻿using FrozenPizza.Settings;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -34,13 +33,13 @@ namespace FrozenPizza
         public Vector2 Pos { get; set; }
         public bool Show { get; set; }
 
-        public void Update(DeviceState state, DeviceState prevState)
+        public void Update(MouseState[] mStates)
         {
-            Pos = state.mouse.Position.ToVector2();
-            if (state.mouse.LeftButton == ButtonState.Pressed)
-              _clicked = true;
-            else if (prevState.mouse.LeftButton == ButtonState.Pressed && state.mouse.LeftButton == ButtonState.Released)
-              _clicked = false;
+            Pos = mStates[1].Position.ToVector2();
+            if (mStates[1].LeftButton == ButtonState.Pressed)
+                _clicked = true;
+            else if (mStates[0].LeftButton == ButtonState.Pressed && mStates[1].LeftButton == ButtonState.Released)
+                _clicked = false;
         }
         public void Draw(SpriteBatch spriteBatch)
         {

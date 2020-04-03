@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>DesktopGL</Platform>
+  <Config />
+  <SourceFiles>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/gfx/bg/main.jpg</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/gfx/bg/wood.jpg</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/gfx/cursors.png</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/gfx/firearms.png</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/gfx/hud.png</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/gfx/logo.png</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/gfx/melee.png</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/gfx/players.png</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/gfx/projectiles.png</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/gfx/shadowmap.png</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/maps/city.jpg</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/maps/meta.png</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/maps/meta16.png</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/maps/tileset16.png</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/maps/tilesetnew16.png</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/menu/click.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/menu/hover.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/player/die.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/player/hurt.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/player/rstep1.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/player/rstep2.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/player/rstep3.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/player/rstep4.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/player/step1.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/player/step2.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/player/step3.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/player/step4.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/weapon/357magnum/fire.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/weapon/357magnum/reload.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/weapon/berettam9/fire.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/weapon/berettam9/reload.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/weapon/blade/attack.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/weapon/deagle/fire.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/weapon/deagle/reload.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/weapon/dryfire.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/weapon/glock18/fire.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/weapon/glock18/reload.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/weapon/hands/attack.wav</File>
+    <File>D:/Projets/FpRevamp/FrozenPizza/Data/sounds/weapon/tool/attack.wav</File>
+  </SourceFiles>
+</SourceFileCollection>

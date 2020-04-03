@@ -54,10 +54,10 @@ namespace FrozenPizza
 
         public Level()
         {
-            _map = new TmxMap("Data/maps/" + MapName);
+            _map = new TmxMap(MapName);
             _twidth = _map.Tilesets[0].TileWidth;
             _theight = _map.Tilesets[0].TileHeight;
-			      _entities = new List<Item>();
+			_entities = new List<Item>();
             _projectiles = new List<Projectile>();
             _metaOffset = (int)(_map.Tilesets[0].Image.Width / _twidth);
             _drawMargin = 10;
@@ -66,7 +66,7 @@ namespace FrozenPizza
         public bool Load(ContentManager content)
         { 
             _tileset = content.Load<Texture2D>("maps/" + _map.Tilesets[1].Name.ToString());
-            _shadows = Resources.ShadowTileset;
+            _shadows = content.Load<Texture2D>("gfx/shadowmap");
             _ttwidth = _tileset.Width / _twidth;
             _ttheight = _tileset.Height / _theight;
             return (true);
@@ -271,13 +271,13 @@ namespace FrozenPizza
         }
 
         //base draw call, includes tilemap algorithm
-        public void Draw(SpriteBatch spriteBatch, Camera cam, MainPlayer mainPlayer)
+        public void Draw(SpriteBatch spriteBatch, Camera cam, MainPlayer mainPlayer, Collection collection)
         {
             drawTiles(spriteBatch, cam, mainPlayer);
             for (int i = _entities.Count - 1; i >= 0; i--)
             {
                 if (_entities[i].pos != - Vector2.One && (!Indoor(mainPlayer.pos) || (Indoor(mainPlayer.pos) && Indoor(_entities[i].pos))))
-                    spriteBatch.Draw(Resources.Tilesets[(int)_entities[i].type], _entities[i].pos, _entities[i].skinRect, Color.White, 0, _entities[i].origin, 1f, SpriteEffects.None, 0.3f);
+                    spriteBatch.Draw(Engine.collection.Tilesets[(int)_entities[i].type], _entities[i].pos, _entities[i].skinRect, Color.White, 0, _entities[i].origin, 1f, SpriteEffects.None, 0.3f);
             }
             for (int i = _projectiles.Count - 1; i >= 0; i--)
             {

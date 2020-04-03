@@ -59,24 +59,7 @@ namespace FrozenPizza
             }
             return (false);
         }
-
-        public static void startServer(String mapName)
-        {
-          ProcessStartInfo startInfo = new ProcessStartInfo();
-
-          startInfo.Arguments = "Data/maps/" + mapName + ".tmx";
-          startInfo.FileName = "FrozenPizzaServer.exe";
-          try
-          {
-            Process.Start(startInfo);
-          }
-          catch (Exception e)
-          {
-            //Error
-          }
-        }
-
-    public void connect(String ip, int port)
+        public void connect(String ip, int port)
         {
             if (!_client.Connected)
             {
@@ -93,6 +76,19 @@ namespace FrozenPizza
             ConnectionStatus = "Disconnected.";
             _client.Close();
             _thread.Abort();
+        }
+
+        public static void startServer(String mapName)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+
+            startInfo.Arguments = "Data/maps/" + mapName + ".tmx";
+            startInfo.FileName = "FrozenPizzaServer.exe";
+            try {
+                Process.Start(startInfo);
+            } catch (Exception e) {
+                //Error
+            }
         }
 
         public static String sendAndReceive(String msg)
@@ -177,10 +173,12 @@ namespace FrozenPizza
             if (!ConnectCallback()) NetHandler.FailureCallback();
             while (Connected)
             {
-                if (!WorldData && Handshake) getServerData();
+                if (!WorldData && Handshake && GameReady)
+                    getServerData();
                 String msg = receive();
 
-                if (msg != null) _cmdHandle.ParseCmd(msg);
+                if (msg != null)
+                    _cmdHandle.ParseCmd(msg);
             }
         }
     }

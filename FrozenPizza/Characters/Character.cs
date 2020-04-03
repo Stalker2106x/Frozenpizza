@@ -62,7 +62,7 @@ namespace FrozenPizza
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Resources.Players, pos, _skinRect, Color.White, -orientation, new Vector2(16, 8), 1.0f, SpriteEffects.None, 0.3f);
+            spriteBatch.Draw(Engine.collection.Players, pos, _skinRect, Color.White, -orientation, new Vector2(16, 8), 1.0f, SpriteEffects.None, 0.3f);
         }
     }
 }

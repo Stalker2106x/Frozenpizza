@@ -1,0 +1,16 @@
+D:\Projets\FpRevamp\Server\bin\Debug\netcoreapp2.2\Server.deps.json
+D:\Projets\FpRevamp\Server\bin\Debug\netcoreapp2.2\Server.runtimeconfig.json
+D:\Projets\FpRevamp\Server\bin\Debug\netcoreapp2.2\Server.runtimeconfig.dev.json
+D:\Projets\FpRevamp\Server\bin\Debug\netcoreapp2.2\Server.dll
+D:\Projets\FpRevamp\Server\bin\Debug\netcoreapp2.2\Server.pdb
+D:\Projets\FpRevamp\Server\obj\Debug\netcoreapp2.2\Server.csprojAssemblyReference.cache
+D:\Projets\FpRevamp\Server\obj\Debug\netcoreapp2.2\Server.csproj.CoreCompileInputs.cache
+D:\Projets\FpRevamp\Server\obj\Debug\netcoreapp2.2\Server.AssemblyInfoInputs.cache
+D:\Projets\FpRevamp\Server\obj\Debug\netcoreapp2.2\Server.AssemblyInfo.cs
+D:\Projets\FpRevamp\Server\obj\Debug\netcoreapp2.2\Server.dll
+D:\Projets\FpRevamp\Server\obj\Debug\netcoreapp2.2\Server.pdb
+D:\Projets\FpRevamp\FrozenPizza\bin\Debug\netcoreapp2.2\Server.deps.json
+D:\Projets\FpRevamp\FrozenPizza\bin\Debug\netcoreapp2.2\Server.runtimeconfig.json
+D:\Projets\FpRevamp\FrozenPizza\bin\Debug\netcoreapp2.2\Server.runtimeconfig.dev.json
+D:\Projets\FpRevamp\FrozenPizza\bin\Debug\netcoreapp2.2\Server.dll
+D:\Projets\FpRevamp\FrozenPizza\bin\Debug\netcoreapp2.2\Server.pdb

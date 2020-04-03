@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Pistols>
+  <Item>
+    <Id>1000</Id>
+    <Name>Glock 18</Name>
+    <ResourceId>glock18</ResourceId>
+    <Slots>Hands Bag</Slots>
+    <Weight>1</Weight>
+    <Size>1</Size>
+    <Damage>15</Damage>
+    <ClipSize>20</ClipSize>
+	  <Accuracy>37</Accuracy>
+    <Cooldown>0.1</Cooldown>
+    <ReloadCooldown>0.7</ReloadCooldown>
+  </Item>
+  <Item>
+    <Id>1001</Id>
+    <Name>Beretta M9</Name>
+    <ResourceId>berettam9</ResourceId>
+    <Slots>Hands Bag</Slots>
+    <Weight>1</Weight>
+    <Size>1</Size>
+    <Damage>10</Damage>
+    <ClipSize>15</ClipSize>
+	  <Accuracy>32</Accuracy>
+    <Cooldown>0.1</Cooldown>
+    <ReloadCooldown>0.7</ReloadCooldown>
+  </Item>
+  <Item>
+    <Id>1002</Id>
+    <Name>.357 Magnum</Name>
+    <ResourceId>357magnum</ResourceId>
+    <Slots>Hands Bag</Slots>
+    <Weight>1</Weight>
+    <Size>1</Size>
+    <Damage>60</Damage>
+    <ClipSize>6</ClipSize>
+	  <Accuracy>40</Accuracy>
+    <Cooldown>0.5</Cooldown>
+    <ReloadCooldown>1.5</ReloadCooldown>
+  </Item>
+  <Item>
+    <Id>1003</Id>
+    <Name>Desert Eagle</Name>
+    <ResourceId>deagle</ResourceId>
+    <Slots>Hands Bag</Slots>
+    <Weight>2</Weight>
+    <Size>1</Size>
+    <Damage>43</Damage>
+    <ClipSize>7</ClipSize>
+	  <Accuracy>40</Accuracy>
+    <Cooldown>0.5</Cooldown>
+    <ReloadCooldown>1</ReloadCooldown>
+  </Item>
+</Pistols>

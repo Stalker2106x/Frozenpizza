@@ -48,12 +48,7 @@ namespace FrozenPizza
             setSkin();
 		}
 
-    public Item Copy()
-    {
-      return (Item)this.MemberwiseClone();
-    }
-
-    public void use()
+        public void use()
         {
 
         }
