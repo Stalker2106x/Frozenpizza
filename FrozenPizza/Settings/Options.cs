@@ -40,9 +40,12 @@ namespace FrozenPizza.Settings
     public GameSettings()
     {
       DisplayMode defaultRes;
-      try {
+      try
+      {
         defaultRes = Options.Resolutions.First((it) => { return (it.Width == 1280 && it.Height == 800); });
-      } catch (Exception) {
+      }
+      catch (Exception)
+      {
         defaultRes = Options.Resolutions[0];
       }
 
@@ -90,11 +93,11 @@ namespace FrozenPizza.Settings
 
     public Options(GraphicsDeviceManager gdevice, GraphicsAdapter gadapter)
     {
-        GDevice = gdevice;
-        GAdapter = gadapter;
-        LoadResolutions();
-        Config = GameSettings.Load();
-        applyConfig();
+      GDevice = gdevice;
+      GAdapter = gadapter;
+      LoadResolutions();
+      Config = GameSettings.Load();
+      applyConfig();
     }
 
     public void LoadResolutions()
@@ -102,7 +105,7 @@ namespace FrozenPizza.Settings
       Resolutions = new List<DisplayMode>();
       foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
       {
-          Resolutions.Add(mode);
+        Resolutions.Add(mode);
       }
     }
 
@@ -118,21 +121,21 @@ namespace FrozenPizza.Settings
 
     public static List<String> getResolutions()
     {
-        List<String> resolutions = new List<String>();
+      List<String> resolutions = new List<String>();
 
-        for (int i = 0; i < Resolutions.Count; i++)
-            resolutions.Add(Resolutions[i].Width + "x" + Resolutions[i].Height);
-        return (resolutions);
+      for (int i = 0; i < Resolutions.Count; i++)
+        resolutions.Add(Resolutions[i].Width + "x" + Resolutions[i].Height);
+      return (resolutions);
     }
 
     public static int getDisplayMode()
     {
-        for (int i = 0; i < Resolutions.Count; i++)
-        {
-            if (Resolutions[i].Width == Config.Width && Resolutions[i].Height == Config.Height)
-                return (i);
-        }
-        return (0);
+      for (int i = 0; i < Resolutions.Count; i++)
+      {
+        if (Resolutions[i].Width == Config.Width && Resolutions[i].Height == Config.Height)
+          return (i);
+      }
+      return (0);
     }
   }
 }

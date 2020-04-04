@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace FrozenPizza
 {
-    
-    public enum WearableSlot
-    {
-        Head,
-		Chest,
-		Hands,
-		Pants,
-		Feets
-    }
+
+  public enum WearableSlot
+  {
+    Head,
+    Chest,
+    Hands,
+    Pants,
+    Feets
+  }
 }
