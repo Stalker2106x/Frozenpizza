@@ -16,7 +16,7 @@ namespace FrozenPizza
     public static List<Player> players;
 
     static Camera cam;
-    static HUD hud;
+    public static HUD hud;
 
     //Static accessors
     public static Player getPlayerById(int id)
@@ -42,7 +42,7 @@ namespace FrozenPizza
       level = new Level();
       level.Load(content);
       hud.Load(content);
-      mainPlayer.Load(content);
+      mainPlayer.Load();
     }
 
     public static void Unload()
@@ -62,10 +62,10 @@ namespace FrozenPizza
       if (mainPlayer.alive && !mainPlayer.inventoryOpen) //If we are ingame reset mouse each loop
         Mouse.SetPosition(cam.getViewport().Width / 2, cam.getViewport().Height / 2);
     }
-    public static void Draw(SpriteBatch spriteBatch, GameTime gameTime, GraphicsDevice graphics, Collection collection)
+    public static void Draw(SpriteBatch spriteBatch, GameTime gameTime, GraphicsDevice graphics)
     {
       spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.getTransformation());
-      level.Draw(spriteBatch, cam, mainPlayer, collection);
+      level.Draw(spriteBatch, cam, mainPlayer);
       mainPlayer.Draw(spriteBatch);
       for (int i = 0; i < players.Count; i++) //Draw players
       {
@@ -73,7 +73,7 @@ namespace FrozenPizza
       }
       spriteBatch.End();
       spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-      hud.Draw(spriteBatch, graphics, mainPlayer, collection, cam);
+      hud.Draw(spriteBatch, graphics, mainPlayer, cam);
       spriteBatch.End();
     }
   }

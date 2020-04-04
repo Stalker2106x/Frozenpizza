@@ -33,7 +33,6 @@ namespace FrozenPizza
 
     //Database, Config and Netcode
     public static NetHandler netHandle;
-    public static Collection collection;
 
     //Menu & Cursor
     private Cursor _cursor;
@@ -75,7 +74,6 @@ namespace FrozenPizza
       keybinds = new KeyBinds();
       keybStates = new KeyboardState[2];
       mouseStates = new MouseState[2];
-      collection = new Collection();
       base.Initialize();
     }
 
@@ -105,7 +103,7 @@ namespace FrozenPizza
     {
       _cursor.Load(this.Content);
       spriteBatch = new SpriteBatch(GraphicsDevice);
-      collection.Load(this.Content);
+      Collection.Load(this.Content);
       Menu.Init(this.Content);
       Menu.MainMenu(this);
     }
@@ -135,8 +133,7 @@ namespace FrozenPizza
       {
         case GameState.Playing:
           //MediaPlayer.Stop();
-          //IsMouseVisible = false;
-          //hud.activate();
+          GameMain.hud.activate();
           break;
         case GameState.Menu:
           //MediaPlayer.Play(Resources.menuTheme);
@@ -163,13 +160,6 @@ namespace FrozenPizza
       keybStates[1] = Keyboard.GetState();
       mouseStates[1] = Mouse.GetState();
       if (_cursor.Show) _cursor.Update(mouseStates);
-      if (keybStates[0].IsKeyUp(Keys.Escape) && keybStates[1].IsKeyDown(Keys.Escape)) //Pause
-      {
-        GameMain.mainPlayer.inventoryOpen = false;
-        if (_cursor.Show == false)
-          toggleMouseVisible();
-        setState(GameState.Menu);
-      }
       switch (gameState)
       {
         case GameState.Menu:
@@ -178,6 +168,14 @@ namespace FrozenPizza
           //_menu.Update(keybStates, mouseStates);
           break;
         case GameState.Playing:
+          if (keybStates[0].IsKeyUp(Keys.Escape) && keybStates[1].IsKeyDown(Keys.Escape)) //Pause
+          {
+            GameMain.mainPlayer.inventoryOpen = false;
+            if (_cursor.Show == false)
+              toggleMouseVisible();
+            setState(GameState.Menu);
+            Menu.GameMenu(this);
+          }
           GameMain.Update(gameTime, keybStates, mouseStates, _cursor);
           break;
       }
@@ -197,7 +195,7 @@ namespace FrozenPizza
       switch (gameState)
       {
         case GameState.Playing:
-          GameMain.Draw(spriteBatch, gameTime, GraphicsDevice, collection);
+          GameMain.Draw(spriteBatch, gameTime, GraphicsDevice);
           spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
           if (_cursor.Show) _cursor.Draw(spriteBatch);
           spriteBatch.End();

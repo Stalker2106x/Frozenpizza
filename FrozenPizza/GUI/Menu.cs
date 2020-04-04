@@ -1,5 +1,6 @@
 ﻿using FrozenPizza.Settings;
 using Microsoft.Xna.Framework.Content;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
 using System;
@@ -22,6 +23,10 @@ namespace FrozenPizza
     public static void MainMenu(Engine engine)
     {
       Desktop.Widgets.Clear();
+
+      Panel mainPanel = new Panel();
+      //mainPanel.Background = new TextureRegion(Resources.menuBackground);
+
       VerticalStackPanel grid = new VerticalStackPanel();
       grid.HorizontalAlignment = HorizontalAlignment.Center;
       grid.VerticalAlignment = VerticalAlignment.Center;
@@ -64,13 +69,17 @@ namespace FrozenPizza
       };
       grid.Widgets.Add(quitBtn);
 
-
-      Desktop.Widgets.Add(grid);
+      mainPanel.Widgets.Add(grid);
+      Desktop.Root = mainPanel;
     }
 
     public static void HostMenu(Engine engine)
     {
       Desktop.Widgets.Clear();
+
+      Panel mainPanel = new Panel();
+      //mainPanel.Background = new TextureRegion(Resources.menuBackground);
+
       Grid grid = new Grid();
       grid.RowSpacing = 8;
 
@@ -164,12 +173,17 @@ namespace FrozenPizza
       };
       grid.Widgets.Add(backBtn);
 
-      Desktop.Widgets.Add(grid);
+      mainPanel.Widgets.Add(grid);
+      Desktop.Root = mainPanel;
     }
 
     public static void JoinMenu(Engine engine)
     {
       Desktop.Widgets.Clear();
+
+      Panel mainPanel = new Panel();
+      //mainPanel.Background = new TextureRegion(Resources.menuBackground);
+
       Grid grid = new Grid();
 
       grid.RowSpacing = 8;
@@ -228,12 +242,17 @@ namespace FrozenPizza
       };
       grid.Widgets.Add(backBtn);
 
-      Desktop.Widgets.Add(grid);
+      mainPanel.Widgets.Add(grid);
+      Desktop.Root = mainPanel;
     }
 
     public static void OptionsMenu(Engine engine)
     {
       Desktop.Widgets.Clear();
+
+      Panel mainPanel = new Panel();
+      //mainPanel.Background = new TextureRegion(Resources.menuBackground);
+
       Grid grid = new Grid();
 
       grid.RowSpacing = 8;
@@ -369,12 +388,17 @@ namespace FrozenPizza
       };
       grid.Widgets.Add(backBtn);
 
-      Desktop.Widgets.Add(grid);
+      mainPanel.Widgets.Add(grid);
+      Desktop.Root = mainPanel;
     }
 
     public static void GameMenu(Engine engine)
     {
       Desktop.Widgets.Clear();
+
+      Panel mainPanel = new Panel();
+      //mainPanel.Background = new TextureRegion(Resources.menuBackground);
+
       Grid grid = new Grid();
 
       grid.RowSpacing = 8;
@@ -434,7 +458,8 @@ namespace FrozenPizza
       };
       grid.Widgets.Add(optionsBtn);
 
-      Desktop.Widgets.Add(grid);
+      mainPanel.Widgets.Add(grid);
+      Desktop.Root = mainPanel;
     }
 
     public static void ConnectCallback(Engine engine, string host)
@@ -458,7 +483,6 @@ namespace FrozenPizza
         Engine.netHandle.GameReady = true;
         engine.toggleMouseVisible();
         Engine.setState(GameState.Playing);
-        GameMenu(engine);
       };
       NetHandler.FailureCallback = () =>
       {

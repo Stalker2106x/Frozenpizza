@@ -34,20 +34,10 @@ namespace FrozenPizza
     }
 
     //Initialization routine
-    public void Load(ContentManager content)
+    public void Load()
     {
       _skinRect = new Rectangle(0, 0, 32, 16);
-      _sounds = new SoundEffect[Enum.GetNames(typeof(PlayerSounds)).Length];
-      _sounds[(int)PlayerSounds.Step1] = content.Load<SoundEffect>("sounds/player/step1");
-      _sounds[(int)PlayerSounds.Step2] = content.Load<SoundEffect>("sounds/player/step2");
-      _sounds[(int)PlayerSounds.Step3] = content.Load<SoundEffect>("sounds/player/step3");
-      _sounds[(int)PlayerSounds.Step4] = content.Load<SoundEffect>("sounds/player/step4");
-      _sounds[(int)PlayerSounds.RunStep1] = content.Load<SoundEffect>("sounds/player/rstep1");
-      _sounds[(int)PlayerSounds.RunStep2] = content.Load<SoundEffect>("sounds/player/rstep2");
-      _sounds[(int)PlayerSounds.RunStep3] = content.Load<SoundEffect>("sounds/player/rstep3");
-      _sounds[(int)PlayerSounds.RunStep4] = content.Load<SoundEffect>("sounds/player/rstep4");
-      _sounds[(int)PlayerSounds.Hurt] = content.Load<SoundEffect>("sounds/player/hurt");
-      _sounds[(int)PlayerSounds.Die] = content.Load<SoundEffect>("sounds/player/die");
+      _sounds = Collection.PlayersSound;
     }
 
     public Rectangle getHitbox()
@@ -63,7 +53,7 @@ namespace FrozenPizza
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-      spriteBatch.Draw(Engine.collection.Players, pos, _skinRect, Color.White, -orientation, new Vector2(16, 8), 1.0f, SpriteEffects.None, 0.3f);
+      spriteBatch.Draw(Collection.Players, pos, _skinRect, Color.White, -orientation, new Vector2(16, 8), 1.0f, SpriteEffects.None, 0.3f);
     }
   }
 }

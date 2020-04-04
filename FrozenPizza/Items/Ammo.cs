@@ -32,7 +32,7 @@ namespace FrozenPizza
       Angle = angle;
       Velocity = velocity;
       Damage = damage;
-      Weapon weapon = (Weapon)Engine.collection.getItemById(id);
+      Weapon weapon = (Weapon)Collection.getItemById(id);
       if (GameMain.mainPlayer.getDistanceTo(pos) <= (GameMain.level.Map.TileWidth * 40))
       {
         float distVolume = (GameMain.mainPlayer.getDistanceTo(pos) / (GameMain.level.Map.TileWidth * 40));
@@ -66,7 +66,7 @@ namespace FrozenPizza
     //Draw projectile
     public void Draw(SpriteBatch spriteBatch)
     {
-      spriteBatch.Draw(Engine.collection.Projectiles, Pos, _skinRect, Color.White, -Angle, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0.3f);
+      spriteBatch.Draw(Collection.Projectiles, Pos, _skinRect, Color.White, -Angle, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0.3f);
     }
   }
 

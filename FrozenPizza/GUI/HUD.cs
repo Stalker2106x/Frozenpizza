@@ -72,6 +72,7 @@ namespace FrozenPizza
 
     public void activate()
     {
+      Desktop.Widgets.Clear();
       Desktop.Root = null;
     }
 
@@ -117,7 +118,7 @@ namespace FrozenPizza
       spriteBatch.Draw(_colorRect, panel, null, color * opacity, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
     }
 
-    public void drawHandsPanel(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, MainPlayer mainPlayer, Collection collection)
+    public void drawHandsPanel(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, MainPlayer mainPlayer)
     {
       DrawHudPanel(spriteBatch, graphicsDevice, _handsPanel, Color.LightGray, 0.5f);
       if (mainPlayer.cooldown)
@@ -125,12 +126,12 @@ namespace FrozenPizza
       if (mainPlayer.hands == null)
       {
         spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
-        spriteBatch.Draw(collection.Tilesets[(int)ItemType.Melee], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), new Rectangle(0, 0, 32, 32), Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
+        spriteBatch.Draw(Collection.Tilesets[(int)ItemType.Melee], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), new Rectangle(0, 0, 32, 32), Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
       }
       else
       {
         spriteBatch.DrawString(_font, mainPlayer.hands.name, _handsPanel.Location.ToVector2(), Color.White);
-        spriteBatch.Draw(collection.Tilesets[(int)mainPlayer.hands.type], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), mainPlayer.hands.skinRect, Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
+        spriteBatch.Draw(Collection.Tilesets[(int)mainPlayer.hands.type], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), mainPlayer.hands.skinRect, Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
         if (mainPlayer.hands.type == ItemType.Firearm)
         {
           Firearm weapon = (Firearm)mainPlayer.hands;
@@ -154,7 +155,7 @@ namespace FrozenPizza
       Engine.DrawLine(spriteBatch, _colorRect, rightLine[0], rightLine[1], Color.Yellow, 1);
     }
 
-    public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, MainPlayer mainPlayer, Collection collection, Camera cam)
+    public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, MainPlayer mainPlayer, Camera cam)
     {
       _hudEntRect.X = 0;
       //Health
@@ -171,7 +172,7 @@ namespace FrozenPizza
       spriteBatch.Draw(_hudEntities, _foodPos + _hudOffset, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
       spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.thirst.max, mainPlayer.thirst.get(), true), calcHeadsUpRect(mainPlayer.thirst.max, mainPlayer.thirst.get()), _foodBackground[1], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
       //Hands Panel
-      drawHandsPanel(spriteBatch, graphicsDevice, mainPlayer, collection);
+      drawHandsPanel(spriteBatch, graphicsDevice, mainPlayer);
       //Inventory
       if (mainPlayer.inventoryOpen)
         DrawInventory(spriteBatch, graphicsDevice, mainPlayer);

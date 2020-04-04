@@ -156,7 +156,7 @@ namespace FrozenPizza
       float.TryParse(args[2], out pos.X);
       float.TryParse(args[3], out pos.Y);
       GameMain.players.Add(new Player(id, "RP", pos, hp));
-      GameMain.players.Last().Load(Engine.collection.Content);
+      GameMain.players.Last().Load();
       acknowledge(null);
       return (true);
     }
@@ -227,7 +227,7 @@ namespace FrozenPizza
       Int32.TryParse(args[1], out id);
       float.TryParse(args[2], out pos.X);
       float.TryParse(args[3], out pos.Y);
-      GameMain.level.Entities.Add(Engine.collection.getNewItemById(uid, id));
+      GameMain.level.Entities.Add(Collection.getNewItemById(uid, id));
       GameMain.level.Entities.Last().pos = pos;
       acknowledge(null);
       return (true);

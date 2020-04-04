@@ -271,13 +271,13 @@ namespace FrozenPizza
     }
 
     //base draw call, includes tilemap algorithm
-    public void Draw(SpriteBatch spriteBatch, Camera cam, MainPlayer mainPlayer, Collection collection)
+    public void Draw(SpriteBatch spriteBatch, Camera cam, MainPlayer mainPlayer)
     {
       drawTiles(spriteBatch, cam, mainPlayer);
       for (int i = _entities.Count - 1; i >= 0; i--)
       {
         if (_entities[i].pos != -Vector2.One && (!Indoor(mainPlayer.pos) || (Indoor(mainPlayer.pos) && Indoor(_entities[i].pos))))
-          spriteBatch.Draw(Engine.collection.Tilesets[(int)_entities[i].type], _entities[i].pos, _entities[i].skinRect, Color.White, 0, _entities[i].origin, 1f, SpriteEffects.None, 0.3f);
+          spriteBatch.Draw(Collection.Tilesets[(int)_entities[i].type], _entities[i].pos, _entities[i].skinRect, Color.White, 0, _entities[i].origin, 1f, SpriteEffects.None, 0.3f);
       }
       for (int i = _projectiles.Count - 1; i >= 0; i--)
       {

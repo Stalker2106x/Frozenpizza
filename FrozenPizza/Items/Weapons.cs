@@ -46,6 +46,11 @@ namespace FrozenPizza
     {
       Sounds = new SoundEffect[1];
     }
+    public Melee Copy()
+    {
+      return (Melee)this.MemberwiseClone();
+    }
+
     public void LoadSounds(ContentManager content)
     {
       Sounds[0] = content.Load<SoundEffect>("sounds/weapon/" + ResourceId + "/attack");
@@ -67,6 +72,11 @@ namespace FrozenPizza
 
     public Firearm(Int64 uid, int id, String name, float weight, float size) : base(uid, id, name, ItemType.Firearm, weight, size)
     {
+    }
+
+    public Firearm Copy()
+    {
+      return (Firearm)this.MemberwiseClone();
     }
 
     //Get a random angle between the aim angles

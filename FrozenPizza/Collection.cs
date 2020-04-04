@@ -17,29 +17,25 @@ namespace FrozenPizza
     Consumable = 3000,
     Wearable = 4000
   }
-  public class Collection
+  public static class Collection
   {
-    public Texture2D GameLogo { get; set; }
-    public SoundEffect[] MenuSounds { get; set; }
-    public List<Melee> MeleeList { get; }
-    public List<Firearm> PistolsList { get; }
-    public Texture2D[] Tilesets { get; set; }
-    public Texture2D Projectiles { get; set; }
-    public Texture2D Players { get; set; }
-    public ContentManager Content { get; set; }
+    public static Texture2D GameLogo;
+    public static SoundEffect[] MenuSounds;
+    public static List<Melee> MeleeList;
+    public static List<Firearm> PistolsList;
+    public static Texture2D[] Tilesets;
+    public static Texture2D Projectiles;
+    public static Texture2D Players;
+    public static SoundEffect[] PlayersSound;
 
-    public Collection()
+    public static bool Load(ContentManager content)
     {
       MenuSounds = new SoundEffect[2];
       //Game
       MeleeList = new List<Melee>();
       PistolsList = new List<Firearm>();
       Tilesets = new Texture2D[Enum.GetNames(typeof(ItemType)).Length];
-    }
 
-    public bool Load(ContentManager content)
-    {
-      Content = content;
       GameLogo = content.Load<Texture2D>("gfx/logo");
       MenuSounds[0] = content.Load<SoundEffect>("sounds/menu/hover");
       MenuSounds[1] = content.Load<SoundEffect>("sounds/menu/click");
@@ -51,7 +47,7 @@ namespace FrozenPizza
       return (true);
     }
 
-    public Item getItemById(int id)
+    public static Item getItemById(int id)
     {
       if (id < (int)ItemIds.Pistol) //Melee
       {
@@ -64,31 +60,20 @@ namespace FrozenPizza
       return (null);
     }
 
-    public Item getNewItemById(Int64 uid, int id)
+    public static Item getNewItemById(Int64 uid, int id)
     {
       if (id < (int)ItemIds.Pistol) //Melee
       {
-        Melee copy, item = MeleeList[id];
-
-        copy = new Melee(uid, item.id, item.name, item.weight, item.size);
-        copy.SetWeaponAttributes(item.ResourceId, item.Damage, item.Cooldown);
-        copy.LoadSounds(Content);
-        return (copy);
+        return (MeleeList[id].Copy());
       }
       else if (id >= (int)ItemIds.Pistol && id < (int)ItemIds.Rifle) //Pistol
       {
-        Firearm copy, item = PistolsList[id - (int)ItemIds.Pistol];
-
-        copy = new Firearm(uid, item.id, item.name, item.weight, item.size);
-        copy.SetWeaponAttributes(item.ResourceId, item.Damage, item.Cooldown);
-        copy.SetFirearmAttributes(item.Accuracy, item.ClipSize, item.ReloadCooldown);
-        copy.LoadSounds(Content);
-        return (copy);
+        return (PistolsList[id - (int)ItemIds.Pistol].Copy());
       }
       return (null);
     }
 
-    public bool LoadMelee(ContentManager content)
+    public static bool LoadMelee(ContentManager content)
     {
       XElement bundle = XElement.Load("Data/items/melee.xml");
 
@@ -102,7 +87,7 @@ namespace FrozenPizza
       return (true);
     }
 
-    public bool LoadPistols(ContentManager content)
+    public static bool LoadPistols(ContentManager content)
     {
       XElement bundle = XElement.Load("Data/items/firearms.xml");
 
@@ -116,12 +101,23 @@ namespace FrozenPizza
       }
       return (true);
     }
-    public bool LoadPlayers(ContentManager content)
+    public static bool LoadPlayers(ContentManager content)
     {
       Players = content.Load<Texture2D>("gfx/players");
+      PlayersSound = new SoundEffect[Enum.GetNames(typeof(PlayerSounds)).Length];
+      PlayersSound[(int)PlayerSounds.Step1] = content.Load<SoundEffect>("sounds/player/step1");
+      PlayersSound[(int)PlayerSounds.Step2] = content.Load<SoundEffect>("sounds/player/step2");
+      PlayersSound[(int)PlayerSounds.Step3] = content.Load<SoundEffect>("sounds/player/step3");
+      PlayersSound[(int)PlayerSounds.Step4] = content.Load<SoundEffect>("sounds/player/step4");
+      PlayersSound[(int)PlayerSounds.RunStep1] = content.Load<SoundEffect>("sounds/player/rstep1");
+      PlayersSound[(int)PlayerSounds.RunStep2] = content.Load<SoundEffect>("sounds/player/rstep2");
+      PlayersSound[(int)PlayerSounds.RunStep3] = content.Load<SoundEffect>("sounds/player/rstep3");
+      PlayersSound[(int)PlayerSounds.RunStep4] = content.Load<SoundEffect>("sounds/player/rstep4");
+      PlayersSound[(int)PlayerSounds.Hurt] = content.Load<SoundEffect>("sounds/player/hurt");
+      PlayersSound[(int)PlayerSounds.Die] = content.Load<SoundEffect>("sounds/player/die");
       return (true);
     }
-    public bool LoadProjectiles(ContentManager content)
+    public static bool LoadProjectiles(ContentManager content)
     {
       Projectiles = content.Load<Texture2D>("gfx/projectiles");
       return (true);

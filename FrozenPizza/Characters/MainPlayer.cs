@@ -88,7 +88,7 @@ namespace FrozenPizza
       if (whands != null)
         return ((float)TimeSpan.FromSeconds(whands.Cooldown).TotalMilliseconds);
       else
-        return ((float)TimeSpan.FromSeconds(Engine.collection.MeleeList[0].Cooldown).TotalMilliseconds);
+        return ((float)TimeSpan.FromSeconds(Collection.MeleeList[0].Cooldown).TotalMilliseconds);
     }
 
     //Placeholder
@@ -250,7 +250,7 @@ namespace FrozenPizza
         Melee weapon;
 
         if (hands == null)
-          weapon = Engine.collection.MeleeList[0];
+          weapon = Collection.MeleeList[0];
         else
           weapon = (Melee)hands;
         weapon.attack(pos);
@@ -398,7 +398,7 @@ namespace FrozenPizza
     //Base draw call
     public override void Draw(SpriteBatch spriteBatch)
     {
-      spriteBatch.Draw(Engine.collection.Players, pos, _skinRect, Color.White, -orientation, new Vector2(16, 8), 1.0f, SpriteEffects.None, 0.3f);
+      spriteBatch.Draw(Collection.Players, pos, _skinRect, Color.White, -orientation, new Vector2(16, 8), 1.0f, SpriteEffects.None, 0.3f);
     }
   }
 
