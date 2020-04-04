@@ -145,7 +145,7 @@ namespace FrozenPizza
     }
 
     //Returns speed accordint to weight and sprint states
-    public float getSpeed(KeyboardState keybState)
+    public float getSpeed()
     {
       float speed = 120f;
 
@@ -182,38 +182,31 @@ namespace FrozenPizza
       }
     }
 
-    //check wether the user is sprinting or not [DEPRECATED]
-    void setSprinting(KeyboardState[] keybStates)
-    {
-      if (!_sprinting && keybStates[1].IsKeyDown(KeyBinds.getKey("Sprint")))
-        _sprinting = true;
-    }
-
     //Code to move the player
-    void updateMove(GameTime gameTime, KeyboardState[] keybStates, Level level)
+    void updateMove(GameTime gameTime, DeviceState state, DeviceState prevState, Level level)
     {
-      float speed = getSpeed(keybStates[1]);
+      float speed = getSpeed();
       Vector2 movement = Vector2.Zero;
 
-      if (keybStates[1].IsKeyUp(KeyBinds.getKey("Sprint")))
+      if (Options.Config.Bindings[GameAction.Sprint].IsControlUp(state))
         _sprinting = false;
-      if (keybStates[1].IsKeyDown(KeyBinds.getKey("StrafeLeft")))
+      if (Options.Config.Bindings[GameAction.StrafeLeft].IsControlDown(state))
       {
-        if (keybStates[1].IsKeyDown(KeyBinds.getKey("Forward")) || keybStates[1].IsKeyDown(KeyBinds.getKey("Backward")))
+        if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state) || Options.Config.Bindings[GameAction.Backward].IsControlDown(state))
           speed *= 0.5f;
         movement = new Vector2((float)Math.Cos(orientation) * -speed, (float)Math.Sin(orientation) * speed);
       }
-      else if (keybStates[1].IsKeyDown(KeyBinds.getKey("StrafeRight")))
+      if (Options.Config.Bindings[GameAction.StrafeRight].IsControlDown(state))
       {
-        if (keybStates[1].IsKeyDown(KeyBinds.getKey("Forward")) || keybStates[1].IsKeyDown(KeyBinds.getKey("Backward")))
+        if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state) || Options.Config.Bindings[GameAction.Backward].IsControlDown(state))
           speed *= 0.5f;
         movement += new Vector2((float)Math.Cos(orientation) * speed, (float)-Math.Sin(orientation) * speed);
       }
 
-      speed = getSpeed(keybStates[1]); //Reset speed
-      if (keybStates[1].IsKeyDown(KeyBinds.getKey("Forward")))
+      speed = getSpeed(); //Reset speed
+      if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state))
         movement += new Vector2((float)Math.Sin(orientation) * -speed, (float)Math.Cos(orientation) * -speed);
-      else if (keybStates[1].IsKeyDown(KeyBinds.getKey("Backward")))
+      else if (Options.Config.Bindings[GameAction.Backward].IsControlDown(state))
         movement += new Vector2((float)Math.Sin(orientation) * speed, (float)Math.Cos(orientation) * speed);
 
       if (movement != Vector2.Zero)
@@ -221,7 +214,8 @@ namespace FrozenPizza
         Vector2 syncVector = new Vector2((float)(movement.X * gameTime.ElapsedGameTime.TotalSeconds), (float)(movement.Y * gameTime.ElapsedGameTime.TotalSeconds));
         Rectangle newhit = getHitbox();
 
-        setSprinting(keybStates);
+        if (!_sprinting && Options.Config.Bindings[GameAction.Sprint].IsControlPressed(state, prevState))
+          _sprinting = true;
         newhit.X += (int)syncVector.X;
         newhit.Y += (int)syncVector.Y;
         if (GameMain.level.RCollide(newhit))
@@ -264,14 +258,14 @@ namespace FrozenPizza
     }
 
     //Check Hands events (Reload, fire, ...)
-    public void updateHands(GameTime gameTime, KeyboardState[] keybStates, MouseState[] mStates)
+    public void updateHands(GameTime gameTime, DeviceState state, DeviceState prevState)
     {
       if (cooldown)
         updateCooldown(gameTime);
       if (inventoryOpen)
         return;
       if ((hands != null && hands.type == ItemType.Firearm)
-          && (keybStates[0].IsKeyUp(KeyBinds.getKey("Reload")) && keybStates[1].IsKeyDown(KeyBinds.getKey("Reload"))))
+         && Options.Config.Bindings[GameAction.Reload].IsControlPressed(state, prevState))
       {
         Firearm weapon = (Firearm)hands;
         if (weapon.reload())
@@ -281,27 +275,27 @@ namespace FrozenPizza
           _cooldownTimer[0] = _cooldownTimer[1];
         }
       }
-      if (mStates[1].LeftButton == ButtonState.Pressed && mStates[0].LeftButton == ButtonState.Released && !cooldown)
+      if (Options.Config.Bindings[GameAction.Fire].IsControlDown(state) && !cooldown)
       {
         useHands();
         cooldown = true;
         _cooldownTimer[1] = TimeSpan.FromMilliseconds(getCooldown());
         _cooldownTimer[0] = _cooldownTimer[1];
       }
-      if (mStates[1].RightButton == ButtonState.Pressed)
+      if (Options.Config.Bindings[GameAction.Aim].IsControlDown(state))
         _aimlock = true;
-      else if (mStates[1].RightButton == ButtonState.Released)
+      else
         _aimlock = false;
     }
 
     //View & Lookup Update
-    void updateAimAngle(Camera cam, MouseState[] mStates)
+    void updateAimAngle(Camera cam, DeviceState state, DeviceState prevState)
     {
-      if (mStates[1].X != cam.getViewport().Width / 2)
-        if (mStates[0].X < mStates[1].X)
-          orientation += (mStates[0].X - mStates[1].X) * _aimSensivity;
-        else if (mStates[0].X > mStates[1].X)
-          orientation -= (mStates[1].X - mStates[0].X) * _aimSensivity;
+      if (state.mouse.X != cam.getViewport().Width / 2)
+        if (prevState.mouse.X < state.mouse.X)
+          orientation += (prevState.mouse.X - state.mouse.X) * _aimSensivity;
+        else if (prevState.mouse.X > state.mouse.X)
+          orientation -= (state.mouse.X - prevState.mouse.X) * _aimSensivity;
       if (orientation < 0)
         orientation = MathHelper.TwoPi;
       else if (orientation > MathHelper.TwoPi)
@@ -376,18 +370,18 @@ namespace FrozenPizza
     }
 
     //Base update call
-    public void Update(GameTime gameTime, Level level, KeyboardState[] keybStates, MouseState[] mStates, Camera cam, Cursor cursor)
+    public void Update(GameTime gameTime, Level level, DeviceState state, DeviceState prevState, Camera cam, Cursor cursor)
     {
       if (!alive) return;
-      if (!inventoryOpen) updateAimAngle(cam, mStates);
-      updateMove(gameTime, keybStates, level);
-      updateHands(gameTime, keybStates, mStates);
+      if (!inventoryOpen) updateAimAngle(cam, state, prevState);
+      updateMove(gameTime, state, prevState, level);
+      updateHands(gameTime, state, prevState);
       updateNetwork(gameTime);
-      if (keybStates[1].IsKeyDown(KeyBinds.getKey("ToggleInventory")) && !keybStates[0].IsKeyDown(KeyBinds.getKey("ToggleInventory")))
+      if (Options.Config.Bindings[GameAction.ToggleInventory].IsControlPressed(state, prevState))
         toggleInventory(cursor);
-      if (keybStates[1].IsKeyDown(KeyBinds.getKey("Pickup")) && !keybStates[0].IsKeyDown(KeyBinds.getKey("Pickup")))
+      if (Options.Config.Bindings[GameAction.Use].IsControlPressed(state, prevState))
         pickupItem();
-      if (keybStates[1].IsKeyDown(KeyBinds.getKey("Drop")) && !keybStates[0].IsKeyDown(KeyBinds.getKey("Drop")))
+      if (Options.Config.Bindings[GameAction.Drop].IsControlPressed(state, prevState))
         dropItem(0);
       updateStates(gameTime);
       if (_states.Count > 0 && _stateTimer.TotalSeconds >= 20)

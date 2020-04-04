@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FrozenPizza.Settings;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -52,13 +53,13 @@ namespace FrozenPizza
       mainPlayer = null;
     }
 
-    public static void Update(GameTime gameTime, KeyboardState[] keybStates, MouseState[] mouseStates, Cursor cursor)
+    public static void Update(GameTime gameTime, DeviceState state, DeviceState prevState, Cursor cursor)
     {
       level.Update(); //Update world
-      mainPlayer.Update(gameTime, level, keybStates, mouseStates, cam, cursor);
+      mainPlayer.Update(gameTime, level, state, prevState, cam, cursor);
       for (int i = 0; i < players.Count; i++)
         players[i].Update(gameTime);
-      hud.Update(mouseStates, mainPlayer);
+      hud.Update(state, prevState, mainPlayer);
       if (mainPlayer.alive && !mainPlayer.inventoryOpen) //If we are ingame reset mouse each loop
         Mouse.SetPosition(cam.getViewport().Width / 2, cam.getViewport().Height / 2);
     }

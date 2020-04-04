@@ -16,9 +16,16 @@ namespace FrozenPizza.Settings
   public enum GameAction
   {
     Fire,
-    Defuse,
-    HoldBreath,
+    Aim,
     Reload,
+    Forward,
+    Backward,
+    StrafeLeft,
+    StrafeRight,
+    Sprint,
+    Use,
+    Drop,
+    ToggleInventory,
     Menu
   }
 
@@ -62,11 +69,18 @@ namespace FrozenPizza.Settings
     public void DefaultBindings()
     {
       Bindings = new Dictionary<GameAction, ControlPair>();
-      Bindings.Add(GameAction.Fire, new ControlPair(new Control(MouseButton.Left), new Control(Buttons.RightShoulder)));
-      Bindings.Add(GameAction.Reload, new ControlPair(new Control(Keys.R), new Control(Buttons.X)));
-      Bindings.Add(GameAction.Defuse, new ControlPair(new Control(Keys.E), new Control(Buttons.LeftTrigger)));
-      Bindings.Add(GameAction.HoldBreath, new ControlPair(new Control(Keys.LeftShift), new Control(Buttons.LeftShoulder)));
-      Bindings.Add(GameAction.Menu, new ControlPair(new Control(Keys.Escape), new Control(Buttons.Start)));
+      Bindings.Add(GameAction.Fire, new ControlPair(new Control(MouseButton.Left)));
+      Bindings.Add(GameAction.Aim, new ControlPair(new Control(MouseButton.Right)));
+      Bindings.Add(GameAction.Reload, new ControlPair(new Control(Keys.R)));
+      Bindings.Add(GameAction.Use, new ControlPair(new Control(Keys.E)));
+      Bindings.Add(GameAction.Forward, new ControlPair(new Control(Keys.Z)));
+      Bindings.Add(GameAction.Backward, new ControlPair(new Control(Keys.S)));
+      Bindings.Add(GameAction.StrafeLeft, new ControlPair(new Control(Keys.Q)));
+      Bindings.Add(GameAction.StrafeRight, new ControlPair(new Control(Keys.D)));
+      Bindings.Add(GameAction.Sprint, new ControlPair(new Control(Keys.LeftShift)));
+      Bindings.Add(GameAction.Drop, new ControlPair(new Control(Keys.G)));
+      Bindings.Add(GameAction.ToggleInventory, new ControlPair(new Control(Keys.Tab)));
+      Bindings.Add(GameAction.Menu, new ControlPair(new Control(Keys.Escape)));
     }
 
     public static GameSettings Load()

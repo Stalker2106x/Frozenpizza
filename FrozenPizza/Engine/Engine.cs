@@ -36,12 +36,6 @@ namespace FrozenPizza
 
     //Menu & Cursor
     private Cursor _cursor;
-    //Menu _menu;
-
-    //Input management
-    KeyBinds keybinds;
-    KeyboardState[] keybStates;
-    MouseState[] mouseStates;
 
     public Engine()
     {
@@ -71,9 +65,6 @@ namespace FrozenPizza
       IsMouseVisible = true;
       _cursor = new Cursor();
       //IsMouseVisible = false;
-      keybinds = new KeyBinds();
-      keybStates = new KeyboardState[2];
-      mouseStates = new MouseState[2];
       base.Initialize();
     }
 
@@ -157,32 +148,26 @@ namespace FrozenPizza
     protected override void Update(GameTime gameTime)
     {
       deviceState = new DeviceState(Mouse.GetState(), Keyboard.GetState(), GamePad.GetState(PlayerIndex.One));
-      keybStates[1] = Keyboard.GetState();
-      mouseStates[1] = Mouse.GetState();
-      if (_cursor.Show) _cursor.Update(mouseStates);
+      if (_cursor.Show) _cursor.Update(deviceState, prevDeviceState);
       switch (gameState)
       {
         case GameState.Menu:
-          if (!hasFocus)
-            return;
-          //_menu.Update(keybStates, mouseStates);
           break;
         case GameState.Playing:
-          if (keybStates[0].IsKeyUp(Keys.Escape) && keybStates[1].IsKeyDown(Keys.Escape)) //Pause
+          if (Options.Config.Bindings[GameAction.Menu].IsControlPressed(deviceState, prevDeviceState)) //Pause
           {
             GameMain.mainPlayer.inventoryOpen = false;
             if (_cursor.Show == false)
               toggleMouseVisible();
-            setState(GameState.Menu);
             Menu.GameMenu(this);
+            setState(GameState.Menu);
           }
-          GameMain.Update(gameTime, keybStates, mouseStates, _cursor);
+          GameMain.Update(gameTime, deviceState, prevDeviceState, _cursor);
           break;
       }
       prevDeviceState = deviceState;
+      prevDeviceState.mouse = Mouse.GetState(); //Recatch state
       base.Update(gameTime);
-      keybStates[0] = keybStates[1];
-      mouseStates[0] = Mouse.GetState();
     }
 
     /// <summary>

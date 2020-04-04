@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FrozenPizza.Settings;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -76,7 +77,7 @@ namespace FrozenPizza
       Desktop.Root = null;
     }
 
-    public void Update(MouseState[] mStates, MainPlayer mainPlayer)
+    public void Update(DeviceState state, DeviceState prevState, MainPlayer mainPlayer)
     {
       if (mainPlayer.cooldown)
         _cooldownBar.Width = mainPlayer.getCooldownPercent(_handsPanel.Width);
