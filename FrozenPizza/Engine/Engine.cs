@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FrozenPizza.Settings;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Myra;
@@ -62,7 +63,7 @@ namespace FrozenPizza
         public Engine()
         {
             graphics = new GraphicsDeviceManager(this);
-            options = new Options(this, graphics, "./Data/cfg/config.cfg");
+            options = new Options(graphics, GraphicsAdapter.DefaultAdapter);
             TargetElapsedTime = TimeSpan.FromSeconds(1.0f / 90.0f);
             Content.RootDirectory = "Data";
             gstate = GameState.Menu;
@@ -77,14 +78,13 @@ namespace FrozenPizza
 		/// </summary>
 		protected override void Initialize()
         {
-            options.Load(GraphicsDevice.Adapter);
             IsMouseVisible = false;
             _cursor = new Cursor();
             InitializeGraphics();
             keybinds = new KeyBinds();
             keybStates = new KeyboardState[2];
-			mouseStates = new MouseState[2];
-			collection = new Collection();
+			      mouseStates = new MouseState[2];
+			      collection = new Collection();
             base.Initialize();
         }
 

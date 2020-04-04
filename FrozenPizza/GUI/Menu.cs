@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using FrozenPizza.Settings;
+using Microsoft.Xna.Framework.Content;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
 using System;
@@ -384,7 +385,7 @@ namespace FrozenPizza
                 Options.Config.SoundVolume = soundSlider.Value;
                 Options.applyConfig();
                 engine.InitializeGraphics();
-                Options.SetConfigFile();
+                Options.Config.Save();
                 OptionsMenu(engine);
             };
             grid.Widgets.Add(applyBtn);

@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "fa5d9974eb964b53163bd0a9a58e4f1bd4299327"
+    "signature": "c6e87ed0933296cbe9554c0c1b10d6c3c9ac4c6a"
   },
   "compilationOptions": {},
   "targets": {
@@ -10,7 +10,8 @@
         "dependencies": {
           "MonoGame.Content.Builder": "3.7.0.4",
           "MonoGame.Framework.DesktopGL.Core": "3.7.0.7",
-          "Myra": "0.9.9.200"
+          "Myra": "0.9.9.200",
+          "Newtonsoft.Json": "12.0.3"
         },
         "runtime": {
           "FrozenPizza.dll": {}
@@ -97,6 +98,14 @@
           }
         }
       },
+      "Newtonsoft.Json/12.0.3": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.3.23909"
+          }
+        }
+      },
       "XNAssets/0.5.0.6": {
         "runtime": {
           "lib/netstandard2.0/XNAssets.dll": {
@@ -140,6 +149,13 @@
       "sha512": "sha512-H0vwkrZV5cV9Fv6YCnzftcmje++7glb4z0Eltcf99zJ+8NhBDBBAcSmcFQgg/EUwKYGk8cjmz/713KqkUpqaLw==",
       "path": "myra/0.9.9.200",
       "hashPath": "myra.0.9.9.200.nupkg.sha512"
+    },
+    "Newtonsoft.Json/12.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
+      "path": "newtonsoft.json/12.0.3",
+      "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
     },
     "XNAssets/0.5.0.6": {
       "type": "package",
