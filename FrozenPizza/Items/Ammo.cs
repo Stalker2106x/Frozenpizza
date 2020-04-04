@@ -33,9 +33,9 @@ namespace FrozenPizza
       Velocity = velocity;
       Damage = damage;
       Weapon weapon = (Weapon)Engine.collection.getItemById(id);
-      if (Engine.mainPlayer.getDistanceTo(pos) <= (Engine.Level.Map.TileWidth * 40))
+      if (GameMain.mainPlayer.getDistanceTo(pos) <= (GameMain.level.Map.TileWidth * 40))
       {
-        float distVolume = (Engine.mainPlayer.getDistanceTo(pos) / (Engine.Level.Map.TileWidth * 40));
+        float distVolume = (GameMain.mainPlayer.getDistanceTo(pos) / (GameMain.level.Map.TileWidth * 40));
 
         distVolume = (Options.Config.SoundVolume - distVolume) / Options.Config.SoundVolume;
         weapon.Sounds[(int)FirearmActions.Fire].Play(distVolume > 0 ? distVolume : 0, 0f, 0f);
@@ -48,16 +48,16 @@ namespace FrozenPizza
     {
       Pos += new Vector2((float)Math.Sin(Angle) * -Velocity, (float)Math.Cos(Angle) * -Velocity);
       if (Pos.X < 0 || Pos.Y < 0
-          || (Pos.X >= Engine.Level.Map.Width * Engine.Level.Map.TileWidth)
-          || (Pos.X >= Engine.Level.Map.Height * Engine.Level.Map.TileHeight))
+          || (Pos.X >= GameMain.level.Map.Width * GameMain.level.Map.TileWidth)
+          || (Pos.X >= GameMain.level.Map.Height * GameMain.level.Map.TileHeight))
         return (false);
-      else if (Engine.Level.Collide(Pos))
+      else if (GameMain.level.Collide(Pos))
         return (false);
-      else if (Engine.mainPlayer.getHitbox().Contains(Pos))
+      else if (GameMain.mainPlayer.getHitbox().Contains(Pos))
         return (false);
-      for (int i = 0; i < Engine.Players.Count; i++)
+      for (int i = 0; i < GameMain.players.Count; i++)
       {
-        if (Engine.Players[i].getHitbox().Contains(Pos))
+        if (GameMain.players[i].getHitbox().Contains(Pos))
           return (false);
       }
       return (true);

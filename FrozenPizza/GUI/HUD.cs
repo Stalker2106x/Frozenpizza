@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Myra.Graphics2D.UI;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -67,6 +68,11 @@ namespace FrozenPizza
       _font = content.Load<SpriteFont>(@"font/hud");
       _foodBackground = new Color[2] { Color.White, Color.White };
       return (true);
+    }
+
+    public void activate()
+    {
+      Desktop.Root = null;
     }
 
     public void Update(MouseState[] mStates, MainPlayer mainPlayer)

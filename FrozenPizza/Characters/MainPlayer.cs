@@ -224,7 +224,7 @@ namespace FrozenPizza
         setSprinting(keybStates);
         newhit.X += (int)syncVector.X;
         newhit.Y += (int)syncVector.Y;
-        if (Engine.Level.RCollide(newhit))
+        if (GameMain.level.RCollide(newhit))
         {
           return;
         }
@@ -353,7 +353,7 @@ namespace FrozenPizza
     {
       if (hands == null)
       {
-        Item ent = Engine.Level.getEntityByPos(pos);
+        Item ent = GameMain.level.getEntityByPos(pos);
 
         if (ent == null)
           return;

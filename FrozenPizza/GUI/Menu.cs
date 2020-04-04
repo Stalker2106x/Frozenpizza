@@ -148,6 +148,7 @@ namespace FrozenPizza
           return;
         }
         NetHandler.startServer(mapCombo.SelectedItem.Text);
+        ConnectCallback(engine, "localhost");
       };
       grid.Widgets.Add(HostBtn);
 
@@ -211,35 +212,7 @@ namespace FrozenPizza
       joinBtn.HorizontalAlignment = HorizontalAlignment.Center;
       joinBtn.Click += (s, a) =>
       {
-        Engine.netHandle = new NetHandler();
-        string server = serverInput.Text;
-        int port;
-
-        if (server.Length <= 0)
-        {
-          Dialog messageBox = Dialog.CreateMessageBox("Error", "Bad server provided!");
-          messageBox.ShowModal();
-          return;
-        }
-        int pos = server.IndexOf(":");
-        if (pos != -1) Int32.TryParse(server.Substring(pos, server.Length - pos), out port);
-        else port = 27420;
-        NetHandler.HandshakeCallback = () =>
-              {
-                engine.InitializeGame();
-                engine.LoadGame();
-                Engine.netHandle.GameReady = true;
-                engine.toggleMouseVisible();
-                engine.gstate = GameState.Playing;
-                GameMenu(engine);
-              };
-        NetHandler.FailureCallback = () =>
-              {
-                engine.UnloadGame(); //Unload any loaded content
-                Dialog errorBox = Dialog.CreateMessageBox("Error", "Could not reach server");
-                errorBox.ShowModal();
-              };
-        Engine.netHandle.connect(server, port);
+        ConnectCallback(engine, serverInput.Text);
       };
       grid.Widgets.Add(joinBtn);
 
@@ -379,7 +352,6 @@ namespace FrozenPizza
         Options.Config.MusicVolume = musicSlider.Value;
         Options.Config.SoundVolume = soundSlider.Value;
         Options.applyConfig();
-        engine.InitializeGraphics();
         Options.Config.Save();
         OptionsMenu(engine);
       };
@@ -430,7 +402,7 @@ namespace FrozenPizza
       resumeBtn.HorizontalAlignment = HorizontalAlignment.Center;
       resumeBtn.Click += (s, a) =>
       {
-        engine.gstate = GameState.Playing;
+        Engine.setState(GameState.Playing);
       };
       grid.Widgets.Add(resumeBtn);
 
@@ -441,7 +413,7 @@ namespace FrozenPizza
       disconnectBtn.HorizontalAlignment = HorizontalAlignment.Center;
       disconnectBtn.Click += (s, a) =>
       {
-        engine.UnloadGame();
+        GameMain.Unload();
         if (NetHandler.Connected)
         {
           NetHandler.disconnect();
@@ -463,6 +435,38 @@ namespace FrozenPizza
       grid.Widgets.Add(optionsBtn);
 
       Desktop.Widgets.Add(grid);
+    }
+
+    public static void ConnectCallback(Engine engine, string host)
+    {
+      int port;
+
+      if (host.Length <= 0)
+      {
+        Dialog messageBox = Dialog.CreateMessageBox("Error", "Bad server provided!");
+        messageBox.ShowModal();
+        return;
+      }
+      int pos = host.IndexOf(":");
+      if (pos != -1) Int32.TryParse(host.Substring(pos, host.Length - pos), out port);
+      else port = 27420;
+      Engine.netHandle = new NetHandler();
+      NetHandler.HandshakeCallback = () =>
+      {
+        GameMain.Initialize(engine.GraphicsDevice);
+        GameMain.Load(engine.Content);
+        Engine.netHandle.GameReady = true;
+        engine.toggleMouseVisible();
+        Engine.setState(GameState.Playing);
+        GameMenu(engine);
+      };
+      NetHandler.FailureCallback = () =>
+      {
+        GameMain.Unload(); //Unload any loaded content
+        Dialog errorBox = Dialog.CreateMessageBox("Error", "Could not reach server");
+        errorBox.ShowModal();
+      };
+      Engine.netHandle.connect(host, port);
     }
   }
 }
