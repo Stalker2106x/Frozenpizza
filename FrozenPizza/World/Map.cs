@@ -10,33 +10,42 @@ namespace FrozenPizza.World
   public class Map : BaseMap
   {
     Texture2D _tileset;
-    Point _tilesetSize;
+    Point _tilesetSizeInUnits;
+    int _tilesetStartGid;
+
+    enum Tileset {
+      Meta = 0,
+      City
+    }
 
     public Map(string mapName) : base(mapName)
     {
-      _tileset = Collection.LoadTileset(_map.Tilesets[0].Name.ToString());
-      _tilesetSize = new Point(_tileset.Width / _tileSize.X, _tileset.Height / _tileSize.Y);
+      _tileset = Collection.LoadTileset(_map.Tilesets[(int)Tileset.City].Name.ToString());
+
+      _tilesetStartGid = (int)(_map.Tilesets[0].Image.Width / _tileSize.X); //Compute meta size for offset
+      _tilesetSizeInUnits = new Point(_tileset.Width / _tileSize.X, _tileset.Height / _tileSize.Y);
+    }
+
+    Rectangle GetGidRect(int gid)
+    {
+      int tileRelativeGid = gid - _tilesetStartGid - 1;
+      return (new Rectangle((tileRelativeGid % _tilesetSizeInUnits.X) * _tileSize.X,
+                            (tileRelativeGid / _tilesetSizeInUnits.X) * _tileSize.Y,
+                             _tileSize.X, _tileSize.Y));
     }
 
     void DrawLayer(SpriteBatch spriteBatch, Layer layer)
     {
-      for (var i = 0; i < _map.Layers[0].Tiles.Count; i++)
+      for (var i = 0; i < _map.Layers[(int)layer].Tiles.Count; i++)
       {
-        int gid = _map.Layers[(int)layer].Tiles[i].Gid;
+        var tile = _map.Layers[(int)layer].Tiles[i];
+        if (tile.Gid == 0) continue; //Only not Empty tile
 
-        if (gid != 0) //Only not Empty tile
-        {
-          int tileFrame = gid - 1;
-          int column = tileFrame % _tilesetSize.X;
-          int row = (int)Math.Floor((double)tileFrame / (double)_tilesetSize.X);
+        //Convert to world size
+        float x = tile.X * _map.TileWidth;
+        float y = tile.Y * _map.TileHeight;
 
-          float x = (i % _map.Width) * _map.TileWidth;
-          float y = (float)Math.Floor(i / (double)_map.Width) * _map.TileHeight;
-
-          Rectangle tilesetRec = new Rectangle(_tileSize.X * column, _tileSize.Y * row, _tileSize.X, _tileSize.Y);
-
-          spriteBatch.Draw(_tileset, new Rectangle((int)x, (int)y, _tileSize.X, _tileSize.Y), tilesetRec, Color.White);
-        }
+        spriteBatch.Draw(_tileset, new Rectangle((int)x, (int)y, _tileSize.X, _tileSize.Y), GetGidRect(tile.Gid), Color.White);
       }
     }
 
@@ -44,6 +53,7 @@ namespace FrozenPizza.World
     {
       for (Layer layer = Layer.Floor; (int)layer < _map.Layers.Count; layer++)
       {
+        if (layer == Layer.Meta) continue; //Skip certain layers (meta)
         DrawLayer(spriteBatch, layer);
       }
     }

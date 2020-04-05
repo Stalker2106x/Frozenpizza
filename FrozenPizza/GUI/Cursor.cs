@@ -44,6 +44,7 @@ namespace FrozenPizza
     }
     public void Draw(SpriteBatch spriteBatch)
     {
+      if (!Show) return;
       Rectangle realrect = _skinRect;
 
       if (_clicked)

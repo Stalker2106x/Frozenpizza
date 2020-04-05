@@ -19,7 +19,13 @@ namespace FrozenPizza
 {
   public class MainPlayer : Player
   {
-
+    public enum Direction
+    {
+      Left,
+      Right,
+      Forward,
+      Backward
+    }
     //Triggers
     public bool cooldown { get; set; }
     public bool inventoryOpen { get; set; }
@@ -31,7 +37,6 @@ namespace FrozenPizza
 
     //Timers
     TimeSpan _stepTimer;
-    TimeSpan _stateTimer;
     TimeSpan[] _cooldownTimer;
 
     Utils.Timer _networkUpdateTimer;
@@ -54,7 +59,6 @@ namespace FrozenPizza
       _inventory = new Inventory();
 
       //Init timers
-      _stateTimer = new TimeSpan();
       _stepTimer = new TimeSpan();
       _cooldownTimer = new TimeSpan[2];
 
@@ -172,6 +176,14 @@ namespace FrozenPizza
         _stepTimer = TimeSpan.Zero;
       }
     }
+    Vector2 getMoveVector(Direction direction, float move)
+    {
+      if (direction == Direction.Left) return (new Vector2((float)Math.Cos(_orientation) * -move, (float)Math.Sin(_orientation) * move));
+      if (direction == Direction.Right) return (new Vector2((float)Math.Cos(_orientation) * move, (float)-Math.Sin(_orientation) * move));
+      if (direction == Direction.Forward) return (new Vector2((float)Math.Sin(_orientation) * -move, (float)Math.Cos(_orientation) * -move));
+      if (direction == Direction.Backward) return (new Vector2((float)Math.Sin(_orientation) * move, (float)Math.Cos(_orientation) * move));
+      return (Vector2.Zero);
+    }
 
     //Code to move the player
     void updateMove(GameTime gameTime, DeviceState state, DeviceState prevState, Map map)
@@ -182,18 +194,10 @@ namespace FrozenPizza
       if (Options.Config.Bindings[GameAction.Sprint].IsControlPressed(state, prevState)) _sprinting = true;
       else if (Options.Config.Bindings[GameAction.Sprint].IsControlReleased(state, prevState)) _sprinting = false;
 
-      if (Options.Config.Bindings[GameAction.StrafeLeft].IsControlDown(state))
-      {
-        if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state) || Options.Config.Bindings[GameAction.Backward].IsControlDown(state))
-          speed *= 0.5f;
-        movement = new Vector2((float)Math.Cos(_orientation) * -speed, (float)Math.Sin(_orientation) * speed);
-      }
-      if (Options.Config.Bindings[GameAction.StrafeRight].IsControlDown(state))
-      {
-        if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state) || Options.Config.Bindings[GameAction.Backward].IsControlDown(state))
-          speed *= 0.5f;
-        movement += new Vector2((float)Math.Cos(_orientation) * speed, (float)-Math.Sin(_orientation) * speed);
-      }
+      if (Options.Config.Bindings[GameAction.StrafeLeft].IsControlDown(state)) movement += getMoveVector(Direction.Left, speed * 1.5f);
+      if (Options.Config.Bindings[GameAction.StrafeRight].IsControlDown(state)) movement += getMoveVector(Direction.Right, speed * 1.5f);
+      if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state)) movement += getMoveVector(Direction.Forward, speed);
+      if (Options.Config.Bindings[GameAction.Backward].IsControlDown(state)) movement += getMoveVector(Direction.Backward, speed);
 
       speed = getSpeed(); //Reset speed
       if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state))

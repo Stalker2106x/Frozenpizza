@@ -26,7 +26,7 @@ namespace FrozenPizza.World
       name = mapName;
       _map = new TmxMap("Data/maps/"+ mapName + ".tmx");
 
-      _tileSize = new Point(_map.Tilesets[0].TileWidth, _map.Tilesets[0].TileHeight);
+      _tileSize = new Point(_map.Tilesets[1].TileWidth, _map.Tilesets[0].TileHeight);
     }
 
     public static List<string> getAvailableLevels()

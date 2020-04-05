@@ -36,7 +36,7 @@ namespace FrozenPizza
     //public static NetHandler netHandle;
 
     //Menu & Cursor
-    private Cursor _cursor;
+    public static Cursor cursor;
 
     public static ClientV2 networkClient;
 
@@ -64,9 +64,8 @@ namespace FrozenPizza
     /// </summary>
     protected override void Initialize()
     {
-      IsMouseVisible = true;
-      _cursor = new Cursor();
-      //IsMouseVisible = false;
+      IsMouseVisible = false;
+      cursor = new Cursor();
       ClientHandlerV2.Initialize();
       Menu.MainMenu(this);
       base.Initialize();
@@ -78,7 +77,7 @@ namespace FrozenPizza
     protected override void OnDeactivated(Object sender, EventArgs args)
     {
       hasFocus = false;
-      //IsMouseVisible = true;
+      IsMouseVisible = true;
       //call the base method and fire the event
       base.OnDeactivated(sender, args);
     }
@@ -86,7 +85,7 @@ namespace FrozenPizza
     protected override void OnActivated(object sender, EventArgs args)
     {
       base.OnActivated(sender, args);
-      //IsMouseVisible = false;
+      IsMouseVisible = false;
       hasFocus = true;
     }
 
@@ -96,7 +95,7 @@ namespace FrozenPizza
     /// </summary>
     protected override void LoadContent()
     {
-      _cursor.Load(this.Content);
+      cursor.Load(this.Content);
       spriteBatch = new SpriteBatch(GraphicsDevice);
       Collection.Load(this.Content);
       GameMain.Load(GraphicsDevice);
@@ -111,9 +110,9 @@ namespace FrozenPizza
       // TODO: Unload any non ContentManager content here
     }
 
-    public void toggleMouseVisible()
+    public static void setCursor(bool state)
     {
-      _cursor.Show = _cursor.Show == true ? false : true;
+      cursor.Show = state;
     }
     public static DeviceState getDeviceState()
     {
@@ -127,9 +126,11 @@ namespace FrozenPizza
       {
         case GameState.Playing:
           //MediaPlayer.Stop();
+          setCursor(false);
           GameMain.hud.activate();
           break;
         case GameState.Menu:
+          setCursor(true);
           //MediaPlayer.Play(Resources.menuTheme);
           break;
         case GameState.Splashscreen:
@@ -151,7 +152,7 @@ namespace FrozenPizza
     protected override void Update(GameTime gameTime)
     {
       deviceState = new DeviceState(Mouse.GetState(), Keyboard.GetState(), GamePad.GetState(PlayerIndex.One));
-      if (_cursor.Show) _cursor.Update(deviceState, prevDeviceState);
+      if (cursor.Show) cursor.Update(deviceState, prevDeviceState);
       switch (gameState)
       {
         case GameState.Menu:
@@ -160,12 +161,11 @@ namespace FrozenPizza
           if (Options.Config.Bindings[GameAction.Menu].IsControlPressed(deviceState, prevDeviceState)) //Pause
           {
             GameMain.mainPlayer.inventoryOpen = false;
-            if (_cursor.Show == false)
-              toggleMouseVisible();
+            setCursor(true);
             Menu.GameMenu(this);
             setState(GameState.Menu);
           }
-          GameMain.Update(gameTime, deviceState, prevDeviceState, _cursor);
+          GameMain.Update(gameTime, deviceState, prevDeviceState, cursor);
           break;
       }
       prevDeviceState = deviceState;
@@ -184,13 +184,13 @@ namespace FrozenPizza
       {
         case GameState.Playing:
           GameMain.Draw(spriteBatch, gameTime, GraphicsDevice);
-          spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-          if (_cursor.Show) _cursor.Draw(spriteBatch);
-          spriteBatch.End();
           break;
       }
-      base.Draw(gameTime);
       Desktop.Render();
+      spriteBatch.Begin();
+      cursor.Draw(spriteBatch);
+      spriteBatch.End();
+      base.Draw(gameTime);
     }
 
     public static void DrawLine(SpriteBatch spriteBatch, Texture2D text, Vector2 begin, Vector2 end, Color color, int width)

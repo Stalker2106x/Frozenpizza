@@ -44,7 +44,7 @@ namespace FrozenPizza
     }
     public static void Draw(SpriteBatch spriteBatch, GameTime gameTime, GraphicsDevice graphics)
     {
-      spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.getTransformation());
+      spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, cam.getTransformation());
       map.Draw(spriteBatch);
       mainPlayer.Draw(spriteBatch);
       foreach (var player in players) player.Draw(spriteBatch); //Draw players
