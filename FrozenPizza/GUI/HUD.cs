@@ -25,11 +25,7 @@ namespace FrozenPizza
     //HandsPanel
     Vector2 _handsPos;
     Rectangle _handsPanel;
-
-    //FoodPanel
-    Vector2 _foodPos;
-    Color[] _foodBackground;
-
+    
     //Common
     int _headsUpHeight, _headsUpWidth;
     Vector2 _hudOffset;
@@ -58,17 +54,10 @@ namespace FrozenPizza
       _inventoryPanel = new Rectangle(cam.getViewport().Width / 2, 20, cam.getViewport().Width / 2, cam.getViewport().Height - 140);
       //StatsPanel
       _statsPos = new Vector2(0, cam.getViewport().Height - _headsUpHeight);
-      //FoodPanel
-      _foodPos = new Vector2(cam.getViewport().Width - (2 * _headsUpWidth), cam.getViewport().Height - _headsUpHeight);
-    }
 
-    public bool Load(ContentManager content)
-    {
       _hudEntRect = new Rectangle(0, 0, 64, 64);
-      _hudEntities = content.Load<Texture2D>(@"gfx/hud");
-      _font = content.Load<SpriteFont>(@"font/hud");
-      _foodBackground = new Color[2] { Color.White, Color.White };
-      return (true);
+      _hudEntities = Collection.hudEntities;
+      _font = Collection.font;
     }
 
     public void activate()
@@ -81,14 +70,6 @@ namespace FrozenPizza
     {
       if (mainPlayer.cooldown)
         _cooldownBar.Width = mainPlayer.getCooldownPercent(_handsPanel.Width);
-      if (mainPlayer.checkState(PlayerStates.Hungry) && _foodBackground[0] != Color.Orange)
-        _foodBackground[0] = Color.Orange;
-      else if (mainPlayer.checkState(PlayerStates.Starving) && _foodBackground[0] != Color.Red)
-        _foodBackground[0] = Color.Red;
-      if (mainPlayer.checkState(PlayerStates.Thirsty) && _foodBackground[1] != Color.Orange)
-        _foodBackground[1] = Color.Orange;
-      else if (mainPlayer.checkState(PlayerStates.Dehydrated) && _foodBackground[1] != Color.Red)
-        _foodBackground[1] = Color.Red;
     }
 
     public Vector2 getHeadsUpHeight(int maxvalue, int value, bool offset)
@@ -161,17 +142,11 @@ namespace FrozenPizza
       _hudEntRect.X = 0;
       //Health
       spriteBatch.Draw(_hudEntities, _statsPos, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
-      spriteBatch.Draw(_hudEntities, _statsPos + getHeadsUpHeight(mainPlayer.hp.max, mainPlayer.hp.get(), false), calcHeadsUpRect(mainPlayer.hp.max, mainPlayer.hp.get()), Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
+      spriteBatch.Draw(_hudEntities, _statsPos + getHeadsUpHeight(100, 100, false), calcHeadsUpRect(100, 100), Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
       //Armor
       spriteBatch.Draw(_hudEntities, _statsPos + _hudOffset, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
       spriteBatch.DrawString(_font, "999", _statsPos + _hudOffset, Color.White);
       _hudEntRect.X += 64;
-      //Hunger
-      spriteBatch.Draw(_hudEntities, _foodPos, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
-      spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.hunger.max, mainPlayer.hunger.get(), false), calcHeadsUpRect(mainPlayer.hunger.max, mainPlayer.hunger.get()), _foodBackground[0], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
-      //Thirst
-      spriteBatch.Draw(_hudEntities, _foodPos + _hudOffset, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
-      spriteBatch.Draw(_hudEntities, _foodPos + getHeadsUpHeight(mainPlayer.thirst.max, mainPlayer.thirst.get(), true), calcHeadsUpRect(mainPlayer.thirst.max, mainPlayer.thirst.get()), _foodBackground[1], 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
       //Hands Panel
       drawHandsPanel(spriteBatch, graphicsDevice, mainPlayer);
       //Inventory

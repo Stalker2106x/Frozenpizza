@@ -1,4 +1,5 @@
-﻿using FrozenPizza.Settings;
+﻿using FrozenPizza.Network;
+using FrozenPizza.Settings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -32,16 +33,18 @@ namespace FrozenPizza
     bool hasFocus;
 
     //Database, Config and Netcode
-    public static NetHandler netHandle;
+    //public static NetHandler netHandle;
 
     //Menu & Cursor
     private Cursor _cursor;
+
+    public static ClientV2 networkClient;
 
     public Engine()
     {
       quit = false;
       graphics = new GraphicsDeviceManager(this);
-      Content.RootDirectory = "Content";
+      Content.RootDirectory = "Data";
       options = new Options(graphics, GraphicsAdapter.DefaultAdapter);
       graphics.IsFullScreen = Options.Config.Fullscreen;
       graphics.PreferredBackBufferWidth = Options.Config.Width;
@@ -50,7 +53,6 @@ namespace FrozenPizza
       graphics.ApplyChanges();
       IsFixedTimeStep = true;
       TargetElapsedTime = TimeSpan.FromSeconds(1.0 / 90.0); //Set FPS
-      Content.RootDirectory = "Data";
       MyraEnvironment.Game = this;
     }
 
@@ -65,6 +67,8 @@ namespace FrozenPizza
       IsMouseVisible = true;
       _cursor = new Cursor();
       //IsMouseVisible = false;
+      ClientHandlerV2.Initialize();
+      Menu.MainMenu(this);
       base.Initialize();
     }
 
@@ -95,8 +99,7 @@ namespace FrozenPizza
       _cursor.Load(this.Content);
       spriteBatch = new SpriteBatch(GraphicsDevice);
       Collection.Load(this.Content);
-      Menu.Init(this.Content);
-      Menu.MainMenu(this);
+      GameMain.Load(GraphicsDevice);
     }
 
     /// <summary>
@@ -201,11 +204,12 @@ namespace FrozenPizza
 
     public void exit()
     {
-      if (netHandle != null)
+      if (networkClient != null) networkClient.disconnect();
+      /*if (netHandle != null)
       {
-        NetHandler.disconnect();
-        netHandle = null;
-      }
+        //NetHandler.disconnect();
+        //netHandle = null;
+      }*/
       Exit();
     }
   }

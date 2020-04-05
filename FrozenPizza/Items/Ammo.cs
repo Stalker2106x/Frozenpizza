@@ -33,25 +33,25 @@ namespace FrozenPizza
       Velocity = velocity;
       Damage = damage;
       Weapon weapon = (Weapon)Collection.getItemById(id);
-      if (GameMain.mainPlayer.getDistanceTo(pos) <= (GameMain.level.Map.TileWidth * 40))
+      /*if (GameMain.mainPlayer.getDistanceTo(pos) <= (GameMain.map.Map.TileWidth * 40))
       {
-        float distVolume = (GameMain.mainPlayer.getDistanceTo(pos) / (GameMain.level.Map.TileWidth * 40));
+        float distVolume = (GameMain.mainPlayer.getDistanceTo(pos) / (GameMain.map.Map.TileWidth * 40));
 
         distVolume = (Options.Config.SoundVolume - distVolume) / Options.Config.SoundVolume;
         weapon.Sounds[(int)FirearmActions.Fire].Play(distVolume > 0 ? distVolume : 0, 0f, 0f);
-      }
+      }*/
       _skinRect = new Rectangle(0, 0, 32, 32);
     }
 
     //Update locally
     public bool Update()
     {
-      Pos += new Vector2((float)Math.Sin(Angle) * -Velocity, (float)Math.Cos(Angle) * -Velocity);
+      /*Pos += new Vector2((float)Math.Sin(Angle) * -Velocity, (float)Math.Cos(Angle) * -Velocity);
       if (Pos.X < 0 || Pos.Y < 0
-          || (Pos.X >= GameMain.level.Map.Width * GameMain.level.Map.TileWidth)
-          || (Pos.X >= GameMain.level.Map.Height * GameMain.level.Map.TileHeight))
+          || (Pos.X >= GameMain.map.Map.Width * GameMain.map.Map.TileWidth)
+          || (Pos.X >= GameMain.map.Map.Height * GameMain.map.Map.TileHeight))
         return (false);
-      else if (GameMain.level.Collide(Pos))
+      else if (GameMain.map.Collide(Pos))
         return (false);
       else if (GameMain.mainPlayer.getHitbox().Contains(Pos))
         return (false);
@@ -59,7 +59,7 @@ namespace FrozenPizza
       {
         if (GameMain.players[i].getHitbox().Contains(Pos))
           return (false);
-      }
+      }*/
       return (true);
     }
 

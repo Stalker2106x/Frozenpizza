@@ -206,7 +206,7 @@ namespace FrozenPizza
 
     public void drawTiles(SpriteBatch spriteBatch, Camera cam, MainPlayer mainPlayer)
     {
-      Rectangle viewport = cam.getViewport();
+      /*Rectangle viewport = cam.getViewport();
       int xoffset = (viewport.X / _twidth);
       int xend = ((viewport.X + viewport.Width) / _twidth);
       int yoffset = (viewport.Y / _theight);
@@ -258,7 +258,7 @@ namespace FrozenPizza
           }
         }
 
-      }
+      }*/
     }
 
     public void Update()
@@ -273,7 +273,7 @@ namespace FrozenPizza
     //base draw call, includes tilemap algorithm
     public void Draw(SpriteBatch spriteBatch, Camera cam, MainPlayer mainPlayer)
     {
-      drawTiles(spriteBatch, cam, mainPlayer);
+      /*drawTiles(spriteBatch, cam, mainPlayer);
       for (int i = _entities.Count - 1; i >= 0; i--)
       {
         if (_entities[i].pos != -Vector2.One && (!Indoor(mainPlayer.pos) || (Indoor(mainPlayer.pos) && Indoor(_entities[i].pos))))
@@ -282,7 +282,7 @@ namespace FrozenPizza
       for (int i = _projectiles.Count - 1; i >= 0; i--)
       {
         _projectiles[i].Draw(spriteBatch);
-      }
+      }*/
     }
   }
 }

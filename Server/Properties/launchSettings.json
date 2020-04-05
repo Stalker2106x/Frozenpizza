@@ -2,7 +2,7 @@
   "profiles": {
     "Server": {
       "commandName": "Project",
-      "commandLineArgs": "Data/maps/world.tmx"
+      "commandLineArgs": "world"
     }
   }
 }

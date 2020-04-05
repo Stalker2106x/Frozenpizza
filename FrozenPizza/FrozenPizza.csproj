@@ -3,6 +3,11 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Company>Stabax</Company>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;GAME</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,10 +15,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\Server\Payloads\EntitiesData.cs" Link="Network\Payloads\EntitiesData.cs" />
+    <Compile Include="..\Server\Payloads\GameData.cs" Link="Network\Payloads\GameData.cs" />
+    <Compile Include="..\Server\Payloads\NewPlayerData.cs" Link="Network\Payloads\NewPlayerData.cs" />
+    <Compile Include="..\Server\Payloads\PlayerData.cs" Link="Network\Payloads\PlayerData.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiteNetLib" Version="0.8.3.1" />
     <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.4" />
     <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7" />
     <PackageReference Include="Myra" Version="0.9.9.200" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Network\Payloads\" />
   </ItemGroup>
 
 </Project>

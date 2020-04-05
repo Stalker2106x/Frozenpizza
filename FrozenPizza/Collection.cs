@@ -28,8 +28,15 @@ namespace FrozenPizza
     public static Texture2D Players;
     public static SoundEffect[] PlayersSound;
 
+    //HUD
+    public static Texture2D hudEntities;
+    public static SpriteFont font;
+
+    private static ContentManager _content;
+
     public static bool Load(ContentManager content)
     {
+      _content = content;
       MenuSounds = new SoundEffect[2];
       //Game
       MeleeList = new List<Melee>();
@@ -39,11 +46,17 @@ namespace FrozenPizza
       GameLogo = content.Load<Texture2D>("gfx/logo");
       MenuSounds[0] = content.Load<SoundEffect>("sounds/menu/hover");
       MenuSounds[1] = content.Load<SoundEffect>("sounds/menu/click");
+
+      //HUD
+      hudEntities = content.Load<Texture2D>(@"gfx/hud");
+      font = content.Load<SpriteFont>(@"font/hud");
+
       //Game
       LoadMelee(content);
       LoadPistols(content);
       LoadPlayers(content);
       LoadProjectiles(content);
+
       return (true);
     }
 
@@ -121,6 +134,11 @@ namespace FrozenPizza
     {
       Projectiles = content.Load<Texture2D>("gfx/projectiles");
       return (true);
+    }
+
+    public static Texture2D LoadTileset(string tilesetName)
+    {
+      return (_content.Load<Texture2D>("maps/"+tilesetName));
     }
   }
 }

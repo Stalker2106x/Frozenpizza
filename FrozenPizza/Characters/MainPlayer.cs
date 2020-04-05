@@ -1,30 +1,24 @@
-﻿using FrozenPizza.Settings;
+﻿using FrozenPizza.Network;
+using FrozenPizza.Settings;
 using FrozenPizza.Utils;
+using FrozenPizza.World;
+using LiteNetLib;
+using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
+using Server.Payloads;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 
 namespace FrozenPizza
 {
-  public enum PlayerStates
-  {
-    Hungry,
-    Thirsty,
-    Starving,
-    Dehydrated
-  }
-
-
   public class MainPlayer : Player
   {
-    //Stats
-    public Gauge hunger { get; set; }
-    public Gauge thirst { get; set; }
 
     //Triggers
     public bool cooldown { get; set; }
@@ -34,25 +28,19 @@ namespace FrozenPizza
     //Inventory
     public Item hands { get; set; }
     Inventory _inventory;
-    List<PlayerStates> _states;
-
 
     //Timers
     TimeSpan _stepTimer;
     TimeSpan _stateTimer;
     TimeSpan[] _cooldownTimer;
 
+    Utils.Timer _networkUpdateTimer;
+
     float _aimSensivity;
 
 
-    public MainPlayer(String name) : base(-1, name, new Vector2(0, 0))
+    public MainPlayer(int id, String name) : base(id, name, new Vector2(0, 0))
     {
-      //Set Stats
-      hunger = new Gauge(50, 0, 100);
-      thirst = new Gauge(50, 0, 100);
-      pos = Vector2.Zero;
-
-      _states = new List<PlayerStates>();
       //Set triggers
       inventoryOpen = false;
       cooldown = false;
@@ -60,7 +48,6 @@ namespace FrozenPizza
       _sprinting = false;
 
       //Set aim view
-      orientation = 0;
       _aimSensivity = 0.005f;
 
       //Init Inventory
@@ -70,6 +57,10 @@ namespace FrozenPizza
       _stateTimer = new TimeSpan();
       _stepTimer = new TimeSpan();
       _cooldownTimer = new TimeSpan[2];
+
+      _networkUpdateTimer = new Utils.Timer();
+      _networkUpdateTimer.addAction(TimerDirection.Forward, 50, TimeoutBehaviour.StartOver, () => { UpdateNetwork(); });
+      _networkUpdateTimer.Start();
     }
 
 
@@ -108,8 +99,8 @@ namespace FrozenPizza
     public float[] getAimAccuracyAngleRelative()
     {
       float[] aimAccuracyAngle = getAimAccuracyAngle();
-      aimAccuracyAngle[0] += orientation - MathHelper.PiOver2;
-      aimAccuracyAngle[1] += orientation - MathHelper.PiOver2;
+      aimAccuracyAngle[0] += _orientation - MathHelper.PiOver2;
+      aimAccuracyAngle[1] += _orientation - MathHelper.PiOver2;
       return (aimAccuracyAngle);
     }
 
@@ -183,46 +174,36 @@ namespace FrozenPizza
     }
 
     //Code to move the player
-    void updateMove(GameTime gameTime, DeviceState state, DeviceState prevState, Level level)
+    void updateMove(GameTime gameTime, DeviceState state, DeviceState prevState, Map map)
     {
       float speed = getSpeed();
       Vector2 movement = Vector2.Zero;
 
-      if (Options.Config.Bindings[GameAction.Sprint].IsControlUp(state))
-        _sprinting = false;
+      if (Options.Config.Bindings[GameAction.Sprint].IsControlPressed(state, prevState)) _sprinting = true;
+      else if (Options.Config.Bindings[GameAction.Sprint].IsControlReleased(state, prevState)) _sprinting = false;
+
       if (Options.Config.Bindings[GameAction.StrafeLeft].IsControlDown(state))
       {
         if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state) || Options.Config.Bindings[GameAction.Backward].IsControlDown(state))
           speed *= 0.5f;
-        movement = new Vector2((float)Math.Cos(orientation) * -speed, (float)Math.Sin(orientation) * speed);
+        movement = new Vector2((float)Math.Cos(_orientation) * -speed, (float)Math.Sin(_orientation) * speed);
       }
       if (Options.Config.Bindings[GameAction.StrafeRight].IsControlDown(state))
       {
         if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state) || Options.Config.Bindings[GameAction.Backward].IsControlDown(state))
           speed *= 0.5f;
-        movement += new Vector2((float)Math.Cos(orientation) * speed, (float)-Math.Sin(orientation) * speed);
+        movement += new Vector2((float)Math.Cos(_orientation) * speed, (float)-Math.Sin(_orientation) * speed);
       }
 
       speed = getSpeed(); //Reset speed
       if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state))
-        movement += new Vector2((float)Math.Sin(orientation) * -speed, (float)Math.Cos(orientation) * -speed);
+        movement += new Vector2((float)Math.Sin(_orientation) * -speed, (float)Math.Cos(_orientation) * -speed);
       else if (Options.Config.Bindings[GameAction.Backward].IsControlDown(state))
-        movement += new Vector2((float)Math.Sin(orientation) * speed, (float)Math.Cos(orientation) * speed);
+        movement += new Vector2((float)Math.Sin(_orientation) * speed, (float)Math.Cos(_orientation) * speed);
 
       if (movement != Vector2.Zero)
       {
-        Vector2 syncVector = new Vector2((float)(movement.X * gameTime.ElapsedGameTime.TotalSeconds), (float)(movement.Y * gameTime.ElapsedGameTime.TotalSeconds));
-        Rectangle newhit = getHitbox();
-
-        if (!_sprinting && Options.Config.Bindings[GameAction.Sprint].IsControlPressed(state, prevState))
-          _sprinting = true;
-        newhit.X += (int)syncVector.X;
-        newhit.Y += (int)syncVector.Y;
-        if (GameMain.level.RCollide(newhit))
-        {
-          return;
-        }
-        pos += syncVector;
+        _position += new Vector2((float)(movement.X * gameTime.ElapsedGameTime.TotalSeconds), (float)(movement.Y * gameTime.ElapsedGameTime.TotalSeconds));
         stepSound(gameTime, _sprinting);
       }
     }
@@ -247,13 +228,13 @@ namespace FrozenPizza
           weapon = Collection.MeleeList[0];
         else
           weapon = (Melee)hands;
-        weapon.attack(pos);
+        weapon.attack(_position);
       }
       else if (hands.GetType() == typeof(Firearm))
       {
         Firearm weapon = (Firearm)hands;
 
-        weapon.fire(pos, getAimAccuracyAngleRelative());
+        weapon.fire(_position, getAimAccuracyAngleRelative());
       }
     }
 
@@ -293,47 +274,17 @@ namespace FrozenPizza
     {
       if (state.mouse.X != cam.getViewport().Width / 2)
         if (prevState.mouse.X < state.mouse.X)
-          orientation += (prevState.mouse.X - state.mouse.X) * _aimSensivity;
+          _orientation += (prevState.mouse.X - state.mouse.X) * _aimSensivity;
         else if (prevState.mouse.X > state.mouse.X)
-          orientation -= (state.mouse.X - prevState.mouse.X) * _aimSensivity;
-      if (orientation < 0)
-        orientation = MathHelper.TwoPi;
-      else if (orientation > MathHelper.TwoPi)
-        orientation = 0;
-      if (cam.Rotation != orientation)
+          _orientation -= (state.mouse.X - prevState.mouse.X) * _aimSensivity;
+      if (_orientation < 0)
+        _orientation = MathHelper.TwoPi;
+      else if (_orientation > MathHelper.TwoPi)
+        _orientation = 0;
+      if (cam.Rotation != _orientation)
       {
-        cam.Rotation = orientation;
+        cam.Rotation = _orientation;
       }
-    }
-
-    //Player states
-    public bool checkState(PlayerStates state)
-    {
-      for (int i = 0; i < _states.Count; i++)
-        if (_states[i] == state)
-          return (true);
-      return (false);
-    }
-
-    void updateStates(GameTime gameTime)
-    {
-      _stateTimer += gameTime.ElapsedGameTime;
-      if (hunger.get() > 0 && hunger.get() < 50 && !checkState(PlayerStates.Hungry))
-        _states.Add(PlayerStates.Hungry);
-      else if (hunger.get() == hunger.min && !checkState(PlayerStates.Starving))
-        _states.Add(PlayerStates.Starving);
-      if (thirst.get() > 0 && thirst.get() < 50 && !checkState(PlayerStates.Thirsty))
-        _states.Add(PlayerStates.Thirsty);
-      else if (thirst.get() <= thirst.min && !checkState(PlayerStates.Dehydrated))
-        _states.Add(PlayerStates.Dehydrated);
-    }
-
-    //Used to hurt player
-    void applyStates()
-    {
-      _stateTimer = TimeSpan.Zero;
-      if (checkState(PlayerStates.Starving))
-        hp.set(hp.get() - 1);
     }
 
     //Inventory & Item Management
@@ -347,12 +298,12 @@ namespace FrozenPizza
     {
       if (hands == null)
       {
-        Item ent = GameMain.level.getEntityByPos(pos);
+        //Item ent = GameMain.map.getEntityByPos(pos);
 
-        if (ent == null)
+        //if (ent == null)
           return;
-        hands = ent;
-        NetHandler.send("!-ITEM " + ent.uid);
+        //hands = ent;
+        //NetHandler.send("!-ITEM " + ent.uid);
       }
     }
 
@@ -360,39 +311,34 @@ namespace FrozenPizza
     {
       if (hands == null)
         return;
-      NetHandler.send("!+ITEM " + hands.uid);
+      //NetHandler.send("!+ITEM " + hands.uid);
       hands = null;
     }
 
-    public void updateNetwork(GameTime gameTime)
+    public void UpdateNetwork()
     {
-      NetHandler.send("!STATE " + id + " " + pos.X + " " + pos.Y + " " + orientation);
+      NetDataWriter writer = new NetDataWriter();
+      PlayerData payload = new PlayerData(_id, _position, _orientation);
+
+      writer.Put(".PLAYER "+JsonConvert.SerializeObject(payload));
+      Engine.networkClient.send(writer, DeliveryMethod.Unreliable);
     }
 
     //Base update call
-    public void Update(GameTime gameTime, Level level, DeviceState state, DeviceState prevState, Camera cam, Cursor cursor)
+    public void Update(GameTime gameTime, Map map, DeviceState state, DeviceState prevState, Camera cam, Cursor cursor)
     {
-      if (!alive) return;
+      if (!_active) return;
       if (!inventoryOpen) updateAimAngle(cam, state, prevState);
-      updateMove(gameTime, state, prevState, level);
+      updateMove(gameTime, state, prevState, map);
       updateHands(gameTime, state, prevState);
-      updateNetwork(gameTime);
       if (Options.Config.Bindings[GameAction.ToggleInventory].IsControlPressed(state, prevState))
         toggleInventory(cursor);
       if (Options.Config.Bindings[GameAction.Use].IsControlPressed(state, prevState))
         pickupItem();
       if (Options.Config.Bindings[GameAction.Drop].IsControlPressed(state, prevState))
         dropItem(0);
-      updateStates(gameTime);
-      if (_states.Count > 0 && _stateTimer.TotalSeconds >= 20)
-        applyStates();
-      cam.Pos = pos;
-    }
-
-    //Base draw call
-    public override void Draw(SpriteBatch spriteBatch)
-    {
-      spriteBatch.Draw(Collection.Players, pos, _skinRect, Color.White, -orientation, new Vector2(16, 8), 1.0f, SpriteEffects.None, 0.3f);
+      cam.Pos = _position;
+      _networkUpdateTimer.Update(gameTime);
     }
   }
 

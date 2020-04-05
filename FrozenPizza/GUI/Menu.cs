@@ -1,4 +1,5 @@
-﻿using FrozenPizza.Settings;
+﻿using FrozenPizza.Network;
+using FrozenPizza.Settings;
 using Microsoft.Xna.Framework.Content;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
@@ -156,7 +157,7 @@ namespace FrozenPizza
           messageBox.ShowModal();
           return;
         }
-        NetHandler.startServer(mapCombo.SelectedItem.Text);
+        //NetHandler.startServer(mapCombo.SelectedItem.Text);
         ConnectCallback(engine, "localhost");
       };
       grid.Widgets.Add(HostBtn);
@@ -438,11 +439,11 @@ namespace FrozenPizza
       disconnectBtn.Click += (s, a) =>
       {
         GameMain.Unload();
-        if (NetHandler.Connected)
+        /*if (NetHandler.Connected)
         {
           NetHandler.disconnect();
           Engine.netHandle = null;
-        }
+        }*/
         MainMenu(engine);
       };
       grid.Widgets.Add(disconnectBtn);
@@ -474,8 +475,8 @@ namespace FrozenPizza
       }
       int pos = host.IndexOf(":");
       if (pos != -1) Int32.TryParse(host.Substring(pos, host.Length - pos), out port);
-      else port = 27420;
-      Engine.netHandle = new NetHandler();
+      else port = 27015;
+      /*Engine.netHandle = new NetHandler();
       NetHandler.HandshakeCallback = () =>
       {
         GameMain.Initialize(engine.GraphicsDevice);
@@ -489,8 +490,9 @@ namespace FrozenPizza
         GameMain.Unload(); //Unload any loaded content
         Dialog errorBox = Dialog.CreateMessageBox("Error", "Could not reach server");
         errorBox.ShowModal();
-      };
-      Engine.netHandle.connect(host, port);
+      };*/
+      Engine.networkClient = new ClientV2();
+      Engine.networkClient.connect(host, port);
     }
   }
 }

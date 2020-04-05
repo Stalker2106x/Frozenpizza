@@ -1,5 +1,6 @@
 ﻿using FrozenPizza.Settings;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 namespace FrozenPizza
@@ -18,45 +19,37 @@ namespace FrozenPizza
     Die
   }
 
-  public class Player : Character
+  public class Player : BasePlayer
   {
-    public String name { get; set; }
-    public int id { get; set; }
+
+    //Sound
+    protected SoundEffect[] _sounds;
 
     //Constructor for remote players
-    public Player(int vid, String vname, Vector2 vpos, int vhp = 100) : base(vhp)
+    public Player(int id, String name, Vector2 pos, int hp = 100) : base(id, name, hp, pos)
     {
-      name = vname;
-      id = vid;
       _skinRect = new Rectangle(0, 0, 32, 16);
-      pos = vpos;
+      _sounds = Collection.PlayersSound;
     }
 
     //Reports damage from server to player
-    public virtual void hurt(int damage)
+    public virtual void addHealth(int value)
     {
-      hp.set(hp.get() - damage);
+      _hp -= value;
       _sounds[(int)PlayerSounds.Hurt].Play(Options.Config.SoundVolume, 0f, 0f);
-      if (hp.get() == hp.min) die();
+      if (_hp <= 0) die();
     }
 
     //Reports death from server to player
     public virtual void die()
     {
       _sounds[(int)PlayerSounds.Die].Play(Options.Config.SoundVolume, 0f, 0f);
-      alive = false;
+      _active = false;
       _skinRect = new Rectangle(0, 64, 32, 64);
     }
-
-    //Update player pos
-    public virtual void Update(GameTime gameTime)
-    {
-    }
-
-    //Draws the player
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-      base.Draw(spriteBatch);
+      spriteBatch.Draw(Collection.Players, _position, _skinRect, Color.White, -_orientation, new Vector2(16, 8), 1.0f, SpriteEffects.None, 0.3f);
     }
   }
 }
