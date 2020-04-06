@@ -63,7 +63,7 @@ namespace FrozenPizza
       _cooldownTimer = new TimeSpan[2];
 
       _networkUpdateTimer = new Utils.Timer();
-      _networkUpdateTimer.addAction(TimerDirection.Forward, 50, TimeoutBehaviour.StartOver, () => { UpdateNetwork(); });
+      _networkUpdateTimer.addAction(TimerDirection.Forward, 10 , TimeoutBehaviour.StartOver, () => { UpdateNetwork(); });
       _networkUpdateTimer.Start();
     }
 
@@ -176,6 +176,7 @@ namespace FrozenPizza
         _stepTimer = TimeSpan.Zero;
       }
     }
+
     Vector2 getMoveVector(Direction direction, float move)
     {
       if (direction == Direction.Left) return (new Vector2((float)Math.Cos(_orientation) * -move, (float)Math.Sin(_orientation) * move));
@@ -183,6 +184,41 @@ namespace FrozenPizza
       if (direction == Direction.Forward) return (new Vector2((float)Math.Sin(_orientation) * -move, (float)Math.Cos(_orientation) * -move));
       if (direction == Direction.Backward) return (new Vector2((float)Math.Sin(_orientation) * move, (float)Math.Cos(_orientation) * move));
       return (Vector2.Zero);
+    }
+
+    public enum Axis
+    {
+      Horizontal,
+      Vertical
+    }
+
+    public class CheckResult
+    {
+      public bool result;
+      public Vector2 vector;
+      public CheckResult(Vector2 movement)
+      {
+        vector = movement;
+      }
+    }
+
+    public CheckResult checkOverflow(Axis axis, Vector2 movement)
+    {
+      Vector2 normPosition = new Vector2((float)(_position.X % 32), (float)(_position.Y % 32));
+      CheckResult check = new CheckResult(movement);
+
+      if (axis == Axis.Horizontal)
+      {
+        if (normPosition.X + check.vector.X > 31f) check.vector.X = 0;
+        else if (normPosition.X + check.vector.X < 1f) check.vector.X = 0;
+      }
+      else if (axis == Axis.Vertical)
+      {
+        if (normPosition.Y + check.vector.Y > 31f) check.vector.Y = 0;
+        else if (normPosition.Y + check.vector.Y < 1f) check.vector.Y = 0;
+      }
+      check.result = GameMain.map.isValidPosition(_position + check.vector);
+      return (check);
     }
 
     //Code to move the player
@@ -207,7 +243,17 @@ namespace FrozenPizza
 
       if (movement != Vector2.Zero)
       {
-        _position += new Vector2((float)(movement.X * gameTime.ElapsedGameTime.TotalSeconds), (float)(movement.Y * gameTime.ElapsedGameTime.TotalSeconds));
+        Vector2 candidate = new Vector2((float)(movement.X * gameTime.ElapsedGameTime.TotalSeconds), (float)(movement.Y * gameTime.ElapsedGameTime.TotalSeconds));
+        if (!GameMain.map.isValidPosition(_position + candidate))
+        {
+          CheckResult hres = checkOverflow(Axis.Horizontal, candidate);
+          CheckResult vres = checkOverflow(Axis.Vertical, candidate);
+
+          if (!hres.result && !vres.result) candidate = Vector2.Zero;
+          if (hres.result) candidate = hres.vector;
+          if (vres.result) candidate = vres.vector;
+        }
+        _position += candidate;
         stepSound(gameTime, _sprinting);
       }
     }
@@ -215,7 +261,6 @@ namespace FrozenPizza
     //Attack & Cooldown
     public void updateCooldown(GameTime gameTime)
     {
-
       _cooldownTimer[0] -= gameTime.ElapsedGameTime;
       if (_cooldownTimer[0].TotalMilliseconds <= 0)
         cooldown = false;

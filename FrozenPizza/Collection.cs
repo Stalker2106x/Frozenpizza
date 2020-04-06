@@ -20,6 +20,7 @@ namespace FrozenPizza
   public static class Collection
   {
     public static Texture2D GameLogo;
+    public static Texture2D MenuBackground;
     public static SoundEffect[] MenuSounds;
     public static List<Melee> MeleeList;
     public static List<Firearm> PistolsList;
@@ -44,6 +45,7 @@ namespace FrozenPizza
       Tilesets = new Texture2D[Enum.GetNames(typeof(ItemType)).Length];
 
       GameLogo = content.Load<Texture2D>("gfx/logo");
+      MenuBackground = content.Load<Texture2D>("gfx/bg/main");
       MenuSounds[0] = content.Load<SoundEffect>("sounds/menu/hover");
       MenuSounds[1] = content.Load<SoundEffect>("sounds/menu/click");
 

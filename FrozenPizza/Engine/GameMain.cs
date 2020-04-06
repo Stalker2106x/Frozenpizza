@@ -29,7 +29,6 @@ namespace FrozenPizza
     public static void Unload()
     {
       map = null;
-      hud = null;
       mainPlayer = null;
       players = null;
     }

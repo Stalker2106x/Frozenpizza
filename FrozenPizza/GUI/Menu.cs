@@ -21,12 +21,12 @@ namespace FrozenPizza
       //Stylesheet.Current.TextBoxStyle.Width = 100;
     }
 
-    public static void MainMenu(Engine engine)
+    public static void MainMenu()
     {
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
-      //mainPanel.Background = new TextureRegion(Resources.menuBackground);
+      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
 
       VerticalStackPanel grid = new VerticalStackPanel();
       grid.HorizontalAlignment = HorizontalAlignment.Center;
@@ -39,7 +39,7 @@ namespace FrozenPizza
       hostBtn.HorizontalAlignment = HorizontalAlignment.Center;
       hostBtn.Click += (s, a) =>
       {
-        HostMenu(engine);
+        HostMenu();
       };
       grid.Widgets.Add(hostBtn);
 
@@ -48,7 +48,7 @@ namespace FrozenPizza
       playBtn.HorizontalAlignment = HorizontalAlignment.Center;
       playBtn.Click += (s, a) =>
       {
-        JoinMenu(engine);
+        JoinMenu();
       };
       grid.Widgets.Add(playBtn);
 
@@ -57,7 +57,7 @@ namespace FrozenPizza
       optionsBtn.HorizontalAlignment = HorizontalAlignment.Center;
       optionsBtn.Click += (s, a) =>
       {
-        OptionsMenu(engine);
+        OptionsMenu(MainMenu);
       };
       grid.Widgets.Add(optionsBtn);
 
@@ -66,7 +66,7 @@ namespace FrozenPizza
       quitBtn.HorizontalAlignment = HorizontalAlignment.Center;
       quitBtn.Click += (s, a) =>
       {
-        engine.exit();
+        Engine.quit = true;
       };
       grid.Widgets.Add(quitBtn);
 
@@ -74,12 +74,12 @@ namespace FrozenPizza
       Desktop.Root = mainPanel;
     }
 
-    public static void HostMenu(Engine engine)
+    public static void HostMenu()
     {
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
-      //mainPanel.Background = new TextureRegion(Resources.menuBackground);
+      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
 
       Grid grid = new Grid();
       grid.RowSpacing = 8;
@@ -158,7 +158,7 @@ namespace FrozenPizza
           return;
         }
         //NetHandler.startServer(mapCombo.SelectedItem.Text);
-        ConnectCallback(engine, "localhost");
+        ConnectCallback("localhost");
       };
       grid.Widgets.Add(HostBtn);
 
@@ -170,7 +170,7 @@ namespace FrozenPizza
       backBtn.HorizontalAlignment = HorizontalAlignment.Center;
       backBtn.Click += (s, a) =>
       {
-        MainMenu(engine);
+        MainMenu();
       };
       grid.Widgets.Add(backBtn);
 
@@ -178,12 +178,12 @@ namespace FrozenPizza
       Desktop.Root = mainPanel;
     }
 
-    public static void JoinMenu(Engine engine)
+    public static void JoinMenu()
     {
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
-      //mainPanel.Background = new TextureRegion(Resources.menuBackground);
+      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
 
       Grid grid = new Grid();
 
@@ -227,7 +227,7 @@ namespace FrozenPizza
       joinBtn.HorizontalAlignment = HorizontalAlignment.Center;
       joinBtn.Click += (s, a) =>
       {
-        ConnectCallback(engine, serverInput.Text);
+        ConnectCallback(serverInput.Text);
       };
       grid.Widgets.Add(joinBtn);
 
@@ -239,7 +239,7 @@ namespace FrozenPizza
       backBtn.HorizontalAlignment = HorizontalAlignment.Center;
       backBtn.Click += (s, a) =>
       {
-        MainMenu(engine);
+        MainMenu();
       };
       grid.Widgets.Add(backBtn);
 
@@ -247,14 +247,20 @@ namespace FrozenPizza
       Desktop.Root = mainPanel;
     }
 
-    public static void OptionsMenu(Engine engine)
+    /// <summary>
+    /// Options loader
+    /// </summary>
+    public static void OptionsMenu(Action prevMenu)
     {
+      //LoadUIStylesheet();
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
-      //mainPanel.Background = new TextureRegion(Resources.menuBackground);
+      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
 
       Grid grid = new Grid();
+      int gridRow = 0;
+      grid.VerticalAlignment = VerticalAlignment.Center;
 
       grid.RowSpacing = 8;
 
@@ -274,88 +280,133 @@ namespace FrozenPizza
       grid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 60));
       grid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 60));
 
-      Label playerLabel = new Label();
-      playerLabel.Text = "Player name";
-      playerLabel.GridColumn = 1;
-      playerLabel.GridRow = 1;
-      playerLabel.HorizontalAlignment = HorizontalAlignment.Left;
-      grid.Widgets.Add(playerLabel);
-
-      TextBox playerInput = new TextBox();
-      playerInput.Text = "player";
-      playerInput.GridColumn = 2;
-      playerInput.GridRow = 1;
-      playerInput.HorizontalAlignment = HorizontalAlignment.Right;
-      grid.Widgets.Add(playerInput);
+      //Stylesheet.Current.LabelStyle.Font = Resources.regularFont;
 
       Label resolutionLabel = new Label();
       resolutionLabel.Text = "Resolution";
       resolutionLabel.GridColumn = 1;
-      resolutionLabel.GridRow = 2;
+      resolutionLabel.GridRow = gridRow;
       resolutionLabel.HorizontalAlignment = HorizontalAlignment.Left;
       grid.Widgets.Add(resolutionLabel);
 
       ComboBox resolutionCombo = new ComboBox();
       resolutionCombo.GridColumn = 2;
-      resolutionCombo.GridRow = 2;
+      resolutionCombo.GridRow = gridRow;
       resolutionCombo.HorizontalAlignment = HorizontalAlignment.Right;
       List<string> resolutions = Options.getResolutions();
       resolutions.ForEach(e => { resolutionCombo.Items.Add(new ListItem(e)); });
       resolutionCombo.SelectedIndex = Options.getDisplayMode();
       grid.Widgets.Add(resolutionCombo);
+      gridRow++; //Next row
 
       Label displayLabel = new Label();
       displayLabel.Text = "Display mode";
       displayLabel.GridColumn = 1;
-      displayLabel.GridRow = 3;
+      displayLabel.GridRow = gridRow;
       displayLabel.HorizontalAlignment = HorizontalAlignment.Left;
       grid.Widgets.Add(displayLabel);
 
       ComboBox displayCombo = new ComboBox();
       displayCombo.GridColumn = 2;
-      displayCombo.GridRow = 3;
+      displayCombo.GridRow = gridRow;
       displayCombo.HorizontalAlignment = HorizontalAlignment.Right;
       displayCombo.Items.Add(new ListItem("Windowed"));
       displayCombo.Items.Add(new ListItem("Fullscreen"));
       displayCombo.SelectedIndex = Convert.ToInt32(Options.Config.Fullscreen);
       grid.Widgets.Add(displayCombo);
+      gridRow++; //Next row
+
+
+      Label mSensivityLabel = new Label();
+      mSensivityLabel.Text = "Mouse sensivity";
+      mSensivityLabel.GridColumn = 1;
+      mSensivityLabel.GridRow = gridRow;
+      mSensivityLabel.HorizontalAlignment = HorizontalAlignment.Left;
+      grid.Widgets.Add(mSensivityLabel);
+
+      HorizontalSlider mSensivitySlider = new HorizontalSlider();
+      mSensivitySlider.GridColumn = 2;
+      mSensivitySlider.GridRow = gridRow;
+      mSensivitySlider.HorizontalAlignment = HorizontalAlignment.Right;
+      mSensivitySlider.Minimum = 0.3f;
+      mSensivitySlider.Maximum = 6f;
+      mSensivitySlider.Value = Options.Config.MouseSensivity;
+      grid.Widgets.Add(mSensivitySlider);
+      gridRow++; //Next row
+
+      Label gSensivityLabel = new Label();
+      gSensivityLabel.Text = "Controller sensivity";
+      gSensivityLabel.GridColumn = 1;
+      gSensivityLabel.GridRow = gridRow;
+      gSensivityLabel.HorizontalAlignment = HorizontalAlignment.Left;
+      grid.Widgets.Add(gSensivityLabel);
+
+      HorizontalSlider gSensivitySlider = new HorizontalSlider();
+      gSensivitySlider.GridColumn = 2;
+      gSensivitySlider.GridRow = gridRow;
+      gSensivitySlider.HorizontalAlignment = HorizontalAlignment.Right;
+      gSensivitySlider.Minimum = 5f;
+      gSensivitySlider.Maximum = 15f;
+      gSensivitySlider.Value = Options.Config.ControllerSensivity;
+      grid.Widgets.Add(gSensivitySlider);
+      gridRow++; //Next row
 
       Label musicLabel = new Label();
       musicLabel.Text = "Music volume";
       musicLabel.GridColumn = 1;
-      musicLabel.GridRow = 4;
+      musicLabel.GridRow = gridRow;
       musicLabel.HorizontalAlignment = HorizontalAlignment.Left;
       grid.Widgets.Add(musicLabel);
 
       HorizontalSlider musicSlider = new HorizontalSlider();
       musicSlider.GridColumn = 2;
-      musicSlider.GridRow = 4;
-      musicSlider.Width = 100;
+      musicSlider.GridRow = gridRow;
       musicSlider.HorizontalAlignment = HorizontalAlignment.Right;
       musicSlider.Minimum = 0f;
       musicSlider.Maximum = 1f;
+      musicSlider.Value = Options.Config.MusicVolume;
       grid.Widgets.Add(musicSlider);
+      gridRow++; //Next row
 
       Label soundLabel = new Label();
       soundLabel.Text = "Sounds volume";
       soundLabel.GridColumn = 1;
-      soundLabel.GridRow = 5;
+      soundLabel.GridRow = 4;
       soundLabel.HorizontalAlignment = HorizontalAlignment.Left;
       grid.Widgets.Add(soundLabel);
 
       HorizontalSlider soundSlider = new HorizontalSlider();
       soundSlider.GridColumn = 2;
-      soundSlider.GridRow = 5;
-      soundSlider.Width = 100;
+      soundSlider.GridRow = gridRow;
       soundSlider.HorizontalAlignment = HorizontalAlignment.Right;
       soundSlider.Minimum = 0f;
       soundSlider.Maximum = 1f;
+      soundSlider.Value = Options.Config.SoundVolume;
       grid.Widgets.Add(soundSlider);
+      gridRow++; //Next row
+
+      gridRow++; //Skip row
+
+      TextButton bindigsBtn = new TextButton();
+      bindigsBtn.Text = "Bindings";
+      bindigsBtn.GridColumn = 1;
+      bindigsBtn.GridRow = gridRow;
+      bindigsBtn.GridColumnSpan = 2;
+      bindigsBtn.HorizontalAlignment = HorizontalAlignment.Center;
+      bindigsBtn.Click += (s, a) =>
+      {
+        BindingsMenu(prevMenu);
+      };
+      grid.Widgets.Add(bindigsBtn);
+      gridRow++; //Next row
+
+      gridRow++; //Skip row
+      //Stylesheet.Current.LabelStyle.Font = Resources.titleFont;
 
       TextButton applyBtn = new TextButton();
       applyBtn.Text = "Apply";
       applyBtn.GridColumn = 1;
-      applyBtn.GridRow = 6;
+      applyBtn.GridRow = gridRow;
       applyBtn.GridColumnSpan = 2;
       applyBtn.HorizontalAlignment = HorizontalAlignment.Center;
       applyBtn.Click += (s, a) =>
@@ -369,23 +420,26 @@ namespace FrozenPizza
         Options.Config.Fullscreen = Convert.ToBoolean(displayCombo.SelectedIndex);
         Options.Config.Width = Options.Resolutions[(int)resolutionCombo.SelectedIndex].Width;
         Options.Config.Height = Options.Resolutions[(int)resolutionCombo.SelectedIndex].Height;
+        Options.Config.MouseSensivity = mSensivitySlider.Value;
+        Options.Config.ControllerSensivity = gSensivitySlider.Value;
         Options.Config.MusicVolume = musicSlider.Value;
         Options.Config.SoundVolume = soundSlider.Value;
         Options.applyConfig();
         Options.Config.Save();
-        OptionsMenu(engine);
+        prevMenu();
       };
       grid.Widgets.Add(applyBtn);
+      gridRow++; //Next row
 
       TextButton backBtn = new TextButton();
-      backBtn.Text = "Back";
+      backBtn.Text = "Cancel";
       backBtn.GridColumn = 1;
-      backBtn.GridRow = 7;
+      backBtn.GridRow = gridRow;
       backBtn.GridColumnSpan = 2;
       backBtn.HorizontalAlignment = HorizontalAlignment.Center;
       backBtn.Click += (s, a) =>
       {
-        MainMenu(engine);
+        prevMenu();
       };
       grid.Widgets.Add(backBtn);
 
@@ -393,14 +447,19 @@ namespace FrozenPizza
       Desktop.Root = mainPanel;
     }
 
-    public static void GameMenu(Engine engine)
+    /// <summary>
+    /// Bindings Menu loader
+    /// </summary>
+    public static void BindingsMenu(Action optionsPrevMenu)
     {
+      //LoadUIStylesheet();
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
-      //mainPanel.Background = new TextureRegion(Resources.menuBackground);
+      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
 
       Grid grid = new Grid();
+      grid.VerticalAlignment = VerticalAlignment.Center;
 
       grid.RowSpacing = 8;
 
@@ -408,22 +467,149 @@ namespace FrozenPizza
       grid.ColumnsProportions.Add(new Proportion(ProportionType.Part));
       grid.ColumnsProportions.Add(new Proportion(ProportionType.Part));
       grid.ColumnsProportions.Add(new Proportion(ProportionType.Part));
+      grid.ColumnsProportions.Add(new Proportion(ProportionType.Part));
       grid.RowsProportions.Add(new Proportion(ProportionType.Part));
-      grid.RowsProportions.Add(new Proportion(ProportionType.Part));
-      grid.RowsProportions.Add(new Proportion(ProportionType.Part));
-      grid.RowsProportions.Add(new Proportion(ProportionType.Part));
-      grid.RowsProportions.Add(new Proportion(ProportionType.Part));
-      grid.RowsProportions.Add(new Proportion(ProportionType.Part));
-      grid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 25));
-      grid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 60));
-      grid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 25));
+      for (int bindCount = 0; bindCount < Options.Config.Bindings.Count; bindCount++)
+        grid.RowsProportions.Add(new Proportion(ProportionType.Part));
+      grid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 75));
       grid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 60));
       grid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 60));
 
+      //Stylesheet.Current.LabelStyle.Font = Resources.regularFont;
+      //Header
+      Label actionLabel = new Label();
+      actionLabel.Text = "Action";
+      actionLabel.GridColumn = 1;
+      actionLabel.GridRow = 0;
+      actionLabel.HorizontalAlignment = HorizontalAlignment.Left;
+      grid.Widgets.Add(actionLabel);
+
+      Label primaryBindLabel = new Label();
+      primaryBindLabel.Text = "Primary";
+      primaryBindLabel.GridColumn = 2;
+      primaryBindLabel.GridRow = 0;
+      primaryBindLabel.HorizontalAlignment = HorizontalAlignment.Left;
+      grid.Widgets.Add(primaryBindLabel);
+
+      Label secondaryBindLabel = new Label();
+      secondaryBindLabel.Text = "Secondary";
+      secondaryBindLabel.GridColumn = 3;
+      secondaryBindLabel.GridRow = 0;
+      secondaryBindLabel.HorizontalAlignment = HorizontalAlignment.Left;
+      grid.Widgets.Add(secondaryBindLabel);
+
+      //Binds
+      int i = 1;
+      foreach (KeyValuePair<GameAction, ControlPair> entry in Options.Config.Bindings)
+      {
+        Label action = new Label();
+        action.Text = entry.Key.ToString();
+        action.GridColumn = 1;
+        action.GridRow = i;
+        action.HorizontalAlignment = HorizontalAlignment.Left;
+        grid.Widgets.Add(action);
+
+        TextButton primaryBind = new TextButton();
+        primaryBind.Text = entry.Value.primary.GetValueOrDefault().GetInput();
+        primaryBind.GridColumn = 2;
+        primaryBind.GridRow = i;
+        primaryBind.Click += (s, a) =>
+        {
+          (new Thread(() => {
+            primaryBind.Text = "...";
+            Control? control;
+            int attempts = 30;
+            do
+            {
+              control = Control.GetAnyPressedKey(Engine.getDeviceState());
+              Thread.Sleep(100);
+              attempts--;
+            } while (control == null && attempts > 0);
+            if (control != null)
+            {
+              var bind = Options.Config.Bindings[entry.Key];
+              bind.primary = control;
+              Options.Config.Bindings[entry.Key] = bind;
+            }
+            primaryBind.Text = Options.Config.Bindings[entry.Key].primary.GetValueOrDefault().GetInput();
+          })).Start();
+        };
+        grid.Widgets.Add(primaryBind);
+
+        TextButton secondaryBind = new TextButton();
+        secondaryBind.Text = entry.Value.secondary.GetValueOrDefault().GetInput();
+        secondaryBind.GridColumn = 3;
+        secondaryBind.GridRow = i;
+        secondaryBind.Click += (s, a) =>
+        {
+          (new Thread(() => {
+            secondaryBind.Text = "...";
+            Control? control;
+            int attempts = 30;
+            do
+            {
+              control = Control.GetAnyPressedKey(Engine.getDeviceState());
+              Thread.Sleep(100);
+              attempts--;
+            } while (control == null && attempts > 0);
+            if (control != null)
+            {
+              var bind = Options.Config.Bindings[entry.Key];
+              bind.secondary = control;
+              Options.Config.Bindings[entry.Key] = bind;
+            }
+            secondaryBind.Text = Options.Config.Bindings[entry.Key].secondary.GetValueOrDefault().GetInput();
+          })).Start();
+        };
+        grid.Widgets.Add(secondaryBind);
+
+        i++;
+      }
+
+      //Stylesheet.Current.LabelStyle.Font = Resources.titleFont;
+      TextButton applyBtn = new TextButton();
+      applyBtn.Text = "Apply";
+      applyBtn.GridColumn = 1;
+      applyBtn.GridRow = i + 1;
+      applyBtn.GridColumnSpan = 3;
+      applyBtn.HorizontalAlignment = HorizontalAlignment.Center;
+      applyBtn.Click += (s, a) =>
+      {
+        OptionsMenu(optionsPrevMenu);
+      };
+      grid.Widgets.Add(applyBtn);
+
+      TextButton backBtn = new TextButton();
+      backBtn.Text = "Cancel";
+      backBtn.GridColumn = 1;
+      backBtn.GridRow = i + 2;
+      backBtn.GridColumnSpan = 3;
+      backBtn.HorizontalAlignment = HorizontalAlignment.Center;
+      backBtn.Click += (s, a) =>
+      {
+        OptionsMenu(optionsPrevMenu);
+      };
+      grid.Widgets.Add(backBtn);
+
+      mainPanel.Widgets.Add(grid);
+      Desktop.Root = mainPanel;
+    }
+
+    public static void GameMenu()
+    {
+      Desktop.Widgets.Clear();
+
+      Panel mainPanel = new Panel();
+      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
+
+      VerticalStackPanel grid = new VerticalStackPanel();
+      grid.HorizontalAlignment = HorizontalAlignment.Center;
+      grid.VerticalAlignment = VerticalAlignment.Center;
+
+      grid.Spacing = 8;
+
       TextButton resumeBtn = new TextButton();
       resumeBtn.Text = "Resume";
-      resumeBtn.GridColumn = 1;
-      resumeBtn.GridRow = 1;
       resumeBtn.HorizontalAlignment = HorizontalAlignment.Center;
       resumeBtn.Click += (s, a) =>
       {
@@ -433,29 +619,21 @@ namespace FrozenPizza
 
       TextButton disconnectBtn = new TextButton();
       disconnectBtn.Text = "Disconnect";
-      disconnectBtn.GridColumn = 1;
-      disconnectBtn.GridRow = 2;
       disconnectBtn.HorizontalAlignment = HorizontalAlignment.Center;
       disconnectBtn.Click += (s, a) =>
       {
         GameMain.Unload();
-        /*if (NetHandler.Connected)
-        {
-          NetHandler.disconnect();
-          Engine.netHandle = null;
-        }*/
-        MainMenu(engine);
+        Engine.networkClient.disconnect();
+        MainMenu();
       };
       grid.Widgets.Add(disconnectBtn);
 
       TextButton optionsBtn = new TextButton();
       optionsBtn.Text = "Options";
-      optionsBtn.GridColumn = 1;
-      optionsBtn.GridRow = 3;
       optionsBtn.HorizontalAlignment = HorizontalAlignment.Center;
       optionsBtn.Click += (s, a) =>
       {
-        MainMenu(engine);
+        OptionsMenu(GameMenu);
       };
       grid.Widgets.Add(optionsBtn);
 
@@ -463,7 +641,7 @@ namespace FrozenPizza
       Desktop.Root = mainPanel;
     }
 
-    public static void ConnectCallback(Engine engine, string host)
+    public static void ConnectCallback(string host)
     {
       int port;
 

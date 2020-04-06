@@ -130,7 +130,6 @@ namespace FrozenPizza.Network
       Player player = GameMain.players.First((it) => { return (it.id == payload.id); });
       player.position = new Vector2(payload.x, payload.y);
       player.orientation = payload.orientation;
-      Console.WriteLine(body);
     }
   }
 }

@@ -10,7 +10,6 @@ namespace FrozenPizza.World
   public class Map : BaseMap
   {
     Texture2D _tileset;
-    Point _tilesetSizeInUnits;
     int _tilesetStartGid;
 
     enum Tileset {
@@ -23,7 +22,6 @@ namespace FrozenPizza.World
       _tileset = Collection.LoadTileset(_map.Tilesets[(int)Tileset.City].Name.ToString());
 
       _tilesetStartGid = (int)(_map.Tilesets[0].Image.Width / _tileSize.X); //Compute meta size for offset
-      _tilesetSizeInUnits = new Point(_tileset.Width / _tileSize.X, _tileset.Height / _tileSize.Y);
     }
 
     Rectangle GetGidRect(int gid)

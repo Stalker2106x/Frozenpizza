@@ -34,7 +34,7 @@ namespace FrozenPizza.Settings
   /// </summary>
   public class GameSettings
   {
-    const string ConfigPath = "Content/Config.cfg";
+    const string ConfigPath = "Data/Config.cfg";
     public bool Fullscreen { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }

@@ -67,7 +67,6 @@ namespace FrozenPizza
       IsMouseVisible = false;
       cursor = new Cursor();
       ClientHandlerV2.Initialize();
-      Menu.MainMenu(this);
       base.Initialize();
     }
 
@@ -99,6 +98,7 @@ namespace FrozenPizza
       spriteBatch = new SpriteBatch(GraphicsDevice);
       Collection.Load(this.Content);
       GameMain.Load(GraphicsDevice);
+      Menu.MainMenu();
     }
 
     /// <summary>
@@ -162,7 +162,7 @@ namespace FrozenPizza
           {
             GameMain.mainPlayer.inventoryOpen = false;
             setCursor(true);
-            Menu.GameMenu(this);
+            Menu.GameMenu();
             setState(GameState.Menu);
           }
           GameMain.Update(gameTime, deviceState, prevDeviceState, cursor);
