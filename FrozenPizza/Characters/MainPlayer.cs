@@ -1,4 +1,5 @@
-﻿using FrozenPizza.Network;
+﻿using FrozenPizza.Entities;
+using FrozenPizza.Network;
 using FrozenPizza.Settings;
 using FrozenPizza.Utils;
 using FrozenPizza.World;
@@ -32,7 +33,7 @@ namespace FrozenPizza
     bool _sprinting, _aimlock;
 
     //Inventory
-    public Item hands { get; set; }
+    public BaseItem hands { get; set; }
     Inventory _inventory;
 
     //Timers
@@ -77,28 +78,28 @@ namespace FrozenPizza
     }
 
     //Get the 'use' (or fire) cooldown from currently held item
-    public float getCooldown()
+    /*public float getCooldown()
     {
       Weapon whands = (Weapon)hands;
       if (whands != null)
         return ((float)TimeSpan.FromSeconds(whands.Cooldown).TotalMilliseconds);
       else
         return ((float)TimeSpan.FromSeconds(Collection.MeleeList[0].Cooldown).TotalMilliseconds);
-    }
+    }*/
 
-    //Placeholder
-    public int getArmor()
+  //Placeholder
+    /*public int getArmor()
     {
       return (0);
-    }
+    }*/
 
-    //Placeholder
+    /*
     public float getWeight()
     {
       float weight = 0;
 
       return (weight);
-    }
+    }*/
 
     public float[] getAimAccuracyAngleRelative()
     {
@@ -116,7 +117,7 @@ namespace FrozenPizza
 
       aimAccuracyAngle[0] = MathHelper.PiOver2 * 1.5f;
       aimAccuracyAngle[1] = MathHelper.PiOver2 * 0.5f;
-      if (hands != null && hands.type == ItemType.Firearm)
+      /*if (hands != null && hands.type == ItemType.Firearm)
       {
         Firearm weapon = (Firearm)hands;
 
@@ -135,7 +136,7 @@ namespace FrozenPizza
           aimAccuracyAngle[0] -= 0.05f;
           aimAccuracyAngle[1] += 0.05f;
         }
-      }
+      }*/
       return (aimAccuracyAngle);
     }
 
@@ -269,7 +270,7 @@ namespace FrozenPizza
     //Use Hands
     public void useHands()
     {
-      if (hands == null || hands.GetType() == typeof(Melee))
+      /*if (hands == null || hands.GetType() == typeof(Melee))
       {
         Melee weapon;
 
@@ -284,12 +285,13 @@ namespace FrozenPizza
         Firearm weapon = (Firearm)hands;
 
         weapon.fire(_position, getAimAccuracyAngleRelative());
-      }
+      }*/
     }
 
     //Check Hands events (Reload, fire, ...)
     public void updateHands(GameTime gameTime, DeviceState state, DeviceState prevState)
     {
+      /*
       if (cooldown)
         updateCooldown(gameTime);
       if (inventoryOpen)
@@ -316,6 +318,7 @@ namespace FrozenPizza
         _aimlock = true;
       else
         _aimlock = false;
+        */
     }
 
     //View & Lookup Update
@@ -343,34 +346,39 @@ namespace FrozenPizza
       cursor.Show = inventoryOpen;
     }
 
-    public void pickupItem()
+    public void interact()
     {
-      if (hands == null)
+      if (hands == null) //Pickup
       {
-        //Item ent = GameMain.map.getEntityByPos(pos);
-
-        //if (ent == null)
-          return;
-        //hands = ent;
-        //NetHandler.send("!-ITEM " + ent.uid);
+        Point gridPos = GameMain.map.WorldToGrid(_position);
+        var item = GameMain.map.items.Find((it) => { return (it.position == gridPos); });
+        if (item != null)
+        {
+          item.position = null;
+          ClientSenderV2.SendItemPickup(new ItemData(item.uid, item.position));
+          hands = item;
+        }
       }
     }
 
     public void dropItem(int uid)
     {
-      if (hands == null)
-        return;
-      //NetHandler.send("!+ITEM " + hands.uid);
-      hands = null;
+      if (hands != null) //drop
+      {
+        var item = GameMain.map.items.Find((it) => { return (it.uid == hands.uid); });
+        if (item != null)
+        {
+          Point gridPos = GameMain.map.WorldToGrid(_position);
+          item.position = gridPos;
+          ClientSenderV2.SendItemPickup(new ItemData(item.uid, item.position));
+          hands = null;
+        }
+      }
     }
 
     public void UpdateNetwork()
     {
-      NetDataWriter writer = new NetDataWriter();
-      PlayerData payload = new PlayerData(_id, _position, _orientation);
-
-      writer.Put(".PLAYER "+JsonConvert.SerializeObject(payload));
-      Engine.networkClient.send(writer, DeliveryMethod.Unreliable);
+      ClientSenderV2.SendPlayerData(new PlayerData(_id, _position, _orientation));
     }
 
     //Base update call
@@ -382,10 +390,8 @@ namespace FrozenPizza
       updateHands(gameTime, state, prevState);
       if (Options.Config.Bindings[GameAction.ToggleInventory].IsControlPressed(state, prevState))
         toggleInventory(cursor);
-      if (Options.Config.Bindings[GameAction.Use].IsControlPressed(state, prevState))
-        pickupItem();
-      if (Options.Config.Bindings[GameAction.Drop].IsControlPressed(state, prevState))
-        dropItem(0);
+      if (Options.Config.Bindings[GameAction.Use].IsControlPressed(state, prevState)) interact();
+      if (Options.Config.Bindings[GameAction.Drop].IsControlPressed(state, prevState)) dropItem(0);
       cam.Pos = _position;
       _networkUpdateTimer.Update(gameTime);
     }

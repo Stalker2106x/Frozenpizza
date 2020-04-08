@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <Compile Include="..\FrozenPizza\Characters\BasePlayer.cs" Link="BasePlayer.cs" />
+    <Compile Include="..\FrozenPizza\Entities\BaseItem.cs" Link="BaseItem.cs" />
     <Compile Include="..\FrozenPizza\World\BaseMap.cs" Link="BaseMap.cs" />
   </ItemGroup>
 

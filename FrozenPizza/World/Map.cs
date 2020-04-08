@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FrozenPizza.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -12,6 +13,8 @@ namespace FrozenPizza.World
     Texture2D _tileset;
     int _tilesetStartGid;
 
+    public List<Item> items;
+
     enum Tileset {
       Meta = 0,
       City
@@ -19,6 +22,7 @@ namespace FrozenPizza.World
 
     public Map(string mapName) : base(mapName)
     {
+      items = new List<Item>();
       _tileset = Collection.LoadTileset(_map.Tilesets[(int)Tileset.City].Name.ToString());
 
       _tilesetStartGid = (int)(_map.Tilesets[0].Image.Width / _tileSize.X); //Compute meta size for offset
@@ -51,9 +55,10 @@ namespace FrozenPizza.World
     {
       for (Layer layer = Layer.Floor; (int)layer < _map.Layers.Count; layer++)
       {
-        if (layer == Layer.Meta) continue; //Skip certain layers (meta)
+        if (layer == Layer.Meta || layer == Layer.Ceiling) continue; //Skip certain layers
         DrawLayer(spriteBatch, layer);
       }
+      foreach (var item in items) item.Draw(spriteBatch, _tileSize);
     }
   }
 }

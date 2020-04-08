@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FrozenPizza.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -44,12 +45,12 @@ namespace FrozenPizza
 
     //Map
     TmxMap _map;
-    List<Item> _entities;
+    List<BaseItem> _entities;
     List<Projectile> _projectiles;
 
     public static String MapName { get; set; }
     public TmxMap Map { get { return (_map); } }
-    public List<Item> Entities { get { return (_entities); } }
+    public List<BaseItem> Entities { get { return (_entities); } }
     public List<Projectile> Projectiles { get { return (_projectiles); } }
 
     public Level()
@@ -57,7 +58,7 @@ namespace FrozenPizza
       _map = new TmxMap(MapName);
       _twidth = _map.Tilesets[0].TileWidth;
       _theight = _map.Tilesets[0].TileHeight;
-      _entities = new List<Item>();
+      _entities = new List<BaseItem>();
       _projectiles = new List<Projectile>();
       _metaOffset = (int)(_map.Tilesets[0].Image.Width / _twidth);
       _drawMargin = 10;
@@ -150,20 +151,20 @@ namespace FrozenPizza
     {
       for (int i = 0; i < _entities.Count; i++)
       {
-        if (_entities[i].uid == uid)
-          return (i);
+        //if (_entities[i].uid == uid)
+          //return (i);
       }
       return (-1);
     }
 
-    public Item getEntityByPos(Vector2 pos)
+    public BaseItem getEntityByPos(Vector2 pos)
     {
       Rectangle range = new Rectangle((pos - new Vector2(16, 16)).ToPoint(), new Vector2(32, 32).ToPoint());
 
       for (int i = 0; i < _entities.Count; i++)
       {
-        if (range.Contains(_entities[i].pos))
-          return (_entities[i]);
+        //if (range.Contains(_entities[i].pos))
+          //return (_entities[i]);
       }
       return (null);
     }

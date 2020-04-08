@@ -4,6 +4,8 @@
   using System.Drawing;
   using System.Numerics;
 #endif
+using FrozenPizza;
+using FrozenPizza.Entities;
 using System.Collections.Generic;
 using System.IO;
 using TiledSharp;
@@ -15,7 +17,7 @@ namespace FrozenPizza.World
   {
     protected enum Layer
     {
-      Floor,
+      Floor = 0,
       Wall,
       Ceiling,
       Meta

@@ -32,8 +32,8 @@ namespace FrozenPizza
       Angle = angle;
       Velocity = velocity;
       Damage = damage;
-      Weapon weapon = (Weapon)Collection.getItemById(id);
-      /*if (GameMain.mainPlayer.getDistanceTo(pos) <= (GameMain.map.Map.TileWidth * 40))
+      /*Weapon weapon = (Weapon)Collection.getItemById(id);
+      if (GameMain.mainPlayer.getDistanceTo(pos) <= (GameMain.map.Map.TileWidth * 40))
       {
         float distVolume = (GameMain.mainPlayer.getDistanceTo(pos) / (GameMain.map.Map.TileWidth * 40));
 
@@ -70,9 +70,9 @@ namespace FrozenPizza
     }
   }
 
-  public class Ammo : Item
+  public class Ammo// : Item
   {
-    public Ammo(Int64 uid, int id, String name, float weight, float size) : base(uid, id, name, ItemType.Ammo, weight, size)
+    public Ammo(Int64 uid, int id, String name, float weight, float size)// : base(uid, id, name, ItemType.Ammo, weight, size)
     {
 
     }

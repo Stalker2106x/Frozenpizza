@@ -148,20 +148,107 @@
 /processorParam:TextureFormat=Color
 /build:Data/gfx/shadowmap.png
 
-#begin Data/items/firearms.xml
-/copy:Data/items/firearms.xml
+#begin Data/gfx/weapons/357.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/weapons/357.png
 
-#begin Data/items/food.xml
-/copy:Data/items/food.xml
+#begin Data/gfx/weapons/deagle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/weapons/deagle.png
 
-#begin Data/items/melee.xml
-/copy:Data/items/melee.xml
+#begin Data/gfx/weapons/glock18.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/weapons/glock18.png
 
-#begin Data/items/menus.xml
-/copy:Data/items/menus.xml
+#begin Data/gfx/weapons/hands.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/weapons/hands.png
 
-#begin Data/items/wearables.xml
-/copy:Data/items/wearables.xml
+#begin Data/gfx/weapons/m9.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/weapons/m9.png
+
+#begin Data/gfx/weapons/machete.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/weapons/machete.png
+
+#begin Data/gfx/weapons/pizzacutter.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/weapons/pizzacutter.png
+
+#begin Data/gfx/weapons/screwdriver.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/weapons/screwdriver.png
+
+#begin Data/items/melee.json
+/copy:Data/items/melee.json
+
+#begin Data/items/weapons.json
+/copy:Data/items/weapons.json
 
 #begin Data/maps/BP3NO.tmx
 /copy:Data/maps/BP3NO.tmx

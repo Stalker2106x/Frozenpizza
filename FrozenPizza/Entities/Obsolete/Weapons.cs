@@ -16,7 +16,7 @@ namespace FrozenPizza
     DryFire,
     Reload
   }
-  public class Weapon : Item
+  public class WeaponOld// : Item
   {
     public int Damage { get; set; }
     public int Durability { get; set; }
@@ -24,7 +24,7 @@ namespace FrozenPizza
     public String ResourceId { get; set; }
     public SoundEffect[] Sounds { get; set; }
 
-    public Weapon(Int64 uid, int id, String name, ItemType type, float weight, float size) : base(uid, id, name, type, weight, size)
+    public WeaponOld(Int64 uid, int id, String name, float weight, float size) //: base(uid, id, name, weight, size)
     {
 
     }
@@ -40,9 +40,9 @@ namespace FrozenPizza
     }
   }
 
-  public class Melee : Weapon
+  public class Melee : WeaponOld
   {
-    public Melee(Int64 uid, int id, String name, float weight, float size) : base(uid, id, name, ItemType.Melee, weight, size)
+    public Melee(Int64 uid, int id, String name, float weight, float size) : base(uid, id, name, weight, size)
     {
       Sounds = new SoundEffect[1];
     }
@@ -55,14 +55,14 @@ namespace FrozenPizza
     {
       Sounds[0] = content.Load<SoundEffect>("sounds/weapon/" + ResourceId + "/attack");
     }
-    public void attack(Vector2 pos)
+    /*public void attack(Vector2 pos)
     {
       Sounds[0].Play(Options.Config.SoundVolume, 0f, 0f);
       NetHandler.send("!MELEE " + size + " " + Damage);
-    }
+    }*/
   }
 
-  public class Firearm : Weapon
+  public class Firearm : WeaponOld
   {
 
     public int Accuracy { get; set; }
@@ -70,7 +70,7 @@ namespace FrozenPizza
     public int ClipSize { get; set; }
     public float ReloadCooldown { get; set; }
 
-    public Firearm(Int64 uid, int id, String name, float weight, float size) : base(uid, id, name, ItemType.Firearm, weight, size)
+    public Firearm(Int64 uid, int id, String name, float weight, float size) : base(uid, id, name, weight, size)
     {
     }
 
@@ -98,7 +98,7 @@ namespace FrozenPizza
 
       if (LoadedAmmo > 0)
       {
-        NetHandler.send("!FIRE " + id + " " + (int)ProjectileType.Bullet + " " + angle + " " + 7f + " " + Damage);
+        //NetHandler.send("!FIRE " + id + " " + (int)ProjectileType.Bullet + " " + angle + " " + 7f + " " + Damage);
         LoadedAmmo -= 1;
       }
       else

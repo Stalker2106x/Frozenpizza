@@ -7,6 +7,28 @@ using Microsoft.Xna.Framework;
 
 namespace Server.Payloads
 {
+  /// <summary>
+  /// Declarative payload
+  /// </summary>
+  public class NewPlayerData
+  {
+    public string name;
+
+    public int hp;
+
+    public PlayerData data;
+
+    public NewPlayerData(string name_, int hp_, PlayerData data_)
+    {
+      name = name_;
+      hp = hp_;
+      data = data_;
+    }
+  }
+
+  /// <summary>
+  /// Update payload
+  /// </summary>
   public class PlayerData
   {
     public int id;

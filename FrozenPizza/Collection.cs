@@ -1,33 +1,30 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FrozenPizza.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
 namespace FrozenPizza
 {
-  public enum ItemIds
-  {
-    Melee = 0,
-    Pistol = 1000,
-    Rifle = 2000,
-    Consumable = 3000,
-    Wearable = 4000
-  }
   public static class Collection
   {
     public static Texture2D GameLogo;
     public static Texture2D MenuBackground;
     public static SoundEffect[] MenuSounds;
-    public static List<Melee> MeleeList;
-    public static List<Firearm> PistolsList;
-    public static Texture2D[] Tilesets;
+    public static List<MeleeWeapon> MeleeList;
+    public static List<FireWeapon> FirearmList;
+    //public static Texture2D[] Tilesets;
     public static Texture2D Projectiles;
     public static Texture2D Players;
     public static SoundEffect[] PlayersSound;
+
+    public static Dictionary<string, Texture2D> ItemTextures;
 
     //HUD
     public static Texture2D hudEntities;
@@ -40,9 +37,7 @@ namespace FrozenPizza
       _content = content;
       MenuSounds = new SoundEffect[2];
       //Game
-      MeleeList = new List<Melee>();
-      PistolsList = new List<Firearm>();
-      Tilesets = new Texture2D[Enum.GetNames(typeof(ItemType)).Length];
+      //Tilesets = new Texture2D[Enum.GetNames(typeof(ItemType)).Length];
 
       GameLogo = content.Load<Texture2D>("gfx/logo");
       MenuBackground = content.Load<Texture2D>("gfx/bg/main");
@@ -54,15 +49,15 @@ namespace FrozenPizza
       font = content.Load<SpriteFont>(@"font/hud");
 
       //Game
-      LoadMelee(content);
-      LoadPistols(content);
       LoadPlayers(content);
-      LoadProjectiles(content);
+      LoadMelee(content);
+      LoadFirearm(content);
+      //LoadProjectiles(content);
 
       return (true);
     }
 
-    public static Item getItemById(int id)
+    /*public static Item getItemById(int id)
     {
       if (id < (int)ItemIds.Pistol) //Melee
       {
@@ -86,11 +81,18 @@ namespace FrozenPizza
         return (PistolsList[id - (int)ItemIds.Pistol].Copy());
       }
       return (null);
-    }
+    }*/
 
-    public static bool LoadMelee(ContentManager content)
+    public static void LoadMelee(ContentManager content)
     {
-      XElement bundle = XElement.Load("Data/items/melee.xml");
+      string meleeData = File.ReadAllText("Data/items/melee.json");
+      MeleeList = JsonConvert.DeserializeObject<List<MeleeWeapon>>(meleeData);
+
+      foreach (var melee in MeleeList)
+      {
+        melee.texture = content.Load<Texture2D>("gfx/weapons/" + melee.id);
+      }
+      /*XElement bundle = XElement.Load("Data/items/melee.xml");
 
       Tilesets[(int)ItemType.Melee] = content.Load<Texture2D>("gfx/melee");
       foreach (var item in bundle.Elements("Item"))
@@ -99,11 +101,19 @@ namespace FrozenPizza
         MeleeList.Last().SetWeaponAttributes(item.Element("ResourceId").Value.ToString(), (int)item.Element("Damage"), (float)item.Element("Cooldown"));
         MeleeList.Last().LoadSounds(content);
       }
-      return (true);
+      return (true);*/
     }
 
-    public static bool LoadPistols(ContentManager content)
+    public static void LoadFirearm(ContentManager content)
     {
+      string fireData = File.ReadAllText("Data/items/weapons.json");
+      FirearmList = JsonConvert.DeserializeObject<List<FireWeapon>>(fireData);
+
+      foreach (var firearm in FirearmList)
+      {
+        firearm.texture = content.Load<Texture2D>("gfx/weapons/" + firearm.id);
+      }
+      /*
       XElement bundle = XElement.Load("Data/items/firearms.xml");
 
       Tilesets[(int)ItemType.Firearm] = content.Load<Texture2D>("gfx/firearms");
@@ -114,8 +124,9 @@ namespace FrozenPizza
         PistolsList.Last().SetFirearmAttributes((int)item.Element("Accuracy"), (int)item.Element("ClipSize"), (float)item.Element("ReloadCooldown"));
         PistolsList.Last().LoadSounds(content);
       }
-      return (true);
+      return (true);*/
     }
+
     public static bool LoadPlayers(ContentManager content)
     {
       Players = content.Load<Texture2D>("gfx/players");
@@ -132,11 +143,20 @@ namespace FrozenPizza
       PlayersSound[(int)PlayerSounds.Die] = content.Load<SoundEffect>("sounds/player/die");
       return (true);
     }
+
+    public static Item GetItemWithId(string id)
+    {
+      foreach (var melee in MeleeList) if (melee.id == id) return (melee.Copy());
+      foreach (var firearm in FirearmList) if (firearm.id == id) return (firearm.Copy());
+      return (null);
+    }
+
+    /*
     public static bool LoadProjectiles(ContentManager content)
     {
       Projectiles = content.Load<Texture2D>("gfx/projectiles");
       return (true);
-    }
+    }*/
 
     public static Texture2D LoadTileset(string tilesetName)
     {

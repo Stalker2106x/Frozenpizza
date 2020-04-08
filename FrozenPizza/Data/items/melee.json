@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Hands",
+    "id": "hands",
+    "weight": 0,
+    "damage": 10,
+    "cooldown": 0.75
+  },
+  {
+    "name": "Screwdriver",
+    "id": "screwdriver",
+    "weight": 0.5,
+    "damage": 10,
+    "cooldown": 0.3
+  },
+  {
+    "name": "Pizza Cutter",
+    "id": "pizzacutter",
+    "weight": 0.5,
+    "damage": 10,
+    "cooldown": 0.75
+  },
+  {
+    "name": "Machete",
+    "id": "machete",
+    "weight": 0,
+    "damage": 25,
+    "cooldown": 0.7
+  }
+]

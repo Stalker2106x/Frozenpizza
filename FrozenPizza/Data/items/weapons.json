@@ -1,0 +1,46 @@
+﻿[
+  {
+    "name": "Glock 18",
+    "id": "glock18",
+    "weight": 1,
+    "damage": 15,
+    "magazine": 10,
+	  "accuracy": 37,
+    "cooldown": 0.1,
+    "fireMode": "semiauto",
+    "reloadDelay": 0.7
+  },
+  {
+    "name": "Beretta M9",
+    "id": "m9",
+    "weight": 1,
+    "damage": 10,
+    "magazine": 15,
+	  "accuracy": 40,
+    "cooldown": 0.1,
+    "fireMode": "semiauto",
+    "reloadDelay": 0.7
+  },
+  {
+    "name": ".357 Magnum",
+    "id": "357",
+    "weight": 1,
+    "damage": 60,
+    "magazine": 6,
+	  "accuracy": 35,
+    "cooldown": 0.4,
+    "fireMode": "semiauto",
+    "reloadDelay": 0.7
+  },
+  {
+    "name": "Desert Eagle",
+    "id": "deagle",
+    "weight": 1,
+    "damage": 45,
+    "magazine": 7,
+	  "accuracy": 55,
+    "cooldown": 0.5,
+    "fireMode": "semiauto",
+    "reloadDelay": 0.7
+  }
+]

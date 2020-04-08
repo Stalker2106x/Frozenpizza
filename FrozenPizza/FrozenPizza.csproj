@@ -15,9 +15,40 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\bin\**" />
+    <Compile Remove="Data\cfg\**" />
+    <Compile Remove="Data\font\**" />
+    <Compile Remove="Data\gfx\**" />
+    <Compile Remove="Data\maps\**" />
+    <Compile Remove="Data\obj\**" />
+    <Compile Remove="Data\sounds\**" />
+    <EmbeddedResource Remove="Data\bin\**" />
+    <EmbeddedResource Remove="Data\cfg\**" />
+    <EmbeddedResource Remove="Data\font\**" />
+    <EmbeddedResource Remove="Data\gfx\**" />
+    <EmbeddedResource Remove="Data\maps\**" />
+    <EmbeddedResource Remove="Data\obj\**" />
+    <EmbeddedResource Remove="Data\sounds\**" />
+    <MonoGameContentReference Remove="Data\bin\**" />
+    <MonoGameContentReference Remove="Data\cfg\**" />
+    <MonoGameContentReference Remove="Data\font\**" />
+    <MonoGameContentReference Remove="Data\gfx\**" />
+    <MonoGameContentReference Remove="Data\maps\**" />
+    <MonoGameContentReference Remove="Data\obj\**" />
+    <MonoGameContentReference Remove="Data\sounds\**" />
+    <None Remove="Data\bin\**" />
+    <None Remove="Data\cfg\**" />
+    <None Remove="Data\font\**" />
+    <None Remove="Data\gfx\**" />
+    <None Remove="Data\maps\**" />
+    <None Remove="Data\obj\**" />
+    <None Remove="Data\sounds\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\Server\Payloads\EntitiesData.cs" Link="Network\Payloads\EntitiesData.cs" />
     <Compile Include="..\Server\Payloads\GameData.cs" Link="Network\Payloads\GameData.cs" />
-    <Compile Include="..\Server\Payloads\NewPlayerData.cs" Link="Network\Payloads\NewPlayerData.cs" />
+    <Compile Include="..\Server\Payloads\ItemData.cs" Link="Network\Payloads\ItemData.cs" />
     <Compile Include="..\Server\Payloads\PlayerData.cs" Link="Network\Payloads\PlayerData.cs" />
   </ItemGroup>
 

@@ -8,17 +8,29 @@ using System.Threading.Tasks;
 
 namespace FrozenPizza.Network
 {
+  public enum ConnectionStep
+  {
+    Begin,
+    SyncGamedata,
+    SyncEntities,
+    Handshake,
+    Synced
+  }
   public class ClientV2
   {
-    EventBasedNetListener _listener;
-    NetManager _client;
-    Task _runTask;
+    private EventBasedNetListener _listener;
+    private NetManager _client;
+    private Task _runTask;
+    private bool _quit;
+
+    public static ConnectionStep step;
 
     public ClientV2()
     {
+      _quit = false;
       _listener = new EventBasedNetListener();
       _client = new NetManager(_listener);
-      ClientHandlerV2.Reset();
+      step = ConnectionStep.Begin;
     }
     public void connect(string host, int port)
     {
@@ -39,13 +51,15 @@ namespace FrozenPizza.Network
     public void disconnect()
     {
       _client.Stop();
+      _quit = true;
+      _runTask.Wait();
     }
 
     public void run()
     {
       _runTask = Task.Run(() =>
       {
-        while (true)
+        while (!_quit)
         {
           _client.PollEvents();
           Thread.Sleep(15);

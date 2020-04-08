@@ -1,4 +1,6 @@
 ﻿
+using Server;
+
 namespace FPServer
 {
   public class Program
@@ -7,6 +9,7 @@ namespace FPServer
     static int Main(string[] args)
     {
       ServerHandlerV2.Initialize();
+      BaseCollection.Load();
 
       if (args.Length < 1)
         return (-1);

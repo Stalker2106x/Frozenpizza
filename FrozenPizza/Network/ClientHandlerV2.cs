@@ -1,4 +1,5 @@
-﻿using FrozenPizza.World;
+﻿using FrozenPizza.Entities;
+using FrozenPizza.World;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
@@ -12,35 +13,21 @@ using static LiteNetLib.EventBasedNetListener;
 
 namespace FrozenPizza.Network
 {
-  public enum ConnectionStep
+  public static class ClientHandlerV2
   {
-    Begin,
-    SyncGamedata,
-    SyncEntities,
-    Handshake,
-    Synced
-  }
-  public class ClientHandlerV2
-  {
-    public static ConnectionStep step;
     public static Dictionary<string, Action<string>> commands;
-
-    public static void Reset()
-    {
-      step = ConnectionStep.Begin;
-    }
-
     public static void Initialize()
     {
       commands = new Dictionary<string, Action<string>>()
       {
-        { ".WELCOME", (s) => { ContinueSync(); } },
+        { ".WELCOME", (s) => { ClientSenderV2.ContinueSync(); } },
         { "!GAMEDATA", ReceiveGamedata },
         { "!ENTITIES", ReceiveEntities },
         { ".HANDSHAKE", ReceiveHandshake },
         { ".NEWPLAYER", AddNewPlayer },
         { ".RMPLAYER", RemovePlayer },
-        { ".PLAYER", UpdatePlayer }
+        { ".PLAYER", UpdatePlayer },
+        { ".ITEM", UpdateItem }
       };
     }
 
@@ -63,36 +50,15 @@ namespace FrozenPizza.Network
       }
     }
 
-    public static void ContinueSync()
-    {
-      NetDataWriter writer = new NetDataWriter();
-      step += 1;
-      switch (step)
-      {
-        case ConnectionStep.SyncGamedata:
-          writer.Put("?GAMEDATA"); //Ask for gamedata
-          Engine.networkClient.send(writer, DeliveryMethod.ReliableOrdered);
-          break;
-        case ConnectionStep.SyncEntities:
-          writer.Put("?ENTITIES"); //Ask for entities
-          Engine.networkClient.send(writer, DeliveryMethod.ReliableOrdered);
-          break;
-        case ConnectionStep.Handshake:
-          writer.Put(".HANDSHAKE"); //Handshake
-          Engine.networkClient.send(writer, DeliveryMethod.ReliableOrdered);
-          break;
-      }
-    }
-
-    public static void ReceiveGamedata(string body)
+    public static void ReceiveGamedata(string body) //!GAMEDATA
     {
       GameData payload = JsonConvert.DeserializeObject<GameData>(body);
       GameMain.map = new Map(payload.mapName);
       GameMain.mainPlayer = new MainPlayer(payload.clientId, "Bernie");
-      ContinueSync();
+      ClientSenderV2.ContinueSync();
     }
 
-    public static void ReceiveEntities(string body)
+    public static void ReceiveEntities(string body) //!ENTITIES
     {
       GameMain.players = new List<Player>();
       EntitiesData payload = JsonConvert.DeserializeObject<EntitiesData>(body);
@@ -100,17 +66,23 @@ namespace FrozenPizza.Network
       {
         GameMain.players.Add(new Player(it.data.id, it.name, new Vector2(it.data.x, it.data.y), it.hp));
       });
+      payload.items.ForEach((it) =>
+      {
+        Item item = Collection.GetItemWithId(it.id);
+        item.position = new Point(it.x, it.y);
+        GameMain.map.items.Add(item);
+      });
       Console.WriteLine("Entities Received");
-      ContinueSync();
+      ClientSenderV2.ContinueSync();
     }
-    public static void ReceiveHandshake(string body)
+    public static void ReceiveHandshake(string body) //.HANDSHAKE
     {
       Console.WriteLine("Handshake Received");
       Engine.setState(GameState.Playing);
-      step = ConnectionStep.Synced; //Ready
+      ClientV2.step = ConnectionStep.Synced; //Ready
     }
 
-    public static void AddNewPlayer(string body)
+    public static void AddNewPlayer(string body) //.ADDPLAYER
     {
       NewPlayerData payload = JsonConvert.DeserializeObject<NewPlayerData>(body);
 
@@ -123,13 +95,22 @@ namespace FrozenPizza.Network
       GameMain.players.Remove(GameMain.players.First((it) => { return (it.id == id); }));
     }
 
-    public static void UpdatePlayer(string body)
+    public static void UpdatePlayer(string body) //.PLAYER
     {
       PlayerData payload = JsonConvert.DeserializeObject<PlayerData>(body);
 
       Player player = GameMain.players.First((it) => { return (it.id == payload.id); });
       player.position = new Vector2(payload.x, payload.y);
       player.orientation = payload.orientation;
+    }
+
+    public static void UpdateItem(string body) //.ITEM
+    {
+      ItemData payload = JsonConvert.DeserializeObject<ItemData>(body);
+
+      BaseItem item = GameMain.map.items.Find((it) => { return (it.uid == payload.uid); });
+      if (payload.onmap) item.position = new Point(payload.x, payload.y);
+      else item.position = null;
     }
   }
 }

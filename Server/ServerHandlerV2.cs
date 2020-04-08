@@ -1,10 +1,12 @@
 ﻿using FrozenPizza;
+using FrozenPizza.Entities;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using Newtonsoft.Json;
 using Server.Payloads;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -36,7 +38,8 @@ namespace FPServer
         {"?GAMEDATA", SendGamedata},
         {"?ENTITIES", SendEntities},
         {".HANDSHAKE", SendHandshake},
-        {".PLAYER", UpdatePlayer}
+        {".PLAYER", UpdatePlayer},
+        {".ITEM", UpdateItem}
       };
     }
     public static void Parse(NetPeer client, NetPacketReader reader, DeliveryMethod method)
@@ -70,7 +73,7 @@ namespace FPServer
     public static void SendEntities(NetPeer client, string body) //!ENTITIES
     {
       NetDataWriter writer = new NetDataWriter();
-      EntitiesData payload = new EntitiesData(client.Id, ServerV2.players.Values.ToList());
+      EntitiesData payload = new EntitiesData(client.Id, ServerV2.players.Values.ToList(), ServerV2.map.items);
 
       writer.Put("!ENTITIES "+JsonConvert.SerializeObject(payload));
       client.Send(writer, DeliveryMethod.ReliableOrdered);
@@ -99,6 +102,19 @@ namespace FPServer
       ServerV2.players[client].position = new Vector2(payload.x, payload.y);
       writer.Put(".PLAYER " + body);
       Program.server.broadcast(client, writer, DeliveryMethod.Unreliable);
+    }
+
+    public static void UpdateItem(NetPeer client, string body) //.ITEM
+    {
+      NetDataWriter writer = new NetDataWriter();
+      ItemData payload = JsonConvert.DeserializeObject<ItemData>(body);
+
+      BaseItem item = ServerV2.map.items.Find((it) => { return (it.uid == payload.uid); });
+      if (payload.onmap) item.position = new Point(payload.x, payload.y);
+      else item.position = null;
+
+      writer.Put(".ITEM " + body);
+      Program.server.broadcast(client, writer, DeliveryMethod.ReliableUnordered);
     }
   }
 }

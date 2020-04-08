@@ -18,7 +18,7 @@ namespace FPServer
     NetManager _server;
 
     //Game
-    public static BaseMap map;
+    public static ServerMap map;
     public static Dictionary<NetPeer, BasePlayer> players;
 
     public ServerV2(string mapName)
@@ -26,7 +26,7 @@ namespace FPServer
       _listener = new EventBasedNetListener();
       _server = new NetManager(_listener);
       _clients = new List<NetPeer>();
-      map = new BaseMap(mapName);
+      map = new ServerMap(mapName);
       players = new Dictionary<NetPeer, BasePlayer>();
     }
 
