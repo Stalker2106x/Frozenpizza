@@ -266,8 +266,8 @@ namespace FrozenPizza
     {
       for (int i = _projectiles.Count - 1; i >= 0; i--)
       {
-        if (!_projectiles[i].Update())
-          _projectiles.RemoveAt(i);
+        //if (!_projectiles[i].Update())
+          //_projectiles.RemoveAt(i);
       }
     }
 

@@ -46,5 +46,14 @@ namespace FrozenPizza.Network
       writer.Put(".ITEM " + JsonConvert.SerializeObject(payload));
       Engine.networkClient.send(writer, DeliveryMethod.ReliableUnordered);
     }
+
+    public static void SendProjectile(InteractionData payload) //.PROJECTILE
+    {
+      NetDataWriter writer = new NetDataWriter();
+
+      writer.Put(".PROJECTILE " + JsonConvert.SerializeObject(payload));
+      Engine.networkClient.send(writer, DeliveryMethod.ReliableUnordered);
+    }
+
   }
 }

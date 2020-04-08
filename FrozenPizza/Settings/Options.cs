@@ -15,7 +15,7 @@ namespace FrozenPizza.Settings
   /// </summary>
   public enum GameAction
   {
-    Fire,
+    UseHands,
     Aim,
     Reload,
     Forward,
@@ -23,7 +23,7 @@ namespace FrozenPizza.Settings
     StrafeLeft,
     StrafeRight,
     Sprint,
-    Use,
+    Interact,
     Drop,
     ToggleInventory,
     Menu
@@ -69,10 +69,10 @@ namespace FrozenPizza.Settings
     public void DefaultBindings()
     {
       Bindings = new Dictionary<GameAction, ControlPair>();
-      Bindings.Add(GameAction.Fire, new ControlPair(new Control(MouseButton.Left)));
+      Bindings.Add(GameAction.UseHands, new ControlPair(new Control(MouseButton.Left)));
       Bindings.Add(GameAction.Aim, new ControlPair(new Control(MouseButton.Right)));
       Bindings.Add(GameAction.Reload, new ControlPair(new Control(Keys.R)));
-      Bindings.Add(GameAction.Use, new ControlPair(new Control(Keys.E)));
+      Bindings.Add(GameAction.Interact, new ControlPair(new Control(Keys.E)));
       Bindings.Add(GameAction.Forward, new ControlPair(new Control(Keys.Z)));
       Bindings.Add(GameAction.Backward, new ControlPair(new Control(Keys.S)));
       Bindings.Add(GameAction.StrafeLeft, new ControlPair(new Control(Keys.Q)));

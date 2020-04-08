@@ -1,5 +1,6 @@
 ﻿#if GAME
   using Microsoft.Xna.Framework;
+  using Microsoft.Xna.Framework.Graphics;
 #else
   using System.Drawing;
   using System.Numerics;
@@ -8,18 +9,11 @@ using System;
 
 namespace FrozenPizza.Entities
 {
-  public enum ItemType
-  {
-    MeleeWeapon,
-    FireWeapon
-  }
-
   public class BaseItem
   {
     public int uid;
     public string name;
     public string id;
-    public ItemType type;
     public float weight;
     public Point size;
 
@@ -29,5 +23,20 @@ namespace FrozenPizza.Entities
     {
       return (BaseItem)this.MemberwiseClone();
     }
+
+    /// <summary>
+    /// Game specific logic
+    /// </summary>
+#if GAME
+    public Texture2D texture;
+    public virtual void use(Player player) { throw new Exception("BaseItem should be overriden"); }
+
+    public void Draw(SpriteBatch spriteBatch, Point tileSize)
+    {
+      if (position == null) return; //Not on world
+      spriteBatch.Draw(texture, new Rectangle(position.GetValueOrDefault().X * tileSize.X, position.GetValueOrDefault().Y * tileSize.Y, tileSize.X, tileSize.Y), Color.White);
+    }
+#endif
   }
+
 }

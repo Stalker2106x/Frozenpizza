@@ -21,6 +21,7 @@ namespace FrozenPizza
     public static List<FireWeapon> FirearmList;
     //public static Texture2D[] Tilesets;
     public static Texture2D Projectiles;
+    public static Texture2D projectile;
     public static Texture2D Players;
     public static SoundEffect[] PlayersSound;
 
@@ -49,39 +50,13 @@ namespace FrozenPizza
       font = content.Load<SpriteFont>(@"font/hud");
 
       //Game
+      projectile = content.Load<Texture2D>(@"gfx/projectile");
       LoadPlayers(content);
       LoadMelee(content);
       LoadFirearm(content);
-      //LoadProjectiles(content);
 
       return (true);
     }
-
-    /*public static Item getItemById(int id)
-    {
-      if (id < (int)ItemIds.Pistol) //Melee
-      {
-        return (MeleeList[id]);
-      }
-      else if (id >= (int)ItemIds.Pistol && id < (int)ItemIds.Rifle) //Pistol
-      {
-        return (PistolsList[id - (int)ItemIds.Pistol]);
-      }
-      return (null);
-    }
-
-    public static Item getNewItemById(Int64 uid, int id)
-    {
-      if (id < (int)ItemIds.Pistol) //Melee
-      {
-        return (MeleeList[id].Copy());
-      }
-      else if (id >= (int)ItemIds.Pistol && id < (int)ItemIds.Rifle) //Pistol
-      {
-        return (PistolsList[id - (int)ItemIds.Pistol].Copy());
-      }
-      return (null);
-    }*/
 
     public static void LoadMelee(ContentManager content)
     {
@@ -92,16 +67,6 @@ namespace FrozenPizza
       {
         melee.texture = content.Load<Texture2D>("gfx/weapons/" + melee.id);
       }
-      /*XElement bundle = XElement.Load("Data/items/melee.xml");
-
-      Tilesets[(int)ItemType.Melee] = content.Load<Texture2D>("gfx/melee");
-      foreach (var item in bundle.Elements("Item"))
-      {
-        MeleeList.Add(new Melee(-1, (int)item.Element("Id"), item.Element("Name").Value, (float)item.Element("Weight"), (float)item.Element("Size")));
-        MeleeList.Last().SetWeaponAttributes(item.Element("ResourceId").Value.ToString(), (int)item.Element("Damage"), (float)item.Element("Cooldown"));
-        MeleeList.Last().LoadSounds(content);
-      }
-      return (true);*/
     }
 
     public static void LoadFirearm(ContentManager content)
@@ -113,18 +78,6 @@ namespace FrozenPizza
       {
         firearm.texture = content.Load<Texture2D>("gfx/weapons/" + firearm.id);
       }
-      /*
-      XElement bundle = XElement.Load("Data/items/firearms.xml");
-
-      Tilesets[(int)ItemType.Firearm] = content.Load<Texture2D>("gfx/firearms");
-      foreach (var item in bundle.Elements("Item"))
-      {
-        PistolsList.Add(new Firearm(-1, (int)item.Element("Id"), item.Element("Name").Value, (float)item.Element("Weight"), (float)item.Element("Size")));
-        PistolsList.Last().SetWeaponAttributes(item.Element("ResourceId").Value.ToString(), (int)item.Element("Damage"), (float)item.Element("Cooldown"));
-        PistolsList.Last().SetFirearmAttributes((int)item.Element("Accuracy"), (int)item.Element("ClipSize"), (float)item.Element("ReloadCooldown"));
-        PistolsList.Last().LoadSounds(content);
-      }
-      return (true);*/
     }
 
     public static bool LoadPlayers(ContentManager content)
@@ -144,19 +97,12 @@ namespace FrozenPizza
       return (true);
     }
 
-    public static Item GetItemWithId(string id)
+    public static BaseItem GetItemWithId(string id)
     {
       foreach (var melee in MeleeList) if (melee.id == id) return (melee.Copy());
       foreach (var firearm in FirearmList) if (firearm.id == id) return (firearm.Copy());
       return (null);
     }
-
-    /*
-    public static bool LoadProjectiles(ContentManager content)
-    {
-      Projectiles = content.Load<Texture2D>("gfx/projectiles");
-      return (true);
-    }*/
 
     public static Texture2D LoadTileset(string tilesetName)
     {

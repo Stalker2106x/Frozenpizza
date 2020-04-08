@@ -49,10 +49,18 @@ namespace FrozenPizza
       graphics.IsFullScreen = Options.Config.Fullscreen;
       graphics.PreferredBackBufferWidth = Options.Config.Width;
       graphics.PreferredBackBufferHeight = Options.Config.Height;
+      graphics.PreferMultiSampling = true;
+      graphics.GraphicsProfile = GraphicsProfile.HiDef;
       graphics.SynchronizeWithVerticalRetrace = false;
-      graphics.ApplyChanges();
+      GraphicsDevice.PresentationParameters.MultiSampleCount = 8;
+      GraphicsDevice.RasterizerState = new RasterizerState()
+      {
+        CullMode = CullMode.None,
+        MultiSampleAntiAlias = true,
+      };
       IsFixedTimeStep = true;
       TargetElapsedTime = TimeSpan.FromSeconds(1.0 / 90.0); //Set FPS
+      graphics.ApplyChanges();
       MyraEnvironment.Game = this;
     }
 
@@ -113,6 +121,10 @@ namespace FrozenPizza
     public static void setCursor(bool state)
     {
       cursor.Show = state;
+    }
+    public static DeviceState getPrevDeviceState()
+    {
+      return (prevDeviceState);
     }
     public static DeviceState getDeviceState()
     {
@@ -204,12 +216,7 @@ namespace FrozenPizza
 
     public void exit()
     {
-      if (networkClient != null) networkClient.disconnect();
-      /*if (netHandle != null)
-      {
-        //NetHandler.disconnect();
-        //netHandle = null;
-      }*/
+      networkClient.disconnect();
       Exit();
     }
   }

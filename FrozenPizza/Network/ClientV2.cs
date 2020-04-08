@@ -10,7 +10,8 @@ namespace FrozenPizza.Network
 {
   public enum ConnectionStep
   {
-    Begin,
+    Disconnected,
+    Connecting,
     SyncGamedata,
     SyncEntities,
     Handshake,
@@ -30,16 +31,19 @@ namespace FrozenPizza.Network
       _quit = false;
       _listener = new EventBasedNetListener();
       _client = new NetManager(_listener);
-      step = ConnectionStep.Begin;
+      step = ConnectionStep.Disconnected;
     }
     public void connect(string host, int port)
     {
+      if (step != ConnectionStep.Disconnected) return; //One connection at a time
       Console.WriteLine("Client connecting...");
+      step++;
       _client.Start();
       _client.Connect(host, port, "SomeConnectionKey" /* text key or NetDataWriter */);
       //Disconnect handler
       _listener.PeerDisconnectedEvent += (peer, disconnectInfo) =>
       {
+        step = ConnectionStep.Disconnected;
         Console.WriteLine("Disconnected: (ORG:{0}) {1}", peer.EndPoint, disconnectInfo.Reason.ToString());
         Engine.setState(GameState.Menu);
         GameMain.Unload();

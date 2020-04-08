@@ -20,13 +20,6 @@ namespace FrozenPizza
 {
   public class MainPlayer : Player
   {
-    public enum Direction
-    {
-      Left,
-      Right,
-      Forward,
-      Backward
-    }
     //Triggers
     public bool cooldown { get; set; }
     public bool inventoryOpen { get; set; }
@@ -45,7 +38,7 @@ namespace FrozenPizza
     float _aimSensivity;
 
 
-    public MainPlayer(int id, String name) : base(id, name, new Vector2(0, 0))
+    public MainPlayer(int id, String name) : base(id, name, new Vector2(1200, 1000))
     {
       //Set triggers
       inventoryOpen = false;
@@ -178,15 +171,6 @@ namespace FrozenPizza
       }
     }
 
-    Vector2 getMoveVector(Direction direction, float move)
-    {
-      if (direction == Direction.Left) return (new Vector2((float)Math.Cos(_orientation) * -move, (float)Math.Sin(_orientation) * move));
-      if (direction == Direction.Right) return (new Vector2((float)Math.Cos(_orientation) * move, (float)-Math.Sin(_orientation) * move));
-      if (direction == Direction.Forward) return (new Vector2((float)Math.Sin(_orientation) * -move, (float)Math.Cos(_orientation) * -move));
-      if (direction == Direction.Backward) return (new Vector2((float)Math.Sin(_orientation) * move, (float)Math.Cos(_orientation) * move));
-      return (Vector2.Zero);
-    }
-
     public enum Axis
     {
       Horizontal,
@@ -231,10 +215,10 @@ namespace FrozenPizza
       if (Options.Config.Bindings[GameAction.Sprint].IsControlPressed(state, prevState)) _sprinting = true;
       else if (Options.Config.Bindings[GameAction.Sprint].IsControlReleased(state, prevState)) _sprinting = false;
 
-      if (Options.Config.Bindings[GameAction.StrafeLeft].IsControlDown(state)) movement += getMoveVector(Direction.Left, speed * 1.5f);
-      if (Options.Config.Bindings[GameAction.StrafeRight].IsControlDown(state)) movement += getMoveVector(Direction.Right, speed * 1.5f);
-      if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state)) movement += getMoveVector(Direction.Forward, speed);
-      if (Options.Config.Bindings[GameAction.Backward].IsControlDown(state)) movement += getMoveVector(Direction.Backward, speed);
+      if (Options.Config.Bindings[GameAction.StrafeLeft].IsControlDown(state)) movement += getDirectionVector(Direction.Left, speed * 1.5f);
+      if (Options.Config.Bindings[GameAction.StrafeRight].IsControlDown(state)) movement += getDirectionVector(Direction.Right, speed * 1.5f);
+      if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state)) movement += getDirectionVector(Direction.Forward, speed);
+      if (Options.Config.Bindings[GameAction.Backward].IsControlDown(state)) movement += getDirectionVector(Direction.Backward, speed);
 
       speed = getSpeed(); //Reset speed
       if (Options.Config.Bindings[GameAction.Forward].IsControlDown(state))
@@ -270,6 +254,8 @@ namespace FrozenPizza
     //Use Hands
     public void useHands()
     {
+      if (hands == null) return;
+      hands.use(this);
       /*if (hands == null || hands.GetType() == typeof(Melee))
       {
         Melee weapon;
@@ -390,8 +376,9 @@ namespace FrozenPizza
       updateHands(gameTime, state, prevState);
       if (Options.Config.Bindings[GameAction.ToggleInventory].IsControlPressed(state, prevState))
         toggleInventory(cursor);
-      if (Options.Config.Bindings[GameAction.Use].IsControlPressed(state, prevState)) interact();
+      if (Options.Config.Bindings[GameAction.Interact].IsControlPressed(state, prevState)) interact();
       if (Options.Config.Bindings[GameAction.Drop].IsControlPressed(state, prevState)) dropItem(0);
+      if (Options.Config.Bindings[GameAction.UseHands].IsControlDown(state) && !cooldown) useHands();
       cam.Pos = _position;
       _networkUpdateTimer.Update(gameTime);
     }

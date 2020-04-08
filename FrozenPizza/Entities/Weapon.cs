@@ -1,53 +1,71 @@
-﻿using System;
+﻿#if GAME
+using FrozenPizza.Network;
+using FrozenPizza.Settings;
+using Server.Payloads;
+#endif
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace FrozenPizza.Entities
 {
-
-  public class Weapon : Item
+  /// <summary>
+  /// Common base class for weapons
+  /// </summary>
+  public class BaseWeapon : BaseItem
   {
     public float cooldown;
-    public float damage;
+    public int damage;
 
-    public Weapon() : base()
+    /// <summary>
+    /// Game specific logic
+    /// </summary>
+#if GAME
+    public override void use(Player player)
     {
-
+      throw new Exception("Unknown Base Weapon");
     }
+#endif
   }
 
   /// <summary>
   /// Melee Wepaon
   /// </summary>
-  public class MeleeWeapon : Weapon
+  public class MeleeWeapon : BaseWeapon
   {
     public MeleeWeapon() : base()
     {
 
     }
 
-    public MeleeWeapon Copy()
+    public new MeleeWeapon Copy()
     {
       return (MeleeWeapon)this.MemberwiseClone();
     }
 
-    public void use()
+    /// <summary>
+    /// Game specific logic
+    /// </summary>
+#if GAME
+    public override void use(Player player)
     {
-
     }
+#endif
   }
 
+  /// <summary>
+  /// Firearm
+  /// </summary>
   public enum FireMode
   {
     FullAuto,
     SemiAuto
   }
 
-  /// <summary>
-  /// Firearm
-  /// </summary>
-  public class FireWeapon : Weapon
+  public class FireWeapon : BaseWeapon
   {
+    private static Random _randomGenerator = new Random();
+
     public int ammo;
     public int magazineSize;
     public float reloadDelay;
@@ -60,19 +78,28 @@ namespace FrozenPizza.Entities
     {
 
     }
-    public FireWeapon Copy()
+
+    public new FireWeapon Copy()
     {
       return (FireWeapon)this.MemberwiseClone();
     }
 
-    public void use()
+    /// <summary>
+    /// Game specific logic
+    /// </summary>
+#if GAME
+    public override void use(Player player)
     {
-
+      if (fireMode == FireMode.SemiAuto && Options.Config.Bindings[GameAction.UseHands].IsControlHeld(Engine.getDeviceState(), Engine.getPrevDeviceState())) return;
+      float[] angle = GameMain.mainPlayer.getAimAccuracyAngle();
+      GameMain.projectiles.Add(new Projectile(player.position + player.getDirectionVector(Direction.Forward, 10), (int)(player.orientation + (_randomGenerator.Next((int)angle[1] * 10, (int)angle[0] * 10) / 10) ), 200.0f, damage));
+      ClientSenderV2.SendProjectile(new InteractionData(player.id, ActionType.Fire, damage));
     }
 
     public void reload()
     {
 
     }
+#endif
   }
 }

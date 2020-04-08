@@ -18,6 +18,13 @@ namespace FrozenPizza
     Hurt,
     Die
   }
+  public enum Direction
+  {
+    Left,
+    Right,
+    Forward,
+    Backward
+  }
 
   public class Player : BasePlayer
   {
@@ -38,6 +45,15 @@ namespace FrozenPizza
       _hp -= value;
       _sounds[(int)PlayerSounds.Hurt].Play(Options.Config.SoundVolume, 0f, 0f);
       if (_hp <= 0) die();
+    }
+
+    public Vector2 getDirectionVector(Direction direction, float move)
+    {
+      if (direction == Direction.Left) return (new Vector2((float)Math.Cos(_orientation) * -move, (float)Math.Sin(_orientation) * move));
+      if (direction == Direction.Right) return (new Vector2((float)Math.Cos(_orientation) * move, (float)-Math.Sin(_orientation) * move));
+      if (direction == Direction.Forward) return (new Vector2((float)Math.Sin(_orientation) * -move, (float)Math.Cos(_orientation) * -move));
+      if (direction == Direction.Backward) return (new Vector2((float)Math.Sin(_orientation) * move, (float)Math.Cos(_orientation) * move));
+      return (Vector2.Zero);
     }
 
     //Reports death from server to player

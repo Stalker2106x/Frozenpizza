@@ -33,7 +33,7 @@ namespace FPServer
         switch ((MetaTile)tile.Gid)
         {
           case MetaTile.Melee:
-            var melee = BaseCollection.MeleeList[_randomGenerator.Next(0, BaseCollection.MeleeList.Count)].Copy();
+            var melee = BaseCollection.MeleeList[_randomGenerator.Next(1, BaseCollection.MeleeList.Count)].Copy();
             melee.position = new Point(tile.X, tile.Y);
             melee.uid = uid;
             items.Add(melee);

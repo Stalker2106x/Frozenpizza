@@ -14,7 +14,7 @@ namespace FrozenPizza
     Bullet,
     Arrow
   }
-  public class Projectile
+  public class Projectilez
   {
     Vector2 Pos { get; set; }
     float Angle { get; set; }
@@ -25,7 +25,7 @@ namespace FrozenPizza
     Rectangle _skinRect;
 
     //Creates a projectile from network
-    public Projectile(int id, ProjectileType type, Vector2 pos, float angle, float velocity, int damage)
+    public Projectilez(int id, ProjectileType type, Vector2 pos, float angle, float velocity, int damage)
     {
       Type = type;
       Pos = pos;

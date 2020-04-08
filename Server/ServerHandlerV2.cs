@@ -39,7 +39,8 @@ namespace FPServer
         {"?ENTITIES", SendEntities},
         {".HANDSHAKE", SendHandshake},
         {".PLAYER", UpdatePlayer},
-        {".ITEM", UpdateItem}
+        {".ITEM", UpdateItem},
+        {".PROJECTILE", UpdateProjectile}
       };
     }
     public static void Parse(NetPeer client, NetPacketReader reader, DeliveryMethod method)
@@ -106,14 +107,22 @@ namespace FPServer
 
     public static void UpdateItem(NetPeer client, string body) //.ITEM
     {
+      Console.WriteLine(body);
       NetDataWriter writer = new NetDataWriter();
       ItemData payload = JsonConvert.DeserializeObject<ItemData>(body);
 
       BaseItem item = ServerV2.map.items.Find((it) => { return (it.uid == payload.uid); });
-      if (payload.onmap) item.position = new Point(payload.x, payload.y);
-      else item.position = null;
+      item.position = payload.GetPosition();
 
       writer.Put(".ITEM " + body);
+      Program.server.broadcast(client, writer, DeliveryMethod.ReliableUnordered);
+    }
+    public static void UpdateProjectile(NetPeer client, string body) //.PROJECTILE
+    {
+      Console.WriteLine(body);
+      NetDataWriter writer = new NetDataWriter();
+
+      writer.Put(".PROJECTILE " + body);
       Program.server.broadcast(client, writer, DeliveryMethod.ReliableUnordered);
     }
   }

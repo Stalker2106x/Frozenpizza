@@ -1,4 +1,5 @@
-﻿using FrozenPizza.Settings;
+﻿using FrozenPizza.Entities;
+using FrozenPizza.Settings;
 using FrozenPizza.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -17,6 +18,8 @@ namespace FrozenPizza
     public static MainPlayer mainPlayer { get; set; }
     public static List<Player> players;
 
+    public static List<Projectile> projectiles;
+
     static Camera cam;
     public static HUD hud;
 
@@ -24,6 +27,7 @@ namespace FrozenPizza
     {
       cam = new Camera(graphics);
       hud = new HUD(graphics, cam);
+      projectiles = new List<Projectile>();
     }
 
     public static void Unload()
@@ -31,12 +35,17 @@ namespace FrozenPizza
       map = null;
       mainPlayer = null;
       players = null;
+      projectiles = null;
     }
 
     public static void Update(GameTime gameTime, DeviceState state, DeviceState prevState, Cursor cursor)
     {
       //map.Update(); //Update world
       mainPlayer.Update(gameTime, map, state, prevState, cam, cursor);
+      for (int i = projectiles.Count - 1; i >= 0; i--)
+      {
+        if (!projectiles[i].Update(gameTime)) projectiles.RemoveAt(i);
+      }
       hud.Update(state, prevState, mainPlayer);
       if (mainPlayer.active && !mainPlayer.inventoryOpen) //If we are ingame reset mouse each loop
         Mouse.SetPosition(cam.getViewport().Width / 2, cam.getViewport().Height / 2);
@@ -46,6 +55,7 @@ namespace FrozenPizza
       spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, cam.getTransformation());
       map.Draw(spriteBatch);
       mainPlayer.Draw(spriteBatch);
+      foreach (var projectile in projectiles) projectile.Draw(spriteBatch);
       foreach (var player in players) player.Draw(spriteBatch); //Draw players
       spriteBatch.End();
       spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);

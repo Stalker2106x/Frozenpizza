@@ -26,6 +26,7 @@ namespace FrozenPizza.Network
         { ".HANDSHAKE", ReceiveHandshake },
         { ".NEWPLAYER", AddNewPlayer },
         { ".RMPLAYER", RemovePlayer },
+        { ".PROJECTILE", AddProjectile },
         { ".PLAYER", UpdatePlayer },
         { ".ITEM", UpdateItem }
       };
@@ -68,16 +69,17 @@ namespace FrozenPizza.Network
       });
       payload.items.ForEach((it) =>
       {
-        Item item = Collection.GetItemWithId(it.id);
-        item.position = new Point(it.x, it.y);
+        var item = Collection.GetItemWithId(it.id);
+        item.uid = it.uid;
+        item.position = it.GetPosition();
         GameMain.map.items.Add(item);
       });
-      Console.WriteLine("Entities Received");
+      Console.WriteLine(body);
       ClientSenderV2.ContinueSync();
     }
     public static void ReceiveHandshake(string body) //.HANDSHAKE
     {
-      Console.WriteLine("Handshake Received");
+      Console.WriteLine("Handshake");
       Engine.setState(GameState.Playing);
       ClientV2.step = ConnectionStep.Synced; //Ready
     }
@@ -88,7 +90,15 @@ namespace FrozenPizza.Network
 
       GameMain.players.Add(new Player(payload.data.id, payload.name, new Vector2(payload.data.x, payload.data.y), payload.hp));
     }
-    public static void RemovePlayer(string body)
+    
+    public static void AddProjectile(string body) //.PROJECTILE"
+    {
+      InteractionData payload = JsonConvert.DeserializeObject<InteractionData>(body);
+      var player = GameMain.players.First((it) => { return (it.id == payload.playerId); });
+      GameMain.projectiles.Add(new Projectile(player.position, player.orientation, 200f, (int)payload.value));
+    }
+
+    public static void RemovePlayer(string body) //.RMPLAYER
     {
       int id;
       int.TryParse(body, out id);
@@ -109,8 +119,7 @@ namespace FrozenPizza.Network
       ItemData payload = JsonConvert.DeserializeObject<ItemData>(body);
 
       BaseItem item = GameMain.map.items.Find((it) => { return (it.uid == payload.uid); });
-      if (payload.onmap) item.position = new Point(payload.x, payload.y);
-      else item.position = null;
+      item.position = payload.GetPosition();
     }
   }
 }

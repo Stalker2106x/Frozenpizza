@@ -13,7 +13,7 @@ namespace FrozenPizza.World
     Texture2D _tileset;
     int _tilesetStartGid;
 
-    public List<Item> items;
+    public List<BaseItem> items;
 
     enum Tileset {
       Meta = 0,
@@ -22,7 +22,7 @@ namespace FrozenPizza.World
 
     public Map(string mapName) : base(mapName)
     {
-      items = new List<Item>();
+      items = new List<BaseItem>();
       _tileset = Collection.LoadTileset(_map.Tilesets[(int)Tileset.City].Name.ToString());
 
       _tilesetStartGid = (int)(_map.Tilesets[0].Image.Width / _tileSize.X); //Compute meta size for offset

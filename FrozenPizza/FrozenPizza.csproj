@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;GAME</DefineConstants>
+    <DefineConstants>GAME</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>GAME</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -48,6 +51,7 @@
   <ItemGroup>
     <Compile Include="..\Server\Payloads\EntitiesData.cs" Link="Network\Payloads\EntitiesData.cs" />
     <Compile Include="..\Server\Payloads\GameData.cs" Link="Network\Payloads\GameData.cs" />
+    <Compile Include="..\Server\Payloads\InteractionData.cs" Link="Network\Payloads\InteractionData.cs" />
     <Compile Include="..\Server\Payloads\ItemData.cs" Link="Network\Payloads\ItemData.cs" />
     <Compile Include="..\Server\Payloads\PlayerData.cs" Link="Network\Payloads\PlayerData.cs" />
   </ItemGroup>

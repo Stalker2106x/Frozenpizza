@@ -11,13 +11,18 @@
 
   <ItemGroup>
     <Compile Include="..\FrozenPizza\Characters\BasePlayer.cs" Link="BasePlayer.cs" />
-    <Compile Include="..\FrozenPizza\Entities\BaseItem.cs" Link="BaseItem.cs" />
+    <Compile Include="..\FrozenPizza\Entities\BaseItem.cs" Link="Entities\BaseItem.cs" />
+    <Compile Include="..\FrozenPizza\Entities\Weapon.cs" Link="Entities\Weapon.cs" />
     <Compile Include="..\FrozenPizza\World\BaseMap.cs" Link="BaseMap.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="LiteNetLib" Version="0.8.3.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Entities\" />
   </ItemGroup>
 
 </Project>

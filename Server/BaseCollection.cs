@@ -7,10 +7,13 @@ using System.Text;
 
 namespace FPServer
 {
+  /// <summary>
+  /// Holds basic representation of items
+  /// </summary>
   public static class BaseCollection
   {
-    public static List<BaseItem> MeleeList;
-    public static List<BaseItem> FirearmList;
+    public static List<MeleeWeapon> MeleeList;
+    public static List<FireWeapon> FirearmList;
     public static void Load()
     {
       LoadMelee();
@@ -20,13 +23,13 @@ namespace FPServer
     public static void LoadMelee()
     {
       string meleeData = File.ReadAllText("Data/items/melee.json");
-      MeleeList = JsonConvert.DeserializeObject<List<BaseItem>>(meleeData);
+      MeleeList = JsonConvert.DeserializeObject<List<MeleeWeapon>>(meleeData);
     }
 
     public static void LoadFirearm()
     {
       string fireData = File.ReadAllText("Data/items/weapons.json");
-      FirearmList = JsonConvert.DeserializeObject<List<BaseItem>>(fireData);
+      FirearmList = JsonConvert.DeserializeObject<List<FireWeapon>>(fireData);
     }
 
   }
