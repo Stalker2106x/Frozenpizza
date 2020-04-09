@@ -1,11 +1,14 @@
 ﻿using FrozenPizza.Network;
 using FrozenPizza.Settings;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Myra;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 
 namespace FrozenPizza
@@ -20,6 +23,38 @@ namespace FrozenPizza
       //Stylesheet.Current.ComboBoxStyle.Width = 100;
       //Stylesheet.Current.TextBoxStyle.Width = 100;
     }
+
+    /// <summary>
+    /// Load default styles for menus
+    /// </summary>
+    public static void LoadUIStylesheet()
+    {
+      Stylesheet.Current.ButtonStyle.Width = 500;
+      Stylesheet.Current.ButtonStyle.Background = new ColoredRegion(DefaultAssets.WhiteRegion, Color.Transparent);
+      Stylesheet.Current.ButtonStyle.OverBackground = new ColoredRegion(DefaultAssets.WhiteRegion, new Color(255, 0, 0, 0.1f));
+      Stylesheet.Current.ButtonStyle.PressedBackground = new ColoredRegion(DefaultAssets.WhiteRegion, new Color(255, 0, 0, 0.2f));
+      //Stylesheet.Current.TextBoxStyle.Font = Resources.regularFont;
+      //Stylesheet.Current.ComboBoxStyle.LabelStyle.Font = Resources.regularFont;
+      Stylesheet.Current.ComboBoxStyle.Width = 200;
+      Stylesheet.Current.HorizontalSliderStyle.Width = 200;
+      //Stylesheet.Current.LabelStyle.Font = Resources.titleFont;
+    }
+
+    /// <summary>
+    /// Inject version footer to current Desktop
+    /// </summary>
+    public static void AddVersionFooter(Panel panel)
+    {
+
+      //Stylesheet.Current.LabelStyle.Font = Resources.regularFont;
+      Label version = new Label();
+      version.HorizontalAlignment = HorizontalAlignment.Right;
+      version.VerticalAlignment = VerticalAlignment.Bottom;
+      version.Text = "v" + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+      panel.Widgets.Add(version);
+    }
+
 
     public static void MainMenu()
     {
@@ -71,6 +106,7 @@ namespace FrozenPizza
       grid.Widgets.Add(quitBtn);
 
       mainPanel.Widgets.Add(grid);
+      AddVersionFooter(mainPanel);
       Desktop.Root = mainPanel;
     }
 
