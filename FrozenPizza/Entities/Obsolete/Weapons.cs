@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Audio;
 using FrozenPizza.Settings;
+using FrozenPizza.Entities;
 
 namespace FrozenPizza
 {
@@ -134,6 +135,11 @@ namespace FrozenPizza
       Sounds[(int)FirearmActions.DryFire] = content.Load<SoundEffect>("sounds/weapon/dryfire");
       Sounds[(int)FirearmActions.Reload] = content.Load<SoundEffect>("sounds/weapon/" + ResourceId + "/reload");
 
+    }
+
+    public static explicit operator Firearm(BaseItem v)
+    {
+      throw new NotImplementedException();
     }
   }
 }

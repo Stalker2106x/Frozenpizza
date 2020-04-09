@@ -74,11 +74,6 @@ namespace FrozenPizza.Entities
 
     public float accuracy;
 
-    public FireWeapon() : base()
-    {
-
-    }
-
     public new FireWeapon Copy()
     {
       return (FireWeapon)this.MemberwiseClone();
@@ -91,14 +86,22 @@ namespace FrozenPizza.Entities
     public override void use(Player player)
     {
       if (fireMode == FireMode.SemiAuto && Options.Config.Bindings[GameAction.UseHands].IsControlHeld(Engine.getDeviceState(), Engine.getPrevDeviceState())) return;
+      if (ammo <= 0)
+      {
+        Collection.Dryfire.Play(Options.Config.SoundVolume, 0f, 0f);
+        return;
+      }
+      ammo--;
       float[] angle = GameMain.mainPlayer.getAimAccuracyAngle();
+      sounds["use"].Play(Options.Config.SoundVolume, 0f, 0f);
       GameMain.projectiles.Add(new Projectile(player.position + player.getDirectionVector(Direction.Forward, 10), (int)(player.orientation + (_randomGenerator.Next((int)angle[1] * 10, (int)angle[0] * 10) / 10) ), 200.0f, damage));
       ClientSenderV2.SendProjectile(new InteractionData(player.id, ActionType.Fire, damage));
     }
 
     public void reload()
     {
-
+      sounds["reload"].Play(Options.Config.SoundVolume, 0f, 0f);
+      ammo = magazineSize;
     }
 #endif
   }

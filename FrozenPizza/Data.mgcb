@@ -460,75 +460,75 @@
 /processorParam:Quality=Best
 /build:Data/sounds/player/step4.wav
 
-#begin Data/sounds/weapon/357magnum/fire.wav
+#begin Data/sounds/weapons/357/fire.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Data/sounds/weapon/357magnum/fire.wav
+/build:Data/sounds/weapons/357/fire.wav
 
-#begin Data/sounds/weapon/357magnum/reload.wav
+#begin Data/sounds/weapons/357/reload.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Data/sounds/weapon/357magnum/reload.wav
+/build:Data/sounds/weapons/357/reload.wav
 
-#begin Data/sounds/weapon/berettam9/fire.wav
+#begin Data/sounds/weapons/blade/attack.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Data/sounds/weapon/berettam9/fire.wav
+/build:Data/sounds/weapons/blade/attack.wav
 
-#begin Data/sounds/weapon/berettam9/reload.wav
+#begin Data/sounds/weapons/deagle/fire.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Data/sounds/weapon/berettam9/reload.wav
+/build:Data/sounds/weapons/deagle/fire.wav
 
-#begin Data/sounds/weapon/blade/attack.wav
+#begin Data/sounds/weapons/deagle/reload.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Data/sounds/weapon/blade/attack.wav
+/build:Data/sounds/weapons/deagle/reload.wav
 
-#begin Data/sounds/weapon/deagle/fire.wav
+#begin Data/sounds/weapons/dryfire.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Data/sounds/weapon/deagle/fire.wav
+/build:Data/sounds/weapons/dryfire.wav
 
-#begin Data/sounds/weapon/deagle/reload.wav
+#begin Data/sounds/weapons/glock18/fire.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Data/sounds/weapon/deagle/reload.wav
+/build:Data/sounds/weapons/glock18/fire.wav
 
-#begin Data/sounds/weapon/dryfire.wav
+#begin Data/sounds/weapons/glock18/reload.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Data/sounds/weapon/dryfire.wav
+/build:Data/sounds/weapons/glock18/reload.wav
 
-#begin Data/sounds/weapon/glock18/fire.wav
+#begin Data/sounds/weapons/hands/attack.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Data/sounds/weapon/glock18/fire.wav
+/build:Data/sounds/weapons/hands/attack.wav
 
-#begin Data/sounds/weapon/glock18/reload.wav
+#begin Data/sounds/weapons/m9/fire.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Data/sounds/weapon/glock18/reload.wav
+/build:Data/sounds/weapons/m9/fire.wav
 
-#begin Data/sounds/weapon/hands/attack.wav
+#begin Data/sounds/weapons/m9/reload.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Data/sounds/weapon/hands/attack.wav
+/build:Data/sounds/weapons/m9/reload.wav
 
-#begin Data/sounds/weapon/tool/attack.wav
+#begin Data/sounds/weapons/tool/attack.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Data/sounds/weapon/tool/attack.wav
+/build:Data/sounds/weapons/tool/attack.wav
 

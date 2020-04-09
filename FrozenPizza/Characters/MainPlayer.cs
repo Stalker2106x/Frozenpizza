@@ -252,26 +252,21 @@ namespace FrozenPizza
     }
 
     //Use Hands
-    public void useHands()
+    public void useHands(GameAction type)
     {
       if (hands == null) return;
-      hands.use(this);
-      /*if (hands == null || hands.GetType() == typeof(Melee))
+      switch (type)
       {
-        Melee weapon;
-
-        if (hands == null)
-          weapon = Collection.MeleeList[0];
-        else
-          weapon = (Melee)hands;
-        weapon.attack(_position);
+        case GameAction.UseHands:
+          hands.use(this);
+          break;
+        case GameAction.Reload:
+          FireWeapon weapon;
+          if ((weapon = hands as FireWeapon) != null) weapon.reload();
+          break;
+        default:
+          break;
       }
-      else if (hands.GetType() == typeof(Firearm))
-      {
-        Firearm weapon = (Firearm)hands;
-
-        weapon.fire(_position, getAimAccuracyAngleRelative());
-      }*/
     }
 
     //Check Hands events (Reload, fire, ...)
@@ -378,7 +373,8 @@ namespace FrozenPizza
         toggleInventory(cursor);
       if (Options.Config.Bindings[GameAction.Interact].IsControlPressed(state, prevState)) interact();
       if (Options.Config.Bindings[GameAction.Drop].IsControlPressed(state, prevState)) dropItem(0);
-      if (Options.Config.Bindings[GameAction.UseHands].IsControlDown(state) && !cooldown) useHands();
+      if (Options.Config.Bindings[GameAction.UseHands].IsControlDown(state) && !cooldown) useHands(GameAction.UseHands);
+      if (Options.Config.Bindings[GameAction.Reload].IsControlPressed(state, prevState) && !cooldown) useHands(GameAction.Reload);
       cam.Pos = _position;
       _networkUpdateTimer.Update(gameTime);
     }
