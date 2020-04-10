@@ -25,9 +25,10 @@ namespace FrozenPizza
 
     public static void Load(GraphicsDevice graphics)
     {
+      players = new List<Player>();
+      projectiles = new List<Projectile>();
       cam = new Camera(graphics);
       hud = new HUD(graphics, cam);
-      projectiles = new List<Projectile>();
     }
 
     public static void Unload()
@@ -47,7 +48,7 @@ namespace FrozenPizza
         if (!projectiles[i].Update(gameTime)) projectiles.RemoveAt(i);
       }
       hud.Update(state, prevState, mainPlayer);
-      if (mainPlayer.active && !mainPlayer.inventoryOpen) //If we are ingame reset mouse each loop
+      if (mainPlayer.active && !hud.overlayActive) //If we are ingame reset mouse each loop
         Mouse.SetPosition(cam.getViewport().Width / 2, cam.getViewport().Height / 2);
     }
     public static void Draw(SpriteBatch spriteBatch, GameTime gameTime, GraphicsDevice graphics)

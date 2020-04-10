@@ -61,7 +61,6 @@ namespace FrozenPizza.Network
 
     public static void ReceiveEntities(string body) //!ENTITIES
     {
-      GameMain.players = new List<Player>();
       EntitiesData payload = JsonConvert.DeserializeObject<EntitiesData>(body);
       payload.players.ForEach((it) =>
       {

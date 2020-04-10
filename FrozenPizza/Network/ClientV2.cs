@@ -31,8 +31,10 @@ namespace FrozenPizza.Network
       _quit = false;
       _listener = new EventBasedNetListener();
       _client = new NetManager(_listener);
+      _client.DisconnectTimeout = 60000;
       step = ConnectionStep.Disconnected;
     }
+
     public void connect(string host, int port)
     {
       if (step != ConnectionStep.Disconnected) return; //One connection at a time

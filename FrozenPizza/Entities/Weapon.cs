@@ -1,7 +1,9 @@
 ﻿#if GAME
-using FrozenPizza.Network;
-using FrozenPizza.Settings;
-using Server.Payloads;
+  using FrozenPizza.Network;
+  using FrozenPizza.Settings;
+  using FrozenPizza.Utils;
+  using Microsoft.Xna.Framework;
+  using Server.Payloads;
 #endif
 using System;
 using System.Collections.Generic;
@@ -17,13 +19,36 @@ namespace FrozenPizza.Entities
     public float cooldown;
     public int damage;
 
+    public BaseWeapon() : base()
+    {
+#if GAME
+      useCooldown = new Timer();
+#endif
+    }
+
+    public override void Init()
+    {
+      base.Init();
+#if GAME
+      useCooldown.addAction(TimerDirection.Forward, cooldown, TimeoutBehaviour.Reset, () => { });
+#endif
+    }
+
     /// <summary>
     /// Game specific logic
     /// </summary>
 #if GAME
+    public Timer useCooldown;
+
+    public override void Update(GameTime gameTime)
+    {
+      useCooldown.Update(gameTime);
+    }
+
     public override void use(Player player)
     {
-      throw new Exception("Unknown Base Weapon");
+      if (useCooldown.getDuration() != 0) return;
+      useCooldown.Start();
     }
 #endif
   }
@@ -47,6 +72,7 @@ namespace FrozenPizza.Entities
     /// Game specific logic
     /// </summary>
 #if GAME
+
     public override void use(Player player)
     {
     }
@@ -70,9 +96,23 @@ namespace FrozenPizza.Entities
     public int magazineSize;
     public float reloadDelay;
 
-    public FireMode fireMode;
-
     public float accuracy;
+
+
+    public FireWeapon() : base()
+    {
+#if GAME
+      reloadTimer = new Timer();
+#endif
+    }
+
+    public override void Init()
+    {
+      base.Init();
+#if GAME
+      reloadTimer.addAction(TimerDirection.Forward, reloadDelay, TimeoutBehaviour.Reset, () => { });
+#endif
+    }
 
     public new FireWeapon Copy()
     {
@@ -83,25 +123,38 @@ namespace FrozenPizza.Entities
     /// Game specific logic
     /// </summary>
 #if GAME
+    public FireMode fireMode;
+    public Timer reloadTimer;
+
     public override void use(Player player)
     {
-      if (fireMode == FireMode.SemiAuto && Options.Config.Bindings[GameAction.UseHands].IsControlHeld(Engine.getDeviceState(), Engine.getPrevDeviceState())) return;
+      if (reloadTimer.getDuration() != 0
+      || (fireMode == FireMode.SemiAuto && Options.Config.Bindings[GameAction.UseHands].IsControlHeld(Engine.getDeviceState(), Engine.getPrevDeviceState()))) return;
       if (ammo <= 0)
       {
         Collection.Dryfire.Play(Options.Config.SoundVolume, 0f, 0f);
         return;
       }
+      base.use(player);
       ammo--;
-      float[] angle = GameMain.mainPlayer.getAimAccuracyAngle();
+      AccuracyAngle angle = GameMain.mainPlayer.getAimAccuracyAngleRelative();
       sounds["use"].Play(Options.Config.SoundVolume, 0f, 0f);
-      GameMain.projectiles.Add(new Projectile(player.position + player.getDirectionVector(Direction.Forward, 10), (int)(player.orientation + (_randomGenerator.Next((int)angle[1] * 10, (int)angle[0] * 10) / 10) ), 200.0f, damage));
+      GameMain.projectiles.Add(new Projectile(player.position + player.getDirectionVector(Direction.Forward, 10), _randomGenerator.Next( (int)angle.min * 1000, (int)angle.max * 1000) / 1000, 200.0f, damage));
       ClientSenderV2.SendProjectile(new InteractionData(player.id, ActionType.Fire, damage));
     }
 
     public void reload()
     {
+      if (reloadTimer.getDuration() != 0 || ammo == magazineSize) return;
       sounds["reload"].Play(Options.Config.SoundVolume, 0f, 0f);
+      reloadTimer.Start();
       ammo = magazineSize;
+    }
+    public override void Update(GameTime gameTime)
+    {
+      base.Update(gameTime);
+      reloadTimer.Update(gameTime);
+      GameMain.hud.updateWeapon(ammo, magazineSize, (float)reloadTimer.getDuration());
     }
 #endif
   }

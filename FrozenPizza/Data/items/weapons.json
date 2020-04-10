@@ -6,9 +6,9 @@
     "damage": 15,
     "magazineSize": 10,
 	  "accuracy": 37,
-    "cooldown": 0.1,
+    "cooldown": 100,
     "fireMode": "semiauto",
-    "reloadDelay": 0.7
+    "reloadDelay": 700
   },
   {
     "name": "Beretta M9",
@@ -17,9 +17,9 @@
     "damage": 10,
     "magazineSize": 15,
     "accuracy": 40,
-    "cooldown": 0.1,
+    "cooldown": 100,
     "fireMode": "semiauto",
-    "reloadDelay": 0.7
+    "reloadDelay": 750
   },
   {
     "name": ".357 Magnum",
@@ -28,9 +28,9 @@
     "damage": 60,
     "magazineSize": 6,
     "accuracy": 35,
-    "cooldown": 0.4,
+    "cooldown": 400,
     "fireMode": "semiauto",
-    "reloadDelay": 0.7
+    "reloadDelay": 1000
   },
   {
     "name": "Desert Eagle",
@@ -39,8 +39,8 @@
     "damage": 45,
     "magazineSize": 7,
     "accuracy": 55,
-    "cooldown": 0.5,
+    "cooldown": 600,
     "fireMode": "semiauto",
-    "reloadDelay": 0.7
+    "reloadDelay": 800
   }
 ]

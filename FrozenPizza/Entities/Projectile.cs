@@ -31,11 +31,17 @@ namespace FrozenPizza.Entities
       position += new Vector2((float)(Math.Sin(angle) * -velocity * gameTime.ElapsedGameTime.TotalSeconds), (float)(Math.Cos(angle) * -velocity * gameTime.ElapsedGameTime.TotalSeconds));
       if (!GameMain.map.isValidPosition(position)) return (false);
       else if (GameMain.mainPlayer.getHitbox().Contains(position))
-        return (false);
-      for (int i = 0; i < GameMain.players.Count; i++)
       {
-        if (GameMain.players[i].getHitbox().Contains(position))
+        GameMain.mainPlayer.addHealth(-damage);
+        return (false);
+      }
+      foreach (var player in GameMain.players)
+      {
+        if (player.getHitbox().Contains(position))
+        {
+          player.addHealth(-damage);
           return (false);
+        }
       }
       return (true);
     }

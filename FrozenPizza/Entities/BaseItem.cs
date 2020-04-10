@@ -1,7 +1,9 @@
 ﻿#if GAME
+  using FrozenPizza.Utils;
   using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
+  using Microsoft.Xna.Framework.Audio;
+  using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 #else
   using System.Drawing;
   using System.Numerics;
@@ -27,7 +29,12 @@ namespace FrozenPizza.Entities
     textures = new Dictionary<string, Texture2D>();
     sounds = new Dictionary<string, SoundEffect>();
 #endif
-  }
+    }
+
+    public virtual void Init()
+    {
+
+    }
 
     public BaseItem Copy()
     {
@@ -42,6 +49,10 @@ namespace FrozenPizza.Entities
     public Dictionary<string, SoundEffect> sounds;
 
     public virtual void use(Player player) { throw new Exception("BaseItem should be overriden"); }
+
+    public virtual void Update(GameTime gameTime)
+    {
+    }
 
     public void Draw(SpriteBatch spriteBatch, Point tileSize)
     {

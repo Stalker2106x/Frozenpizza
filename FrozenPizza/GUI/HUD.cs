@@ -1,9 +1,14 @@
-﻿using FrozenPizza.Settings;
+﻿using FrozenPizza.Entities;
+using FrozenPizza.GUI;
+using FrozenPizza.Settings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Myra;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
+using Myra.Graphics2D.UI.Styles;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,146 +16,140 @@ using System.Text;
 namespace FrozenPizza
 {
   public class HUD
-  {
-    //Text
-    SpriteFont _font;
+  { 
+    // Specific panels
+    Panel _playersPanel;
 
-    //Stats
-    Texture2D _hudEntities;
-    Rectangle _hudEntRect;
+    public bool overlayActive;
 
-    //StatsPanel
-    Vector2 _statsPos;
+    /// NEW
+    private Panel _ui;
 
-    //HandsPanel
-    Vector2 _handsPos;
-    Rectangle _handsPanel;
-    
-    //Common
-    int _headsUpHeight, _headsUpWidth;
-    Vector2 _hudOffset;
-    Texture2D _colorRect;
-
-    //Inventory
-    Rectangle _inventoryPanel;
-
-    //Bars
-    Rectangle _cooldownBar;
+    private VerticalProgressBar _healthIndicator;
+    private VerticalProgressBar _kevlarIndicator;
+    private Label _handsLabel;
+    private Image _handsImage;
+    private Label _handsAmount;
+    private HorizontalProgressBar _handsProgressIndicator;
 
     public HUD(GraphicsDevice graphics, Camera cam)
     {
-      //Common
-      _hudOffset = new Vector2(64, 0);
-      _headsUpHeight = 64;
-      _headsUpWidth = 64;
-      _colorRect = new Texture2D(graphics, 1, 1);
-      _colorRect.SetData(new[] { Color.White });
-      //HandsPanel
-      _handsPanel = new Rectangle((cam.getViewport().Width / 2) - 125, cam.getViewport().Height - 90, 250, 80);
-      _handsPos = new Vector2(_handsPanel.X, _handsPanel.Y);
-      //Bars
-      _cooldownBar = new Rectangle((cam.getViewport().Width / 2) - 125, cam.getViewport().Height - 13, 0, 3);
-      //Inventory
-      _inventoryPanel = new Rectangle(cam.getViewport().Width / 2, 20, cam.getViewport().Width / 2, cam.getViewport().Height - 140);
-      //StatsPanel
-      _statsPos = new Vector2(0, cam.getViewport().Height - _headsUpHeight);
+      _playersPanel = GameMenu.PlayersPlanel();
+      Desktop.Widgets.Add(_playersPanel);
 
-      _hudEntRect = new Rectangle(0, 0, 64, 64);
-      _hudEntities = Collection.hudEntities;
-      _font = Collection.font;
+      overlayActive = false;
+      _ui = new Panel();
+      addIndicators();
     }
 
     public void activate()
     {
-      Desktop.Widgets.Clear();
-      Desktop.Root = null;
+      Desktop.Root = _ui;
     }
 
-    public void Update(DeviceState state, DeviceState prevState, MainPlayer mainPlayer)
+    public void addIndicators()
     {
-      if (mainPlayer.cooldown)
-        _cooldownBar.Width = mainPlayer.getCooldownPercent(_handsPanel.Width);
+      // Bottom Left Panel
+      HorizontalStackPanel bottomLeftPanel = new HorizontalStackPanel();
+      bottomLeftPanel.HorizontalAlignment = HorizontalAlignment.Left;
+      bottomLeftPanel.VerticalAlignment = VerticalAlignment.Bottom;
+      bottomLeftPanel.Spacing = 8;
+
+      Stylesheet.Current.HorizontalProgressBarStyle.Background = new ColoredRegion(DefaultAssets.WhiteRegion, Color.Gray);
+      Stylesheet.Current.HorizontalProgressBarStyle.Filler = new ColoredRegion(DefaultAssets.WhiteRegion, Color.Red);
+      _healthIndicator = new VerticalProgressBar();
+      _healthIndicator.Width = 64;
+      _healthIndicator.Height = 64;
+      _healthIndicator.Minimum = 0;
+      _healthIndicator.Maximum = 100;
+      _healthIndicator.Value = 100;
+      bottomLeftPanel.Widgets.Add(_healthIndicator);
+
+      Stylesheet.Current.HorizontalProgressBarStyle.Background = new ColoredRegion(DefaultAssets.WhiteRegion, Color.Transparent);
+      Stylesheet.Current.HorizontalProgressBarStyle.Filler = new ColoredRegion(DefaultAssets.WhiteRegion, Color.Blue);
+      _kevlarIndicator = new VerticalProgressBar();
+      _kevlarIndicator.Width = 64;
+      _kevlarIndicator.Height = 64;
+      _kevlarIndicator.Minimum = 0;
+      _kevlarIndicator.Maximum = 100;
+      _kevlarIndicator.Value = 100;
+      bottomLeftPanel.Widgets.Add(_kevlarIndicator);
+
+      _ui.Widgets.Add(bottomLeftPanel);
+      // Bottom Panel
+      VerticalStackPanel bottomPanel = new VerticalStackPanel();
+      bottomPanel.HorizontalAlignment = HorizontalAlignment.Center;
+      bottomPanel.VerticalAlignment = VerticalAlignment.Bottom;
+
+      //bottomPanel.Background = new TextureRegion(Collection.MenuBackground);
+
+      _handsLabel = new Label();
+      _handsLabel.Text = "Hands";
+      bottomPanel.Widgets.Add(_handsLabel);
+
+      _handsImage = new Image();
+      bottomPanel.Widgets.Add(_handsImage);
+
+      _handsAmount = new Label();
+      _handsAmount.Text = "";
+      bottomPanel.Widgets.Add(_handsAmount);
+
+      Stylesheet.Current.HorizontalProgressBarStyle.Background = new ColoredRegion(DefaultAssets.WhiteRegion, Color.Transparent);
+      Stylesheet.Current.HorizontalProgressBarStyle.Filler = new ColoredRegion(DefaultAssets.WhiteRegion, Color.LimeGreen);
+      _handsProgressIndicator = new HorizontalProgressBar();
+      _handsProgressIndicator.Height = 20;
+      _handsProgressIndicator.Width = 100;
+      bottomPanel.Widgets.Add(_handsProgressIndicator);
+
+      _ui.Widgets.Add(bottomPanel);
     }
 
-    public Vector2 getHeadsUpHeight(int maxvalue, int value, bool offset)
+    public void initHands(BaseItem hands)
     {
-      Vector2 vec = new Vector2(0, (_headsUpHeight - (int)(((float)value / (float)maxvalue) * (float)_headsUpHeight)));
-      if (offset)
-        vec += _hudOffset;
-      return (vec);
-    }
-    public Rectangle calcHeadsUpRect(int maxvalue, int value)
-    {
-      Rectangle rect = new Rectangle(_hudEntRect.X, _hudEntRect.Y + (int)getHeadsUpHeight(maxvalue, value, false).Y,
-                       _headsUpWidth, value);
-
-      _hudEntRect.X += 64;
-      return (rect);
+      _handsLabel.Text = hands.name;
+      _handsImage.Renderable = new TextureRegion(hands.textures["world"], new Rectangle(0, 0, hands.textures["world"].Width, hands.textures["world"].Height));
+      _handsProgressIndicator.Minimum = 0;
+      FireWeapon weapon;
+      if ((weapon = hands as FireWeapon) != null) _handsProgressIndicator.Maximum = weapon.reloadDelay;
     }
 
-    private void DrawInventory(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, MainPlayer mainPlayer)
+    public void updatePlayer(int health, int armor)
     {
-      //Background Panel
-      DrawHudPanel(spriteBatch, graphicsDevice, _inventoryPanel, Color.Gray, 0.9f);
-
+      _healthIndicator.Value = health;
+      _kevlarIndicator.Value = armor;
     }
 
-    private void DrawHudPanel(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Rectangle panel, Color color, float opacity)
+    public void updateWeapon(int ammo, int magazineSize, float reloadTime)
     {
-      spriteBatch.Draw(_colorRect, panel, null, color * opacity, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
-    }
-
-    public void drawHandsPanel(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, MainPlayer mainPlayer)
-    {
-      DrawHudPanel(spriteBatch, graphicsDevice, _handsPanel, Color.LightGray, 0.5f);
-      if (mainPlayer.cooldown)
-        DrawHudPanel(spriteBatch, graphicsDevice, _cooldownBar, Color.White, 0.75f);
-      if (mainPlayer.hands == null)
-      {
-        spriteBatch.DrawString(_font, "Hands", _handsPanel.Location.ToVector2(), Color.White);
-      }
-      else
-      {
-        spriteBatch.DrawString(_font, mainPlayer.hands.name, _handsPanel.Location.ToVector2(), Color.White);
-        spriteBatch.Draw(mainPlayer.hands.textures["world"], new Vector2(_handsPanel.X + _handsPanel.Width / 2, _handsPanel.Y + _handsPanel.Height / 2), new Rectangle(0, 0, 32, 32), Color.White, 0f, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0f);
-        /*if (mainPlayer.hands.type == ItemType.Firearm)
-        {
-          Firearm weapon = (Firearm)mainPlayer.hands;
-
-          spriteBatch.DrawString(_font, weapon.LoadedAmmo.ToString(), _handsPanel.Location.ToVector2() + new Vector2(_handsPanel.Width - _font.MeasureString(weapon.LoadedAmmo.ToString()).X, _handsPanel.Height - _font.MeasureString(weapon.LoadedAmmo.ToString()).Y), Color.White);
-        }*/
-      }
+      _handsAmount.Text = ammo + " / " + magazineSize;
+      _handsProgressIndicator.Value = reloadTime;
     }
 
     public void drawAimLines(SpriteBatch spriteBatch, MainPlayer mainPlayer, Camera cam)
     {
-      float[] aimAccuracyAngle = mainPlayer.getAimAccuracyAngle();
+      AccuracyAngle aimAccuracyAngle = mainPlayer.getAimAccuracyAngle();
       Vector2[] leftLine = new Vector2[2];
       Vector2[] rightLine = new Vector2[2];
 
-      leftLine[0] = cam.getViewportCenter() + new Vector2((float)Math.Cos(aimAccuracyAngle[0]) * 100, (float)-Math.Sin(aimAccuracyAngle[0]) * 100);
-      leftLine[1] = cam.getViewportCenter() + new Vector2((float)Math.Cos(aimAccuracyAngle[0]) * 120, (float)-Math.Sin(aimAccuracyAngle[0]) * 120);
-      rightLine[0] = cam.getViewportCenter() + new Vector2((float)Math.Cos(aimAccuracyAngle[1]) * 100, (float)-Math.Sin(aimAccuracyAngle[1]) * 100);
-      rightLine[1] = cam.getViewportCenter() + new Vector2((float)Math.Cos(aimAccuracyAngle[1]) * 120, (float)-Math.Sin(aimAccuracyAngle[1]) * 120);
-      Engine.DrawLine(spriteBatch, _colorRect, leftLine[0], leftLine[1], Color.Yellow, 1);
-      Engine.DrawLine(spriteBatch, _colorRect, rightLine[0], rightLine[1], Color.Yellow, 1);
+      leftLine[0] = cam.getViewportCenter() + new Vector2((float)Math.Cos(aimAccuracyAngle.max) * 100, (float)-Math.Sin(aimAccuracyAngle.max) * 100);
+      leftLine[1] = cam.getViewportCenter() + new Vector2((float)Math.Cos(aimAccuracyAngle.max) * 120, (float)-Math.Sin(aimAccuracyAngle.max) * 120);
+      rightLine[0] = cam.getViewportCenter() + new Vector2((float)Math.Cos(aimAccuracyAngle.min) * 100, (float)-Math.Sin(aimAccuracyAngle.min) * 100);
+      rightLine[1] = cam.getViewportCenter() + new Vector2((float)Math.Cos(aimAccuracyAngle.min) * 120, (float)-Math.Sin(aimAccuracyAngle.min) * 120);
+      Engine.DrawLine(spriteBatch, Collection.Pixel, leftLine[0], leftLine[1], Color.Yellow, 1);
+      Engine.DrawLine(spriteBatch, Collection.Pixel, rightLine[0], rightLine[1], Color.Yellow, 1);
+    }
+
+    public void Update(DeviceState state, DeviceState prevState, MainPlayer mainPlayer)
+    {
+      if (Options.Config.Bindings[GameAction.ToggleInventory].IsControlPressed(state, prevState))
+      {
+        overlayActive = !overlayActive;
+        _playersPanel.Enabled = true;
+      }
     }
 
     public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, MainPlayer mainPlayer, Camera cam)
     {
-      _hudEntRect.X = 0;
-      //Health
-      spriteBatch.Draw(_hudEntities, _statsPos, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
-      spriteBatch.Draw(_hudEntities, _statsPos + getHeadsUpHeight(100, 100, false), calcHeadsUpRect(100, 100), Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
-      //Armor
-      spriteBatch.Draw(_hudEntities, _statsPos + _hudOffset, _hudEntRect, Color.Gray, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
-      spriteBatch.DrawString(_font, "999", _statsPos + _hudOffset, Color.White);
-      _hudEntRect.X += 64;
-      //Hands Panel
-      drawHandsPanel(spriteBatch, graphicsDevice, mainPlayer);
-      //Inventory
-      if (mainPlayer.inventoryOpen)
-        DrawInventory(spriteBatch, graphicsDevice, mainPlayer);
       //Cursor & AimLines
       drawAimLines(spriteBatch, mainPlayer, cam);
     }

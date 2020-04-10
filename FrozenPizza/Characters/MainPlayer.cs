@@ -18,15 +18,43 @@ using System.Threading;
 
 namespace FrozenPizza
 {
+
+  public enum Axis
+  {
+    Horizontal,
+    Vertical
+  }
+
+  public class CheckResult
+  {
+    public bool result;
+    public Vector2 vector;
+    public CheckResult(Vector2 movement)
+    {
+      vector = movement;
+    }
+  }
+
+  public class AccuracyAngle
+  {
+    public float min;
+    public float max;
+
+    public void add(float value)
+    {
+      min -= value;
+      max += value;
+    }
+  }
+
   public class MainPlayer : Player
   {
     //Triggers
-    public bool cooldown { get; set; }
-    public bool inventoryOpen { get; set; }
+    public bool cooldown;
     bool _sprinting, _aimlock;
 
     //Inventory
-    public BaseItem hands { get; set; }
+    public BaseItem hands;
     Inventory _inventory;
 
     //Timers
@@ -38,10 +66,9 @@ namespace FrozenPizza
     float _aimSensivity;
 
 
-    public MainPlayer(int id, String name) : base(id, name, new Vector2(1200, 1000))
+    public MainPlayer(int id, String name) : base(id, name, new Vector2(1440, 1088))
     {
       //Set triggers
-      inventoryOpen = false;
       cooldown = false;
       _aimlock = false;
       _sprinting = false;
@@ -50,6 +77,7 @@ namespace FrozenPizza
       _aimSensivity = 0.005f;
 
       //Init Inventory
+      hands = Collection.MeleeList.Find((it) => { return (it.id == "hands"); }).Copy();
       _inventory = new Inventory();
 
       //Init timers
@@ -70,66 +98,25 @@ namespace FrozenPizza
       return ((int)((float)(elapsed / _cooldownTimer[1].TotalMilliseconds) * width));
     }
 
-    //Get the 'use' (or fire) cooldown from currently held item
-    /*public float getCooldown()
+    public AccuracyAngle getAimAccuracyAngleRelative()
     {
-      Weapon whands = (Weapon)hands;
-      if (whands != null)
-        return ((float)TimeSpan.FromSeconds(whands.Cooldown).TotalMilliseconds);
-      else
-        return ((float)TimeSpan.FromSeconds(Collection.MeleeList[0].Cooldown).TotalMilliseconds);
-    }*/
-
-  //Placeholder
-    /*public int getArmor()
-    {
-      return (0);
-    }*/
-
-    /*
-    public float getWeight()
-    {
-      float weight = 0;
-
-      return (weight);
-    }*/
-
-    public float[] getAimAccuracyAngleRelative()
-    {
-      float[] aimAccuracyAngle = getAimAccuracyAngle();
-      aimAccuracyAngle[0] += _orientation - MathHelper.PiOver2;
-      aimAccuracyAngle[1] += _orientation - MathHelper.PiOver2;
+      AccuracyAngle aimAccuracyAngle = getAimAccuracyAngle();
+      aimAccuracyAngle.add(_orientation - MathHelper.PiOver2);
       return (aimAccuracyAngle);
     }
 
     //Returns the two angles of aim calculating weapon accuracy (0 is left, 1 is right)
-    public float[] getAimAccuracyAngle()
+    public AccuracyAngle getAimAccuracyAngle()
     {
-      float[] aimAccuracyAngle = new float[2];
+      AccuracyAngle aimAccuracyAngle = new AccuracyAngle();
 
 
-      aimAccuracyAngle[0] = MathHelper.PiOver2 * 1.5f;
-      aimAccuracyAngle[1] = MathHelper.PiOver2 * 0.5f;
-      /*if (hands != null && hands.type == ItemType.Firearm)
-      {
-        Firearm weapon = (Firearm)hands;
-
-        aimAccuracyAngle[0] -= (float)(Math.PI / 180) * weapon.Accuracy;
-        aimAccuracyAngle[1] += (float)(Math.PI / 180) * weapon.Accuracy;
-      }
-      if (_sprinting)
-      {
-        aimAccuracyAngle[0] += 0.15f;
-        aimAccuracyAngle[1] -= 0.15f;
-      }
-      else
-      {
-        if (_aimlock)
-        {
-          aimAccuracyAngle[0] -= 0.05f;
-          aimAccuracyAngle[1] += 0.05f;
-        }
-      }*/
+      aimAccuracyAngle.max = MathHelper.PiOver2 * 1.5f;
+      aimAccuracyAngle.min = MathHelper.PiOver2 * 0.5f;
+      FireWeapon weapon;
+      if ((weapon = hands as FireWeapon) != null) aimAccuracyAngle.add(-(float)(Math.PI / 180f) * weapon.accuracy);
+      if (_sprinting) aimAccuracyAngle.add(0.15f);
+      else if (_aimlock) aimAccuracyAngle.add(-0.05f);
       return (aimAccuracyAngle);
     }
 
@@ -148,7 +135,6 @@ namespace FrozenPizza
     {
       base.die();
       dropItem(0);
-      inventoryOpen = false;
     }
 
     //Plays if needed the correct stepsound
@@ -168,22 +154,6 @@ namespace FrozenPizza
 
         _sounds[rnd.Next(0, 4)].Play(Options.Config.SoundVolume, 0f, 0f);
         _stepTimer = TimeSpan.Zero;
-      }
-    }
-
-    public enum Axis
-    {
-      Horizontal,
-      Vertical
-    }
-
-    public class CheckResult
-    {
-      public bool result;
-      public Vector2 vector;
-      public CheckResult(Vector2 movement)
-      {
-        vector = movement;
       }
     }
 
@@ -243,18 +213,9 @@ namespace FrozenPizza
       }
     }
 
-    //Attack & Cooldown
-    public void updateCooldown(GameTime gameTime)
-    {
-      _cooldownTimer[0] -= gameTime.ElapsedGameTime;
-      if (_cooldownTimer[0].TotalMilliseconds <= 0)
-        cooldown = false;
-    }
-
     //Use Hands
     public void useHands(GameAction type)
     {
-      if (hands == null) return;
       switch (type)
       {
         case GameAction.UseHands:
@@ -267,39 +228,6 @@ namespace FrozenPizza
         default:
           break;
       }
-    }
-
-    //Check Hands events (Reload, fire, ...)
-    public void updateHands(GameTime gameTime, DeviceState state, DeviceState prevState)
-    {
-      /*
-      if (cooldown)
-        updateCooldown(gameTime);
-      if (inventoryOpen)
-        return;
-      if ((hands != null && hands.type == ItemType.Firearm)
-         && Options.Config.Bindings[GameAction.Reload].IsControlPressed(state, prevState))
-      {
-        Firearm weapon = (Firearm)hands;
-        if (weapon.reload())
-        {
-          cooldown = true;
-          _cooldownTimer[1] = TimeSpan.FromSeconds(weapon.ReloadCooldown);
-          _cooldownTimer[0] = _cooldownTimer[1];
-        }
-      }
-      if (Options.Config.Bindings[GameAction.Fire].IsControlDown(state) && !cooldown)
-      {
-        useHands();
-        cooldown = true;
-        _cooldownTimer[1] = TimeSpan.FromMilliseconds(getCooldown());
-        _cooldownTimer[0] = _cooldownTimer[1];
-      }
-      if (Options.Config.Bindings[GameAction.Aim].IsControlDown(state))
-        _aimlock = true;
-      else
-        _aimlock = false;
-        */
     }
 
     //View & Lookup Update
@@ -320,16 +248,9 @@ namespace FrozenPizza
       }
     }
 
-    //Inventory & Item Management
-    void toggleInventory(Cursor cursor)
-    {
-      inventoryOpen = !inventoryOpen;
-      cursor.Show = inventoryOpen;
-    }
-
     public void interact()
     {
-      if (hands == null) //Pickup
+      if (hands.id == "hands") //Pickup
       {
         Point gridPos = GameMain.map.WorldToGrid(_position);
         var item = GameMain.map.items.Find((it) => { return (it.position == gridPos); });
@@ -338,13 +259,14 @@ namespace FrozenPizza
           item.position = null;
           ClientSenderV2.SendItemPickup(new ItemData(item.uid, item.position));
           hands = item;
+          GameMain.hud.initHands(hands);
         }
       }
     }
 
     public void dropItem(int uid)
     {
-      if (hands != null) //drop
+      if (hands.id != "hands") //drop
       {
         var item = GameMain.map.items.Find((it) => { return (it.uid == hands.uid); });
         if (item != null)
@@ -352,7 +274,7 @@ namespace FrozenPizza
           Point gridPos = GameMain.map.WorldToGrid(_position);
           item.position = gridPos;
           ClientSenderV2.SendItemPickup(new ItemData(item.uid, item.position));
-          hands = null;
+          hands = Collection.MeleeList.Find((it) => { return (it.id == "hands"); }).Copy();
         }
       }
     }
@@ -366,11 +288,11 @@ namespace FrozenPizza
     public void Update(GameTime gameTime, Map map, DeviceState state, DeviceState prevState, Camera cam, Cursor cursor)
     {
       if (!_active) return;
-      if (!inventoryOpen) updateAimAngle(cam, state, prevState);
+      if (!GameMain.hud.overlayActive) updateAimAngle(cam, state, prevState);
+      hands.Update(gameTime);
       updateMove(gameTime, state, prevState, map);
-      updateHands(gameTime, state, prevState);
-      if (Options.Config.Bindings[GameAction.ToggleInventory].IsControlPressed(state, prevState))
-        toggleInventory(cursor);
+      if (Options.Config.Bindings[GameAction.Aim].IsControlPressed(state, prevState)) _aimlock = true;
+      if (Options.Config.Bindings[GameAction.Aim].IsControlReleased(state, prevState)) _aimlock = false;
       if (Options.Config.Bindings[GameAction.Interact].IsControlPressed(state, prevState)) interact();
       if (Options.Config.Bindings[GameAction.Drop].IsControlPressed(state, prevState)) dropItem(0);
       if (Options.Config.Bindings[GameAction.UseHands].IsControlDown(state) && !cooldown) useHands(GameAction.UseHands);

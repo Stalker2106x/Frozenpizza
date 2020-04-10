@@ -33,6 +33,7 @@ namespace FPServer
     public void start(int port, int slots)
     {
       _server.Start(port);
+      _server.DisconnectTimeout = 60000;
 
       //Connection Request handler
       _listener.ConnectionRequestEvent += request =>

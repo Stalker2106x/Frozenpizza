@@ -104,7 +104,7 @@ namespace FrozenPizza
     {
       cursor.Load(this.Content);
       spriteBatch = new SpriteBatch(GraphicsDevice);
-      Collection.Load(this.Content);
+      Collection.Load(this.Content, GraphicsDevice);
       GameMain.Load(GraphicsDevice);
       Menu.MainMenu();
     }
@@ -163,6 +163,7 @@ namespace FrozenPizza
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     protected override void Update(GameTime gameTime)
     {
+      if (quit) exit();
       deviceState = new DeviceState(Mouse.GetState(), Keyboard.GetState(), GamePad.GetState(PlayerIndex.One));
       if (cursor.Show) cursor.Update(deviceState, prevDeviceState);
       switch (gameState)
@@ -172,7 +173,7 @@ namespace FrozenPizza
         case GameState.Playing:
           if (Options.Config.Bindings[GameAction.Menu].IsControlPressed(deviceState, prevDeviceState)) //Pause
           {
-            GameMain.mainPlayer.inventoryOpen = false;
+
             setCursor(true);
             Menu.GameMenu();
             setState(GameState.Menu);
@@ -216,7 +217,7 @@ namespace FrozenPizza
 
     public void exit()
     {
-      networkClient.disconnect();
+      if (networkClient != null) networkClient.disconnect();
       Exit();
     }
   }

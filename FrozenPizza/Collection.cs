@@ -16,12 +16,15 @@ namespace FrozenPizza
   {
     public static Texture2D GameLogo;
     public static Texture2D MenuBackground;
+
     public static SoundEffect[] MenuSounds;
     public static List<MeleeWeapon> MeleeList;
     public static List<FireWeapon> FirearmList;
     public static SoundEffect Dryfire;
     //public static Texture2D[] Tilesets;
     public static Texture2D Projectiles;
+
+    public static Texture2D Pixel;
     public static Texture2D projectile;
     public static Texture2D Players;
     public static SoundEffect[] PlayersSound;
@@ -34,12 +37,13 @@ namespace FrozenPizza
 
     private static ContentManager _content;
 
-    public static bool Load(ContentManager content)
+    public static bool Load(ContentManager content, GraphicsDevice graphics)
     {
       _content = content;
       MenuSounds = new SoundEffect[2];
       //Game
-      //Tilesets = new Texture2D[Enum.GetNames(typeof(ItemType)).Length];
+      Pixel = new Texture2D(graphics, 1, 1, false, SurfaceFormat.Color);
+      Pixel.SetData(new[] { Color.White });
 
       GameLogo = content.Load<Texture2D>("gfx/logo");
       MenuBackground = content.Load<Texture2D>("gfx/bg/main");
@@ -66,6 +70,7 @@ namespace FrozenPizza
 
       foreach (var melee in MeleeList)
       {
+        melee.Init();
         melee.textures["world"] = content.Load<Texture2D>("gfx/weapons/" + melee.id);
       }
     }
@@ -77,6 +82,7 @@ namespace FrozenPizza
 
       foreach (var firearm in FirearmList)
       {
+        firearm.Init();
         firearm.textures["world"] = content.Load<Texture2D>("gfx/weapons/" + firearm.id);
         firearm.sounds["use"] = content.Load<SoundEffect>("sounds/weapons/" + firearm.id + "/fire");
         firearm.sounds["reload"] = content.Load<SoundEffect>("sounds/weapons/" + firearm.id + "/reload");
