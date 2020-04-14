@@ -20,7 +20,7 @@ namespace FrozenPizza
 
     public static List<Projectile> projectiles;
 
-    static Camera cam;
+    public static Camera cam;
     public static HUD hud;
 
     public static void Load(GraphicsDevice graphics)
@@ -49,7 +49,7 @@ namespace FrozenPizza
       }
       hud.Update(state, prevState, mainPlayer);
       if (mainPlayer.active && !hud.overlayActive) //If we are ingame reset mouse each loop
-        Mouse.SetPosition(cam.getViewport().Width / 2, cam.getViewport().Height / 2);
+        Mouse.SetPosition(Options.Config.Width / 2, Options.Config.Height / 2);
     }
     public static void Draw(SpriteBatch spriteBatch, GameTime gameTime, GraphicsDevice graphics)
     {

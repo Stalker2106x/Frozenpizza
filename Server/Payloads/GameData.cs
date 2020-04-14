@@ -14,12 +14,12 @@ namespace Server.Payloads
     public int spawnX;
     public int spawnY;
 
-    public GameData(int id, string mapName_, Point spawn)
+    public GameData(int id, string mapName_, Vector2 spawn)
     {
       clientId = id;
       mapName = mapName_;
-      spawnX = spawn.X;
-      spawnY = spawn.Y;
+      spawnX = (int)spawn.X;
+      spawnY = (int)spawn.Y;
     }
   }
 }

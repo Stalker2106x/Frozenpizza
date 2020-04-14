@@ -88,7 +88,6 @@ namespace FrozenPizza.Network
         item.position = it.GetPosition();
         GameMain.map.items.Add(item);
       });
-      Console.WriteLine(body);
       ClientSenderV2.ContinueSync();
     }
     public static void ReceiveHandshake(string body) //.HANDSHAKE
@@ -120,7 +119,6 @@ namespace FrozenPizza.Network
 
     public static void UpdateFullPlayer(string body) //.FPLAYER
     {
-      Console.WriteLine(body);
       FullPlayerData payload = JsonConvert.DeserializeObject<FullPlayerData>(body);
 
       Player player = null;

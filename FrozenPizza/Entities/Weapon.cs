@@ -113,6 +113,12 @@ namespace FrozenPizza.Entities
       ClientSenderV2.SendMeleeHit(new MeleeHitData(player.id, hitPos, damage));
       return (true);
     }
+
+    public override void drop()
+    {
+      attackEffectTimer.Reset();
+    }
+
     public override void Update(GameTime gameTime)
     {
       base.Update(gameTime);
@@ -216,6 +222,11 @@ namespace FrozenPizza.Entities
       return (true);
     }
 
+    public override void drop()
+    {
+      muzzleFlashTimer.Reset();
+    }
+
     public void reload()
     {
       if (reloadTimer.isActive() || ammo == magazineSize) return;
@@ -235,7 +246,7 @@ namespace FrozenPizza.Entities
       base.Draw(spriteBatch, player);
       if (muzzleFlashTimer.isActive())
       {
-        spriteBatch.Draw(textures["muzzleFlashEffect"], player.position + player.getDirectionVector(Direction.Forward, 15),
+        spriteBatch.Draw(textures["muzzleFlashEffect"], player.position,
           new Rectangle(0, 0, textures["muzzleFlashEffect"].Width, textures["muzzleFlashEffect"].Height), Color.White, -player.orientation,
           new Vector2(16, 8), 1.0f, SpriteEffects.None, 0.3f);
       }

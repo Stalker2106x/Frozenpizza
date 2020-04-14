@@ -3,6 +3,7 @@ using FrozenPizza.World;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Numerics;
 using System.Text;
 
 namespace FPServer
@@ -18,10 +19,12 @@ namespace FPServer
     private static Random _randomGenerator = new Random();
 
     public List<BaseItem> items;
+    public List<Rectangle> spawnAreas;
 
     public ServerMap(string mapName) : base(mapName)
     {
       items = new List<BaseItem>();
+      LoadSpawnAreas();
       GenerateItems();
     }
 
@@ -53,6 +56,20 @@ namespace FPServer
           default:
             break;
         }
+      }
+    }
+    public Vector2 GetRandomSpawnArea()
+    {
+      var area = spawnAreas[_randomGenerator.Next(0, spawnAreas.Count)];
+      return (new Vector2(_randomGenerator.Next(area.X, area.X + area.Width), _randomGenerator.Next(area.Y, area.Y + area.Height)));
+    }
+
+    public void LoadSpawnAreas()
+    {
+      spawnAreas = new List<Rectangle>();
+      foreach (var area in _map.ObjectGroups["Spawn"].Objects)
+      {
+        spawnAreas.Add(new Rectangle((int)area.X, (int)area.Y, (int)area.Width, (int)area.Height));
       }
     }
   }

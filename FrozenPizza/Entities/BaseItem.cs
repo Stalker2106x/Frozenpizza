@@ -56,6 +56,8 @@ namespace FrozenPizza.Entities
     public Dictionary<string, SoundEffect> sounds;
 
     public virtual bool use(Player player) { throw new Exception("BaseItem should be overriden"); }
+    public virtual void drop() { }
+
 
     public virtual void Update(GameTime gameTime)
     {

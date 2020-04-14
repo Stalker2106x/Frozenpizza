@@ -52,9 +52,14 @@ namespace FrozenPizza.World
 
     void DrawLayer(SpriteBatch spriteBatch, Layer layer, bool skipVisible = false)
     {
-      for (var i = 0; i < _map.Layers[(int)layer].Tiles.Count; i++)
+      Rectangle viewPort = GameMain.cam.getGridViewport();
+      Rectangle drawBounds = new Rectangle(viewPort.X - (viewPort.Width / 2), viewPort.Y - (viewPort.Height / 2), (int)(viewPort.X + (viewPort.Width * 1.5)), (int)(viewPort.Y + (viewPort.Height * 1.5)));
+      for (int y = drawBounds.Y; y < drawBounds.Height; y++)
       {
-        DrawTile(spriteBatch, _map.Layers[(int)layer].Tiles[i], skipVisible);
+        for (int x = drawBounds.X; x < drawBounds.Width; x++)
+        {
+          DrawTile(spriteBatch, _map.Layers[(int)layer].Tiles[x + (y * _map.Width)], skipVisible);
+        }
       }
     }
 
@@ -69,6 +74,24 @@ namespace FrozenPizza.World
       else if (tileAngle <= 0) tileAngle += MathHelper.TwoPi;
 
       return (viewAngle.Contains(tileAngle));
+    }
+
+    List<TmxLayerTile> GetTilesInView(Layer layer)
+    {
+      List<TmxLayerTile> inViewTiles = new List<TmxLayerTile>();
+      AccuracyAngle viewAngle = new AccuracyAngle();
+      Vector2 viewOrigin = (GameMain.mainPlayer.position + GameMain.mainPlayer.getDirectionVector(Direction.Backward, 50));
+      viewAngle.EnforceConsistency();
+      foreach (var tile in _map.Layers[(int)layer].Tiles)
+      {
+        Vector2 vecToPoint = new Vector2(tile.X - viewOrigin.X, tile.Y - viewOrigin.Y);
+        float tileAngle = (3 * MathHelper.PiOver2) - (float)Math.Atan2(vecToPoint.Y, vecToPoint.X);
+
+        if (tileAngle >= MathHelper.TwoPi) tileAngle -= MathHelper.TwoPi;
+        else if (tileAngle <= 0) tileAngle += MathHelper.TwoPi;
+        if (viewAngle.Contains(tileAngle)) inViewTiles.Add(tile);
+      }
+      return (inViewTiles);
     }
 
     public void Draw(SpriteBatch spriteBatch)

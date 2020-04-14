@@ -190,7 +190,8 @@ namespace FrozenPizza
 
     public CheckResult checkOverflow(Axis axis, Vector2 movement)
     {
-      Vector2 normPosition = new Vector2((_position.X % GameMain.map.tileSize.X) - (GameMain.map.tileSize.X / 2f), (_position.Y % GameMain.map.tileSize.Y) - (GameMain.map.tileSize.Y / 2f));
+      Vector2 normPosition = new Vector2(((_position.X + (GameMain.map.tileSize.X / 2)) % GameMain.map.tileSize.X),
+                                         ((_position.Y + (GameMain.map.tileSize.Y / 2)) % GameMain.map.tileSize.Y));
       Rectangle tileBounds = new Rectangle(1, 1, GameMain.map.tileSize.X - 1, GameMain.map.tileSize.Y - 1);
       CheckResult check = new CheckResult(movement);
 
@@ -265,19 +266,16 @@ namespace FrozenPizza
     //View & Lookup Update
     void updateAimAngle(Camera cam, DeviceState state, DeviceState prevState)
     {
-      if (state.mouse.X != cam.getViewport().Width / 2)
-        if (prevState.mouse.X < state.mouse.X)
-          _orientation += ((prevState.mouse.X - state.mouse.X) * Options.Config.MouseSensivity / 100);
-        else if (prevState.mouse.X > state.mouse.X)
-          _orientation -= ((state.mouse.X - prevState.mouse.X) * Options.Config.MouseSensivity / 100);
-      if (_orientation < 0)
-        _orientation = MathHelper.TwoPi;
-      else if (_orientation > MathHelper.TwoPi)
-        _orientation = 0;
-      if (cam.Rotation != _orientation)
+      if (state.mouse.X != Options.Config.Width / 2)
       {
-        cam.Rotation = _orientation;
+        if (prevState.mouse.X < state.mouse.X)
+          _orientation += (prevState.mouse.X - state.mouse.X) * (Options.Config.MouseSensivity / 100);
+        else if (prevState.mouse.X > state.mouse.X)
+          _orientation -= (state.mouse.X - prevState.mouse.X) * (Options.Config.MouseSensivity / 100);
       }
+      if (_orientation < 0) _orientation += MathHelper.TwoPi;
+      else if (_orientation > MathHelper.TwoPi) _orientation -= MathHelper.TwoPi;
+      cam.Rotation = _orientation;
     }
 
     public void interact()
@@ -303,6 +301,7 @@ namespace FrozenPizza
       {
         ClientSenderV2.SendItemPickup(new ItemData(hands.uid, hands.position));
         hands.position = GameMain.map.WorldToGrid(_position);
+        hands.drop();
         GameMain.map.items.Add(hands);
         hands = new MeleeWeapon();
         hands.Copy(Collection.MeleeList.First((it) => { return (it.id == "hands"); }));

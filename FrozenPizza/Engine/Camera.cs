@@ -47,10 +47,16 @@ namespace FrozenPizza
     }
 
     //Returns real viewport
-    public Rectangle getViewport()
+    public Rectangle getWorldViewport()
     {
       return (new Rectangle((int)_origin.X - _graphics.Viewport.Width / 2, (int)_origin.Y - _graphics.Viewport.Height / 2,
                               _graphics.Viewport.Width, _graphics.Viewport.Height));
+    }
+    public Rectangle getGridViewport()
+    {
+      var wViewPort = getWorldViewport();
+      return (new Rectangle(GameMain.map.WorldToGrid(new Vector2(wViewPort.X, wViewPort.Y)),
+                              new Point(_graphics.Viewport.Width / GameMain.map.tileSize.X, _graphics.Viewport.Height / GameMain.map.tileSize.Y)));
     }
 
     //returns viewport relative origin

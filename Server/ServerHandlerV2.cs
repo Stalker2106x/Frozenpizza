@@ -68,7 +68,7 @@ namespace FPServer
     public static void SendGamedata(NetPeer client, string body) //!GAMEDATA
     {
       NetDataWriter writer = new NetDataWriter();
-      GameData payload = new GameData(client.Id, ServerV2.map.name, new Point(1445, 1090));
+      GameData payload = new GameData(client.Id, ServerV2.map.name, ServerV2.map.GetRandomSpawnArea());
 
       writer.Put("!GAMEDATA "+ JsonConvert.SerializeObject(payload));
       client.Send(writer, DeliveryMethod.ReliableOrdered);
@@ -102,7 +102,7 @@ namespace FPServer
     {
       NetDataWriter writer = new NetDataWriter();
       BasePlayer player = ServerV2.players[client];
-      FullPlayerData payload = new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.id, new Vector2(1000, 1000), player.orientation));
+      FullPlayerData payload = new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.id, ServerV2.map.GetRandomSpawnArea(), player.orientation));
 
       writer.Put("!FPLAYER " + JsonConvert.SerializeObject(payload));
       Program.server.broadcast(null, writer, DeliveryMethod.ReliableUnordered);
@@ -122,7 +122,6 @@ namespace FPServer
 
     public static void UpdateItem(NetPeer client, string body) //.ITEM
     {
-      Console.WriteLine(body);
       NetDataWriter writer = new NetDataWriter();
       ItemData payload = JsonConvert.DeserializeObject<ItemData>(body);
 
@@ -135,7 +134,6 @@ namespace FPServer
 
     public static void UpdateProjectile(NetPeer client, string body) //.PROJECTILE
     {
-      Console.WriteLine(body);
       ProjectileData payload = JsonConvert.DeserializeObject<ProjectileData>(body);
       NetDataWriter writer = new NetDataWriter();
 
@@ -146,7 +144,6 @@ namespace FPServer
 
     public static void UpdateMelee(NetPeer client, string body) //.MELEE
     {
-      Console.WriteLine(body);
       MeleeHitData payload = JsonConvert.DeserializeObject<MeleeHitData>(body);
 
       foreach (var entry in ServerV2.players)
