@@ -33,14 +33,18 @@ namespace FPServer
         switch ((MetaTile)tile.Gid)
         {
           case MetaTile.Melee:
-            var melee = BaseCollection.MeleeList[_randomGenerator.Next(1, BaseCollection.MeleeList.Count)].Copy();
+            var melee = new MeleeWeapon();
+            melee.Copy(BaseCollection.MeleeList[_randomGenerator.Next(1, BaseCollection.MeleeList.Count)]);
+            melee.Init();
             melee.position = new Point(tile.X, tile.Y);
             melee.uid = uid;
             items.Add(melee);
             uid++;
             break;
           case MetaTile.Pistol:
-            var pistol = BaseCollection.FirearmList[_randomGenerator.Next(0, BaseCollection.FirearmList.Count)].Copy();
+            var pistol = new FireWeapon();
+            pistol.Copy(BaseCollection.FirearmList[_randomGenerator.Next(0, BaseCollection.FirearmList.Count)]);
+            pistol.Init();
             pistol.position = new Point(tile.X, tile.Y);
             pistol.uid = uid;
             items.Add(pistol);

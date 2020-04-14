@@ -27,7 +27,7 @@ namespace FrozenPizza.World
     
     protected TmxMap _map;
 
-    protected Point _tileSize;
+    public Point tileSize;
     protected Point _tilesetSizeInUnits;
 
     public BaseMap(string mapName)
@@ -35,8 +35,8 @@ namespace FrozenPizza.World
       name = mapName;
       _map = new TmxMap("Data/maps/"+ mapName + ".tmx");
 
-      _tileSize = new Point(_map.Tilesets[1].TileWidth, _map.Tilesets[1].TileHeight);
-      _tilesetSizeInUnits = new Point(_map.Tilesets[1].Image.Width.GetValueOrDefault() / _tileSize.X, _map.Tilesets[1].Image.Width.GetValueOrDefault() / _tileSize.Y);
+      tileSize = new Point(_map.Tilesets[1].TileWidth, _map.Tilesets[1].TileHeight);
+      _tilesetSizeInUnits = new Point(_map.Tilesets[1].Image.Width.GetValueOrDefault() / tileSize.X, _map.Tilesets[1].Image.Width.GetValueOrDefault() / tileSize.Y);
     }
 
     public static List<string> getAvailableLevels()
@@ -55,7 +55,7 @@ namespace FrozenPizza.World
 
     public Point WorldToGrid(Vector2 coord)
     {
-      return (new Point((int)coord.X / _tileSize.X, (int)coord.Y / _tileSize.Y));
+      return (new Point((int)((coord.X / tileSize.X) + 0.5f), (int)((coord.Y/ tileSize.Y) + 0.5f)));
     }
 
     public int GridToIndex(Point gridCoord)
@@ -72,6 +72,12 @@ namespace FrozenPizza.World
         return (false);
       }
       return (true);
+    }
+
+    public bool isValidPosition(Rectangle rect)
+    {
+      return (isValidPosition(new Vector2(rect.X, rect.Y)) && isValidPosition(new Vector2(rect.X, rect.Y + rect.Width))
+           && isValidPosition(new Vector2(rect.X + rect.Height, rect.Y)) && isValidPosition(new Vector2(rect.X + rect.Height, rect.Y + rect.Width)));
     }
 
   }

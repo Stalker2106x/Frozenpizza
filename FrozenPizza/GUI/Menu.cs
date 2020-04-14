@@ -1,7 +1,9 @@
 ﻿using FrozenPizza.Network;
 using FrozenPizza.Settings;
+using FrozenPizza.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Myra;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
@@ -15,14 +17,6 @@ namespace FrozenPizza
 {
   public class Menu
   {
-    public static void Init(ContentManager content)
-    {
-      /*SpriteFont font = content.Load<SpriteFont>("font/general");
-      Stylesheet.Current.LabelStyle.Font = font;*/
-      //Stylesheet.Current.TextButtonStyle.Width = 100;
-      //Stylesheet.Current.ComboBoxStyle.Width = 100;
-      //Stylesheet.Current.TextBoxStyle.Width = 100;
-    }
 
     /// <summary>
     /// Load default styles for menus
@@ -33,11 +27,11 @@ namespace FrozenPizza
       Stylesheet.Current.ButtonStyle.Background = new ColoredRegion(DefaultAssets.WhiteRegion, Color.Transparent);
       Stylesheet.Current.ButtonStyle.OverBackground = new ColoredRegion(DefaultAssets.WhiteRegion, new Color(255, 0, 0, 0.1f));
       Stylesheet.Current.ButtonStyle.PressedBackground = new ColoredRegion(DefaultAssets.WhiteRegion, new Color(255, 0, 0, 0.2f));
-      //Stylesheet.Current.TextBoxStyle.Font = Resources.regularFont;
-      //Stylesheet.Current.ComboBoxStyle.LabelStyle.Font = Resources.regularFont;
+      Stylesheet.Current.TextBoxStyle.Font = Collection.regularFont;
+      Stylesheet.Current.ComboBoxStyle.LabelStyle.Font = Collection.regularFont;
       Stylesheet.Current.ComboBoxStyle.Width = 200;
       Stylesheet.Current.HorizontalSliderStyle.Width = 200;
-      //Stylesheet.Current.LabelStyle.Font = Resources.titleFont;
+      Stylesheet.Current.LabelStyle.Font = Collection.titleFont;
     }
 
     /// <summary>
@@ -55,9 +49,19 @@ namespace FrozenPizza
       panel.Widgets.Add(version);
     }
 
+    /// <summary>
+    /// Open modal
+    /// </summary>
+    public static void OpenModal(string body, string title = "Message")
+    {
+      var messageBox = Dialog.CreateMessageBox(title, body);
+      messageBox.ShowModal();
+    }
+
 
     public static void MainMenu()
     {
+      LoadUIStylesheet();
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
@@ -68,6 +72,11 @@ namespace FrozenPizza
       grid.VerticalAlignment = VerticalAlignment.Center;
 
       grid.Spacing = 8;
+
+      Image gameLogo = new Image();
+      gameLogo.Renderable = new TextureRegion(Collection.GameLogo);
+      gameLogo.HorizontalAlignment = HorizontalAlignment.Center;
+      grid.Widgets.Add(gameLogo);
 
       TextButton hostBtn = new TextButton();
       hostBtn.Text = "Host Game";
@@ -112,6 +121,7 @@ namespace FrozenPizza
 
     public static void HostMenu()
     {
+      LoadUIStylesheet();
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
@@ -161,7 +171,7 @@ namespace FrozenPizza
       mapCombo.GridColumn = 2;
       mapCombo.GridRow = 2;
       mapCombo.HorizontalAlignment = HorizontalAlignment.Right;
-      List<string> maps = Level.getAvailableLevels();
+      List<string> maps = BaseMap.getAvailableLevels();
       maps.ForEach(e => { mapCombo.Items.Add(new ListItem(e)); });
       mapCombo.SelectedIndex = 0;
       grid.Widgets.Add(mapCombo);
@@ -216,6 +226,7 @@ namespace FrozenPizza
 
     public static void JoinMenu()
     {
+      LoadUIStylesheet();
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
@@ -288,7 +299,7 @@ namespace FrozenPizza
     /// </summary>
     public static void OptionsMenu(Action prevMenu)
     {
-      //LoadUIStylesheet();
+      LoadUIStylesheet();
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
@@ -488,7 +499,7 @@ namespace FrozenPizza
     /// </summary>
     public static void BindingsMenu(Action optionsPrevMenu)
     {
-      //LoadUIStylesheet();
+      LoadUIStylesheet();
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
@@ -658,7 +669,7 @@ namespace FrozenPizza
       disconnectBtn.HorizontalAlignment = HorizontalAlignment.Center;
       disconnectBtn.Click += (s, a) =>
       {
-        GameMain.Unload();
+        GameMain.Reset();
         Engine.networkClient.disconnect();
         MainMenu();
       };
@@ -690,23 +701,15 @@ namespace FrozenPizza
       int pos = host.IndexOf(":");
       if (pos != -1) Int32.TryParse(host.Substring(pos, host.Length - pos), out port);
       else port = 27015;
-      /*Engine.netHandle = new NetHandler();
-      NetHandler.HandshakeCallback = () =>
+      Engine.networkClient = new ClientV2();
+      try
       {
-        GameMain.Initialize(engine.GraphicsDevice);
-        GameMain.Load(engine.Content);
-        Engine.netHandle.GameReady = true;
-        engine.toggleMouseVisible();
-        Engine.setState(GameState.Playing);
-      };
-      NetHandler.FailureCallback = () =>
-      {
-        GameMain.Unload(); //Unload any loaded content
+        Engine.networkClient.connect(host, port);
+      } catch(Exception) {
+        GameMain.Reset(); //Unload any loaded content
         Dialog errorBox = Dialog.CreateMessageBox("Error", "Could not reach server");
         errorBox.ShowModal();
-      };*/
-      Engine.networkClient = new ClientV2();
-      Engine.networkClient.connect(host, port);
+      }
     }
   }
 }

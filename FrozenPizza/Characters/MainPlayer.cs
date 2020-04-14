@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Server.Payloads;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace FrozenPizza
@@ -35,15 +36,52 @@ namespace FrozenPizza
     }
   }
 
+  public static class Orientation
+  {
+    public static float North = (float)Math.PI / 2;
+    public static float NorthEast = (float)Math.PI / 4;
+    public static float East = 0;
+    public static float SouthEast = (float)(7 * Math.PI) / 4;
+    public static float South = (float)(3 * Math.PI) / 2;
+    public static float SouthWest = (float)(5 * Math.PI) / 4;
+    public static float West = (float)Math.PI;
+    public static float NorthWest = (float)( 3 * Math.PI) / 4;
+    public static float MaxAngle = NorthWest - North;
+  }
+
   public class AccuracyAngle
   {
-    public float min;
-    public float max;
+    public float left;
+    public float right;
 
-    public void add(float value)
+    public AccuracyAngle()
     {
-      min -= value;
-      max += value;
+      left = GameMain.mainPlayer.orientation + MathHelper.PiOver4;
+      right = GameMain.mainPlayer.orientation - MathHelper.PiOver4;
+    }
+
+    public void EnforceComparison()
+    {
+      if (left < right) right -= MathHelper.TwoPi;
+    }
+    public void EnforceConsistency()
+    {
+      if (left < 0) left += MathHelper.TwoPi;
+      else if (left > MathHelper.TwoPi) left -= MathHelper.TwoPi;
+      if (right < 0) right += MathHelper.TwoPi;
+      else if (right > MathHelper.TwoPi) right -= MathHelper.TwoPi;
+    }
+
+    public bool Contains(float value)
+    {
+      if (right > left)
+      {
+        return ((value <= left && value >= 0) || (value <= MathHelper.TwoPi && value >= right));
+      }
+      else
+      {
+        return ((value <= left && value >= right));
+      }
     }
   }
 
@@ -59,64 +97,50 @@ namespace FrozenPizza
 
     //Timers
     TimeSpan _stepTimer;
-    TimeSpan[] _cooldownTimer;
 
     Utils.Timer _networkUpdateTimer;
 
-    float _aimSensivity;
 
 
-    public MainPlayer(int id, String name) : base(id, name, new Vector2(1440, 1088))
+    public MainPlayer(int id, String name, Vector2 position) : base(id, name, position)
     {
       //Set triggers
-      cooldown = false;
       _aimlock = false;
       _sprinting = false;
 
-      //Set aim view
-      _aimSensivity = 0.005f;
-
       //Init Inventory
-      hands = Collection.MeleeList.Find((it) => { return (it.id == "hands"); }).Copy();
+      hands = new MeleeWeapon();
+      hands.Copy(Collection.MeleeList.First((it) => { return (it.id == "hands"); }));
+      hands.Init();
       _inventory = new Inventory();
-
-      //Init timers
-      _stepTimer = new TimeSpan();
-      _cooldownTimer = new TimeSpan[2];
-
+      
       _networkUpdateTimer = new Utils.Timer();
       _networkUpdateTimer.addAction(TimerDirection.Forward, 10 , TimeoutBehaviour.StartOver, () => { UpdateNetwork(); });
       _networkUpdateTimer.Start();
     }
 
-
-    //Converts Cooldown time to percent for the bar
-    public int getCooldownPercent(int width)
-    {
-      float elapsed = (float)(_cooldownTimer[1].TotalMilliseconds - _cooldownTimer[0].TotalMilliseconds);
-
-      return ((int)((float)(elapsed / _cooldownTimer[1].TotalMilliseconds) * width));
-    }
-
-    public AccuracyAngle getAimAccuracyAngleRelative()
-    {
-      AccuracyAngle aimAccuracyAngle = getAimAccuracyAngle();
-      aimAccuracyAngle.add(_orientation - MathHelper.PiOver2);
-      return (aimAccuracyAngle);
-    }
-
     //Returns the two angles of aim calculating weapon accuracy (0 is left, 1 is right)
-    public AccuracyAngle getAimAccuracyAngle()
+    public AccuracyAngle getAimAccuracyAngle(bool relative = false)
     {
       AccuracyAngle aimAccuracyAngle = new AccuracyAngle();
+      float fov = (float)Math.PI / 4f; //half view
 
-
-      aimAccuracyAngle.max = MathHelper.PiOver2 * 1.5f;
-      aimAccuracyAngle.min = MathHelper.PiOver2 * 0.5f;
       FireWeapon weapon;
-      if ((weapon = hands as FireWeapon) != null) aimAccuracyAngle.add(-(float)(Math.PI / 180f) * weapon.accuracy);
-      if (_sprinting) aimAccuracyAngle.add(0.15f);
-      else if (_aimlock) aimAccuracyAngle.add(-0.05f);
+      if ((weapon = hands as FireWeapon) != null)
+      {
+        fov -= (weapon.accuracy / 100) * Orientation.MaxAngle;
+      }
+      if (_sprinting) fov += 0.15f;
+      else if (_aimlock) fov -= 0.05f;
+
+      aimAccuracyAngle.left = fov;
+      aimAccuracyAngle.right = -fov;
+      if (relative)
+      {
+        aimAccuracyAngle.left += (_orientation);
+        aimAccuracyAngle.right += (_orientation);
+      }
+      aimAccuracyAngle.EnforceConsistency();
       return (aimAccuracyAngle);
     }
 
@@ -130,11 +154,18 @@ namespace FrozenPizza
       return (speed);
     }
 
+    public override void addHealth(int value)
+    {
+      base.addHealth(value);
+      GameMain.hud.updatePlayer(_hp, 0);
+    }
+
     //Make player drop item on death & closes inventory
     public override void die()
     {
       base.die();
       dropItem(0);
+      GameMain.hud.toggleDeathPanel();
     }
 
     //Plays if needed the correct stepsound
@@ -159,18 +190,19 @@ namespace FrozenPizza
 
     public CheckResult checkOverflow(Axis axis, Vector2 movement)
     {
-      Vector2 normPosition = new Vector2((float)(_position.X % 32), (float)(_position.Y % 32));
+      Vector2 normPosition = new Vector2((_position.X % GameMain.map.tileSize.X) - (GameMain.map.tileSize.X / 2f), (_position.Y % GameMain.map.tileSize.Y) - (GameMain.map.tileSize.Y / 2f));
+      Rectangle tileBounds = new Rectangle(1, 1, GameMain.map.tileSize.X - 1, GameMain.map.tileSize.Y - 1);
       CheckResult check = new CheckResult(movement);
 
       if (axis == Axis.Horizontal)
       {
-        if (normPosition.X + check.vector.X > 31f) check.vector.X = 0;
-        else if (normPosition.X + check.vector.X < 1f) check.vector.X = 0;
+        if (normPosition.X + check.vector.X > tileBounds.Width) check.vector.X = 0;
+        else if (normPosition.X + check.vector.X < tileBounds.X) check.vector.X = 0;
       }
       else if (axis == Axis.Vertical)
       {
-        if (normPosition.Y + check.vector.Y > 31f) check.vector.Y = 0;
-        else if (normPosition.Y + check.vector.Y < 1f) check.vector.Y = 0;
+        if (normPosition.Y + check.vector.Y > tileBounds.Height) check.vector.Y = 0;
+        else if (normPosition.Y + check.vector.Y < tileBounds.Y) check.vector.Y = 0;
       }
       check.result = GameMain.map.isValidPosition(_position + check.vector);
       return (check);
@@ -235,9 +267,9 @@ namespace FrozenPizza
     {
       if (state.mouse.X != cam.getViewport().Width / 2)
         if (prevState.mouse.X < state.mouse.X)
-          _orientation += (prevState.mouse.X - state.mouse.X) * _aimSensivity;
+          _orientation += ((prevState.mouse.X - state.mouse.X) * Options.Config.MouseSensivity / 100);
         else if (prevState.mouse.X > state.mouse.X)
-          _orientation -= (state.mouse.X - prevState.mouse.X) * _aimSensivity;
+          _orientation -= ((state.mouse.X - prevState.mouse.X) * Options.Config.MouseSensivity / 100);
       if (_orientation < 0)
         _orientation = MathHelper.TwoPi;
       else if (_orientation > MathHelper.TwoPi)
@@ -253,9 +285,10 @@ namespace FrozenPizza
       if (hands.id == "hands") //Pickup
       {
         Point gridPos = GameMain.map.WorldToGrid(_position);
-        var item = GameMain.map.items.Find((it) => { return (it.position == gridPos); });
+        var item = GameMain.map.items.FirstOrDefault((it) => { return (it.position == gridPos); });
         if (item != null)
         {
+          GameMain.map.items.Remove(item);
           item.position = null;
           ClientSenderV2.SendItemPickup(new ItemData(item.uid, item.position));
           hands = item;
@@ -268,14 +301,13 @@ namespace FrozenPizza
     {
       if (hands.id != "hands") //drop
       {
-        var item = GameMain.map.items.Find((it) => { return (it.uid == hands.uid); });
-        if (item != null)
-        {
-          Point gridPos = GameMain.map.WorldToGrid(_position);
-          item.position = gridPos;
-          ClientSenderV2.SendItemPickup(new ItemData(item.uid, item.position));
-          hands = Collection.MeleeList.Find((it) => { return (it.id == "hands"); }).Copy();
-        }
+        ClientSenderV2.SendItemPickup(new ItemData(hands.uid, hands.position));
+        hands.position = GameMain.map.WorldToGrid(_position);
+        GameMain.map.items.Add(hands);
+        hands = new MeleeWeapon();
+        hands.Copy(Collection.MeleeList.First((it) => { return (it.id == "hands"); }));
+        hands.Init();
+        GameMain.hud.initHands(hands);
       }
     }
 
@@ -299,6 +331,12 @@ namespace FrozenPizza
       if (Options.Config.Bindings[GameAction.Reload].IsControlPressed(state, prevState) && !cooldown) useHands(GameAction.Reload);
       cam.Pos = _position;
       _networkUpdateTimer.Update(gameTime);
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+      base.Draw(spriteBatch);
+      hands.Draw(spriteBatch, this);
     }
   }
 

@@ -30,6 +30,13 @@ namespace FrozenPizza.Network
           break;
       }
     }
+    public static void SendSpawnRequest() //?SPAWN
+    {
+      NetDataWriter writer = new NetDataWriter();
+
+      writer.Put("?RESPAWN");
+      Engine.networkClient.send(writer, DeliveryMethod.ReliableUnordered);
+    }
 
     public static void SendPlayerData(PlayerData payload) //.PLAYER
     {
@@ -47,11 +54,18 @@ namespace FrozenPizza.Network
       Engine.networkClient.send(writer, DeliveryMethod.ReliableUnordered);
     }
 
-    public static void SendProjectile(InteractionData payload) //.PROJECTILE
+    public static void SendProjectile(ProjectileData payload) //.PROJECTILE
     {
       NetDataWriter writer = new NetDataWriter();
 
       writer.Put(".PROJECTILE " + JsonConvert.SerializeObject(payload));
+      Engine.networkClient.send(writer, DeliveryMethod.ReliableUnordered);
+    }
+    public static void SendMeleeHit(MeleeHitData payload) //.PROJECTILE
+    {
+      NetDataWriter writer = new NetDataWriter();
+
+      writer.Put(".MELEE " + JsonConvert.SerializeObject(payload));
       Engine.networkClient.send(writer, DeliveryMethod.ReliableUnordered);
     }
 

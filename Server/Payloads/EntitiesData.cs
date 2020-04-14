@@ -8,17 +8,17 @@ namespace Server.Payloads
 {
   public class EntitiesData
   {
-    public List<NewPlayerData> players;
+    public List<FullPlayerData> players;
     public List<NewItemData> items;
 
     public EntitiesData() { } //default
     public EntitiesData(int clientId, List<BasePlayer> playerList, List<BaseItem> itemList)
     {
-      players = new List<NewPlayerData>();
+      players = new List<FullPlayerData>();
       playerList.ForEach((it) =>
       {
         if (clientId != -1 && clientId == it.id) return; //Skip owner if set, we dont want to propagate itself
-        players.Add(new NewPlayerData(it.name, it.hp, new PlayerData(it.id, it.position, it.orientation)));
+        players.Add(new FullPlayerData(it.name, it.active, it.hp, new PlayerData(it.id, it.position, it.orientation)));
       });
       items = new List<NewItemData>();
       itemList.ForEach((it) =>

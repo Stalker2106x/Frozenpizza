@@ -1,10 +1,14 @@
 ﻿using FrozenPizza;
+using FrozenPizza.Entities;
 using FrozenPizza.World;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using Newtonsoft.Json;
+using Server;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,8 +20,10 @@ namespace FPServer
     EventBasedNetListener _listener;
     List<NetPeer> _clients;
     NetManager _server;
+    private bool _quit;
 
     //Game
+    public static List<Projectile> projectiles;
     public static ServerMap map;
     public static Dictionary<NetPeer, BasePlayer> players;
 
@@ -27,6 +33,7 @@ namespace FPServer
       _server = new NetManager(_listener);
       _clients = new List<NetPeer>();
       map = new ServerMap(mapName);
+      projectiles = new List<Projectile>();
       players = new Dictionary<NetPeer, BasePlayer>();
     }
 
@@ -39,9 +46,15 @@ namespace FPServer
       _listener.ConnectionRequestEvent += request =>
       {
         if (_server.PeersCount < slots)
-          request.AcceptIfKey("SomeConnectionKey");
+        {
+          request.AcceptIfKey("FrozenPizza");
+        }
         else
-          request.Reject();
+        {
+          NetDataWriter writer = new NetDataWriter();
+          writer.Put("Server is full");
+          request.Reject(writer);
+        }
       };
       //Connect handler
       _listener.PeerConnectedEvent += peer =>
@@ -50,7 +63,8 @@ namespace FPServer
         Console.WriteLine("New client connected: {0}", peer.EndPoint);
         players.Add(peer, new BasePlayer(peer.Id, "Player"+ peer.Id, 100, new Vector2(10, 10)));
         NetDataWriter writer = new NetDataWriter();
-        writer.Put(".WELCOME");
+        var payload = new { version = Assembly.GetExecutingAssembly().GetName().Version.ToString() };
+        writer.Put(".WELCOME " + JsonConvert.SerializeObject(payload));
         peer.Send(writer, DeliveryMethod.ReliableOrdered);
       };
       //Disconnect handler
@@ -70,21 +84,33 @@ namespace FPServer
     public void stop()
     {
       _server.Stop();
+      _quit = true;
     }
 
     public void run()
     {
       Console.WriteLine("Server Listening...");
-      while (true)
+      while (!_quit)
       {
         _server.PollEvents();
+        update(Program.gameTime);
+        Program.gameTime.Update();
         Thread.Sleep(15);
+      }
+    }
+
+    public void update(ServerTime gameTime)
+    {
+      for (int i = projectiles.Count - 1; i >= 0; i--)
+      {
+        if (!projectiles[i].Update(gameTime)) projectiles.RemoveAt(i);
       }
     }
 
     public void broadcast(NetPeer owner, NetDataWriter writer, DeliveryMethod method)
     {
-      _server.SendToAll(writer, method, owner); //Broadcast to all but owner
+      if (owner == null) _server.SendToAll(writer, method);
+      else _server.SendToAll(writer, method, owner); //Broadcast to all but owner
     }
   }
 }

@@ -1,4 +1,5 @@
 ﻿using FrozenPizza.Settings;
+using FrozenPizza.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -29,9 +30,6 @@ namespace FrozenPizza
   public class Player : BasePlayer
   {
 
-    //Sound
-    protected SoundEffect[] _sounds;
-
     //Constructor for remote players
     public Player(int id, String name, Vector2 pos, int hp = 100) : base(id, name, hp, pos)
     {
@@ -39,33 +37,23 @@ namespace FrozenPizza
       _sounds = Collection.PlayersSound;
     }
 
-    //Reports damage from server to player
-    public virtual void addHealth(int value)
-    {
-      _hp -= value;
-      _sounds[(int)PlayerSounds.Hurt].Play(Options.Config.SoundVolume, 0f, 0f);
-      if (_hp <= 0) die();
-    }
-
     public Vector2 getDirectionVector(Direction direction, float move)
     {
-      if (direction == Direction.Left) return (new Vector2((float)Math.Cos(_orientation) * -move, (float)Math.Sin(_orientation) * move));
-      if (direction == Direction.Right) return (new Vector2((float)Math.Cos(_orientation) * move, (float)-Math.Sin(_orientation) * move));
-      if (direction == Direction.Forward) return (new Vector2((float)Math.Sin(_orientation) * -move, (float)Math.Cos(_orientation) * -move));
-      if (direction == Direction.Backward) return (new Vector2((float)Math.Sin(_orientation) * move, (float)Math.Cos(_orientation) * move));
+      return (getDirectionVector(direction, _orientation, move));
+    }
+
+    public static Vector2 getDirectionVector(Direction direction, float angle, float move)
+    {
+      if (direction == Direction.Left) return (new Vector2((float)Math.Cos(angle) * -move, (float)Math.Sin(angle) * move));
+      if (direction == Direction.Right) return (new Vector2((float)Math.Cos(angle) * move, (float)-Math.Sin(angle) * move));
+      if (direction == Direction.Forward) return (new Vector2((float)Math.Sin(angle) * -move, (float)Math.Cos(angle) * -move));
+      if (direction == Direction.Backward) return (new Vector2((float)Math.Sin(angle) * move, (float)Math.Cos(angle) * move));
       return (Vector2.Zero);
     }
 
-    //Reports death from server to player
-    public virtual void die()
-    {
-      _sounds[(int)PlayerSounds.Die].Play(Options.Config.SoundVolume, 0f, 0f);
-      _active = false;
-      _skinRect = new Rectangle(0, 64, 32, 64);
-    }
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-      spriteBatch.Draw(Collection.Players, _position, _skinRect, Color.White, -_orientation, new Vector2(16, 8), 1.0f, SpriteEffects.None, 0.3f);
+      spriteBatch.Draw(Collection.Players, _position, _skinRect, Color.White, -_orientation, new Vector2(_skinRect.Width/2, _skinRect.Height/2), 1.0f, SpriteEffects.None, 0.3f);
     }
   }
 }

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 
 namespace FrozenPizza.Entities
 {
+  [Serializable]
   public class BaseItem
   {
     public int uid;
@@ -31,16 +32,22 @@ namespace FrozenPizza.Entities
 #endif
     }
 
+    public virtual void Copy(BaseItem toCopy)
+    {
+      name = toCopy.name;
+      id = toCopy.id;
+      weight = toCopy.weight;
+      size = toCopy.size;
+#if GAME
+      textures = toCopy.textures;
+      sounds = toCopy.sounds;
+#endif
+    }
+
     public virtual void Init()
     {
-
     }
-
-    public BaseItem Copy()
-    {
-      return (BaseItem)this.MemberwiseClone();
-    }
-
+    
     /// <summary>
     /// Game specific logic
     /// </summary>
@@ -48,16 +55,17 @@ namespace FrozenPizza.Entities
     public Dictionary<string, Texture2D> textures;
     public Dictionary<string, SoundEffect> sounds;
 
-    public virtual void use(Player player) { throw new Exception("BaseItem should be overriden"); }
+    public virtual bool use(Player player) { throw new Exception("BaseItem should be overriden"); }
 
     public virtual void Update(GameTime gameTime)
     {
     }
 
-    public void Draw(SpriteBatch spriteBatch, Point tileSize)
+    public virtual void Draw(SpriteBatch spriteBatch, Player player)
     {
       if (position == null) return; //Not on world
-      spriteBatch.Draw(textures["world"], new Rectangle(position.GetValueOrDefault().X * tileSize.X, position.GetValueOrDefault().Y * tileSize.Y, tileSize.X, tileSize.Y), Color.White);
+      spriteBatch.Draw(textures["world"], Tools.GetDrawRect(position.GetValueOrDefault().X * GameMain.map.tileSize.X, position.GetValueOrDefault().Y * GameMain.map.tileSize.Y, GameMain.map.tileSize),
+                                          new Rectangle(0, 0, GameMain.map.tileSize.X, GameMain.map.tileSize.Y), Color.White);
     }
 #endif
   }

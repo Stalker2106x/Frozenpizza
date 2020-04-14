@@ -19,14 +19,25 @@
 #begin Data/cfg/controls.cfg
 /copy:Data/cfg/controls.cfg
 
-#begin Data/font/army.spritefont
-/copy:Data/font/army.spritefont
+#begin Data/font/HighVoltage.ttf
+/copy:Data/font/HighVoltage.ttf
 
-#begin Data/font/general.spritefont
-/copy:Data/font/general.spritefont
+#begin Data/font/regular.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Data/font/regular.spritefont
 
-#begin Data/font/hud.xnb
-/copy:Data/font/hud.xnb
+#begin Data/font/Serat.ttf
+/copy:Data/font/Serat.ttf
+
+#begin Data/font/title.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Data/font/title.spritefont
 
 #begin Data/gfx/bg/main.jpg
 /importer:TextureImporter
@@ -112,6 +123,18 @@
 /processorParam:TextureFormat=Color
 /build:Data/gfx/melee.png
 
+#begin Data/gfx/muzzleFlash.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/muzzleFlash.png
+
 #begin Data/gfx/players.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -159,6 +182,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Data/gfx/shadowmap.png
+
+#begin Data/gfx/swoosh.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/gfx/swoosh.png
 
 #begin Data/gfx/weapons/357.png
 /importer:TextureImporter
@@ -472,12 +507,6 @@
 /processorParam:Quality=Best
 /build:Data/sounds/weapons/357/reload.wav
 
-#begin Data/sounds/weapons/blade/attack.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Data/sounds/weapons/blade/attack.wav
-
 #begin Data/sounds/weapons/deagle/fire.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -525,6 +554,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Data/sounds/weapons/m9/reload.wav
+
+#begin Data/sounds/weapons/melee.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Data/sounds/weapons/melee.wav
 
 #begin Data/sounds/weapons/tool/attack.wav
 /importer:WavImporter

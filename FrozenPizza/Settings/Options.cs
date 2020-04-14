@@ -25,7 +25,7 @@ namespace FrozenPizza.Settings
     Sprint,
     Interact,
     Drop,
-    ToggleInventory,
+    TogglePlayersPanel,
     Menu
   }
 
@@ -79,7 +79,7 @@ namespace FrozenPizza.Settings
       Bindings.Add(GameAction.StrafeRight, new ControlPair(new Control(Keys.D)));
       Bindings.Add(GameAction.Sprint, new ControlPair(new Control(Keys.LeftShift)));
       Bindings.Add(GameAction.Drop, new ControlPair(new Control(Keys.G)));
-      Bindings.Add(GameAction.ToggleInventory, new ControlPair(new Control(Keys.Tab)));
+      Bindings.Add(GameAction.TogglePlayersPanel, new ControlPair(new Control(Keys.Tab)));
       Bindings.Add(GameAction.Menu, new ControlPair(new Control(Keys.Escape)));
     }
 

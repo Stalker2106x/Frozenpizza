@@ -3,7 +3,8 @@
   using FrozenPizza.Settings;
   using FrozenPizza.Utils;
   using Microsoft.Xna.Framework;
-  using Server.Payloads;
+using Microsoft.Xna.Framework.Graphics;
+using Server.Payloads;
 #endif
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace FrozenPizza.Entities
   /// <summary>
   /// Common base class for weapons
   /// </summary>
+  [Serializable]
   public class BaseWeapon : BaseItem
   {
     public float cooldown;
@@ -21,6 +23,17 @@ namespace FrozenPizza.Entities
 
     public BaseWeapon() : base()
     {
+#if GAME
+      useCooldown = new Timer();
+#endif
+    }
+    public override void Copy(BaseItem toCopy)
+    {
+      base.Copy(toCopy);
+      BaseWeapon rToCopy;
+      if ((rToCopy = toCopy as BaseWeapon) == null) return;
+      cooldown = rToCopy.cooldown;
+      damage = rToCopy.damage;
 #if GAME
       useCooldown = new Timer();
 #endif
@@ -38,17 +51,18 @@ namespace FrozenPizza.Entities
     /// Game specific logic
     /// </summary>
 #if GAME
-    public Timer useCooldown;
+    protected Timer useCooldown;
 
     public override void Update(GameTime gameTime)
     {
       useCooldown.Update(gameTime);
     }
 
-    public override void use(Player player)
+    public override bool use(Player player)
     {
-      if (useCooldown.getDuration() != 0) return;
+      if (useCooldown.isActive()) return (false);
       useCooldown.Start();
+      return (true);
     }
 #endif
   }
@@ -56,25 +70,63 @@ namespace FrozenPizza.Entities
   /// <summary>
   /// Melee Wepaon
   /// </summary>
+  [Serializable]
   public class MeleeWeapon : BaseWeapon
   {
     public MeleeWeapon() : base()
     {
-
+#if GAME
+      attackEffectTimer = new Timer();
+#endif
+    }
+    public override void Copy(BaseItem toCopy)
+    {
+      base.Copy(toCopy);
+      MeleeWeapon rToCopy;
+      if ((rToCopy = toCopy as MeleeWeapon) == null) return;
+#if GAME
+      attackEffectTimer = new Timer();
+#endif
     }
 
-    public new MeleeWeapon Copy()
+    public override void Init()
     {
-      return (MeleeWeapon)this.MemberwiseClone();
+      base.Init();
+#if GAME
+      attackEffectTimer.addAction(TimerDirection.Forward, 150, TimeoutBehaviour.Reset, () => { });
+#endif
     }
 
     /// <summary>
     /// Game specific logic
     /// </summary>
 #if GAME
+    protected Timer attackEffectTimer;
 
-    public override void use(Player player)
+    public override bool use(Player player)
     {
+      if (!base.use(player)) return (false);
+      if (Options.Config.Bindings[GameAction.UseHands].IsControlHeld(Engine.getDeviceState(), Engine.getPrevDeviceState())) return (false);
+      sounds["use"].Play(Options.Config.SoundVolume, 0f, 0f);
+      attackEffectTimer.Start();
+      Vector2 hitPos = player.position + player.getDirectionVector(Direction.Forward, 15);
+      ClientSenderV2.SendMeleeHit(new MeleeHitData(player.id, hitPos, damage));
+      return (true);
+    }
+    public override void Update(GameTime gameTime)
+    {
+      base.Update(gameTime);
+      attackEffectTimer.Update(gameTime);
+    }
+
+    public override void Draw(SpriteBatch spriteBatch, Player player)
+    {
+      base.Draw(spriteBatch, player);
+      if (attackEffectTimer.isActive())
+      {
+        spriteBatch.Draw(textures["attackEffect"], player.position + player.getDirectionVector(Direction.Forward, 15),
+          new Rectangle(0, 0, textures["attackEffect"].Width, textures["attackEffect"].Height), Color.White, -player.orientation, Vector2.Zero, 1.0f, SpriteEffects.None, 0.3f);
+      }
     }
 #endif
   }
@@ -88,6 +140,7 @@ namespace FrozenPizza.Entities
     SemiAuto
   }
 
+  [Serializable]
   public class FireWeapon : BaseWeapon
   {
     private static Random _randomGenerator = new Random();
@@ -103,6 +156,22 @@ namespace FrozenPizza.Entities
     {
 #if GAME
       reloadTimer = new Timer();
+      muzzleFlashTimer = new Timer();
+#endif
+    }
+    public override void Copy(BaseItem toCopy)
+    {
+      base.Copy(toCopy);
+      FireWeapon rToCopy;
+      if ((rToCopy = toCopy as FireWeapon) == null) return;
+      ammo = rToCopy.ammo;
+      magazineSize = rToCopy.magazineSize;
+      reloadDelay = rToCopy.reloadDelay;
+      accuracy = rToCopy.accuracy;
+#if GAME
+      fireMode = rToCopy.fireMode;
+      reloadTimer = new Timer();
+      muzzleFlashTimer = new Timer();
 #endif
     }
 
@@ -111,41 +180,45 @@ namespace FrozenPizza.Entities
       base.Init();
 #if GAME
       reloadTimer.addAction(TimerDirection.Forward, reloadDelay, TimeoutBehaviour.Reset, () => { });
+      muzzleFlashTimer.addAction(TimerDirection.Forward, 150, TimeoutBehaviour.Reset, () => { });
 #endif
-    }
-
-    public new FireWeapon Copy()
-    {
-      return (FireWeapon)this.MemberwiseClone();
     }
 
     /// <summary>
     /// Game specific logic
     /// </summary>
 #if GAME
-    public FireMode fireMode;
-    public Timer reloadTimer;
+    protected FireMode fireMode;
+    protected Timer reloadTimer;
+    protected Timer muzzleFlashTimer;
 
-    public override void use(Player player)
+    public override bool use(Player player)
     {
-      if (reloadTimer.getDuration() != 0
-      || (fireMode == FireMode.SemiAuto && Options.Config.Bindings[GameAction.UseHands].IsControlHeld(Engine.getDeviceState(), Engine.getPrevDeviceState()))) return;
+      if (!base.use(player)) return (false);
+      if (reloadTimer.isActive()
+      || (fireMode == FireMode.SemiAuto && Options.Config.Bindings[GameAction.UseHands].IsControlHeld(Engine.getDeviceState(), Engine.getPrevDeviceState()))) return (false);
       if (ammo <= 0)
       {
         Collection.Dryfire.Play(Options.Config.SoundVolume, 0f, 0f);
-        return;
+        return (true);
       }
-      base.use(player);
       ammo--;
-      AccuracyAngle angle = GameMain.mainPlayer.getAimAccuracyAngleRelative();
+      muzzleFlashTimer.Start();
+      AccuracyAngle angle = GameMain.mainPlayer.getAimAccuracyAngle(true);
+      angle.EnforceComparison();
+      float bulletAngle = (float)(_randomGenerator.Next((int)(angle.right * 1000000f), (int)(angle.left * 1000000f)) / 1000000f);
+      Vector2 bulletPos = player.position + player.getDirectionVector(Direction.Forward, 15);
+      float bulletVelocity = 400f;
+
       sounds["use"].Play(Options.Config.SoundVolume, 0f, 0f);
-      GameMain.projectiles.Add(new Projectile(player.position + player.getDirectionVector(Direction.Forward, 10), _randomGenerator.Next( (int)angle.min * 1000, (int)angle.max * 1000) / 1000, 200.0f, damage));
-      ClientSenderV2.SendProjectile(new InteractionData(player.id, ActionType.Fire, damage));
+      GameMain.projectiles.Add(new Projectile(player.id, bulletPos, bulletAngle, bulletVelocity, damage));
+      ClientSenderV2.SendProjectile(new ProjectileData(player.id, bulletPos, bulletAngle, bulletVelocity, damage));
+      return (true);
     }
 
     public void reload()
     {
-      if (reloadTimer.getDuration() != 0 || ammo == magazineSize) return;
+      if (reloadTimer.isActive() || ammo == magazineSize) return;
       sounds["reload"].Play(Options.Config.SoundVolume, 0f, 0f);
       reloadTimer.Start();
       ammo = magazineSize;
@@ -154,7 +227,18 @@ namespace FrozenPizza.Entities
     {
       base.Update(gameTime);
       reloadTimer.Update(gameTime);
+      muzzleFlashTimer.Update(gameTime);
       GameMain.hud.updateWeapon(ammo, magazineSize, (float)reloadTimer.getDuration());
+    }
+    public override void Draw(SpriteBatch spriteBatch, Player player)
+    {
+      base.Draw(spriteBatch, player);
+      if (muzzleFlashTimer.isActive())
+      {
+        spriteBatch.Draw(textures["muzzleFlashEffect"], player.position + player.getDirectionVector(Direction.Forward, 15),
+          new Rectangle(0, 0, textures["muzzleFlashEffect"].Width, textures["muzzleFlashEffect"].Height), Color.White, -player.orientation,
+          new Vector2(16, 8), 1.0f, SpriteEffects.None, 0.3f);
+      }
     }
 #endif
   }

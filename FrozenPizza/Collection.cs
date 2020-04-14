@@ -33,7 +33,8 @@ namespace FrozenPizza
 
     //HUD
     public static Texture2D hudEntities;
-    public static SpriteFont font;
+    public static SpriteFont regularFont;
+    public static SpriteFont titleFont;
 
     private static ContentManager _content;
 
@@ -45,6 +46,9 @@ namespace FrozenPizza
       Pixel = new Texture2D(graphics, 1, 1, false, SurfaceFormat.Color);
       Pixel.SetData(new[] { Color.White });
 
+      regularFont = content.Load<SpriteFont>("font/regular");
+      titleFont = content.Load<SpriteFont>("font/title");
+
       GameLogo = content.Load<Texture2D>("gfx/logo");
       MenuBackground = content.Load<Texture2D>("gfx/bg/main");
       MenuSounds[0] = content.Load<SoundEffect>("sounds/menu/hover");
@@ -52,7 +56,6 @@ namespace FrozenPizza
 
       //HUD
       hudEntities = content.Load<Texture2D>(@"gfx/hud");
-      font = content.Load<SpriteFont>(@"font/hud");
 
       //Game
       projectile = content.Load<Texture2D>(@"gfx/projectile");
@@ -70,8 +73,10 @@ namespace FrozenPizza
 
       foreach (var melee in MeleeList)
       {
-        melee.Init();
         melee.textures["world"] = content.Load<Texture2D>("gfx/weapons/" + melee.id);
+        melee.textures["attackEffect"] = content.Load<Texture2D>("gfx/swoosh");
+        melee.sounds["use"] = content.Load<SoundEffect>("sounds/weapons/melee");
+        melee.Init();
       }
     }
 
@@ -82,10 +87,11 @@ namespace FrozenPizza
 
       foreach (var firearm in FirearmList)
       {
-        firearm.Init();
         firearm.textures["world"] = content.Load<Texture2D>("gfx/weapons/" + firearm.id);
+        firearm.textures["muzzleFlashEffect"] = content.Load<Texture2D>("gfx/muzzleFlash");
         firearm.sounds["use"] = content.Load<SoundEffect>("sounds/weapons/" + firearm.id + "/fire");
         firearm.sounds["reload"] = content.Load<SoundEffect>("sounds/weapons/" + firearm.id + "/reload");
+        firearm.Init();
       }
       Dryfire = content.Load<SoundEffect>("sounds/weapons/dryfire");
     }
@@ -109,8 +115,26 @@ namespace FrozenPizza
 
     public static BaseItem GetItemWithId(string id)
     {
-      foreach (var melee in MeleeList) if (melee.id == id) return (melee.Copy());
-      foreach (var firearm in FirearmList) if (firearm.id == id) return (firearm.Copy());
+      foreach (var melee in MeleeList)
+      {
+        if (melee.id == id)
+        {
+          var copy = new MeleeWeapon();
+          copy.Copy(melee);
+          copy.Init();
+          return (copy);
+        }
+      }
+      foreach (var firearm in FirearmList)
+      {
+        if (firearm.id == id)
+        {
+          var copy = new FireWeapon();
+          copy.Copy(firearm);
+          copy.Init();
+          return (copy);
+        }
+      }
       return (null);
     }
 

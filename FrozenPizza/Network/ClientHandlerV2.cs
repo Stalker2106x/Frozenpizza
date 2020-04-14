@@ -1,4 +1,5 @@
 ﻿using FrozenPizza.Entities;
+using FrozenPizza.Utils;
 using FrozenPizza.World;
 using LiteNetLib;
 using LiteNetLib.Utils;
@@ -8,6 +9,7 @@ using Server.Payloads;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using static LiteNetLib.EventBasedNetListener;
 
@@ -20,13 +22,14 @@ namespace FrozenPizza.Network
     {
       commands = new Dictionary<string, Action<string>>()
       {
-        { ".WELCOME", (s) => { ClientSenderV2.ContinueSync(); } },
+        { ".WELCOME", StartConnection },
         { "!GAMEDATA", ReceiveGamedata },
         { "!ENTITIES", ReceiveEntities },
         { ".HANDSHAKE", ReceiveHandshake },
         { ".NEWPLAYER", AddNewPlayer },
         { ".RMPLAYER", RemovePlayer },
         { ".PROJECTILE", AddProjectile },
+        { ".FPLAYER", UpdateFullPlayer },
         { ".PLAYER", UpdatePlayer },
         { ".ITEM", UpdateItem }
       };
@@ -51,11 +54,23 @@ namespace FrozenPizza.Network
       }
     }
 
+    public static void StartConnection(string body) //.WELCOME
+    {
+      var payloadDef = new { version = "" };
+      var payload = JsonConvert.DeserializeAnonymousType(body, payloadDef);
+      if (payload.version != Assembly.GetExecutingAssembly().GetName().Version.ToString()) //Version mismatch
+      {
+        Menu.OpenModal("The server is running a different version (" + payload.version + ")", "Error");
+        Engine.networkClient.disconnect();
+      }
+      ClientSenderV2.ContinueSync();
+    }
+
     public static void ReceiveGamedata(string body) //!GAMEDATA
     {
       GameData payload = JsonConvert.DeserializeObject<GameData>(body);
       GameMain.map = new Map(payload.mapName);
-      GameMain.mainPlayer = new MainPlayer(payload.clientId, "Bernie");
+      GameMain.mainPlayer = new MainPlayer(payload.clientId, "Bernie", new Vector2(payload.spawnX, payload.spawnY));
       ClientSenderV2.ContinueSync();
     }
 
@@ -85,16 +100,15 @@ namespace FrozenPizza.Network
 
     public static void AddNewPlayer(string body) //.ADDPLAYER
     {
-      NewPlayerData payload = JsonConvert.DeserializeObject<NewPlayerData>(body);
+      FullPlayerData payload = JsonConvert.DeserializeObject<FullPlayerData>(body);
 
       GameMain.players.Add(new Player(payload.data.id, payload.name, new Vector2(payload.data.x, payload.data.y), payload.hp));
     }
     
     public static void AddProjectile(string body) //.PROJECTILE"
     {
-      InteractionData payload = JsonConvert.DeserializeObject<InteractionData>(body);
-      var player = GameMain.players.First((it) => { return (it.id == payload.playerId); });
-      GameMain.projectiles.Add(new Projectile(player.position, player.orientation, 200f, (int)payload.value));
+      ProjectileData payload = JsonConvert.DeserializeObject<ProjectileData>(body);
+      GameMain.projectiles.Add(new Projectile(payload.ownerId, new Vector2(payload.x, payload.y), payload.angle, payload.velocity, payload.damage));
     }
 
     public static void RemovePlayer(string body) //.RMPLAYER
@@ -102,6 +116,25 @@ namespace FrozenPizza.Network
       int id;
       int.TryParse(body, out id);
       GameMain.players.Remove(GameMain.players.First((it) => { return (it.id == id); }));
+    }
+
+    public static void UpdateFullPlayer(string body) //.FPLAYER
+    {
+      Console.WriteLine(body);
+      FullPlayerData payload = JsonConvert.DeserializeObject<FullPlayerData>(body);
+
+      Player player = null;
+      if (GameMain.mainPlayer.id == payload.data.id) player = GameMain.mainPlayer;
+      else player = GameMain.players.First((it) => { return (it.id == payload.data.id); });
+      if (!player.active && payload.active) //respawn
+      {
+        player.Reset();
+        if (player.id == payload.data.id) GameMain.hud.toggleDeathPanel(); //Close death panel
+      }
+      if (payload.hp != player.hp) player.addHealth(payload.hp - player.hp);
+      if (!payload.active && player.active) player.die();
+      player.position = new Vector2(payload.data.x, payload.data.y);
+      player.orientation = payload.data.orientation;
     }
 
     public static void UpdatePlayer(string body) //.PLAYER

@@ -2,6 +2,8 @@
 using LiteNetLib.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +21,9 @@ namespace FrozenPizza.Network
   }
   public class ClientV2
   {
+    //Server
+    public static Process activeProcess;
+    //Client
     private EventBasedNetListener _listener;
     private NetManager _client;
     private Task _runTask;
@@ -41,14 +46,15 @@ namespace FrozenPizza.Network
       Console.WriteLine("Client connecting...");
       step++;
       _client.Start();
-      _client.Connect(host, port, "SomeConnectionKey" /* text key or NetDataWriter */);
+      _client.Connect(host, port, "FrozenPizza" /* text key or NetDataWriter */);
       //Disconnect handler
       _listener.PeerDisconnectedEvent += (peer, disconnectInfo) =>
       {
         step = ConnectionStep.Disconnected;
-        Console.WriteLine("Disconnected: (ORG:{0}) {1}", peer.EndPoint, disconnectInfo.Reason.ToString());
+
+        Menu.OpenModal("Disconnected from server:" + disconnectInfo.Reason.ToString(), "Error");
         Engine.setState(GameState.Menu);
-        GameMain.Unload();
+        GameMain.Reset();
       };
       _listener.NetworkReceiveEvent += (fromPeer, dataReader, deliveryMethod) => { ClientHandlerV2.Parse(fromPeer, dataReader, deliveryMethod); };
       run();
@@ -59,6 +65,22 @@ namespace FrozenPizza.Network
       _client.Stop();
       _quit = true;
       _runTask.Wait();
+    }
+
+    public static void startServer(string mapName)
+    {
+      ProcessStartInfo startInfo = new ProcessStartInfo();
+
+      startInfo.Arguments = "exec Server.dll Data/maps/" + mapName + ".tmx";
+      startInfo.FileName = "dotnet";
+      try
+      {
+        activeProcess = Process.Start(startInfo);
+      }
+      catch (Exception e)
+      {
+        //Error
+      }
     }
 
     public void run()

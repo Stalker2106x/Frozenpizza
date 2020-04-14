@@ -10,17 +10,20 @@ namespace Server.Payloads
   /// <summary>
   /// Declarative payload
   /// </summary>
-  public class NewPlayerData
+  public class FullPlayerData
   {
     public string name;
+
+    public bool active;
 
     public int hp;
 
     public PlayerData data;
 
-    public NewPlayerData(string name_, int hp_, PlayerData data_)
+    public FullPlayerData(string name_, bool active_, int hp_, PlayerData data_)
     {
       name = name_;
+      active = active_;
       hp = hp_;
       data = data_;
     }

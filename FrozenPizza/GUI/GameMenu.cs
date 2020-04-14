@@ -1,4 +1,5 @@
-﻿using Myra.Graphics2D.TextureAtlases;
+﻿using FrozenPizza.Network;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,13 @@ namespace FrozenPizza.GUI
     public static Panel PlayersPlanel()
     {
       Panel mainPanel = new Panel();
+      mainPanel.VerticalAlignment = VerticalAlignment.Center;
+      mainPanel.HorizontalAlignment = HorizontalAlignment.Center;
       mainPanel.Background = new TextureRegion(Collection.MenuBackground);
 
       Grid grid = new Grid();
       grid.VerticalAlignment = VerticalAlignment.Center;
+      grid.HorizontalAlignment = HorizontalAlignment.Center;
 
       grid.RowSpacing = 8;
 
@@ -52,8 +56,27 @@ namespace FrozenPizza.GUI
       secondaryBindLabel.HorizontalAlignment = HorizontalAlignment.Left;
       grid.Widgets.Add(secondaryBindLabel);
 
-      //Binds
-      int i = 1;
+      Label mainIdLabel = new Label();
+      mainIdLabel.Text = "Main";//GameMain.mainPlayer.id.ToString();
+      mainIdLabel.GridColumn = 1;
+      mainIdLabel.GridRow = 1;
+      mainIdLabel.HorizontalAlignment = HorizontalAlignment.Left;
+      grid.Widgets.Add(mainIdLabel);
+
+      Label mainNameLabel = new Label();
+      mainNameLabel.Text = "Main";// GameMain.mainPlayer.name;
+      mainNameLabel.GridColumn = 2;
+      mainNameLabel.GridRow = 1;
+      grid.Widgets.Add(mainNameLabel);
+
+      Label mainPingLabel = new Label();
+      mainPingLabel.Text = "50ms";
+      mainPingLabel.GridColumn = 3;
+      mainPingLabel.GridRow = 1;
+      grid.Widgets.Add(mainPingLabel);
+
+      //Players
+      int i = 2;
       foreach (Player player in GameMain.players)
       {
         Label idLabel = new Label();
@@ -77,6 +100,25 @@ namespace FrozenPizza.GUI
 
         i++;
       }
+      return (mainPanel);
+    }
+
+    public static VerticalStackPanel DeathPanel()
+    {
+      VerticalStackPanel mainPanel = new VerticalStackPanel();
+      mainPanel.VerticalAlignment = VerticalAlignment.Center;
+      mainPanel.HorizontalAlignment = HorizontalAlignment.Center;
+      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
+
+      Label deathLabel = new Label();
+      deathLabel.Text = "You are dead";
+      mainPanel.Widgets.Add(deathLabel);
+
+      TextButton respawnBtn = new TextButton();
+      respawnBtn.Text = "Respawn";
+      respawnBtn.Click += (s, a) => { ClientSenderV2.SendSpawnRequest(); };
+      mainPanel.Widgets.Add(respawnBtn);
+
       return (mainPanel);
     }
   }

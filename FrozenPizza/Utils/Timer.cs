@@ -55,11 +55,11 @@ namespace FrozenPizza.Utils
     public List<TimeoutAction> actions;
     private List<int> _destroyBuffer;
 
-    public Timer(TimerDirection direction = TimerDirection.Forward, float startDuration = 0)
+    public Timer()
     {
       Stop();
-      _duration = startDuration;
       _multiplier = 1;
+      _duration = 0;
       _destroyBuffer = new List<int>();
       actions = new List<TimeoutAction>();
     }
@@ -161,6 +161,7 @@ namespace FrozenPizza.Utils
               StartOver();
               break;
             case TimeoutBehaviour.Destroy:
+              _active = false;
               _destroyBuffer.Add(i);
               break;
             default:

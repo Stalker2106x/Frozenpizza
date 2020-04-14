@@ -31,12 +31,12 @@ namespace FrozenPizza
       hud = new HUD(graphics, cam);
     }
 
-    public static void Unload()
+    public static void Reset()
     {
-      map = null;
       mainPlayer = null;
-      players = null;
-      projectiles = null;
+      map = null;
+      players.Clear();
+      projectiles.Clear();
     }
 
     public static void Update(GameTime gameTime, DeviceState state, DeviceState prevState, Cursor cursor)

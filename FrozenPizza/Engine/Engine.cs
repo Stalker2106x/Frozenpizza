@@ -29,9 +29,6 @@ namespace FrozenPizza
     private GraphicsDeviceManager graphics;
     private SpriteBatch spriteBatch;
 
-    //GAME MECHANICS
-    bool hasFocus;
-
     //Database, Config and Netcode
     //public static NetHandler netHandle;
 
@@ -61,6 +58,8 @@ namespace FrozenPizza
       IsFixedTimeStep = true;
       TargetElapsedTime = TimeSpan.FromSeconds(1.0 / 90.0); //Set FPS
       graphics.ApplyChanges();
+      gameState = GameState.Menu;
+      cursor = new Cursor();
       MyraEnvironment.Game = this;
     }
 
@@ -72,9 +71,9 @@ namespace FrozenPizza
     /// </summary>
     protected override void Initialize()
     {
-      IsMouseVisible = false;
-      cursor = new Cursor();
       ClientHandlerV2.Initialize();
+      IsMouseVisible = false;
+      cursor.Show = true;
       base.Initialize();
     }
 
@@ -83,17 +82,26 @@ namespace FrozenPizza
     /// </summary>
     protected override void OnDeactivated(Object sender, EventArgs args)
     {
-      hasFocus = false;
       IsMouseVisible = true;
+      cursor.Show = false;
       //call the base method and fire the event
       base.OnDeactivated(sender, args);
     }
 
     protected override void OnActivated(object sender, EventArgs args)
     {
-      base.OnActivated(sender, args);
       IsMouseVisible = false;
-      hasFocus = true;
+      switch (gameState)
+      {
+        case GameState.Splashscreen:
+        case GameState.Menu:
+          cursor.Show = true;
+          break;
+        case GameState.Playing:
+          cursor.Show = false;
+          break;
+      }
+      base.OnActivated(sender, args);
     }
 
     /// <summary>
@@ -206,18 +214,10 @@ namespace FrozenPizza
       base.Draw(gameTime);
     }
 
-    public static void DrawLine(SpriteBatch spriteBatch, Texture2D text, Vector2 begin, Vector2 end, Color color, int width)
-    {
-      Rectangle r = new Rectangle((int)begin.X, (int)begin.Y, (int)(end - begin).Length() + width, width);
-      Vector2 v = Vector2.Normalize(begin - end);
-      float angle = (float)Math.Acos(Vector2.Dot(v, -Vector2.UnitX));
-      if (begin.Y > end.Y) angle = MathHelper.TwoPi - angle;
-      spriteBatch.Draw(text, r, null, color, angle, Vector2.Zero, SpriteEffects.None, 0);
-    }
-
     public void exit()
     {
       if (networkClient != null) networkClient.disconnect();
+      if (ClientV2.activeProcess != null) ClientV2.activeProcess.Kill();
       Exit();
     }
   }

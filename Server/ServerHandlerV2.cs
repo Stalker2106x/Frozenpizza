@@ -3,6 +3,7 @@ using FrozenPizza.Entities;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using Newtonsoft.Json;
+using Server;
 using Server.Payloads;
 using System;
 using System.Collections.Generic;
@@ -37,10 +38,12 @@ namespace FPServer
       {
         {"?GAMEDATA", SendGamedata},
         {"?ENTITIES", SendEntities},
+        {"?RESPAWN", SendSpawn},
         {".HANDSHAKE", SendHandshake},
         {".PLAYER", UpdatePlayer},
         {".ITEM", UpdateItem},
-        {".PROJECTILE", UpdateProjectile}
+        {".PROJECTILE", UpdateProjectile},
+        {".MELEE", UpdateMelee}
       };
     }
     public static void Parse(NetPeer client, NetPacketReader reader, DeliveryMethod method)
@@ -65,7 +68,7 @@ namespace FPServer
     public static void SendGamedata(NetPeer client, string body) //!GAMEDATA
     {
       NetDataWriter writer = new NetDataWriter();
-      GameData payload = new GameData(client.Id, ServerV2.map.name);
+      GameData payload = new GameData(client.Id, ServerV2.map.name, new Point(1445, 1090));
 
       writer.Put("!GAMEDATA "+ JsonConvert.SerializeObject(payload));
       client.Send(writer, DeliveryMethod.ReliableOrdered);
@@ -89,10 +92,20 @@ namespace FPServer
       client.Send(writer, DeliveryMethod.ReliableOrdered);
       //Propagate
       BasePlayer player = ServerV2.players[client];
-      NewPlayerData payload = new NewPlayerData(player.name, player.hp, new PlayerData(player.id, player.position, player.orientation));
+      FullPlayerData payload = new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.id, player.position, player.orientation));
       writer.Reset();
       writer.Put(".NEWPLAYER "+JsonConvert.SerializeObject(payload));
       Program.server.broadcast(client, writer, DeliveryMethod.ReliableOrdered);
+    }
+
+    public static void SendSpawn(NetPeer client, string body) //!GAMEDATA
+    {
+      NetDataWriter writer = new NetDataWriter();
+      BasePlayer player = ServerV2.players[client];
+      FullPlayerData payload = new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.id, new Vector2(1000, 1000), player.orientation));
+
+      writer.Put("!FPLAYER " + JsonConvert.SerializeObject(payload));
+      Program.server.broadcast(null, writer, DeliveryMethod.ReliableUnordered);
     }
 
     public static void UpdatePlayer(NetPeer client, string body) //.PLAYER
@@ -100,7 +113,9 @@ namespace FPServer
       NetDataWriter writer = new NetDataWriter();
       PlayerData payload = JsonConvert.DeserializeObject<PlayerData>(body);
 
-      ServerV2.players[client].position = new Vector2(payload.x, payload.y);
+      BasePlayer player = ServerV2.players[client];
+      player.position = new Vector2(payload.x, payload.y);
+      player.orientation = payload.orientation;
       writer.Put(".PLAYER " + body);
       Program.server.broadcast(client, writer, DeliveryMethod.Unreliable);
     }
@@ -117,13 +132,33 @@ namespace FPServer
       writer.Put(".ITEM " + body);
       Program.server.broadcast(client, writer, DeliveryMethod.ReliableUnordered);
     }
+
     public static void UpdateProjectile(NetPeer client, string body) //.PROJECTILE
     {
       Console.WriteLine(body);
+      ProjectileData payload = JsonConvert.DeserializeObject<ProjectileData>(body);
       NetDataWriter writer = new NetDataWriter();
 
+      ServerV2.projectiles.Add(new Projectile(payload.ownerId, new Vector2(payload.x, payload.y), payload.angle, payload.velocity, payload.damage));
       writer.Put(".PROJECTILE " + body);
       Program.server.broadcast(client, writer, DeliveryMethod.ReliableUnordered);
+    }
+
+    public static void UpdateMelee(NetPeer client, string body) //.MELEE
+    {
+      Console.WriteLine(body);
+      MeleeHitData payload = JsonConvert.DeserializeObject<MeleeHitData>(body);
+
+      foreach (var entry in ServerV2.players)
+      {
+        if (!entry.Value.active) continue;
+        BasePlayer player = entry.Value;
+        if (player.getHitbox().Contains(new Point((int)payload.x, (int)payload.y)))
+        {
+          player.addHealth(-payload.damage);
+          ServerSenderV2.SendFullPlayerData(new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.id, player.position, player.orientation)));
+        }
+      }
     }
   }
 }
