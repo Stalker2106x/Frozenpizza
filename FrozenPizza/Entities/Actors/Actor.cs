@@ -1,16 +1,13 @@
 ﻿#if GAME
-using FrozenPizza.Settings;
+  using FrozenPizza.Settings;
+#endif
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-#else
-  using System.Drawing;
-  using System.Numerics;
-#endif
 using System;
 
 namespace FrozenPizza
 {
-  public class BasePlayer
+  public class Actor
   {
     //Stats
     protected int _id; //From server
@@ -35,21 +32,17 @@ namespace FrozenPizza
     //Graphics
     protected Rectangle _skinRect;
 
-#if GAME
     //Sound
     protected SoundEffect[] _sounds;
-#endif
 
-    public BasePlayer(int id, string name_, int hp, Vector2 position)
+    public Actor(int id, string name_, int hp, Vector2 position)
     {
       _active = true;
       _id = id;
       _name = name_;
       _hp = hp;
       _position = position;
-#if GAME
       _orientation = 0;
-#endif
       _skinRect = new Rectangle(0, 0, 32, 16);
     }
 

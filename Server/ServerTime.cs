@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Server
+namespace FPServer
 {
   public class ServerTime
   {

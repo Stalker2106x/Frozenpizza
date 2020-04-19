@@ -7,9 +7,7 @@ using Server;
 using Server.Payloads;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 
 namespace FPServer
@@ -91,7 +89,7 @@ namespace FPServer
       writer.Put(".HANDSHAKE");
       client.Send(writer, DeliveryMethod.ReliableOrdered);
       //Propagate
-      BasePlayer player = ServerV2.players[client];
+      Player player = ServerV2.players[client];
       FullPlayerData payload = new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.id, player.position, player.orientation));
       writer.Reset();
       writer.Put(".NEWPLAYER "+JsonConvert.SerializeObject(payload));
@@ -101,7 +99,7 @@ namespace FPServer
     public static void SendSpawn(NetPeer client, string body) //!GAMEDATA
     {
       NetDataWriter writer = new NetDataWriter();
-      BasePlayer player = ServerV2.players[client];
+      Player player = ServerV2.players[client];
       FullPlayerData payload = new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.id, ServerV2.map.GetRandomSpawnArea(), player.orientation));
 
       writer.Put("!FPLAYER " + JsonConvert.SerializeObject(payload));
@@ -113,8 +111,8 @@ namespace FPServer
       NetDataWriter writer = new NetDataWriter();
       PlayerData payload = JsonConvert.DeserializeObject<PlayerData>(body);
 
-      BasePlayer player = ServerV2.players[client];
-      player.position = new Vector2(payload.x, payload.y);
+      Player player = ServerV2.players[client];
+      player.position = payload.position;
       player.orientation = payload.orientation;
       writer.Put(".PLAYER " + body);
       Program.server.broadcast(client, writer, DeliveryMethod.Unreliable);
@@ -125,8 +123,8 @@ namespace FPServer
       NetDataWriter writer = new NetDataWriter();
       ItemData payload = JsonConvert.DeserializeObject<ItemData>(body);
 
-      BaseItem item = ServerV2.map.items.Find((it) => { return (it.uid == payload.uid); });
-      item.position = payload.GetPosition();
+      Item item = ServerV2.map.items.Find((it) => { return (it.uid == payload.uid); });
+      item.position = payload.position;
 
       writer.Put(".ITEM " + body);
       Program.server.broadcast(client, writer, DeliveryMethod.ReliableUnordered);
@@ -137,7 +135,7 @@ namespace FPServer
       ProjectileData payload = JsonConvert.DeserializeObject<ProjectileData>(body);
       NetDataWriter writer = new NetDataWriter();
 
-      ServerV2.projectiles.Add(new Projectile(payload.ownerId, new Vector2(payload.x, payload.y), payload.angle, payload.velocity, payload.damage));
+      ServerV2.projectiles.Add(new Projectile(payload.ownerId, payload.position, payload.angle, payload.velocity, payload.damage));
       writer.Put(".PROJECTILE " + body);
       Program.server.broadcast(client, writer, DeliveryMethod.ReliableUnordered);
     }
@@ -149,8 +147,8 @@ namespace FPServer
       foreach (var entry in ServerV2.players)
       {
         if (!entry.Value.active) continue;
-        BasePlayer player = entry.Value;
-        if (player.getHitbox().Contains(new Point((int)payload.x, (int)payload.y)))
+        Player player = entry.Value;
+        if (player.getHitbox().Contains(payload.position.ToPoint()))
         {
           player.addHealth(-payload.damage);
           ServerSenderV2.SendFullPlayerData(new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.id, player.position, player.orientation)));

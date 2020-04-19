@@ -12,14 +12,12 @@ using System.Xml.Linq;
 
 namespace FrozenPizza
 {
-  public static class Collection
+  public static class Resources
   {
     public static Texture2D GameLogo;
     public static Texture2D MenuBackground;
 
     public static SoundEffect[] MenuSounds;
-    public static List<MeleeWeapon> MeleeList;
-    public static List<FireWeapon> FirearmList;
     public static SoundEffect Dryfire;
     //public static Texture2D[] Tilesets;
     public static Texture2D Projectiles;
@@ -60,44 +58,15 @@ namespace FrozenPizza
       //Game
       projectile = content.Load<Texture2D>(@"gfx/projectile");
       LoadPlayers(content);
-      LoadMelee(content);
-      LoadFirearm(content);
+      EntityStore.LoadGameMelee(content);
+      EntityStore.LoadGameRanged(content);
 
       return (true);
     }
 
-    public static void LoadMelee(ContentManager content)
-    {
-      string meleeData = File.ReadAllText("Data/items/melee.json");
-      MeleeList = JsonConvert.DeserializeObject<List<MeleeWeapon>>(meleeData);
-
-      foreach (var melee in MeleeList)
-      {
-        melee.textures["world"] = content.Load<Texture2D>("gfx/weapons/" + melee.id);
-        melee.textures["attackEffect"] = content.Load<Texture2D>("gfx/swoosh");
-        melee.sounds["use"] = content.Load<SoundEffect>("sounds/weapons/melee");
-        melee.Init();
-      }
-    }
-
-    public static void LoadFirearm(ContentManager content)
-    {
-      string fireData = File.ReadAllText("Data/items/weapons.json");
-      FirearmList = JsonConvert.DeserializeObject<List<FireWeapon>>(fireData);
-
-      foreach (var firearm in FirearmList)
-      {
-        firearm.textures["world"] = content.Load<Texture2D>("gfx/weapons/" + firearm.id);
-        firearm.textures["muzzleFlashEffect"] = content.Load<Texture2D>("gfx/muzzleFlash");
-        firearm.sounds["use"] = content.Load<SoundEffect>("sounds/weapons/" + firearm.id + "/fire");
-        firearm.sounds["reload"] = content.Load<SoundEffect>("sounds/weapons/" + firearm.id + "/reload");
-        firearm.Init();
-      }
-      Dryfire = content.Load<SoundEffect>("sounds/weapons/dryfire");
-    }
-
     public static bool LoadPlayers(ContentManager content)
     {
+      Dryfire = content.Load<SoundEffect>("sounds/weapons/dryfire");
       Players = content.Load<Texture2D>("gfx/players");
       PlayersSound = new SoundEffect[Enum.GetNames(typeof(PlayerSounds)).Length];
       PlayersSound[(int)PlayerSounds.Step1] = content.Load<SoundEffect>("sounds/player/step1");
@@ -111,31 +80,6 @@ namespace FrozenPizza
       PlayersSound[(int)PlayerSounds.Hurt] = content.Load<SoundEffect>("sounds/player/hurt");
       PlayersSound[(int)PlayerSounds.Die] = content.Load<SoundEffect>("sounds/player/die");
       return (true);
-    }
-
-    public static BaseItem GetItemWithId(string id)
-    {
-      foreach (var melee in MeleeList)
-      {
-        if (melee.id == id)
-        {
-          var copy = new MeleeWeapon();
-          copy.Copy(melee);
-          copy.Init();
-          return (copy);
-        }
-      }
-      foreach (var firearm in FirearmList)
-      {
-        if (firearm.id == id)
-        {
-          var copy = new FireWeapon();
-          copy.Copy(firearm);
-          copy.Init();
-          return (copy);
-        }
-      }
-      return (null);
     }
 
     public static Texture2D LoadTileset(string tilesetName)

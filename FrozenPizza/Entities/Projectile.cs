@@ -1,16 +1,13 @@
 ﻿#if GAME
-using FrozenPizza.Utils;
-using Microsoft.Xna.Framework;
-  using Microsoft.Xna.Framework.Graphics;
-  using System;
+  using FrozenPizza.Utils;
 #else
 using FPServer;
-using Server;
-using Server.Payloads;
-using System;
-using System.Drawing;
-  using System.Numerics;
+  using Server;
+  using Server.Payloads;
 #endif
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace FrozenPizza.Entities
 {
@@ -58,7 +55,7 @@ namespace FrozenPizza.Entities
 
     public void Draw(SpriteBatch spriteBatch)
     {
-      spriteBatch.Draw(Collection.projectile, Tools.GetDrawPoint(position, Collection.projectile), new Rectangle(0, 0, Collection.projectile.Width, Collection.projectile.Height), Color.White, -angle, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0.3f);
+      spriteBatch.Draw(Resources.projectile, Tools.GetDrawPoint(position, Resources.projectile), new Rectangle(0, 0, Resources.projectile.Width, Resources.projectile.Height), Color.White, -angle, new Vector2(16, 16), 1.0f, SpriteEffects.None, 0.3f);
     }
 #else
     public bool Update(ServerTime gameTime)
@@ -67,7 +64,7 @@ namespace FrozenPizza.Entities
       if (!ServerV2.map.isValidPosition(position)) return (false);
       foreach (var entry in ServerV2.players)
       {
-        BasePlayer player = entry.Value;
+        Player player = entry.Value;
         if (!player.active) continue;
         if (player.getHitbox().Contains(new Point((int)position.X, (int)position.Y)))
         {

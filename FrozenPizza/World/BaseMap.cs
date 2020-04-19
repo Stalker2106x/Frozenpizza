@@ -1,11 +1,5 @@
-﻿#if GAME
-  using Microsoft.Xna.Framework;
-#else
-  using System.Drawing;
-  using System.Numerics;
-#endif
+﻿using Microsoft.Xna.Framework;
 using FrozenPizza;
-using FrozenPizza.Entities;
 using System.Collections.Generic;
 using System.IO;
 using TiledSharp;

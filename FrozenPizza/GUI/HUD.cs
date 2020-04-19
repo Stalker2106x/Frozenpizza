@@ -82,7 +82,7 @@ namespace FrozenPizza
       bottomPanel.HorizontalAlignment = HorizontalAlignment.Center;
       bottomPanel.VerticalAlignment = VerticalAlignment.Bottom;
 
-      //bottomPanel.Background = new TextureRegion(Collection.MenuBackground);
+      //bottomPanel.Background = new TextureRegion(Resources.MenuBackground);
 
       _handsLabel = new Label();
       _handsLabel.Text = "Hands";
@@ -105,13 +105,13 @@ namespace FrozenPizza
       _ui.Widgets.Add(bottomPanel);
     }
 
-    public void initHands(BaseItem hands)
+    public void initHands(Item hands)
     {
       _handsLabel.Text = hands.name;
       _handsImage.Renderable = new TextureRegion(hands.textures["world"], new Rectangle(0, 0, hands.textures["world"].Width, hands.textures["world"].Height));
       _handsProgressIndicator.Minimum = 0;
-      FireWeapon weapon;
-      if ((weapon = hands as FireWeapon) != null) _handsProgressIndicator.Maximum = weapon.reloadDelay;
+      RangedWeapon weapon;
+      if ((weapon = hands as RangedWeapon) != null) _handsProgressIndicator.Maximum = weapon.reloadDelay;
       else _handsAmount.Text = "";
     }
 
@@ -137,8 +137,8 @@ namespace FrozenPizza
       leftLine[1] = cam.getViewportCenter() + Player.getDirectionVector(Direction.Forward, aimAccuracyAngle.left, 120);
       rightLine[0] = cam.getViewportCenter() + Player.getDirectionVector(Direction.Forward, aimAccuracyAngle.right, 100);
       rightLine[1] = cam.getViewportCenter() + Player.getDirectionVector(Direction.Forward, aimAccuracyAngle.right, 120);
-      DrawLine(spriteBatch, Collection.Pixel, leftLine[0], leftLine[1], Color.Yellow, 1);
-      DrawLine(spriteBatch, Collection.Pixel, rightLine[0], rightLine[1], Color.Yellow, 1);
+      DrawLine(spriteBatch, Resources.Pixel, leftLine[0], leftLine[1], Color.Yellow, 1);
+      DrawLine(spriteBatch, Resources.Pixel, rightLine[0], rightLine[1], Color.Yellow, 1);
     }
     public void toggleDeathPanel()
     {

@@ -1,6 +1,4 @@
-﻿using FrozenPizza.Settings;
-using FrozenPizza.Utils;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -27,14 +25,16 @@ namespace FrozenPizza
     Backward
   }
 
-  public class Player : BasePlayer
+  public class Player : Actor
   {
 
     //Constructor for remote players
     public Player(int id, String name, Vector2 pos, int hp = 100) : base(id, name, hp, pos)
     {
+#if GAME
       _skinRect = new Rectangle(0, 0, 32, 16);
-      _sounds = Collection.PlayersSound;
+      _sounds = Resources.PlayersSound;
+#endif
     }
 
     public Vector2 getDirectionVector(Direction direction, float move)
@@ -51,9 +51,14 @@ namespace FrozenPizza
       return (Vector2.Zero);
     }
 
+    /// <summary>
+    /// Game Logic
+    /// </summary>
+#if GAME
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-      spriteBatch.Draw(Collection.Players, _position, _skinRect, Color.White, -_orientation, new Vector2(_skinRect.Width/2, _skinRect.Height/2), 1.0f, SpriteEffects.None, 0.3f);
+      spriteBatch.Draw(Resources.Players, _position, _skinRect, Color.White, -_orientation, new Vector2(_skinRect.Width/2, _skinRect.Height/2), 1.0f, SpriteEffects.None, 0.3f);
     }
+#endif
   }
 }

@@ -13,20 +13,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\FrozenPizza\Characters\BasePlayer.cs" Link="BasePlayer.cs" />
-    <Compile Include="..\FrozenPizza\Entities\BaseItem.cs" Link="Entities\BaseItem.cs" />
+    <Compile Include="..\FrozenPizza\Entities\Actors\Actor.cs" Link="Entities\Actors\Actor.cs" />
+    <Compile Include="..\FrozenPizza\Entities\Actors\Player.cs" Link="Entities\Actors\Player.cs" />
+    <Compile Include="..\FrozenPizza\Entities\Items\Item.cs" Link="Entities\Items\Item.cs" />
+    <Compile Include="..\FrozenPizza\Entities\Items\Weapon.cs" Link="Entities\Items\Weapon.cs" />
     <Compile Include="..\FrozenPizza\Entities\Projectile.cs" Link="Entities\Projectile.cs" />
-    <Compile Include="..\FrozenPizza\Entities\Weapon.cs" Link="Entities\Weapon.cs" />
     <Compile Include="..\FrozenPizza\World\BaseMap.cs" Link="BaseMap.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="LiteNetLib" Version="0.8.3.1" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\" />
+    <Folder Include="Entities\Actors\" />
+    <Folder Include="Entities\Items\" />
   </ItemGroup>
 
 </Project>

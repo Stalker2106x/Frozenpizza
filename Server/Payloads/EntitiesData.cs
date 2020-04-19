@@ -1,8 +1,6 @@
 ﻿using FrozenPizza;
 using FrozenPizza.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Server.Payloads
 {
@@ -12,7 +10,7 @@ namespace Server.Payloads
     public List<NewItemData> items;
 
     public EntitiesData() { } //default
-    public EntitiesData(int clientId, List<BasePlayer> playerList, List<BaseItem> itemList)
+    public EntitiesData(int clientId, List<Player> playerList, List<Item> itemList)
     {
       players = new List<FullPlayerData>();
       playerList.ForEach((it) =>

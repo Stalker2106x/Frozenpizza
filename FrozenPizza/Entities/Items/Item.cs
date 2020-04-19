@@ -1,20 +1,15 @@
 ﻿#if GAME
-  using FrozenPizza.Utils;
-  using Microsoft.Xna.Framework;
-  using Microsoft.Xna.Framework.Audio;
-  using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json;
-#else
-  using System.Drawing;
-  using System.Numerics;
+using FrozenPizza.Utils;
 #endif
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
 namespace FrozenPizza.Entities
 {
-  [Serializable]
-  public class BaseItem
+  public class Item
   {
     public int uid;
     public string name;
@@ -24,7 +19,7 @@ namespace FrozenPizza.Entities
 
     public Point? position;
 
-    public BaseItem()
+    public Item()
     {
 #if GAME
     textures = new Dictionary<string, Texture2D>();
@@ -32,7 +27,7 @@ namespace FrozenPizza.Entities
 #endif
     }
 
-    public virtual void Copy(BaseItem toCopy)
+    public virtual void Copy(Item toCopy)
     {
       name = toCopy.name;
       id = toCopy.id;

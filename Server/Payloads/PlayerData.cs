@@ -1,9 +1,4 @@
-﻿#if GAME
-using Microsoft.Xna.Framework;
-#else
-  using System.Drawing;
-  using System.Numerics;
-#endif
+﻿using Microsoft.Xna.Framework;
 
 namespace Server.Payloads
 {
@@ -36,17 +31,15 @@ namespace Server.Payloads
   {
     public int id;
 
-    public int x;
-    public int y;
+    public Vector2 position;
 
     public float orientation;
 
-    public PlayerData(int id_, Vector2 position, float orientation_)
+    public PlayerData(int id_, Vector2 position_, float orientation_)
     {
       id = id_;
       orientation = orientation_;
-      x = (int)position.X;
-      y = (int)position.Y;
+      position = position_;
     }
   }
 }

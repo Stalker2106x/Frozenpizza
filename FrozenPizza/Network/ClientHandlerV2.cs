@@ -79,13 +79,13 @@ namespace FrozenPizza.Network
       EntitiesData payload = JsonConvert.DeserializeObject<EntitiesData>(body);
       payload.players.ForEach((it) =>
       {
-        GameMain.players.Add(new Player(it.data.id, it.name, new Vector2(it.data.x, it.data.y), it.hp));
+        GameMain.players.Add(new Player(it.data.id, it.name, it.data.position, it.hp));
       });
       payload.items.ForEach((it) =>
       {
-        var item = Collection.GetItemWithId(it.id);
+        var item = EntityStore.GetItemWithId(it.id);
         item.uid = it.uid;
-        item.position = it.GetPosition();
+        item.position = it.position;
         GameMain.map.items.Add(item);
       });
       ClientSenderV2.ContinueSync();
@@ -101,13 +101,13 @@ namespace FrozenPizza.Network
     {
       FullPlayerData payload = JsonConvert.DeserializeObject<FullPlayerData>(body);
 
-      GameMain.players.Add(new Player(payload.data.id, payload.name, new Vector2(payload.data.x, payload.data.y), payload.hp));
+      GameMain.players.Add(new Player(payload.data.id, payload.name, payload.data.position, payload.hp));
     }
     
     public static void AddProjectile(string body) //.PROJECTILE"
     {
       ProjectileData payload = JsonConvert.DeserializeObject<ProjectileData>(body);
-      GameMain.projectiles.Add(new Projectile(payload.ownerId, new Vector2(payload.x, payload.y), payload.angle, payload.velocity, payload.damage));
+      GameMain.projectiles.Add(new Projectile(payload.ownerId, payload.position, payload.angle, payload.velocity, payload.damage));
     }
 
     public static void RemovePlayer(string body) //.RMPLAYER
@@ -131,7 +131,7 @@ namespace FrozenPizza.Network
       }
       if (payload.hp != player.hp) player.addHealth(payload.hp - player.hp);
       if (!payload.active && player.active) player.die();
-      player.position = new Vector2(payload.data.x, payload.data.y);
+      player.position = payload.data.position;
       player.orientation = payload.data.orientation;
     }
 
@@ -140,7 +140,7 @@ namespace FrozenPizza.Network
       PlayerData payload = JsonConvert.DeserializeObject<PlayerData>(body);
 
       Player player = GameMain.players.First((it) => { return (it.id == payload.id); });
-      player.position = new Vector2(payload.x, payload.y);
+      player.position = payload.position;
       player.orientation = payload.orientation;
     }
 
@@ -148,8 +148,8 @@ namespace FrozenPizza.Network
     {
       ItemData payload = JsonConvert.DeserializeObject<ItemData>(body);
 
-      BaseItem item = GameMain.map.items.Find((it) => { return (it.uid == payload.uid); });
-      item.position = payload.GetPosition();
+      Item item = GameMain.map.items.Find((it) => { return (it.uid == payload.uid); });
+      item.position = payload.position;
     }
   }
 }

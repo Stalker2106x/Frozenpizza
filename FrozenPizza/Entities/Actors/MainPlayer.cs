@@ -1,7 +1,7 @@
-﻿using FrozenPizza.Entities;
-using FrozenPizza.Network;
+﻿using FrozenPizza.Network;
 using FrozenPizza.Settings;
 using FrozenPizza.Utils;
+using FrozenPizza.Entities;
 using FrozenPizza.World;
 using LiteNetLib;
 using LiteNetLib.Utils;
@@ -92,14 +92,12 @@ namespace FrozenPizza
     bool _sprinting, _aimlock;
 
     //Inventory
-    public BaseItem hands;
-    Inventory _inventory;
+    public Item hands;
 
     //Timers
     TimeSpan _stepTimer;
 
     Utils.Timer _networkUpdateTimer;
-
 
 
     public MainPlayer(int id, String name, Vector2 position) : base(id, name, position)
@@ -110,9 +108,8 @@ namespace FrozenPizza
 
       //Init Inventory
       hands = new MeleeWeapon();
-      hands.Copy(Collection.MeleeList.First((it) => { return (it.id == "hands"); }));
+      hands.Copy(EntityStore.MeleeWeapons.First((it) => { return (it.id == "hands"); }));
       hands.Init();
-      _inventory = new Inventory();
       
       _networkUpdateTimer = new Utils.Timer();
       _networkUpdateTimer.addAction(TimerDirection.Forward, 10 , TimeoutBehaviour.StartOver, () => { UpdateNetwork(); });
@@ -125,8 +122,8 @@ namespace FrozenPizza
       AccuracyAngle aimAccuracyAngle = new AccuracyAngle();
       float fov = (float)Math.PI / 4f; //half view
 
-      FireWeapon weapon;
-      if ((weapon = hands as FireWeapon) != null)
+      RangedWeapon weapon;
+      if ((weapon = hands as RangedWeapon) != null)
       {
         fov -= (weapon.accuracy / 100) * Orientation.MaxAngle;
       }
@@ -255,8 +252,8 @@ namespace FrozenPizza
           hands.use(this);
           break;
         case GameAction.Reload:
-          FireWeapon weapon;
-          if ((weapon = hands as FireWeapon) != null) weapon.reload();
+          RangedWeapon weapon;
+          if ((weapon = hands as RangedWeapon) != null) weapon.reload();
           break;
         default:
           break;
@@ -304,7 +301,7 @@ namespace FrozenPizza
         hands.drop();
         GameMain.map.items.Add(hands);
         hands = new MeleeWeapon();
-        hands.Copy(Collection.MeleeList.First((it) => { return (it.id == "hands"); }));
+        hands.Copy(EntityStore.MeleeWeapons.First((it) => { return (it.id == "hands"); }));
         hands.Init();
         GameMain.hud.initHands(hands);
       }

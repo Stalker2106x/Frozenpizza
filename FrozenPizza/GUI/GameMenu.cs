@@ -14,7 +14,7 @@ namespace FrozenPizza.GUI
       Panel mainPanel = new Panel();
       mainPanel.VerticalAlignment = VerticalAlignment.Center;
       mainPanel.HorizontalAlignment = HorizontalAlignment.Center;
-      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
+      mainPanel.Background = new TextureRegion(Resources.MenuBackground);
 
       Grid grid = new Grid();
       grid.VerticalAlignment = VerticalAlignment.Center;
@@ -108,7 +108,7 @@ namespace FrozenPizza.GUI
       VerticalStackPanel mainPanel = new VerticalStackPanel();
       mainPanel.VerticalAlignment = VerticalAlignment.Center;
       mainPanel.HorizontalAlignment = HorizontalAlignment.Center;
-      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
+      mainPanel.Background = new TextureRegion(Resources.MenuBackground);
 
       Label deathLabel = new Label();
       deathLabel.Text = "You are dead";

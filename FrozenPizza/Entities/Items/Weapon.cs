@@ -2,10 +2,10 @@
   using FrozenPizza.Network;
   using FrozenPizza.Settings;
   using FrozenPizza.Utils;
-  using Microsoft.Xna.Framework;
+#endif
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Server.Payloads;
-#endif
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,23 +15,22 @@ namespace FrozenPizza.Entities
   /// <summary>
   /// Common base class for weapons
   /// </summary>
-  [Serializable]
-  public class BaseWeapon : BaseItem
+  public class Weapon : Item
   {
     public float cooldown;
     public int damage;
 
-    public BaseWeapon() : base()
+    public Weapon() : base()
     {
 #if GAME
       useCooldown = new Timer();
 #endif
     }
-    public override void Copy(BaseItem toCopy)
+    public override void Copy(Item toCopy)
     {
       base.Copy(toCopy);
-      BaseWeapon rToCopy;
-      if ((rToCopy = toCopy as BaseWeapon) == null) return;
+      Weapon rToCopy;
+      if ((rToCopy = toCopy as Weapon) == null) return;
       cooldown = rToCopy.cooldown;
       damage = rToCopy.damage;
 #if GAME
@@ -70,8 +69,7 @@ namespace FrozenPizza.Entities
   /// <summary>
   /// Melee Wepaon
   /// </summary>
-  [Serializable]
-  public class MeleeWeapon : BaseWeapon
+  public class MeleeWeapon : Weapon
   {
     public MeleeWeapon() : base()
     {
@@ -79,7 +77,7 @@ namespace FrozenPizza.Entities
       attackEffectTimer = new Timer();
 #endif
     }
-    public override void Copy(BaseItem toCopy)
+    public override void Copy(Item toCopy)
     {
       base.Copy(toCopy);
       MeleeWeapon rToCopy;
@@ -147,7 +145,7 @@ namespace FrozenPizza.Entities
   }
 
   [Serializable]
-  public class FireWeapon : BaseWeapon
+  public class RangedWeapon : Weapon
   {
     private static Random _randomGenerator = new Random();
 
@@ -158,18 +156,18 @@ namespace FrozenPizza.Entities
     public float accuracy;
 
 
-    public FireWeapon() : base()
+    public RangedWeapon() : base()
     {
 #if GAME
       reloadTimer = new Timer();
       muzzleFlashTimer = new Timer();
 #endif
     }
-    public override void Copy(BaseItem toCopy)
+    public override void Copy(Item toCopy)
     {
       base.Copy(toCopy);
-      FireWeapon rToCopy;
-      if ((rToCopy = toCopy as FireWeapon) == null) return;
+      RangedWeapon rToCopy;
+      if ((rToCopy = toCopy as RangedWeapon) == null) return;
       ammo = rToCopy.ammo;
       magazineSize = rToCopy.magazineSize;
       reloadDelay = rToCopy.reloadDelay;
@@ -205,7 +203,7 @@ namespace FrozenPizza.Entities
       || (fireMode == FireMode.SemiAuto && Options.Config.Bindings[GameAction.UseHands].IsControlHeld(Engine.getDeviceState(), Engine.getPrevDeviceState()))) return (false);
       if (ammo <= 0)
       {
-        Collection.Dryfire.Play(Options.Config.SoundVolume, 0f, 0f);
+        Resources.Dryfire.Play(Options.Config.SoundVolume, 0f, 0f);
         return (true);
       }
       ammo--;

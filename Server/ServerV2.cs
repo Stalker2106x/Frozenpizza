@@ -3,11 +3,11 @@ using FrozenPizza.Entities;
 using FrozenPizza.World;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using Server;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -25,7 +25,7 @@ namespace FPServer
     //Game
     public static List<Projectile> projectiles;
     public static ServerMap map;
-    public static Dictionary<NetPeer, BasePlayer> players;
+    public static Dictionary<NetPeer, Player> players;
 
     public ServerV2(string mapName)
     {
@@ -34,7 +34,7 @@ namespace FPServer
       _clients = new List<NetPeer>();
       map = new ServerMap(mapName);
       projectiles = new List<Projectile>();
-      players = new Dictionary<NetPeer, BasePlayer>();
+      players = new Dictionary<NetPeer, Player>();
     }
 
     public void start(int port, int slots)
@@ -61,7 +61,7 @@ namespace FPServer
       {
         _clients.Add(peer);
         Console.WriteLine("New client connected: {0}", peer.EndPoint);
-        players.Add(peer, new BasePlayer(peer.Id, "Player"+ peer.Id, 100, new Vector2(10, 10)));
+        players.Add(peer, new Player(peer.Id, "Player"+ peer.Id, new Vector2(10, 10), 100));
         NetDataWriter writer = new NetDataWriter();
         var payload = new { version = Assembly.GetExecutingAssembly().GetName().Version.ToString() };
         writer.Put(".WELCOME " + JsonConvert.SerializeObject(payload));

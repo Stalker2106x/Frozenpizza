@@ -1,9 +1,4 @@
-﻿#if GAME
-  using Microsoft.Xna.Framework;
-#else
-  using System.Drawing;
-  using System.Numerics;
-#endif
+﻿using Microsoft.Xna.Framework;
 
 namespace Server.Payloads
 {

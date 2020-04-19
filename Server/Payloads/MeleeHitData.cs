@@ -1,23 +1,17 @@
-﻿#if GAME
-  using Microsoft.Xna.Framework;
-#else
-  using System.Drawing;
-  using System.Numerics;
-#endif
+﻿using Microsoft.Xna.Framework;
+
 namespace Server.Payloads
 {
   public class MeleeHitData
   {
     public int ownerId;
-    public float x;
-    public float y;
+    public Vector2 position;
     public int damage;
 
-    public MeleeHitData(int ownerId_, Vector2 position, int damage_)
+    public MeleeHitData(int ownerId_, Vector2 position_, int damage_)
     {
       ownerId = ownerId_;
-      x = position.X;
-      y = position.Y;
+      position = position_;
       damage = damage_;
     }
   }

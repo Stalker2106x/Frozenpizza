@@ -1,9 +1,4 @@
-﻿#if GAME
-  using Microsoft.Xna.Framework;
-#else
-  using System.Drawing;
-  using System.Numerics;
-#endif
+﻿using Microsoft.Xna.Framework;
 
 namespace Server.Payloads
 {
@@ -14,28 +9,13 @@ namespace Server.Payloads
   {
     public int uid;
     public string id;
-    public int? x;
-    public int? y;
+    public Point? position;
 
-    public NewItemData(int uid_, string id_, Point? position)
+    public NewItemData(int uid_, string id_, Point? position_)
     {
       uid = uid_;
       id = id_;
-      if (position == null)
-      {
-        x = null;
-        y = null;
-      }
-      else
-      {
-        x = position.GetValueOrDefault().X;
-        y = position.GetValueOrDefault().Y;
-      }
-    }
-    public Point? GetPosition()
-    {
-      if (x == null || y == null) return (null);
-      return (new Point(x.GetValueOrDefault(), y.GetValueOrDefault()));
+      position = position_;
     }
   }
   /// <summary>
@@ -44,27 +24,12 @@ namespace Server.Payloads
   public class ItemData
   {
     public int uid;
-    public int? x;
-    public int? y;
+    public Point? position;
 
-    public ItemData(int uid_, Point? position)
+    public ItemData(int uid_, Point? position_)
     {
-      if (position == null)
-      {
-        x = null;
-        y = null;
-      }
-      else
-      {
-        x = position.GetValueOrDefault().X;
-        y = position.GetValueOrDefault().Y;
-      }
-    }
-
-    public Point? GetPosition()
-    {
-      if (x == null || y == null) return (null);
-      return (new Point(x.GetValueOrDefault(), y.GetValueOrDefault()));
+      uid = uid_;
+      position = position_;
     }
   }
 }

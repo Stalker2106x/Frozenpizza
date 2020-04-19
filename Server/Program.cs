@@ -1,4 +1,5 @@
 ﻿
+using FrozenPizza;
 using Server;
 
 namespace FPServer
@@ -10,7 +11,8 @@ namespace FPServer
     static int Main(string[] args)
     {
       ServerHandlerV2.Initialize();
-      BaseCollection.Load();
+      EntityStore.LoadMelee();
+      EntityStore.LoadRanged();
       gameTime = new ServerTime();
 
       if (args.Length < 1)

@@ -27,11 +27,11 @@ namespace FrozenPizza
       Stylesheet.Current.ButtonStyle.Background = new ColoredRegion(DefaultAssets.WhiteRegion, Color.Transparent);
       Stylesheet.Current.ButtonStyle.OverBackground = new ColoredRegion(DefaultAssets.WhiteRegion, new Color(255, 0, 0, 0.1f));
       Stylesheet.Current.ButtonStyle.PressedBackground = new ColoredRegion(DefaultAssets.WhiteRegion, new Color(255, 0, 0, 0.2f));
-      Stylesheet.Current.TextBoxStyle.Font = Collection.regularFont;
-      Stylesheet.Current.ComboBoxStyle.LabelStyle.Font = Collection.regularFont;
+      Stylesheet.Current.TextBoxStyle.Font = Resources.regularFont;
+      Stylesheet.Current.ComboBoxStyle.LabelStyle.Font = Resources.regularFont;
       Stylesheet.Current.ComboBoxStyle.Width = 200;
       Stylesheet.Current.HorizontalSliderStyle.Width = 200;
-      Stylesheet.Current.LabelStyle.Font = Collection.titleFont;
+      Stylesheet.Current.LabelStyle.Font = Resources.titleFont;
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ namespace FrozenPizza
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
-      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
+      mainPanel.Background = new TextureRegion(Resources.MenuBackground);
 
       VerticalStackPanel grid = new VerticalStackPanel();
       grid.HorizontalAlignment = HorizontalAlignment.Center;
@@ -74,7 +74,7 @@ namespace FrozenPizza
       grid.Spacing = 8;
 
       Image gameLogo = new Image();
-      gameLogo.Renderable = new TextureRegion(Collection.GameLogo);
+      gameLogo.Renderable = new TextureRegion(Resources.GameLogo);
       gameLogo.HorizontalAlignment = HorizontalAlignment.Center;
       grid.Widgets.Add(gameLogo);
 
@@ -125,7 +125,7 @@ namespace FrozenPizza
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
-      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
+      mainPanel.Background = new TextureRegion(Resources.MenuBackground);
 
       Grid grid = new Grid();
       grid.RowSpacing = 8;
@@ -230,7 +230,7 @@ namespace FrozenPizza
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
-      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
+      mainPanel.Background = new TextureRegion(Resources.MenuBackground);
 
       Grid grid = new Grid();
 
@@ -303,7 +303,7 @@ namespace FrozenPizza
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
-      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
+      mainPanel.Background = new TextureRegion(Resources.MenuBackground);
 
       Grid grid = new Grid();
       int gridRow = 0;
@@ -503,7 +503,7 @@ namespace FrozenPizza
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
-      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
+      mainPanel.Background = new TextureRegion(Resources.MenuBackground);
 
       Grid grid = new Grid();
       grid.VerticalAlignment = VerticalAlignment.Center;
@@ -647,7 +647,7 @@ namespace FrozenPizza
       Desktop.Widgets.Clear();
 
       Panel mainPanel = new Panel();
-      mainPanel.Background = new TextureRegion(Collection.MenuBackground);
+      mainPanel.Background = new TextureRegion(Resources.MenuBackground);
 
       VerticalStackPanel grid = new VerticalStackPanel();
       grid.HorizontalAlignment = HorizontalAlignment.Center;

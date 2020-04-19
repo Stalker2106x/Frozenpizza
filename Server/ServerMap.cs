@@ -1,9 +1,9 @@
-﻿using FrozenPizza.Entities;
+﻿using FrozenPizza;
+using FrozenPizza.Entities;
 using FrozenPizza.World;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Numerics;
 using System.Text;
 
 namespace FPServer
@@ -18,12 +18,12 @@ namespace FPServer
 
     private static Random _randomGenerator = new Random();
 
-    public List<BaseItem> items;
+    public List<Item> items;
     public List<Rectangle> spawnAreas;
 
     public ServerMap(string mapName) : base(mapName)
     {
-      items = new List<BaseItem>();
+      items = new List<Item>();
       LoadSpawnAreas();
       GenerateItems();
     }
@@ -37,7 +37,7 @@ namespace FPServer
         {
           case MetaTile.Melee:
             var melee = new MeleeWeapon();
-            melee.Copy(BaseCollection.MeleeList[_randomGenerator.Next(1, BaseCollection.MeleeList.Count)]);
+            melee.Copy(EntityStore.MeleeWeapons[_randomGenerator.Next(1, EntityStore.MeleeWeapons.Count)]);
             melee.Init();
             melee.position = new Point(tile.X, tile.Y);
             melee.uid = uid;
@@ -45,8 +45,8 @@ namespace FPServer
             uid++;
             break;
           case MetaTile.Pistol:
-            var pistol = new FireWeapon();
-            pistol.Copy(BaseCollection.FirearmList[_randomGenerator.Next(0, BaseCollection.FirearmList.Count)]);
+            var pistol = new RangedWeapon();
+            pistol.Copy(EntityStore.RangedWeapons[_randomGenerator.Next(0, EntityStore.RangedWeapons.Count)]);
             pistol.Init();
             pistol.position = new Point(tile.X, tile.Y);
             pistol.uid = uid;
