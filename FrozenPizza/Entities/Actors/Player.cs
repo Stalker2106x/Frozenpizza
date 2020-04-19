@@ -27,10 +27,13 @@ namespace FrozenPizza
 
   public class Player : Actor
   {
+    protected int _uid; //From server
+    public int uid { get { return (_uid); } }
 
     //Constructor for remote players
-    public Player(int id, String name, Vector2 pos, int hp = 100) : base(id, name, hp, pos)
+    public Player(int uid, String name, Vector2 pos, int hp = 100) : base(name, hp, pos)
     {
+      _uid = uid;
 #if GAME
       _skinRect = new Rectangle(0, 0, 32, 16);
       _sounds = Resources.PlayersSound;
@@ -51,14 +54,5 @@ namespace FrozenPizza
       return (Vector2.Zero);
     }
 
-    /// <summary>
-    /// Game Logic
-    /// </summary>
-#if GAME
-    public virtual void Draw(SpriteBatch spriteBatch)
-    {
-      spriteBatch.Draw(Resources.Players, _position, _skinRect, Color.White, -_orientation, new Vector2(_skinRect.Width/2, _skinRect.Height/2), 1.0f, SpriteEffects.None, 0.3f);
-    }
-#endif
   }
 }

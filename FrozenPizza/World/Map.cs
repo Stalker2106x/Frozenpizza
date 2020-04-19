@@ -25,9 +25,16 @@ namespace FrozenPizza.World
     public Map(string mapName) : base(mapName)
     {
       items = new List<Item>();
-      _tileset = Resources.LoadTileset(_map.Tilesets[(int)Tileset.City].Name.ToString());
-
-      _tilesetStartGid = (int)(_map.Tilesets[0].Image.Width / tileSize.X); //Compute meta size for offset
+      _tilesetStartGid = 0;
+      foreach (var tileset in _map.Tilesets)
+      {
+        if (tileset.Name == "city")
+        {
+          _tileset = Resources.LoadTileset(tileset.Name.ToString());
+          break; //Only count offset for city
+        }
+        _tilesetStartGid += (int)(tileset.Image.Width / tileSize.X); //Compute meta size for offset
+      }
     }
 
     Rectangle GetGidRect(int gid)
@@ -52,8 +59,11 @@ namespace FrozenPizza.World
 
     void DrawLayer(SpriteBatch spriteBatch, Layer layer, bool skipVisible = false)
     {
-      Rectangle viewPort = GameMain.cam.getGridViewport();
-      Rectangle drawBounds = new Rectangle(viewPort.X - (viewPort.Width / 2), viewPort.Y - (viewPort.Height / 2), (int)(viewPort.X + (viewPort.Width * 1.5)), (int)(viewPort.Y + (viewPort.Height * 1.5)));
+      Rectangle drawBounds = GameMain.cam.getGridFullViewport();
+      if (drawBounds.X < 0) drawBounds.X = 0;
+      if (drawBounds.Width > _map.Width) drawBounds.Width = _map.Width;
+      if (drawBounds.Y < 0) drawBounds.Y = 0;
+      if (drawBounds.Height > _map.Height) drawBounds.Height = _map.Height;
       for (int y = drawBounds.Y; y < drawBounds.Height; y++)
       {
         for (int x = drawBounds.X; x < drawBounds.Width; x++)

@@ -108,7 +108,7 @@ namespace FrozenPizza.Entities
       sounds["use"].Play(Options.Config.SoundVolume, 0f, 0f);
       attackEffectTimer.Start();
       Vector2 hitPos = player.position + player.getDirectionVector(Direction.Forward, 15);
-      ClientSenderV2.SendMeleeHit(new MeleeHitData(player.id, hitPos, damage));
+      ClientSenderV2.SendMeleeHit(new MeleeHitData(player.uid, hitPos, damage));
       return (true);
     }
 
@@ -215,8 +215,8 @@ namespace FrozenPizza.Entities
       float bulletVelocity = 400f;
 
       sounds["use"].Play(Options.Config.SoundVolume, 0f, 0f);
-      GameMain.projectiles.Add(new Projectile(player.id, bulletPos, bulletAngle, bulletVelocity, damage));
-      ClientSenderV2.SendProjectile(new ProjectileData(player.id, bulletPos, bulletAngle, bulletVelocity, damage));
+      GameMain.projectiles.Add(new Projectile(player.uid, bulletPos, bulletAngle, bulletVelocity, damage));
+      ClientSenderV2.SendProjectile(new ProjectileData(player.uid, bulletPos, bulletAngle, bulletVelocity, damage));
       return (true);
     }
 

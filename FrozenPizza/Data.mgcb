@@ -354,6 +354,9 @@
 /processorParam:TextureFormat=Color
 /build:Data/maps/props.png
 
+#begin Data/maps/survival.tmx
+/copy:Data/maps/survival.tmx
+
 #begin Data/maps/tiles.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -80,7 +80,7 @@ namespace FrozenPizza.GUI
       foreach (Player player in GameMain.players)
       {
         Label idLabel = new Label();
-        idLabel.Text = player.id.ToString();
+        idLabel.Text = player.uid.ToString();
         idLabel.GridColumn = 1;
         idLabel.GridRow = i;
         idLabel.HorizontalAlignment = HorizontalAlignment.Left;

@@ -1,4 +1,5 @@
 ﻿using FrozenPizza.Entities;
+using FrozenPizza.Entities.Actors;
 using FrozenPizza.Settings;
 using FrozenPizza.World;
 using Microsoft.Xna.Framework;
@@ -17,6 +18,7 @@ namespace FrozenPizza
     public static Map map;
     public static MainPlayer mainPlayer { get; set; }
     public static List<Player> players;
+    public static List<Creature> creatures;
 
     public static List<Projectile> projectiles;
 
@@ -26,6 +28,7 @@ namespace FrozenPizza
     public static void Load(GraphicsDevice graphics)
     {
       players = new List<Player>();
+      creatures = new List<Creature>();
       projectiles = new List<Projectile>();
       cam = new Camera(graphics);
       hud = new HUD(graphics, cam);
@@ -43,6 +46,7 @@ namespace FrozenPizza
     {
       //map.Update(); //Update world
       mainPlayer.Update(gameTime, map, state, prevState, cam, cursor);
+      foreach (var crea in creatures) crea.Update(gameTime);
       for (int i = projectiles.Count - 1; i >= 0; i--)
       {
         if (!projectiles[i].Update(gameTime)) projectiles.RemoveAt(i);
@@ -57,7 +61,8 @@ namespace FrozenPizza
       map.Draw(spriteBatch);
       mainPlayer.Draw(spriteBatch);
       foreach (var projectile in projectiles) projectile.Draw(spriteBatch);
-      foreach (var player in players) player.Draw(spriteBatch); //Draw players
+      foreach (var player in players) player.Draw(spriteBatch);
+      foreach (var crea in creatures) crea.Draw(spriteBatch);
       spriteBatch.End();
       spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
       hud.Draw(spriteBatch, graphics, mainPlayer, cam);

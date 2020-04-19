@@ -90,7 +90,7 @@ namespace FPServer
       client.Send(writer, DeliveryMethod.ReliableOrdered);
       //Propagate
       Player player = ServerV2.players[client];
-      FullPlayerData payload = new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.id, player.position, player.orientation));
+      FullPlayerData payload = new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.uid, player.position, player.orientation));
       writer.Reset();
       writer.Put(".NEWPLAYER "+JsonConvert.SerializeObject(payload));
       Program.server.broadcast(client, writer, DeliveryMethod.ReliableOrdered);
@@ -100,7 +100,7 @@ namespace FPServer
     {
       NetDataWriter writer = new NetDataWriter();
       Player player = ServerV2.players[client];
-      FullPlayerData payload = new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.id, ServerV2.map.GetRandomSpawnArea(), player.orientation));
+      FullPlayerData payload = new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.uid, ServerV2.map.GetRandomSpawnArea(), player.orientation));
 
       writer.Put("!FPLAYER " + JsonConvert.SerializeObject(payload));
       Program.server.broadcast(null, writer, DeliveryMethod.ReliableUnordered);
@@ -151,7 +151,7 @@ namespace FPServer
         if (player.getHitbox().Contains(payload.position.ToPoint()))
         {
           player.addHealth(-payload.damage);
-          ServerSenderV2.SendFullPlayerData(new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.id, player.position, player.orientation)));
+          ServerSenderV2.SendFullPlayerData(new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.uid, player.position, player.orientation)));
         }
       }
     }

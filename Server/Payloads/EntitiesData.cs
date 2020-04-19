@@ -15,8 +15,8 @@ namespace Server.Payloads
       players = new List<FullPlayerData>();
       playerList.ForEach((it) =>
       {
-        if (clientId != -1 && clientId == it.id) return; //Skip owner if set, we dont want to propagate itself
-        players.Add(new FullPlayerData(it.name, it.active, it.hp, new PlayerData(it.id, it.position, it.orientation)));
+        if (clientId != -1 && clientId == it.uid) return; //Skip owner if set, we dont want to propagate itself
+        players.Add(new FullPlayerData(it.name, it.active, it.hp, new PlayerData(it.uid, it.position, it.orientation)));
       });
       items = new List<NewItemData>();
       itemList.ForEach((it) =>

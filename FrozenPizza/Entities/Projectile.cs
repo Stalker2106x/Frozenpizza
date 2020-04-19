@@ -69,7 +69,7 @@ namespace FrozenPizza.Entities
         if (player.getHitbox().Contains(new Point((int)position.X, (int)position.Y)))
         {
           player.addHealth(-damage);
-          FullPlayerData payload = new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.id, player.position, player.orientation));
+          FullPlayerData payload = new FullPlayerData(player.name, player.active, player.hp, new PlayerData(player.uid, player.position, player.orientation));
           ServerSenderV2.SendFullPlayerData(payload);
           return (false);
         }

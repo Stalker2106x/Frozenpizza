@@ -3,6 +3,7 @@
 #endif
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace FrozenPizza
@@ -10,9 +11,6 @@ namespace FrozenPizza
   public class Actor
   {
     //Stats
-    protected int _id; //From server
-    public int id { get { return (_id); } }
-
     protected string _name;
     public string name { get { return (_name); } }
 
@@ -35,10 +33,9 @@ namespace FrozenPizza
     //Sound
     protected SoundEffect[] _sounds;
 
-    public Actor(int id, string name_, int hp, Vector2 position)
+    public Actor(string name_, int hp, Vector2 position)
     {
       _active = true;
-      _id = id;
       _name = name_;
       _hp = hp;
       _position = position;
@@ -81,6 +78,16 @@ namespace FrozenPizza
     {
       return ((float)Math.Sqrt(Math.Pow(pos.X - _position.X, 2) + Math.Pow(pos.Y - _position.Y, 2)));
     }
+
+    /// <summary>
+    /// Game Logic
+    /// </summary>
+#if GAME
+    public virtual void Draw(SpriteBatch spriteBatch)
+    {
+      spriteBatch.Draw(Resources.Players, _position, _skinRect, Color.White, -_orientation, new Vector2(_skinRect.Width / 2, _skinRect.Height / 2), 1.0f, SpriteEffects.None, 0.3f);
+    }
+#endif
 
   }
 }

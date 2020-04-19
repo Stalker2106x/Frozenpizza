@@ -1,4 +1,5 @@
 ﻿using FrozenPizza.Entities;
+using FrozenPizza.Entities.Actors;
 using FrozenPizza.Utils;
 using FrozenPizza.World;
 using LiteNetLib;
@@ -50,7 +51,7 @@ namespace FrozenPizza.Network
       try {
         commands[command](body);
       } catch (Exception e) {
-        Console.WriteLine("Unhandled command:" + e.Message);
+        Console.WriteLine("Unhandled command:" + e.Message + "#" + e.StackTrace);
       }
     }
 
@@ -95,6 +96,7 @@ namespace FrozenPizza.Network
       Console.WriteLine("Handshake");
       Engine.setState(GameState.Playing);
       ClientV2.step = ConnectionStep.Synced; //Ready
+      GameMain.creatures.Add(new Creature("CREABOY", 200, new Vector2(100, 100)));
     }
 
     public static void AddNewPlayer(string body) //.ADDPLAYER
@@ -114,7 +116,7 @@ namespace FrozenPizza.Network
     {
       int id;
       int.TryParse(body, out id);
-      GameMain.players.Remove(GameMain.players.First((it) => { return (it.id == id); }));
+      GameMain.players.Remove(GameMain.players.First((it) => { return (it.uid == id); }));
     }
 
     public static void UpdateFullPlayer(string body) //.FPLAYER
@@ -122,12 +124,12 @@ namespace FrozenPizza.Network
       FullPlayerData payload = JsonConvert.DeserializeObject<FullPlayerData>(body);
 
       Player player = null;
-      if (GameMain.mainPlayer.id == payload.data.id) player = GameMain.mainPlayer;
-      else player = GameMain.players.First((it) => { return (it.id == payload.data.id); });
+      if (GameMain.mainPlayer.uid == payload.data.id) player = GameMain.mainPlayer;
+      else player = GameMain.players.First((it) => { return (it.uid == payload.data.id); });
       if (!player.active && payload.active) //respawn
       {
         player.Reset();
-        if (player.id == payload.data.id) GameMain.hud.toggleDeathPanel(); //Close death panel
+        if (player.uid == payload.data.id) GameMain.hud.toggleDeathPanel(); //Close death panel
       }
       if (payload.hp != player.hp) player.addHealth(payload.hp - player.hp);
       if (!payload.active && player.active) player.die();
@@ -139,7 +141,7 @@ namespace FrozenPizza.Network
     {
       PlayerData payload = JsonConvert.DeserializeObject<PlayerData>(body);
 
-      Player player = GameMain.players.First((it) => { return (it.id == payload.id); });
+      Player player = GameMain.players.First((it) => { return (it.uid == payload.id); });
       player.position = payload.position;
       player.orientation = payload.orientation;
     }

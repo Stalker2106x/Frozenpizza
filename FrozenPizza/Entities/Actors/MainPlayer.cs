@@ -309,7 +309,7 @@ namespace FrozenPizza
 
     public void UpdateNetwork()
     {
-      ClientSenderV2.SendPlayerData(new PlayerData(_id, _position, _orientation));
+      ClientSenderV2.SendPlayerData(new PlayerData(_uid, _position, _orientation));
     }
 
     //Base update call
