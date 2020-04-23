@@ -45,19 +45,20 @@ namespace FrozenPizza.World
                              tileSize.X, tileSize.Y));
     }
 
-    void DrawTile(SpriteBatch spriteBatch, TmxLayerTile tile, bool skipVisible)
+    void DrawTile(SpriteBatch spriteBatch, TmxLayerTile tile, bool indoor, bool skipVisible)
     {
       if (tile.Gid == 0) return; //Only not Empty tile
 
       //Convert to world size
       float x = tile.X * _map.TileWidth;
       float y = tile.Y * _map.TileHeight;
+      if (indoor && raycast(new Vector2(x, y), GameMain.mainPlayer.position, Layer.Ceiling, RaycastType.Continuous)) return;
       if (skipVisible && isTileInView(new Vector2(x, y))) return;
 
       spriteBatch.Draw(_tileset, Tools.GetDrawRect((int)x, (int)y, tileSize), GetGidRect(tile.Gid), Color.White);
     }
 
-    void DrawLayer(SpriteBatch spriteBatch, Layer layer, bool skipVisible = false)
+    void DrawLayer(SpriteBatch spriteBatch, Layer layer, bool indoor = false, bool skipVisible = false)
     {
       Rectangle drawBounds = GameMain.cam.getGridFullViewport();
       if (drawBounds.X < 0) drawBounds.X = 0;
@@ -68,9 +69,27 @@ namespace FrozenPizza.World
       {
         for (int x = drawBounds.X; x < drawBounds.Width; x++)
         {
-          DrawTile(spriteBatch, _map.Layers[(int)layer].Tiles[x + (y * _map.Width)], skipVisible);
+          DrawTile(spriteBatch, _map.Layers[(int)layer].Tiles[x + (y * _map.Width)], indoor, skipVisible);
         }
       }
+    }
+
+    public enum RaycastType
+    {
+      Continuous,
+      Hit
+    }
+
+    bool raycast(Vector2 origin, Vector2 target, Layer layer, RaycastType rcType)
+    {
+      var ray = origin;
+      var angle = MathHelper.PiOver2 - (float)Math.Atan2(ray.Y - target.Y, ray.X - target.X);
+      while ((ray - target).Length() > 10)
+      {
+        if (rcType == RaycastType.Hit && _map.Layers[(int)layer].Tiles[GridToIndex(WorldToGrid(ray))].Gid != 0) return (true);
+        ray += new Vector2((float)Math.Sin(angle) * -2, (float)Math.Cos(angle) * -2);
+      }
+      return (rcType == RaycastType.Hit ? false : true);
     }
 
     bool isTileInView(Vector2 tilePos)
@@ -83,6 +102,7 @@ namespace FrozenPizza.World
       if (tileAngle >= MathHelper.TwoPi) tileAngle -= MathHelper.TwoPi;
       else if (tileAngle <= 0) tileAngle += MathHelper.TwoPi;
 
+      if (raycast(tilePos, GameMain.mainPlayer.position, Layer.Wall, RaycastType.Hit)) return (false);
       return (viewAngle.Contains(tileAngle));
     }
 
@@ -115,7 +135,7 @@ namespace FrozenPizza.World
       {
         item.Draw(spriteBatch, null);
       }
-      DrawLayer(spriteBatch, Layer.Ceiling, true);
+      DrawLayer(spriteBatch, Layer.Ceiling, _map.Layers[(int)Layer.Ceiling].Tiles[GridToIndex(WorldToGrid(GameMain.mainPlayer.position))].Gid != 0, true);
     }
   }
 }

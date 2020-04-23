@@ -40,19 +40,5 @@ namespace FrozenPizza
 #endif
     }
 
-    public Vector2 getDirectionVector(Direction direction, float move)
-    {
-      return (getDirectionVector(direction, _orientation, move));
-    }
-
-    public static Vector2 getDirectionVector(Direction direction, float angle, float move)
-    {
-      if (direction == Direction.Left) return (new Vector2((float)Math.Cos(angle) * -move, (float)Math.Sin(angle) * move));
-      if (direction == Direction.Right) return (new Vector2((float)Math.Cos(angle) * move, (float)-Math.Sin(angle) * move));
-      if (direction == Direction.Forward) return (new Vector2((float)Math.Sin(angle) * -move, (float)Math.Cos(angle) * -move));
-      if (direction == Direction.Backward) return (new Vector2((float)Math.Sin(angle) * move, (float)Math.Cos(angle) * move));
-      return (Vector2.Zero);
-    }
-
   }
 }
